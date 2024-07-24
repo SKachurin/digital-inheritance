@@ -17,14 +17,8 @@ jobs:
       with:
         ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
         
-    - name: Print environment variables
-      run: |
-        echo "APP_SECRET=${{ secrets.APP_SECRET }}"
-        echo "DATABASE_URL=${{ secrets.DATABASE_URL }}"
-        echo "MAILER_DSN=${{ secrets.MAILER_DSN }}"
-        echo "MYSQL_DATABASE=${{ secrets.MYSQL_DATABASE }}"
-        echo "MYSQL_ROOT_HOST=${{ secrets.MYSQL_ROOT_HOST }}"
-        echo "MYSQL_ROOT_PASSWORD=${{ secrets.MYSQL_ROOT_PASSWORD }}"
+    - name: Add server to known_hosts
+      run: ssh-keyscan 5.180.181.53 >> ~/.ssh/known_hosts
 
     - name: Deploy to Server
       run: |
