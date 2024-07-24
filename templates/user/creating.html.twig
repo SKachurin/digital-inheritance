@@ -1,0 +1,17 @@
+{% extends 'base.html.twig' %}
+    {% block content %}
+        <div class="container">
+            <h2 class="mt-7 pt5" style="padding-top: 4em;">New Customer</h2>
+            <p>Is being created...</p>
+
+            {% for label, messages in app.flashes %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ label }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endfor %}
+
+        </div>
+
+    {% endblock %}

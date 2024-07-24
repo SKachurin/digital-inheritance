@@ -1,0 +1,23 @@
+{% extends 'base.html.twig' %}
+    {% block content %}
+        <div class="container">
+            <h1 style="padding-top: 3em;">Login</h1>
+
+            {% if error %}
+                <div class="alert alert-warning" role="alert">
+                    {{ error.messageKey|trans(error.messageData, 'security') }}
+                </div>
+            {% endif %}
+
+            {{ form_start(form) }}
+            {{ form_row(form.email, {'full_name': '_username'}) }}
+            {{ form_row(form.password, {'full_name': '_password'}) }}
+            {{ form_row(form.remember_me, {'full_name': '_remember_me'}) }}
+{#            {{ form_errors(form) }}#}
+            <input type="hidden" name="_target_path" value="{{ path('user_home') }}">
+            {{ form_end(form) }}
+
+
+        </div>
+
+    {% endblock %}
