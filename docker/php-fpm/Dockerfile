@@ -31,6 +31,17 @@ FROM php:8.3.3-fpm-alpine3.19 AS prod
 # Set working directory
 WORKDIR /var/www
 
+# ARG to pass PGID
+ARG PGID
+
+# Install necessary packages including shadow
+RUN apk add --no-cache shadow
+
+# Ensure PGID is not 0, if so, skip creating new group
+RUN if [ "$PGID" -ne 0 ]; then \
+    addgroup -g $PGID newgroup && usermod -aG newgroup www-data; \
+    fi
+
 ARG DATABASE_URL
 ENV DATABASE_URL=${DATABASE_URL}
 
