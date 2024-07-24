@@ -29,6 +29,10 @@ jobs:
           export MYSQL_DATABASE="${{ secrets.MYSQL_DATABASE }}";
           export MYSQL_ROOT_HOST="${{ secrets.MYSQL_ROOT_HOST }}";
           export MYSQL_ROOT_PASSWORD="${{ secrets.MYSQL_ROOT_PASSWORD }}";
+          export PGID="${{ secrets.PGID }}";
           cd /home/Serg/web/thedigitalheir.com/public_html;
           bash deploy.sh;
         '
+      env:
+        SSH_AUTH_SOCK: /tmp/ssh-XXXXXXqXnTEf/agent.1727
+        SSH_AGENT_PID: 1728

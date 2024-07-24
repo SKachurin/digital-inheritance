@@ -31,6 +31,10 @@ FROM php:8.3.3-fpm-alpine3.19 AS prod
 # Set working directory
 WORKDIR /var/www
 
+ARG PGID
+RUN apk add --no-cache shadow
+RUN groupmod --non-unique --gid $PGID www-data
+
 ARG PROD_DATABASE_URL
 ENV DATABASE_URL=${PROD_DATABASE_URL}
 
