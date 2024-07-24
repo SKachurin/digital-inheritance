@@ -1,0 +1,31 @@
+name: Deploy to Server
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
+    - name: Set up SSH
+      uses: webfactory/ssh-agent@v0.5.3
+      with:
+        ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }} 
+        
+    - name: Deploy to Server
+      run: |
+        ssh Serg@5.180.181.53 '
+          export APP_SECRET="${{ secrets.APP_SECRET }}";
+          export DATABASE_URL="${{ secrets.DATABASE_URL }}";
+          export MAILER_DSN="${{ secrets.MAILER_DSN }}";
+          export MYSQL_DATABASE="${{ secrets.MYSQL_DATABASE }}";
+          export MYSQL_ROOT_HOST="${{ secrets.MYSQL_ROOT_HOST }}";
+          export MYSQL_ROOT_PASSWORD="${{ secrets.MYSQL_ROOT_PASSWORD }}";
+          cd /home/Serg/web/thedigitalheir.com/public_html;
+          bash deploy.sh;
+        '
