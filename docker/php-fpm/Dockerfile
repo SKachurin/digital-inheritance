@@ -31,12 +31,8 @@ FROM php:8.3.3-fpm-alpine3.19 AS prod
 # Set working directory
 WORKDIR /var/www
 
-ARG PGID
-RUN apk add --no-cache shadow
-RUN addgroup -g $PGID newgroup && usermod -aG newgroup www-data
-
-ARG PROD_DATABASE_URL
-ENV DATABASE_URL=${PROD_DATABASE_URL}
+ARG DATABASE_URL
+ENV DATABASE_URL=${DATABASE_URL}
 
 # Add docker php ext repo
 ADD https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions /usr/local/bin/
@@ -73,8 +69,8 @@ EXPOSE 9000
 
 FROM prod as test
 
-ARG DEV_DATABASE_URL
-ENV DATABASE_URL=${DEV_DATABASE_URL}
+ARG DATABASE_URL
+ENV DATABASE_URL=${DATABASE_URL}
 
 # Copy php config
 RUN cp /usr/local/etc/php/php.ini-development /usr/local/etc/php/php.ini
