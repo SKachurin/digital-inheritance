@@ -1,0 +1,53 @@
+version: "3.8"
+
+services:
+  digital-nginx:
+    build:
+      dockerfile: docker/nginx/Dockerfile
+      context: ./
+    container_name: digital-nginx
+    working_dir: /etc/nginx/
+    volumes:
+      - ~/.ssh:/root/.ssh
+      - ./public:/var/www/public
+      - ./docker/nginx/nginx.conf:/etc/nginx/conf.d/default.conf
+    ports:
+      - "10000:80"
+    networks:
+      - digital_network
+
+  digital-backend:
+    build:
+      dockerfile: docker/php-fpm/Dockerfile
+      context: ./
+      target: local
+    container_name: digital-backend
+    volumes:
+      - ~/.ssh:/root/.ssh
+      - ./docker/php-fpm/supervisor.d/local.ini:/etc/supervisor.d/default.ini
+      - .:/var/www
+    environment:
+      DATABASE_URL: "${DATABASE_URL}"
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    networks:
+      - digital_network
+
+  digital-mysql:
+    image: mysql:8.0.29
+    container_name: digital-mysql
+    environment:
+      MYSQL_ROOT_HOST: '%'
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      MYSQL_DATABASE: ${MYSQL_DATABASE}
+    volumes:
+      - ./docker/mysql-data:/var/lib/mysql:rw
+    ports:
+      - "13000:3306"
+    networks:
+      - digital_network
+
+networks:
+  digital_network:
+    name: digital_network
+    driver: bridge
