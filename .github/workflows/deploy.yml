@@ -33,6 +33,3 @@ jobs:
           cd /home/Serg/web/thedigitalheir.com/public_html;
           bash deploy.sh;
         '
-      env:
-        SSH_AUTH_SOCK: /tmp/ssh-XXXXXXqXnTEf/agent.1727
-        SSH_AGENT_PID: 1728
