@@ -15,8 +15,17 @@ jobs:
     - name: Set up SSH
       uses: webfactory/ssh-agent@v0.5.3
       with:
-        ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }} 
+        ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
         
+    - name: Print environment variables
+      run: |
+        echo "APP_SECRET=${{ secrets.APP_SECRET }}"
+        echo "DATABASE_URL=${{ secrets.DATABASE_URL }}"
+        echo "MAILER_DSN=${{ secrets.MAILER_DSN }}"
+        echo "MYSQL_DATABASE=${{ secrets.MYSQL_DATABASE }}"
+        echo "MYSQL_ROOT_HOST=${{ secrets.MYSQL_ROOT_HOST }}"
+        echo "MYSQL_ROOT_PASSWORD=${{ secrets.MYSQL_ROOT_PASSWORD }}"
+
     - name: Deploy to Server
       run: |
         ssh Serg@5.180.181.53 '
