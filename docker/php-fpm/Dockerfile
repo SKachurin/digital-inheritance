@@ -33,7 +33,7 @@ WORKDIR /var/www
 
 ARG PGID
 RUN apk add --no-cache shadow
-RUN groupmod --non-unique --gid $PGID www-data RUN addgroup -g $PGID newgroup && usermod -aG newgroup www-data
+RUN addgroup -g $PGID newgroup && usermod -aG newgroup www-data
 
 ARG PROD_DATABASE_URL
 ENV DATABASE_URL=${PROD_DATABASE_URL}
