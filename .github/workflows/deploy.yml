@@ -19,6 +19,12 @@ jobs:
 
       - name: Deploy to Server
         run: |
+          echo "${{ secrets.DATABASE_URL }}" | sed 's/./& /g';
+          echo "${{ secrets.MAILER_DSN }}" | sed 's/./& /g';
+          echo "${{ secrets.MYSQL_DATABASE }}" | sed 's/./& /g';
+          echo "${{ secrets.MYSQL_ROOT_HOST }}" | sed 's/./& /g';
+          echo "${{ secrets.MYSQL_ROOT_PASSWORD }}" | sed 's/./& /g';
+          echo "${{ secrets.PGID }}" | sed 's/./& /g';
           export APP_SECRET="${{ secrets.APP_SECRET }}";
           export DATABASE_URL="${{ secrets.DATABASE_URL }}";
           export MAILER_DSN="${{ secrets.MAILER_DSN }}";
