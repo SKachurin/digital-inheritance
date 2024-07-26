@@ -9,6 +9,7 @@ use App\Entity\Customer;
 use App\Entity\VerificationToken;
 use App\Enum\ContactTypeEnum;
 use App\Enum\CustomerSocialAppEnum;
+use App\Repository\CustomerRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mailer\MailerInterface;
@@ -22,6 +23,7 @@ use DateTimeImmutable;
 use Symfony\Component\Uid\Uuid;
 use App\Repository\ContactRepository;
 
+
 #[AsMessageHandler]
 class CustomerCreatedConsumer
 {
@@ -30,7 +32,7 @@ class CustomerCreatedConsumer
         protected MessageBusInterface $commandBus,
         protected UserPasswordHasherInterface $passwordHasher,
         private EntityManagerInterface $entityManager,
-        private MailerInterface $mailer,
+//        private MailerInterface $mailer,
         private UrlGeneratorInterface $urlGenerator,
         private ContactRepository $contactRepository,
 //        LoggerInterface $logger
@@ -63,24 +65,11 @@ class CustomerCreatedConsumer
             )
             ->setCustomerFullName($input->getCustomerFullName())
             ->setCustomerFirstQuestion($input->getCustomerFirstQuestion())
-            ->setCustomerFirstQuestionAnswer(
-                $this->passwordHasher->hashPassword(
-                    $customer,
-                    $input->getCustomerFirstQuestionAnswer()
-                )
-            )
+            ->setCustomerFirstQuestionAnswer($input->getCustomerFirstQuestionAnswer())
             ->setCustomerSecondQuestion($input->getCustomerSecondQuestion())
+            ->setCustomerFirstQuestionAnswer($input->getCustomerSecondQuestionAnswer())
             ->setCustomerSocialApp($input->getCustomerSocialApp())//CustomerSocialAppEnum::from($input->getCustomerSocialApp()))
         ;
-
-        if ($input->getCustomerSecondQuestionAnswer()){
-            $customer ->setCustomerFirstQuestionAnswer(
-                $this->passwordHasher->hashPassword(
-                    $customer,
-                    $input->getCustomerSecondQuestionAnswer()
-                )
-            );
-        }
 
         $this->entityManager->persist($customer);
 
@@ -129,7 +118,7 @@ class CustomerCreatedConsumer
                 ->setContactTypeEnum($type)
                 ->setValue($value);
 
-            if ($countryCode && $type === 'email') {
+            if ($countryCode && $type !== 'email') {
                 $contact->setCountryCode($countryCode);
             }
 
@@ -148,14 +137,17 @@ class CustomerCreatedConsumer
            $verificationUrl = $this->urlGenerator->generate('email_verification_route', [
                'token' => $token->getToken()
            ], UrlGeneratorInterface::ABSOLUTE_URL);
+           ;
 
-           $email = (new Email())
-               ->from('no-reply@digital-inheritance.com')
-               ->to($contact->getValue())
-               ->subject('Email Verification')
-               ->html('<p>Thank you for registering! Please verify your email by clicking on the following link: <a href="' . $verificationUrl . '">Verify Email</a></p>');
+//          TODO EMAILS
 
-           $this->mailer->send($email);
+//           $email = (new Email())
+//               ->from('no-reply@digital-inheritance.com')
+//               ->to($contact->getValue())
+//               ->subject('Email Verification')
+//               ->html('<p>Thank you for registering! Please verify your email by clicking on the following link: <a href="' . $verificationUrl . '">Verify Email</a></p>');
+//
+//           $this->mailer->send($email);
        }
     }
 }

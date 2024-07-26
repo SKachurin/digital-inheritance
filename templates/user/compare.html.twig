@@ -1,0 +1,23 @@
+{% extends 'base.html.twig' %}
+
+{% block content %}
+    <div class="container">
+        <h1 style="padding-top: 4em;">Left is your data - Right is how we'll store it</h1>
+        <div class="row">
+            <div class="col-md-6">
+                {{ form(form1) }}
+            </div>
+            <div class="col-md-6">
+                {{ form(form2) }}
+            </div>
+        </div>
+    </div>
+
+    {% for label, messages in app.flashes %}
+        {% for message in messages %}
+            <div class="alert alert-{{ label }}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endfor %}
+{% endblock %}

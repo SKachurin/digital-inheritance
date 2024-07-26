@@ -3,8 +3,6 @@
 namespace App\Form\Type;
 
 use App\CommandHandler\Customer\Create\CustomerCreateInputDto;
-use App\Entity\Customer;
-use App\Enum\CustomerSocialAppEnum;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;

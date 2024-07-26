@@ -11,15 +11,15 @@ use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Messenger\Stamp\HandledStamp;
 
-
 class RegistrationController extends AbstractController
 {
     private MessageBusInterface $commandBus;
 
+
+
     public function __construct(MessageBusInterface $commandBus)
     {
         $this->commandBus = $commandBus;
-
     }
 
     public function new(Request $request): Response
@@ -70,4 +70,5 @@ class RegistrationController extends AbstractController
        ]);
 
     }
+
 }
