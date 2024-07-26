@@ -27,7 +27,7 @@ class EmailVerificationController extends AbstractController
 
         $customer = $verificationToken->getCustomer();
 
-        // Add your logic to mark the customer as verified
+        // logic to mark the customer as verified
         // $customer->setEmailVerified(true);
         $entityManager->remove($verificationToken);
         $entityManager->flush();

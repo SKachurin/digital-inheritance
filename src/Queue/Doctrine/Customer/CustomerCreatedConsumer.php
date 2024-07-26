@@ -32,7 +32,7 @@ class CustomerCreatedConsumer
         protected MessageBusInterface $commandBus,
         protected UserPasswordHasherInterface $passwordHasher,
         private EntityManagerInterface $entityManager,
-//        private MailerInterface $mailer,
+        private MailerInterface $mailer,
         private UrlGeneratorInterface $urlGenerator,
         private ContactRepository $contactRepository,
 //        LoggerInterface $logger

@@ -1,7 +1,7 @@
 <?php
 namespace App\Controller;
 
-use App\Entity\User;
+use App\Entity\Customer;
 use App\Form\Type\LoginType;
 use App\Form\Type\RegistrationType;
 use Doctrine\ORM\EntityManagerInterface;
@@ -19,7 +19,6 @@ class LoginController extends AbstractController
 
         $form = $this->createForm(LoginType::class);
 
-       // get the login error if there is one
         $error = $authenticationUtils->getLastAuthenticationError();
 
         // last username entered by the user
