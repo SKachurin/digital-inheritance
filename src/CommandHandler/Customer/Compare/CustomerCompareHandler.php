@@ -4,27 +4,16 @@ declare(strict_types=1);
 
 namespace App\CommandHandler\Customer\Compare;
 
-use App\CommandHandler\Customer\Create\CustomerCreateInputDto;
 use App\Message\CustomerWithContactsMessage;
-use App\Queue\Doctrine\Customer\CustomerCreatedProducer;
-use App\Repository\CustomerRepository;
 use App\Entity\Customer;
-use App\Queue\Doctrine\Customer\CustomerCreatedMessage;
-use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\Query\QueryException;
-use phpDocumentor\Reflection\Types\Void_;
-use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
+use App\Service\CryptoService;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
-use Symfony\Component\Routing\Annotation\Route;
 
 #[AsMessageHandler]
 class CustomerCompareHandler
 {
     public function __construct(
-//        private EntityManagerInterface $entityManager,
-//        private CustomerRepository $customerRepository,
-//        private CustomerCreatedProducer $customerCreatedProducer,
+        private CryptoService $cryptoService,
     ) {}
 
     /**
@@ -36,7 +25,7 @@ class CustomerCompareHandler
         $contacts = $message->getContacts();
 
         $dto1 = $this->createCustomerCompareOutputDto1($customer, $contacts);
-        $dto2 = $this->createCustomerCompareOutputDto1($customer, $contacts);
+        $dto2 = $this->createCustomerCompareOutputDto2($dto1);
 
         return [$dto1, $dto2];
     }
@@ -46,25 +35,44 @@ class CustomerCompareHandler
         $dto = new CustomerCompareOutputDto1($customer);
 
         foreach ($contacts as $contact) {
+
             if ($contact->getContactTypeEnum() === 'email') {
-                if ($dto->getCustomerEmail() === '') {
+                if ($dto->getCustomerSecondEmail() === null) {
                     $dto->setCustomerSecondEmail($contact->getValue());
                 }
             } elseif ($contact->getContactTypeEnum() === 'phone') {
                 if ($dto->getCustomerFirstPhone() === null) {
                     $dto->setCustomerFirstPhone($contact->getValue());
                     $dto->setCustomerCountryCode($contact->getCountryCode());
-                } elseif ($dto->getCustomerSecondPhone() === null) {
+                } elseif ($dto->getCustomerSecondPhone() === '') {
                     $dto->setCustomerSecondPhone($contact->getValue());
                 }
             }
+
         }
 
         return $dto;
     }
 
-//    private function createCustomerCompareOutputDto2(Customer $customer, array $contacts): CustomerCompareOutputDto2
-//    {
-//        return new CustomerCompareOutputDto2($customer, $contacts);
-//    }
+    private function createCustomerCompareOutputDto2(CustomerCompareOutputDto1 $dto): CustomerCompareOutputDto2
+    {
+        $dto2 = new CustomerCompareOutputDto2($dto);
+        $dto2->setCustomerFullName($this->cryptoService->decryptData($dto->getCustomerFullName()));
+        $dto2->setCustomerFirstQuestion($this->cryptoService->decryptData($dto->getCustomerFirstQuestion()));
+        $dto2->setCustomerFirstQuestionAnswer($this->cryptoService->decryptData($dto->getCustomerFirstQuestionAnswer()));
+        $dto2->setCustomerSecondQuestion($this->cryptoService->decryptData($dto->getCustomerSecondQuestion()));
+        $dto2->setCustomerSecondQuestionAnswer($this->cryptoService->decryptData($dto->getCustomerSecondQuestionAnswer()));
+        $dto2->setCustomerEmail($dto->getCustomerEmail());
+        $dto2->setCustomerName($dto->getCustomerName());
+        $dto2->setCustomerSecondEmail($this->cryptoService->decryptData($dto->getCustomerSecondEmail()));
+        $dto2->setCustomerCountryCode($dto->getCustomerCountryCode());
+        $dto2->setCustomerFirstPhone($this->cryptoService->decryptData($dto->getCustomerFirstPhone()));
+        $dto2->setCustomerSecondPhone($this->cryptoService->decryptData($dto->getCustomerSecondPhone()));
+        $dto2->setCustomerSocialApp($dto->getCustomerSocialApp());
+        $dto2->setCustomerOkayPassword($dto->getCustomerOkayPassword());
+        $dto2->setPassword($dto->getPassword());
+
+        return $dto2;
+
+    }
 }

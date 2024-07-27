@@ -30,14 +30,14 @@ class Customer implements UserInterface, PasswordAuthenticatedUserInterface
     private string $customerName;
 
     #[Assert\Email]
-    #[ORM\Column(type: 'string', length: 64, unique: true)]
+    #[ORM\Column(type: 'string', length: 64, unique: true)] //not encoding it for now
     private string $customerEmail;
 //
 //    #[ORM\Column(type: 'string', length: 64, unique: true, nullable: true)]
 //    #[Assert\Email]
 //    private ?string $customerSecondEmail = null;
 
-    #[ORM\Column(type: 'string', length: 150, nullable: true)]
+    #[ORM\Column(type: 'string', length: 512, nullable: true)]
     private ?string $customerFullName = null;
 
 //    #[ORM\Column(type: 'string',  length: 64, nullable: true)]
@@ -49,16 +49,16 @@ class Customer implements UserInterface, PasswordAuthenticatedUserInterface
 //    #[ORM\Column(type: 'string', length: 64, nullable: true)]
 //    private ?string $customerSecondPhone = null;
 
-    #[ORM\Column(type: 'string', length: 200, nullable: true)]
+    #[ORM\Column(type: 'string', length: 1024, nullable: true)]
     private ?string $customerFirstQuestion = null;
 
-    #[ORM\Column(type: 'string', length: 64, nullable: true)]
+    #[ORM\Column(type: 'string', length: 512, nullable: true)]
     private ?string $customerFirstQuestionAnswer = null;
 
-    #[ORM\Column(type: 'string', length: 200, nullable: true)]
+    #[ORM\Column(type: 'string', length: 1024, nullable: true)]
     private ?string $customerSecondQuestion = null;
 
-    #[ORM\Column(type: 'string', length: 64, nullable: true)]
+    #[ORM\Column(type: 'string', length: 512, nullable: true)]
     private ?string $customerSecondQuestionAnswer = null;
 
     #[ORM\Column(type: 'string', enumType: CustomerSocialAppEnum::class)]
@@ -67,13 +67,13 @@ class Customer implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'string', enumType: CustomerPaymentStatusEnum::class)]
     private CustomerPaymentStatusEnum $customerPaymentStatus;
 
-    #[ORM\Column(type: 'string', length: 200, nullable: true)]
+    #[ORM\Column(type: 'string', length: 512, nullable: true)]
     private string $customerOkayPassword;
 
     /**
      * @var string The hashed password
      */
-    #[ORM\Column(type: 'string', length: 200, nullable: true)]
+    #[ORM\Column(type: 'string', length: 512, nullable: true)]
     private string $password;
 
     #[ORM\Column(type: 'text', nullable: true)]

@@ -3,7 +3,6 @@ export PGID=$(shell id -g)
 
 # Инициализация проекта
 init: fix-ssh-permissions build start composer-install
-	@cp -u ./.env ./.env.local
 
 fix-ssh-permissions:
 	@chmod 0700 ~/.ssh && chmod 0600 ~/.ssh/* && chmod 0644 ~/.ssh/*.pub && ssh-add ~/.ssh/id_ed25519

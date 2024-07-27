@@ -22,10 +22,10 @@ class Contact
     #[ORM\Column(type: 'string', length: 64)]
     private string $contactTypeEnum;
 
-    #[ORM\Column(type: 'string', length: 64, nullable: true)]
+    #[ORM\Column(type: 'string', length: 512, nullable: true)]
     private ?string $countryCode;
 
-    #[ORM\Column(type: 'string', length: 150)]
+    #[ORM\Column(type: 'string', length: 512)]
     #[Assert\NotBlank]
     private string $value;
 

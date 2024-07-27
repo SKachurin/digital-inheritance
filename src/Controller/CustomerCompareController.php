@@ -3,7 +3,9 @@ namespace App\Controller;
 
 
 use App\CommandHandler\Customer\Compare\CustomerCompareOutputDto1;
+use App\CommandHandler\Customer\Compare\CustomerCompareOutputDto2;
 use App\Form\Type\DemonstrationType1;
+use App\Form\Type\DemonstrationType2;
 use App\Message\CustomerWithContactsMessage;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
@@ -58,11 +60,11 @@ class CustomerCompareController extends AbstractController
 
             /** @var CustomerCompareOutputDto1 $dto1 */
             $dto1 = $handledResult[0];
-            /** @var CustomerCompareOutputDto1 $dto2 */
+            /** @var CustomerCompareOutputDto2 $dto2 */
             $dto2 = $handledResult[1];
 
             $form1 = $this->createForm(DemonstrationType1::class, $dto1);
-            $form2 = $this->createForm(DemonstrationType1::class, $dto2);
+            $form2 = $this->createForm(DemonstrationType2::class, $dto2);
 
 
             return $this->render('user/compare.html.twig', [
@@ -72,7 +74,7 @@ class CustomerCompareController extends AbstractController
 
         } else {
 
-            return $this->render('user/created.html.twig');
+            return $this->render('base.html.twig');
         }
 
     }

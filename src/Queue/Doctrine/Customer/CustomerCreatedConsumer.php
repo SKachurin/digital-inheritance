@@ -10,6 +10,8 @@ use App\Entity\VerificationToken;
 use App\Enum\ContactTypeEnum;
 use App\Enum\CustomerSocialAppEnum;
 use App\Repository\CustomerRepository;
+use App\Service\CryptoService;
+use Defuse\Crypto\Exception\EnvironmentIsBrokenException;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mailer\MailerInterface;
@@ -23,7 +25,6 @@ use DateTimeImmutable;
 use Symfony\Component\Uid\Uuid;
 use App\Repository\ContactRepository;
 
-
 #[AsMessageHandler]
 class CustomerCreatedConsumer
 {
@@ -35,11 +36,12 @@ class CustomerCreatedConsumer
         private MailerInterface $mailer,
         private UrlGeneratorInterface $urlGenerator,
         private ContactRepository $contactRepository,
+        private CryptoService $cryptoService,
 //        LoggerInterface $logger
     ) {}
 
     /**
-     * @throws TransportExceptionInterface
+     *
      */
     public function __invoke(CustomerCreatedMessage $message,): void
     {
@@ -63,30 +65,64 @@ class CustomerCreatedConsumer
                     $input->getPassword()
                 )
             )
-            ->setCustomerFullName($input->getCustomerFullName())
-            ->setCustomerFirstQuestion($input->getCustomerFirstQuestion())
-            ->setCustomerFirstQuestionAnswer($input->getCustomerFirstQuestionAnswer())
-            ->setCustomerSecondQuestion($input->getCustomerSecondQuestion())
-            ->setCustomerFirstQuestionAnswer($input->getCustomerSecondQuestionAnswer())
-            ->setCustomerSocialApp($input->getCustomerSocialApp())//CustomerSocialAppEnum::from($input->getCustomerSocialApp()))
+            ->setCustomerFullName(
+                $this->cryptoService->encryptData(
+                    $input->getCustomerFullName()
+                )
+            )
+            ->setCustomerFirstQuestion(
+                $this->cryptoService->encryptData(
+                    $input->getCustomerFirstQuestion()
+                )
+            )
+            ->setCustomerFirstQuestionAnswer(
+                $this->cryptoService->encryptData(
+                    $input->getCustomerFirstQuestionAnswer()
+                )
+            )
+            ->setCustomerSecondQuestion(
+                $this->cryptoService->encryptData(
+                    $input->getCustomerSecondQuestion()
+                )
+            )
+            ->setCustomerSecondQuestionAnswer(
+                $this->cryptoService->encryptData(
+                    $input->getCustomerSecondQuestionAnswer()
+                )
+            )
+            ->setCustomerSocialApp($input->getCustomerSocialApp()) //CustomerSocialAppEnum::from($input->getCustomerSocialApp()))
         ;
 
         $this->entityManager->persist($customer);
 
         if ($input->getCustomerEmail()){
-            $this->persistContact($customer, 'email', $input->getCustomerEmail());
+            $this->persistContact($customer, 'email',
+                $this->cryptoService->encryptData(
+                    $input->getCustomerEmail()
+                )
+            );
         }
 
         if ($input->getCustomerSecondEmail()){
-            $this->persistContact($customer, 'email', $input->getCustomerSecondEmail());
+            $this->persistContact($customer, 'email',
+                $this->cryptoService->encryptData(
+                    $input->getCustomerSecondEmail()
+                )
+            );
         }
 
         if ($input->getCustomerFirstPhone()){
-            $this->persistContact($customer, 'phone', $input->getCustomerFirstPhone(), $input->getCustomerCountryCode());
+            $this->persistContact($customer, 'phone',
+                $this->cryptoService->encryptData(
+                    $input->getCustomerFirstPhone()
+                ), $input->getCustomerCountryCode());
         }
 
         if ($input->getCustomerSecondPhone()){
-            $this->persistContact($customer, 'phone', $input->getCustomerSecondPhone(), $input->getCustomerCountryCode());
+            $this->persistContact($customer, 'phone',
+                $this->cryptoService->encryptData(
+                    $input->getCustomerSecondPhone()
+                ), $input->getCustomerCountryCode());
         }
 
 //     TODO: Logs
@@ -126,28 +162,30 @@ class CustomerCreatedConsumer
         }
     }
 
-    /**
-     * @throws TransportExceptionInterface
-     */
+//    /**
+//     * @throws TransportExceptionInterface
+//     */
     private function sendVerificationEmail(Customer $customer, VerificationToken $token): void
     {
        $customerEmails = $this->contactRepository->findBy(['contactTypeEnum' => 'email', 'customer' => $customer]);
 
-       foreach ($customerEmails as $contact) {
-           $verificationUrl = $this->urlGenerator->generate('email_verification_route', [
-               'token' => $token->getToken()
-           ], UrlGeneratorInterface::ABSOLUTE_URL);
-           ;
+//       foreach ($customerEmails as $contact) {
+//           $verificationUrl = $this->urlGenerator->generate('email_verification_route', [
+//               'token' => $token->getToken()
+//           ], UrlGeneratorInterface::ABSOLUTE_URL);
+//           ;
+            // Ensure you decrypt the email before sending
+//            $email = $this->cryptoService->decryptData($contact->getValue());
 
 //          TODO EMAILS
 
 //           $email = (new Email())
 //               ->from('no-reply@digital-inheritance.com')
-//               ->to($contact->getValue())
+//               ->to($email)
 //               ->subject('Email Verification')
 //               ->html('<p>Thank you for registering! Please verify your email by clicking on the following link: <a href="' . $verificationUrl . '">Verify Email</a></p>');
 //
 //           $this->mailer->send($email);
-       }
+//       }
     }
 }

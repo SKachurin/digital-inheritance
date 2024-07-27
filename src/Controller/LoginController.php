@@ -10,11 +10,13 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
+use Defuse\Crypto\Key;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
 class LoginController extends AbstractController
 {
 
-    public function index(AuthenticationUtils $authenticationUtils): Response
+    public function index(ParameterBagInterface $params, AuthenticationUtils $authenticationUtils): Response
     {
 
         $form = $this->createForm(LoginType::class);
@@ -23,42 +25,19 @@ class LoginController extends AbstractController
 
         // last username entered by the user
         $lastUsername = $authenticationUtils->getLastUsername();
+//        $key = $params->get('encryption_key');//Key::loadFromAsciiSafeString($params->get('encryption_key'));
+
+//        $key = Key::createNewRandomKey()->saveToAsciiSafeString();
+
+//        $baseKey = $params->get('encryption_key');//getenv('ENCRYPTION_KEY');
+////        $rawKey = $baseKey->getRawBytes();
+//        $key = Key::loadFromAsciiSafeString($baseKey);
 
         return $this->render('user/login.html.twig', [
              'form'          => $form,
              'last_username' => $lastUsername,
              'error'         => $error,
+//            'key'           => $key,
         ]);
-      }
-
-//    public function login(): Response
-//    {
-//
-//        $form = $this->createForm(LoginType::class, $user);
-//
-//        $form->handleRequest($request);
-//
-//        if ($form->isSubmitted() && $form->isValid()) {
-//
-//            $user = $form->getData();
-//
-//            $em = $this->manager;
-//            $em->persist($user);
-//
-//            $plaintextPassword = $user->password;
-//            $hashedPassword = $passwordHasher->hashPassword(
-//                $user,
-//                $plaintextPassword
-//            );
-//            $user->setPassword($hashedPassword);
-//
-//            if ($user->remember_me){
-//                //TODO setCookie(){ }
-//            }
-//
-//            $em->flush();
-//
-//            return $this->redirectToRoute('user_home');
-//        }
-//    }
+    }
 }
