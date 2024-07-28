@@ -1,5 +1,5 @@
 <?php
-namespace App\Controller;
+namespace App\Controller\Customer;
 
 
 use App\CommandHandler\Customer\Compare\CustomerCompareOutputDto1;
@@ -7,12 +7,12 @@ use App\CommandHandler\Customer\Compare\CustomerCompareOutputDto2;
 use App\Form\Type\DemonstrationType1;
 use App\Form\Type\DemonstrationType2;
 use App\Message\CustomerWithContactsMessage;
+use App\Repository\CustomerRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Messenger\Stamp\HandledStamp;
-use App\Repository\CustomerRepository;
 
 
 class CustomerCompareController extends AbstractController

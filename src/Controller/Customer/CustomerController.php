@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Controller;
+namespace App\Controller\Customer;
 
 //use App\CommandHandler\Action\Create\ActionCreateOutputDto;
 //use App\CommandHandler\Action\Create\ActionCreateInputDto;
@@ -15,6 +15,7 @@ namespace App\Controller;
 //use Symfony\Component\Messenger\Stamp\HandledStamp;
 //use Symfony\Component\Serializer\SerializerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+
 //use Symfony\Component\HttpFoundation\Request;
 //use Symfony\Component\HttpFoundation\Response;
 //use Symfony\Component\Messenger\MessageBusInterface;

@@ -52,12 +52,9 @@ class Note
     private Collection $actions;
 
     public function __construct(
-        Customer $customer,
-        ?Pipeline $pipeline
+
     ) {
-        $this->customer = $customer;
         $this->actions = new ArrayCollection();
-        $this->pipeline = $pipeline;
     }
     public function getId(): int
     {
@@ -76,7 +73,7 @@ class Note
     {
         return $this->customerTextAnswerOne;
     }
-    public function setCustomerTextAnswerOne(string $customerTextAnswerOne): self
+    public function setCustomerTextAnswerOne(?string $customerTextAnswerOne): self
     {
         $this->customerTextAnswerOne = $customerTextAnswerOne;
         return $this;
@@ -85,7 +82,7 @@ class Note
     {
         return $this->customerTextAnswerTwo;
     }
-    public function setCustomerTextAnswerTwo(string $customerTextAnswerTwo): self
+    public function setCustomerTextAnswerTwo(?string $customerTextAnswerTwo): self
     {
         $this->customerTextAnswerTwo = $customerTextAnswerTwo;
         return $this;

@@ -1,5 +1,5 @@
 <?php
-namespace App\Controller;
+namespace App\Controller\Customer;
 
 use App\CommandHandler\Customer\Create\CustomerCreateInputDto;
 use App\Enum\CustomerSocialAppEnum;

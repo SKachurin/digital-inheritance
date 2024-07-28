@@ -17,6 +17,12 @@
             {#    Vue render    #}
 {#            <div id="app"></div>#}
 
+            <div class="row">
+                <div class="col-md-10">
+                    <h1 class="form-header" style="padding-top: 2em;">Create Secure Envelope</h1>
+                    {{ form(form) }}
+                </div>
+            </div>
 
             {% for label, messages in app.flashes %}
                 {% for message in messages %}

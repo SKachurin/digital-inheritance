@@ -1,17 +1,12 @@
 <?php
-namespace App\Controller;
+namespace App\Controller\Customer;
 
-use App\Entity\Customer;
 use App\Form\Type\LoginType;
-use App\Form\Type\RegistrationType;
-use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
-use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 use Defuse\Crypto\Key;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 class LoginController extends AbstractController
 {

@@ -76,7 +76,7 @@ class CryptoService
     /**
      * @throws SodiumException
      */
-    public function decryptData(?string $encryptedData): ?string
+    public function decryptData(?string $encryptedData): false | string
     {
         if ($encryptedData === null) {
             return '';

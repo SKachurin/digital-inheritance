@@ -6,21 +6,25 @@ controllers:
 
 user_registration:
     path: /reg
-    controller: App\Controller\RegistrationController::new
+    controller: App\Controller\Customer\RegistrationController::new
 
 user_registration_done:
     path: /compare
-    controller: App\Controller\CustomerCompareController::compare
+    controller: App\Controller\Customer\CustomerCompareController::compare
 
 user_login:
     path: /log
-    controller: App\Controller\LoginController::index
+    controller: App\Controller\Customer\LoginController::index
 
 user_home:
     path: /lk
     defaults:
         _controller: Symfony\Bundle\FrameworkBundle\Controller\TemplateController::templateAction
         template:    user/dashboard.html.twig
+
+note_create:
+    path: /note/create
+    controller: App\Controller\Note\NoteCreateController::create
 
 home:
     path:          /
