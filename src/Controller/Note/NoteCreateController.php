@@ -57,11 +57,14 @@ class NoteCreateController extends AbstractController
                 $this->addFlash('success', 'Your Envelope is being processed.');
 
                 $note = $handledStamp->getResult();
+                $noteId = $note->getId();
 
                 $form1 = $this->createForm(NoteCreationType1::class, $note, ['customerId' => $customer->getId()]);
 
                 return $this->render('noteCreate.html.twig', [
                     'form' => $form1,
+                    'decodedNote' => true,
+                    'noteId' => $noteId
                 ]);
 
     //            return $this->redirectToRoute('customer_creating');
@@ -69,6 +72,7 @@ class NoteCreateController extends AbstractController
 
             return $this->render('noteCreate.html.twig', [
                 'form' => $form,
+                'decodedNote' => false,
             ]);
 
         }

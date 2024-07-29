@@ -7,13 +7,8 @@ namespace App\Queue\Doctrine\Customer;
 use App\Entity\Contact;
 use App\Entity\Customer;
 use App\Entity\VerificationToken;
-use App\Enum\ContactTypeEnum;
-use App\Enum\CustomerSocialAppEnum;
-use App\Repository\CustomerRepository;
 use App\Service\CryptoService;
-use Defuse\Crypto\Exception\EnvironmentIsBrokenException;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 use Symfony\Component\Messenger\MessageBusInterface;
@@ -90,7 +85,7 @@ class CustomerCreatedConsumer
                     $input->getCustomerSecondQuestionAnswer()
                 )
             )
-            ->setCustomerSocialApp($input->getCustomerSocialApp()) //CustomerSocialAppEnum::from($input->getCustomerSocialApp()))
+            ->setCustomerSocialApp($input->getCustomerSocialApp()) // TODO CustomerSocialAppEnum::from($input->getCustomerSocialApp()))
         ;
 
         $this->entityManager->persist($customer);

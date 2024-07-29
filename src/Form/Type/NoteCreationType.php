@@ -77,7 +77,7 @@ class NoteCreationType extends AbstractType
                     ]),
                 ],
                 'attr' => array(
-                    'placeholder' => 'This field for encrypted data.'
+                    'placeholder' => 'This field is intended for encrypted data.'
                 )
             ])
             ->add('customerTextAnswerTwo', TextareaType::class, [
@@ -90,7 +90,7 @@ class NoteCreationType extends AbstractType
                     ]),
                 ],
                 'attr' => array(
-                    'placeholder' => 'This field for encrypted data.'
+                    'placeholder' => 'This field is intended for encrypted data.'
                 )
             ])
             ->add('beneficiaryTextAnswerOne', TextareaType::class, [
@@ -103,7 +103,7 @@ class NoteCreationType extends AbstractType
                     ]),
                 ],
                 'attr' => array(
-                    'placeholder' => 'This field for encrypted data.'
+                    'placeholder' => 'This field is intended for encrypted data.'
                 )
             ])
             ->add('beneficiaryTextAnswerTwo', TextareaType::class, [
@@ -116,7 +116,7 @@ class NoteCreationType extends AbstractType
                     ]),
                 ],
                 'attr' => array(
-                    'placeholder' => 'This field for encrypted data.'
+                    'placeholder' => 'This field is intended for encrypted data.'
                 )
             ])
 

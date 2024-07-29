@@ -7,48 +7,58 @@ use Exception;
 use Random\RandomException;
 use SodiumException;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
+use Psr\Log\LoggerInterface;
 
 class CryptoService
 {
     private string $key;
+    private LoggerInterface $logger;
+
+    private ?string $personalString;
 
     /**
      * @throws Exception
      */
     public function __construct(
         ParameterBagInterface $params,
-        ?string $personalString = null
+        LoggerInterface $logger,
+        ?string $personalString = ''
+
     )
     {
-        $baseKey = $params->get('encryption_key');
+        $this->logger = $logger;
+        $this->personalString = $personalString;
 
-        if ($personalString === null) {
-            $personalString = $params->get('personal_string');
+        $baseKey = $params->get('encryption_key');
+        if (!is_string($baseKey)) {
+            throw new \InvalidArgumentException('Personal string must be a string.');
         }
+
+        if ($this->personalString === '') {
+            $this->personalString = $params->get('personal_string');
+//            $this->logger->info('NO STRING.',  ['$personalString' => $this->personalString]);
+        }
+
+//        $this->logger->info('$baseKey.', ['$baseKey' => $baseKey]);
+//        $this->logger->info('$personalString.', ['$personalString' => $this->personalString]);
+
 
         if (!is_string($personalString)) {
             throw new \InvalidArgumentException('Personal string must be a string.');
         }
-        $hashedPersonalString = hash('sha256',  $personalString, true);
-        error_log("Hashed Personal String: " . bin2hex($hashedPersonalString));
+        $hashedPersonalString = hash('sha256',  $this->personalString, true);
+        $hashedBaseKey = hash('sha256',  $baseKey, true);
 
-        if (!is_string($baseKey)) {
-            throw new \InvalidArgumentException('Personal string must be a string.');
-        }
-        if (strlen($baseKey) < 16 || strlen($hashedPersonalString) < 16) {
-            throw new Exception('Keys are not long enough to perform the substitution');
-        }
 
-        //create the final key
-        $baseKeyFirstPart = substr($baseKey, 0, 16); // Take first 16 bytes of base key
-        $hashedPersonalStringFirstPart = substr($hashedPersonalString, 0, 16); // Take first 16 bytes of hashed personal string
-
-        $finalKey = $baseKeyFirstPart . $hashedPersonalStringFirstPart;
+        $finalKey = $hashedPersonalString ^ $hashedBaseKey; //xor
+//        $this->logger->info('$finalKey.', ['$finalKey' => $finalKey]);
 
         if (strlen($finalKey) !== 32) {
             throw new Exception('Combined key is not 32 bytes long');
         }
-        error_log("Final Key (Hex): " . bin2hex($finalKey));
+//        error_log("Final Key (Hex): " . bin2hex($finalKey));
+//        error_log("Hashed Personal String: " . bin2hex($hashedPersonalString));
+//        error_log("Hashed baseKey String: " . bin2hex($hashedBaseKey));
 
         $this->key = $finalKey;
     }
@@ -69,6 +79,9 @@ class CryptoService
         // Encrypt the data
         $encrypted = sodium_crypto_secretbox($data, $nonce, $this->key);
 
+//        $this->logger->info(' decryptData Nonce length:', ['length' => strlen($nonce)]);
+//        $this->logger->info('NdecryptData once:', ['nonce' => bin2hex($nonce)]);
+
         // Combine nonce and encrypted data
         return base64_encode($nonce . $encrypted);
     }
@@ -87,9 +100,15 @@ class CryptoService
 
         // Extract the nonce and encrypted message
         $nonce = substr($decoded, 0, SODIUM_CRYPTO_SECRETBOX_NONCEBYTES);
+//        $this->logger->info(' decryptData $nonce.', ['$nonce' => bin2hex($nonce)]);
+
         $ciphertext = substr($decoded, SODIUM_CRYPTO_SECRETBOX_NONCEBYTES);
+//        $this->logger->info('decryptData $ciphertext.', ['$ciphertext' => $ciphertext]);
 
         // Decrypt the message
+//        return
         return sodium_crypto_secretbox_open($ciphertext, $nonce, $this->key);
+//        $this->logger->info('decryptData $x.', ['$x' => $x]);
+//        return $x;
     }
 }

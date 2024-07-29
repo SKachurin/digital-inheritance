@@ -64,6 +64,8 @@ class Customer implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'string', enumType: CustomerSocialAppEnum::class)]
     private CustomerSocialAppEnum $customerSocialApp = CustomerSocialAppEnum::NONE;
 
+    //TODO field for link to Customer account
+
     #[ORM\Column(type: 'string', enumType: CustomerPaymentStatusEnum::class)]
     private CustomerPaymentStatusEnum $customerPaymentStatus;
 

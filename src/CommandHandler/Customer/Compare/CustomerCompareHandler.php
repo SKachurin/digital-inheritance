@@ -7,14 +7,18 @@ namespace App\CommandHandler\Customer\Compare;
 use App\Message\CustomerWithContactsMessage;
 use App\Entity\Customer;
 use App\Service\CryptoService;
+use SodiumException;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
 #[AsMessageHandler]
 class CustomerCompareHandler
 {
+    private CryptoService $cryptoService;
     public function __construct(
-        private CryptoService $cryptoService,
-    ) {}
+        CryptoService $cryptoService,
+    ) {
+        $this->cryptoService = $cryptoService;
+    }
 
     /**
      */
@@ -30,6 +34,9 @@ class CustomerCompareHandler
         return [$dto1, $dto2];
     }
 
+    /**
+     * @throws SodiumException
+     */
     private function createCustomerCompareOutputDto1(Customer $customer, array $contacts): CustomerCompareOutputDto1
     {
         $dto = new CustomerCompareOutputDto1($customer);
@@ -37,31 +44,44 @@ class CustomerCompareHandler
         foreach ($contacts as $contact) {
 
             if ($contact->getContactTypeEnum() === 'email') {
-                if ($dto->getCustomerSecondEmail() === null) {
+                if ($dto->getCustomerEmail() === null) {
+                    $dto->setCustomerEmail($customer->getCustomerEmail());
+                } else {
                     $dto->setCustomerSecondEmail($contact->getValue());
                 }
-            } elseif ($contact->getContactTypeEnum() === 'phone') {
+            }
+            if ($contact->getContactTypeEnum() === 'phone') {
+                $dto->setCustomerCountryCode($contact->getCountryCode());
                 if ($dto->getCustomerFirstPhone() === null) {
                     $dto->setCustomerFirstPhone($contact->getValue());
-                    $dto->setCustomerCountryCode($contact->getCountryCode());
-                } elseif ($dto->getCustomerSecondPhone() === '') {
+                } else {
                     $dto->setCustomerSecondPhone($contact->getValue());
                 }
             }
-
         }
 
         return $dto;
     }
 
+    /**
+     * @throws SodiumException
+     */
     private function createCustomerCompareOutputDto2(CustomerCompareOutputDto1 $dto): CustomerCompareOutputDto2
     {
         $dto2 = new CustomerCompareOutputDto2($dto);
         $dto2->setCustomerFullName($this->cryptoService->decryptData($dto->getCustomerFullName()));
         $dto2->setCustomerFirstQuestion($this->cryptoService->decryptData($dto->getCustomerFirstQuestion()));
-        $dto2->setCustomerFirstQuestionAnswer($this->cryptoService->decryptData($dto->getCustomerFirstQuestionAnswer()));
+        $dto2->setCustomerFirstQuestionAnswer(
+            $this->cryptoService->decryptData(
+                $dto->getCustomerFirstQuestionAnswer()
+            )
+        );
         $dto2->setCustomerSecondQuestion($this->cryptoService->decryptData($dto->getCustomerSecondQuestion()));
-        $dto2->setCustomerSecondQuestionAnswer($this->cryptoService->decryptData($dto->getCustomerSecondQuestionAnswer()));
+        $dto2->setCustomerSecondQuestionAnswer(
+            $this->cryptoService->decryptData(
+                $dto->getCustomerSecondQuestionAnswer()
+            )
+        );
         $dto2->setCustomerEmail($dto->getCustomerEmail());
         $dto2->setCustomerName($dto->getCustomerName());
         $dto2->setCustomerSecondEmail($this->cryptoService->decryptData($dto->getCustomerSecondEmail()));

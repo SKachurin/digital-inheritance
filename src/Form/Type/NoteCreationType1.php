@@ -43,7 +43,7 @@ class NoteCreationType1 extends AbstractType
                     ]),
                 ],
                 'attr' => [
-                    'placeholder' => 'This field for encrypted data.',
+                    'placeholder' => 'This field is intended for encrypted data.',
                     'rows' => 10,
                     'style' => 'height: 15em',
                 ]
@@ -58,7 +58,7 @@ class NoteCreationType1 extends AbstractType
                     ]),
                 ],
                 'attr' => [
-                    'placeholder' => 'This field for encrypted data.',
+                    'placeholder' => 'This field is intended for encrypted data.',
                     'rows' => 10,
                     'style' => 'height: 15em',
                 ]
@@ -73,7 +73,7 @@ class NoteCreationType1 extends AbstractType
                     ]),
                 ],
                 'attr' => [
-                    'placeholder' => 'This field for encrypted data.',
+                    'placeholder' => 'This field is intended for encrypted data.',
                     'rows' => 10,
                     'style' => 'height: 15em',
                 ]
@@ -88,7 +88,7 @@ class NoteCreationType1 extends AbstractType
                     ]),
                 ],
                 'attr' => [
-                    'placeholder' => 'This field for encrypted data.',
+                    'placeholder' => 'This field is intended for encrypted data.',
                     'rows' => 10,
                     'style' => 'height: 15em',
                 ]
@@ -117,7 +117,7 @@ class NoteCreationType1 extends AbstractType
                     ]),
                 ],
                 'attr' => array(
-                    'placeholder' => 'This field for encrypted data.',
+                    'placeholder' => 'This field is intended for encrypted data.',
                     'rows' => 10,
                     'style' => 'height: 15em',
                 )
@@ -132,7 +132,7 @@ class NoteCreationType1 extends AbstractType
                     ]),
                 ],
                 'attr' => array(
-                    'placeholder' => 'This field for encrypted data.',
+                    'placeholder' => 'This field is intended for encrypted data.',
                     'rows' => 10,
                     'style' => 'height: 15em',
                 )

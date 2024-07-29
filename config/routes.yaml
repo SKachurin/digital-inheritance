@@ -26,6 +26,15 @@ note_create:
     path: /note/create
     controller: App\Controller\Note\NoteCreateController::create
 
+note_decrypt:
+    path: /note/{noteId}/decrypt/{question}
+    controller: App\Controller\Note\NoteDecryptController::decrypt
+    requirements:
+        question: '\w+' # Regex to ensure the question parameter only contains word characters
+    defaults:
+        question: 'default' # Default value if question is not provided
+
+
 home:
     path:          /
     controller:    Symfony\Bundle\FrameworkBundle\Controller\TemplateController
