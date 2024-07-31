@@ -24,6 +24,7 @@ jobs:
       - name: Copy files to server
         run: |
           rsync -avz --delete ./ root@5.180.181.53:/var/www/thedigitalheir.com/
+          
       - name: Verify copied files on server
         run: |
           ssh -o StrictHostKeyChecking=no root@5.180.181.53 'ls -la /var/www/thedigitalheir.com'
