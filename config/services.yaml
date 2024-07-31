@@ -36,4 +36,8 @@ services:
         arguments:
             $params: '@parameter_bag'
 
+    App\EventListener\CustomerHasNoteListener:
+        tags:
+            - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest }
+
 

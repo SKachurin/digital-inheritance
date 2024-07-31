@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Repository;
 
+use App\Entity\Customer;
 use App\Entity\Note;
 use App\Repository\Collection\PageCollection;
 use Doctrine\Persistence\ManagerRegistry;
@@ -22,5 +23,17 @@ class NoteRepository extends BaseRepository
     {
         // @phpstan-ignore-next-line
         parent::__construct($registry, Note::class);
+    }
+
+    public function customerHasNote(Customer $customer): ?int
+    {
+        $note = $this->createQueryBuilder('n')
+            ->select('n.id')
+            ->where('n.customer = :customer')
+            ->setParameter('customer', $customer->getId())
+            ->getQuery()
+            ->getOneOrNullResult();
+
+        return $note ? $note['id'] : null;
     }
 }

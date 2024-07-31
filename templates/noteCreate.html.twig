@@ -23,28 +23,29 @@
             <div class="col-md-12">
                 <h1 class="form-header" style="padding-top: 2em;">Create Secure Envelope</h1>
                 {{ form_start(form) }}
-                <div class="form-group">
-                    {{ form_label(form.customerTextAnswerOne) }}
-                    <div class="button-group">
-                        {{ form_widget(form.customerTextAnswerOne) }}
-                        {% if decodedNote %}
+                {% if decodedNote %}
+                    <div class="form-group">
+                        {{ form_label(form.customerTextAnswerOne) }}
+                        <div class="button-group">
+                            {{ form_widget(form.customerTextAnswerOne) }}
                             <section class="mb-4">
-                                <a class="btn btn-outline-dark btn-floating m-1" href="/note/{{ noteId }}/decrypt/customerTextAnswerOne" role="button"><i class="">decrypt</i></a>
+                                <a class="btn btn-outline-dark btn-floating m-1"
+                                   href="/note/{{ noteId }}/decrypt/customerTextAnswerOne" role="button"><i class="">decrypt</i></a>
                             </section>
-                        {% endif %}
+                        </div>
                     </div>
-                </div>
-                <div class="form-group">
-                    {{ form_label(form.customerTextAnswerTwo) }}
-                    <div class="button-group">
-                        {{ form_widget(form.customerTextAnswerTwo) }}
-                        {% if decodedNote %}
+
+                    <div class="form-group">
+                        {{ form_label(form.customerTextAnswerTwo) }}
+                        <div class="button-group">
+                            {{ form_widget(form.customerTextAnswerTwo) }}
                             <section class="mb-4">
-                                <a class="btn btn-outline-dark btn-floating m-1" href="/note/{{ noteId }}/decrypt/customerTextAnswerTwo" role="button"><i class="">decrypt</i></a>
+                                <a class="btn btn-outline-dark btn-floating m-1"
+                                   href="/note/{{ noteId }}/decrypt/customerTextAnswerTwo" role="button"><i class="">decrypt</i></a>
                             </section>
-                        {% endif %}
+                        </div>
                     </div>
-                </div>
+                {% endif %}
                 {{ form_rest(form) }}
                 {{ form_end(form) }}
             </div>

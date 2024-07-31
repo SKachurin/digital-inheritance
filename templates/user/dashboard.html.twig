@@ -16,9 +16,17 @@
 
             {#    Vue render    #}
 {#            <div id="app"></div>#}
-            <section class="mb-4">
-                <a class="btn btn-outline-dark btn-floating m-1 mt-4" href="/note/create" role="button"><i class="">Create Your Secure Envelope</i></a>
-            </section>
+
+            {% if customerHasNote is defined and customerHasNote %}
+                <section class="mb-4">
+                    <a class="btn btn-outline-dark btn-floating m-1 mt-4" href="/note/{{ customerHasNote }}/edit" role="button"><i class="">Edit Your Secure Envelope</i></a>
+                </section>
+            {% endif %}
+            {% if customerHasNote is defined and not customerHasNote %}
+                <section class="mb-4">
+                    <a class="btn btn-outline-dark btn-floating m-1 mt-4" href="/note/create" role="button"><i class="">Create Your Secure Envelope</i></a>
+                </section>
+            {% endif %}
 
 
             {% for label, messages in app.flashes %}

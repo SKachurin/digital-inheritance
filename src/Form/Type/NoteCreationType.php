@@ -30,6 +30,7 @@ class NoteCreationType extends AbstractType
         }
 
         $customerId = $options['customerId'];
+        $decodedNote = $options['decodedNote'];
 
 
         $builder
@@ -66,61 +67,65 @@ class NoteCreationType extends AbstractType
                         ->where('n.customer = :customer')
                         ->setParameter('customer', $customerId);
                 },
-            ])
-            ->add('customerTextAnswerOne', TextareaType::class, [
-                'label' => 'Customer Text Answer One',
-                'required' => false,
-                'constraints' => [
-                    new Length([
-                        'max' => 10000,
-                        'maxMessage' => 'Customer Text Answer One cannot be longer than {{ limit }} characters.',
-                    ]),
-                ],
-                'attr' => array(
-                    'placeholder' => 'This field is intended for encrypted data.'
-                )
-            ])
-            ->add('customerTextAnswerTwo', TextareaType::class, [
-                'label' => 'Customer Text Answer Two',
-                'required' => false,
-                'constraints' => [
-                    new Length([
-                        'max' => 10000,
-                        'maxMessage' => 'Customer Text Answer Two cannot be longer than {{ limit }} characters.',
-                    ]),
-                ],
-                'attr' => array(
-                    'placeholder' => 'This field is intended for encrypted data.'
-                )
-            ])
-            ->add('beneficiaryTextAnswerOne', TextareaType::class, [
-                'label' => 'Beneficiary Text Answer One',
-                'required' => false,
-                'constraints' => [
-                    new Length([
-                        'max' => 10000,
-                        'maxMessage' => 'Beneficiary Text Answer One cannot be longer than {{ limit }} characters.',
-                    ]),
-                ],
-                'attr' => array(
-                    'placeholder' => 'This field is intended for encrypted data.'
-                )
-            ])
-            ->add('beneficiaryTextAnswerTwo', TextareaType::class, [
-                'label' => 'Beneficiary Text Answer Two',
-                'required' => false,
-                'constraints' => [
-                    new Length([
-                        'max' => 10000,
-                        'maxMessage' => 'Beneficiary Text Answer Two cannot be longer than {{ limit }} characters.',
-                    ]),
-                ],
-                'attr' => array(
-                    'placeholder' => 'This field is intended for encrypted data.'
-                )
-            ])
+            ]);
+            if ($decodedNote)
+            {
+                $builder ->
+                    add('customerTextAnswerOne', TextareaType::class, [
+                        'label' => 'Customer Text Answer One',
+                        'required' => false,
+                        'constraints' => [
+                            new Length([
+                                'max' => 10000,
+                                'maxMessage' => 'Customer Text Answer One cannot be longer than {{ limit }} characters.',
+                            ]),
+                        ],
+                        'attr' => array(
+                            'placeholder' => $decodedNote //'This field is intended for encrypted data.'
+                        )
+                    ])
+                    ->add('customerTextAnswerTwo', TextareaType::class, [
+                        'label' => 'Customer Text Answer Two',
+                        'required' => false,
+                        'constraints' => [
+                            new Length([
+                                'max' => 10000,
+                                'maxMessage' => 'Customer Text Answer Two cannot be longer than {{ limit }} characters.',
+                            ]),
+                        ],
+                        'attr' => array(
+                            'placeholder' => 'This field is intended for encrypted data.'
+                        )
+                    ])
+                    ->add('beneficiaryTextAnswerOne', TextareaType::class, [
+                        'label' => 'Beneficiary Text Answer One',
+                        'required' => false,
+                        'constraints' => [
+                            new Length([
+                                'max' => 10000,
+                                'maxMessage' => 'Beneficiary Text Answer One cannot be longer than {{ limit }} characters.',
+                            ]),
+                        ],
+                        'attr' => array(
+                            'placeholder' => 'This field is intended for encrypted data.'
+                        )
+                    ])
+                    ->add('beneficiaryTextAnswerTwo', TextareaType::class, [
+                        'label' => 'Beneficiary Text Answer Two',
+                        'required' => false,
+                        'constraints' => [
+                            new Length([
+                                'max' => 10000,
+                                'maxMessage' => 'Beneficiary Text Answer Two cannot be longer than {{ limit }} characters.',
+                            ]),
+                        ],
+                        'attr' => array(
+                            'placeholder' => 'This field is intended for encrypted data.'
+                        )
+                    ]);
+            }
 
-            ->add('submit', SubmitType::class, [
+            $builder->add('submit', SubmitType::class, [
                 'label' => 'Create Note',
                 'attr' => ['class' => 'btn btn-primary'],
             ]);
@@ -130,7 +135,8 @@ class NoteCreationType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => NoteCreateInputDto::class,
-            'customerId' => null
+            'customerId' => null,
+            'decodedNote' => null
         ]);
     }
 }

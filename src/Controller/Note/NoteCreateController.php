@@ -38,7 +38,7 @@ class NoteCreateController extends AbstractController
 
             );
 
-            $form = $this->createForm(NoteCreationType::class, $note, ['customerId' => $customer->getId()]);
+            $form = $this->createForm(NoteCreationType::class, $note, ['customerId' => $customer->getId(),'decodedNote' => false]);
             $form->handleRequest($request);
 
             if ($form->isSubmitted() && $form->isValid()) {
@@ -63,7 +63,7 @@ class NoteCreateController extends AbstractController
 
                 return $this->render('noteCreate.html.twig', [
                     'form' => $form1,
-                    'decodedNote' => true,
+
                     'noteId' => $noteId
                 ]);
 
