@@ -16,9 +16,18 @@ jobs:
         uses: webfactory/ssh-agent@v0.5.3
         with:
           ssh-private-key: ${{ secrets.SSH_PRIVATE_KEY }}
-
-      - name: Deploy to Server
+          
+      - name: Add server to known hosts
         run: |
+          ssh-keyscan -H 5.180.181.53 >> ~/.ssh/known_hosts 
+          
+      - name: Copy files to server
+        run: |
+          rsync -avz --delete ./ root@5.180.181.53:/var/www/thedigitalheir.com/
+
+      - name: Run deploy script on server
+        run: |
+          ssh -o StrictHostKeyChecking=no root@5.180.181.53 '
           export APP_SECRET="${{ secrets.APP_SECRET }}";
           export DATABASE_URL="${{ secrets.DATABASE_URL }}";
           export MAILER_DSN="${{ secrets.MAILER_DSN }}";
@@ -26,15 +35,6 @@ jobs:
           export MYSQL_ROOT_HOST="${{ secrets.MYSQL_ROOT_HOST }}";
           export MYSQL_ROOT_PASSWORD="${{ secrets.MYSQL_ROOT_PASSWORD }}";
           export PGID="${{ secrets.PGID }}";
-          ssh-keyscan github.com >> ~/.ssh/known_hosts;
-          ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null root@5.180.181.53 '
-            export APP_SECRET="${{ secrets.APP_SECRET }}";
-            export DATABASE_URL="${{ secrets.DATABASE_URL }}";
-            export MAILER_DSN="${{ secrets.MAILER_DSN }}";
-            export MYSQL_DATABASE="${{ secrets.MYSQL_DATABASE }}";
-            export MYSQL_ROOT_HOST="${{ secrets.MYSQL_ROOT_HOST }}";
-            export MYSQL_ROOT_PASSWORD="${{ secrets.MYSQL_ROOT_PASSWORD }}";
-            export PGID="${{ secrets.PGID }}";
-            cd /var/www/thedigitalheir.com;
-            bash deploy.sh;
-          '
+          cd /var/www/thedigitalheir.com;
+          bash deploy.sh;
+        '
