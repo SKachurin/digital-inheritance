@@ -35,6 +35,6 @@ jobs:
           export MYSQL_ROOT_HOST="${{ secrets.MYSQL_ROOT_HOST }}";
           export MYSQL_ROOT_PASSWORD="${{ secrets.MYSQL_ROOT_PASSWORD }}";
           export PGID="${{ secrets.PGID }}";
-          cd /var/www/thedigitalheir.com;
+          cd /var/www/;
           bash deploy.sh;
           '
