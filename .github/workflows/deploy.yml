@@ -37,4 +37,4 @@ jobs:
           export PGID="${{ secrets.PGID }}";
           cd /var/www/thedigitalheir.com;
           bash deploy.sh;
-        '
+          '
