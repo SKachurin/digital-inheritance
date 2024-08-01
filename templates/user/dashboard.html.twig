@@ -21,12 +21,29 @@
                 <section class="mb-4">
                     <a class="btn btn-outline-dark btn-floating m-1 mt-4" href="/note/{{ customerHasNote }}/edit" role="button"><i class="">Edit Your Secure Envelope</i></a>
                 </section>
+                <p>explanation</p>
             {% endif %}
             {% if customerHasNote is defined and not customerHasNote %}
                 <section class="mb-4">
                     <a class="btn btn-outline-dark btn-floating m-1 mt-4" href="/note/create" role="button"><i class="">Create Your Secure Envelope</i></a>
                 </section>
+                <p>explanation</p>
             {% endif %}
+
+            <section class="mb-4">
+                <a class="btn btn-outline-dark btn-floating m-1 mt-4" href="/beneficiary/create" role="button"><i class="">Create Your Heir</i></a>
+            </section>
+            <p>explanation</p>
+
+            <section class="mb-4">
+                <a class="btn btn-outline-dark btn-floating m-1 mt-4" href="/pipeline/create" role="button"><i class="">Create Your Pipeline</i></a>
+            </section>
+            <p>explanation</p>
+
+            <section class="mb-4">
+                <a class="btn btn-outline-dark btn-floating m-1 mt-4" href="/pipeline/create" role="button"><i class="">Make A Payment</i></a>
+            </section>
+            <p>explanation</p>
 
 
             {% for label, messages in app.flashes %}

@@ -26,6 +26,7 @@ class CustomerCreateInputDto
     private ?string $customerSecondQuestion;
     private ?string $customerSecondQuestionAnswer;
     private ?CustomerSocialAppEnum $customerSocialApp;
+    private ?string $customerSocialAppLink;
     #[Assert\NotBlank]
     private string $customerOkayPassword;
     #[Assert\NotBlank]
@@ -39,6 +40,7 @@ class CustomerCreateInputDto
         string  $customerOkayPassword,
         string  $password,
         CustomerSocialAppEnum $customerSocialApp = CustomerSocialAppEnum::NONE,
+        ?string $customerSocialAppLink = null,
         ?string $customerSecondEmail = null,
         ?string $customerFullName = null,
         ?string $customerCountryCode = null,
@@ -173,6 +175,15 @@ class CustomerCreateInputDto
     public function setCustomerSocialApp(?CustomerSocialAppEnum $customerSocialApp): void
     {
         $this->customerSocialApp = $customerSocialApp;
+    }
+
+    public function getCustomerSocialAppLink(): ?string
+    {
+        return $this->customerSocialAppLink;
+    }
+    public function setCustomerSocialAppLink(?string $customerSocialAppLink): void
+    {
+        $this->customerSocialAppLink = $customerSocialAppLink;
     }
 
     public function getCustomerOkayPassword(): string

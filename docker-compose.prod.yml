@@ -20,7 +20,7 @@ services:
     build:
       dockerfile: docker/php-fpm/Dockerfile
       context: ./
-      target: local
+      target: prod
     container_name: digital-backend
     volumes:
       - ~/.ssh:/root/.ssh

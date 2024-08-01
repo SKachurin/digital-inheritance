@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+    {% block content %}
+        <div class="container">
+            <h1 style="padding-top: 4em;">Create Your Heir</h1>
+            {{ form(form) }}
+
+        </div>
+        {% for label, messages in app.flashes %}
+            {% for message in messages %}
+                <div class="alert alert-{{ label }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endfor %}
+
+    {% endblock %}

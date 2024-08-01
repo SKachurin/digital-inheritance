@@ -38,6 +38,10 @@ note_decrypt:
     defaults:
         question: 'default' # Default value if question is not provided
 
+beneficiary_create:
+    path: /beneficiary/create
+    controller: App\Controller\Beneficiary\BeneficiaryCreateController::create
+
 
 home:
     path:          /

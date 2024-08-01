@@ -1,8 +1,10 @@
 <?php
-namespace App\Controller\Customer;
+namespace App\Controller\Beneficiary;
 
+use App\CommandHandler\Beneficiary\Create\BeneficiaryCreateInputDto;
 use App\CommandHandler\Customer\Create\CustomerCreateInputDto;
 use App\Enum\CustomerSocialAppEnum;
+use App\Form\Type\BeneficiaryCreateType;
 use App\Form\Type\RegistrationType;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -11,7 +13,7 @@ use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Messenger\Stamp\HandledStamp;
 
-class RegistrationController extends AbstractController
+class BeneficiaryCreateController extends AbstractController
 {
     private MessageBusInterface $commandBus;
 
@@ -22,39 +24,23 @@ class RegistrationController extends AbstractController
         $this->commandBus = $commandBus;
     }
 
-    public function new(Request $request): Response
+    public function create(Request $request): Response
     {
         $customer = $this->getUser();
 
-        if ($customer instanceof \App\Entity\Customer) {
-            return $this->redirectToRoute('user_home');
+        if (! $customer instanceof \App\Entity\Customer) {
+            return $this->redirectToRoute('user_login');
         }
 
-        $customer = new CustomerCreateInputDto(
-            'enter something',
-            'viva-natura1@yandex.ru',
-            'it should be not obvious for strangers',
-            'Love',
-            'passwordOkay',
-            'password',
-            CustomerSocialAppEnum::NONE,
-            'viva-natura111@yandex.ru',
-            'Winnie the Pooh',
-            '995',
-            '9109019184',
-            '',
-            'All we need is:',
-            'Love'
+        $customer = new BeneficiaryCreateInputDto();
 
-        );
-
-        $form = $this->createForm(RegistrationType::class, $customer);
+        $form = $this->createForm(BeneficiaryCreateType::class, $customer);
 
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
 
-            /** @var CustomerCreateInputDto $customerData */
+            /** @var BeneficiaryCreateInputDto $customerData */
             $customerData = $form->getData();
 
             $envelope = $this->commandBus->dispatch($customerData);
@@ -65,9 +51,19 @@ class RegistrationController extends AbstractController
                 throw new UnprocessableEntityHttpException('500 internal error (CommandBus not responding).');
             }
 
-            $this->addFlash('success', 'Your registration is being processed. You will receive a confirmation email once it is complete.');
 
-            return $this->redirectToRoute('customer_creating');
+            $this->addFlash('success', 'Your Heir is being processed.');
+
+            $heir = $handledStamp->getResult();
+            $heirId = $heir->getId();
+
+            $form1 = $this->createForm(NoteCreationType1::class, $heir, ['customerId' => $customer->getId()]);
+
+            return $this->render('noteCreate.html.twig', [
+                'form' => $form1,
+                'decodedNote' => true,
+                'noteId' => $heirId
+            ]);
         }
 
        return $this->render('user/registration.html.twig', [

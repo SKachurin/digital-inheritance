@@ -18,6 +18,7 @@ form:
     customer_okay_password_repeat: 'Repeat the Okay Password'
     password: 'Normal password for entering our service. If you lose it or it gets leaked, others will still not be able to see your notes without your answers.'
     password_repeat: 'Repeat Password'
+
   help:
     customer_name: 'This field will be used to address you in our communications.'
     customer_email: 'This will be your ID in our system. We will encode it with our best algorithm.'
