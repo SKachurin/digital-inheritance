@@ -26,6 +26,10 @@ note_create:
     path: /note/create
     controller: App\Controller\Note\NoteCreateController::create
 
+note_edit:
+    path: /note/{noteId}/edit
+    controller: App\Controller\Note\NoteEditController::edit
+
 note_decrypt:
     path: /note/{noteId}/decrypt/{question}
     controller: App\Controller\Note\NoteDecryptController::decrypt

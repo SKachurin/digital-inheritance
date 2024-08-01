@@ -63,7 +63,7 @@ class NoteCreateController extends AbstractController
 
                 return $this->render('noteCreate.html.twig', [
                     'form' => $form1,
-
+                    'decodedNote' => true,
                     'noteId' => $noteId
                 ]);
 
