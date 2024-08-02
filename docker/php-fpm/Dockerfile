@@ -9,6 +9,8 @@ RUN mkdir -p -m 0700 ~/.ssh && ssh-keyscan github.com >> ~/.ssh/known_hosts
 
 RUN apk update && apk upgrade
 
+# Install PHP extensions needed for composer
+ADD https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions /usr/local/bin/
 # Install php extensions
 RUN chmod +x /usr/local/bin/install-php-extensions && sync \
     && install-php-extensions apcu
