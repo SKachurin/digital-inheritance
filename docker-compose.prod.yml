@@ -29,6 +29,7 @@ services:
       - ./docker/php-fpm/supervisor.d/local.ini:/etc/supervisor.d/default.ini
       - .:/var/www
     environment:
+      PHP_MEMORY_LIMIT: 512M
       DATABASE_URL: "${DATABASE_URL}"
       APP_SECRET: "${APP_SECRET}"
       MAILER_DSN: "${MAILER_DSN}"

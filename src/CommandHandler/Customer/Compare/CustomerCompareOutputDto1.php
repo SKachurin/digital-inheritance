@@ -22,6 +22,7 @@ class CustomerCompareOutputDto1 implements \JsonSerializable
     private ?string $customerSecondQuestion;
     private ?string $customerSecondQuestionAnswer;
     private ?CustomerSocialAppEnum $customerSocialApp;
+    private ?string $customerSocialAppLink;
     private CustomerPaymentStatusEnum $customerPaymentStatus;
     private string $customerOkayPassword;
     private string $password;
@@ -44,6 +45,7 @@ class CustomerCompareOutputDto1 implements \JsonSerializable
         $this->customerSecondQuestion = $customer->getCustomerSecondQuestion();
         $this->customerSecondQuestionAnswer = $customer->getCustomerSecondQuestionAnswer();
         $this->customerSocialApp = $customer->getCustomerSocialApp();
+        $this->customerSocialAppLink = null; // Will be set based on contacts
         $this->customerPaymentStatus = $customer->getCustomerPaymentStatus();
         $this->customerOkayPassword = $customer->getCustomerOkayPassword();
         $this->password = $customer->getPassword();
@@ -155,6 +157,17 @@ class CustomerCompareOutputDto1 implements \JsonSerializable
    {
        return $this->customerSocialApp;
    }
+
+    public function getCustomerSocialAppLink(): ?string
+    {
+        return $this->customerSocialAppLink;
+    }
+    public function setCustomerSocialAppLink(?string $customerSocialAppLink): self
+    {
+        $this->customerSocialAppLink = $customerSocialAppLink;
+        return $this;
+    }
+
    public function getCustomerPaymentStatus(): CustomerPaymentStatusEnum
    {
        return $this->customerPaymentStatus;

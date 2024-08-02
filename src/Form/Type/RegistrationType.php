@@ -117,6 +117,11 @@ class RegistrationType extends AbstractType
                 ],
                 'required' => true,
             ])
+            ->add('customerSocialAppLink', TextType::class, [
+                'label' => 'form.customer_social_app_link',
+                'help' => 'form.help.customer_social_app_link',
+                'required' => false,
+            ])
             ->add('customerOkayPassword', RepeatedType::class, [
                 'type' => PasswordType::class,
                 'help' => '',

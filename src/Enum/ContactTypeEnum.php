@@ -26,6 +26,7 @@ enum ContactTypeEnum //: string implements TransformableEnumInterface
     public const EMAIL = 'email';
     public const PHONE = 'phone';
     public const MESSENGER = 'messenger';
+    public const SOCIAL = 'social';
 
     /**
      * @return array<int, string>
@@ -36,6 +37,7 @@ enum ContactTypeEnum //: string implements TransformableEnumInterface
             self::EMAIL,
             self::PHONE,
             self::MESSENGER,
+            self::SOCIAL,
         ];
     }
 }

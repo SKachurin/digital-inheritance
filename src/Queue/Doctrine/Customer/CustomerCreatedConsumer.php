@@ -7,8 +7,10 @@ namespace App\Queue\Doctrine\Customer;
 use App\Entity\Contact;
 use App\Entity\Customer;
 use App\Entity\VerificationToken;
+//use App\Repository\CustomerRepository;
 use App\Service\CryptoService;
 use Doctrine\ORM\EntityManagerInterface;
+//use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 use Symfony\Component\Messenger\MessageBusInterface;
@@ -19,10 +21,13 @@ use Symfony\Component\Mime\Email;
 use DateTimeImmutable;
 use Symfony\Component\Uid\Uuid;
 use App\Repository\ContactRepository;
+//use Psr\Log\LoggerInterface;
 
 #[AsMessageHandler]
 class CustomerCreatedConsumer
 {
+//    private LoggerInterface $logger;
+//    private CustomerRepository $customerRepository;
     public function __construct(
         protected SerializerInterface $serializer,
         protected MessageBusInterface $commandBus,
@@ -32,8 +37,12 @@ class CustomerCreatedConsumer
         private UrlGeneratorInterface $urlGenerator,
         private ContactRepository $contactRepository,
         private CryptoService $cryptoService,
-//        LoggerInterface $logger
-    ) {}
+//        LoggerInterface $logger,
+//        CustomerRepository $customerRepository,
+    ) {
+//        $this->logger = $logger;
+//        $this->customerRepository = $customerRepository;
+    }
 
     /**
      *
@@ -41,84 +50,98 @@ class CustomerCreatedConsumer
     public function __invoke(CustomerCreatedMessage $message,): void
     {
 //        try {
-        $input = $message->getCustomerCreateInputDto();
+            $input = $message->getCustomerCreateInputDto();
 
-        $customer = new Customer();
+//            $isDouble = $this->customerRepository->findOneBy(['customerEmail' => $input->getCustomerEmail()]);
+//
+//            if (null !== $isDouble) {
+//                throw new UnprocessableEntityHttpException('Customer already exists.');
+//            }
 
-        $customer
-            ->setCustomerName($input->getCustomerName())
-            ->setCustomerEmail($input->getCustomerEmail())
-            ->setCustomerOkayPassword(
-                $this->passwordHasher->hashPassword(
-                    $customer,
-                    $input->getCustomerOkayPassword()
-                )
-            )
-            ->setPassword(
-                $this->passwordHasher->hashPassword(
-                    $customer,
-                    $input->getPassword()
-                )
-            )
-            ->setCustomerFullName(
-                $this->cryptoService->encryptData(
-                    $input->getCustomerFullName()
-                )
-            )
-            ->setCustomerFirstQuestion(
-                $this->cryptoService->encryptData(
-                    $input->getCustomerFirstQuestion()
-                )
-            )
-            ->setCustomerFirstQuestionAnswer(
-                $this->cryptoService->encryptData(
-                    $input->getCustomerFirstQuestionAnswer()
-                )
-            )
-            ->setCustomerSecondQuestion(
-                $this->cryptoService->encryptData(
-                    $input->getCustomerSecondQuestion()
-                )
-            )
-            ->setCustomerSecondQuestionAnswer(
-                $this->cryptoService->encryptData(
-                    $input->getCustomerSecondQuestionAnswer()
-                )
-            )
-            ->setCustomerSocialApp($input->getCustomerSocialApp()) // TODO CustomerSocialAppEnum::from($input->getCustomerSocialApp()))
-        ;
+            $customer = new Customer();
 
-        $this->entityManager->persist($customer);
-
-        if ($input->getCustomerEmail()){
-            $this->persistContact($customer, 'email',
-                $this->cryptoService->encryptData(
-                    $input->getCustomerEmail()
+            $customer
+                ->setCustomerName($input->getCustomerName())
+                ->setCustomerEmail($input->getCustomerEmail())
+                ->setCustomerOkayPassword(
+                    $this->passwordHasher->hashPassword(
+                        $customer,
+                        $input->getCustomerOkayPassword()
+                    )
                 )
-            );
-        }
-
-        if ($input->getCustomerSecondEmail()){
-            $this->persistContact($customer, 'email',
-                $this->cryptoService->encryptData(
-                    $input->getCustomerSecondEmail()
+                ->setPassword(
+                    $this->passwordHasher->hashPassword(
+                        $customer,
+                        $input->getPassword()
+                    )
                 )
-            );
-        }
+                ->setCustomerFullName(
+                    $this->cryptoService->encryptData(
+                        $input->getCustomerFullName()
+                    )
+                )
+                ->setCustomerFirstQuestion(
+                    $this->cryptoService->encryptData(
+                        $input->getCustomerFirstQuestion()
+                    )
+                )
+                ->setCustomerFirstQuestionAnswer(
+                    $this->cryptoService->encryptData(
+                        $input->getCustomerFirstQuestionAnswer()
+                    )
+                )
+                ->setCustomerSecondQuestion(
+                    $this->cryptoService->encryptData(
+                        $input->getCustomerSecondQuestion()
+                    )
+                )
+                ->setCustomerSecondQuestionAnswer(
+                    $this->cryptoService->encryptData(
+                        $input->getCustomerSecondQuestionAnswer()
+                    )
+                )
+                ->setCustomerSocialApp($input->getCustomerSocialApp()) // TODO CustomerSocialAppEnum::from($input->getCustomerSocialApp()))
+            ;
 
-        if ($input->getCustomerFirstPhone()){
-            $this->persistContact($customer, 'phone',
-                $this->cryptoService->encryptData(
-                    $input->getCustomerFirstPhone()
-                ), $input->getCustomerCountryCode());
-        }
+            $this->entityManager->persist($customer);
 
-        if ($input->getCustomerSecondPhone()){
-            $this->persistContact($customer, 'phone',
-                $this->cryptoService->encryptData(
-                    $input->getCustomerSecondPhone()
-                ), $input->getCustomerCountryCode());
-        }
+            if ($input->getCustomerEmail()){
+                $this->persistContact($customer, 'email',
+                    $this->cryptoService->encryptData(
+                        $input->getCustomerEmail()
+                    )
+                );
+            }
+
+            if ($input->getCustomerSecondEmail()){
+                $this->persistContact($customer, 'email',
+                    $this->cryptoService->encryptData(
+                        $input->getCustomerSecondEmail()
+                    )
+                );
+            }
+
+            if ($input->getCustomerFirstPhone()){
+                $this->persistContact($customer, 'phone',
+                    $this->cryptoService->encryptData(
+                        $input->getCustomerFirstPhone()
+                    ), $input->getCustomerCountryCode());
+            }
+
+            if ($input->getCustomerSecondPhone()){
+                $this->persistContact($customer, 'phone',
+                    $this->cryptoService->encryptData(
+                        $input->getCustomerSecondPhone()
+                    ), $input->getCustomerCountryCode());
+            }
+
+            if ($input->getCustomerSocialAppLink()){
+                $this->persistContact($customer, 'social',
+                    $this->cryptoService->encryptData(
+                        $input->getCustomerSocialAppLink()
+                    )
+                );
+            }
 
 //     TODO: Logs
 
@@ -127,6 +150,14 @@ class CustomerCreatedConsumer
 //        $this->logger->error('Error creating customer: ' . $e->getMessage(), ['exception' => $e]);
 //            // mark the message as failed, etc.???
 //    }
+//        try {
+            $this->entityManager->flush();
+//            $this->logger->info('Customer created successfully.', ['customerEmail' => $customer->getCustomerEmail()]);
+//        } catch (\Exception $e) {
+////            $this->entityManager->getConnection()->rollBack(); // Roll back on error
+//            $this->logger->error('Error creating customer: ' . $e->getMessage(), ['exception' => $e]);
+//            throw $e;
+//        }
 
         $token = new VerificationToken(
             $customer,
@@ -149,7 +180,7 @@ class CustomerCreatedConsumer
                 ->setContactTypeEnum($type)
                 ->setValue($value);
 
-            if ($countryCode && $type !== 'email') {
+            if ($countryCode && $type === 'phone' ) {
                 $contact->setCountryCode($countryCode);
             }
 

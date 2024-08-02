@@ -27,6 +27,7 @@ services:
       - ./docker/php-fpm/supervisor.d/local.ini:/etc/supervisor.d/default.ini
       - .:/var/www
     environment:
+      PHP_MEMORY_LIMIT: 256M
       DATABASE_URL: "mysql://root:root@digital-mysql:3306/local?charset=utf8"
     extra_hosts:
       - "host.docker.internal:host-gateway"

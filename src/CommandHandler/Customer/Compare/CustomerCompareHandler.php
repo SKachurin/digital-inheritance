@@ -58,6 +58,11 @@ class CustomerCompareHandler
                     $dto->setCustomerSecondPhone($contact->getValue());
                 }
             }
+            if ($contact->getContactTypeEnum() === 'social') {
+                if ($dto->getCustomerSocialAppLink() === null) {
+                    $dto->setCustomerSocialAppLink($contact->getValue());
+                }
+            }
         }
 
         return $dto;
@@ -89,6 +94,7 @@ class CustomerCompareHandler
         $dto2->setCustomerFirstPhone($this->cryptoService->decryptData($dto->getCustomerFirstPhone()));
         $dto2->setCustomerSecondPhone($this->cryptoService->decryptData($dto->getCustomerSecondPhone()));
         $dto2->setCustomerSocialApp($dto->getCustomerSocialApp());
+        $dto2->setCustomerSocialAppLink($this->cryptoService->decryptData($dto->getCustomerSocialAppLink()));
         $dto2->setCustomerOkayPassword($dto->getCustomerOkayPassword());
         $dto2->setPassword($dto->getPassword());
 

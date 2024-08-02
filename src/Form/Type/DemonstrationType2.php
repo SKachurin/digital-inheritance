@@ -67,6 +67,10 @@ class DemonstrationType2 extends AbstractType
                 'label' => 'form.label.customer_social_app',
                 'required' => false,
             ])
+            ->add('customerSocialAppLink',  TextType::class, [
+                'label' => 'form.label.customer_social_app_link',
+                'required' => false,
+            ])
             ->add('customerOkayPassword', TextType::class, [
                 'label' => 'form.label.customer_okay_password',
                 'required' => false,

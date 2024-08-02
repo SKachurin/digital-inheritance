@@ -34,7 +34,7 @@ class CustomerRepository extends BaseRepository
             ->leftJoin('c.contacts', 'contact')
             ->addSelect('contact')
             ->orderBy('c.id', 'DESC')
-            ->setMaxResults(4)
+            ->setMaxResults(5)
             ->getQuery()
             ->getOneOrNullResult();
 

@@ -58,6 +58,7 @@ class CustomerCreateInputDto
         $this->customerOkayPassword = $customerOkayPassword;
         $this->password = $password;
         $this->customerSocialApp = $customerSocialApp;
+        $this->customerSocialAppLink = $customerSocialAppLink;
         $this->customerSecondEmail = $customerSecondEmail;
         $this->customerFullName = $customerFullName;
         $this->customerCountryCode = $customerCountryCode;
