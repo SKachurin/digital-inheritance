@@ -2,7 +2,6 @@
 namespace App\Controller\Customer;
 
 use App\Form\Type\LoginType;
-use Defuse\Crypto\Key;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\Response;
@@ -13,6 +12,9 @@ class LoginController extends AbstractController
 
     public function index(ParameterBagInterface $params, AuthenticationUtils $authenticationUtils): Response
     {
+        if ($this->getUser()) {
+            return $this->redirectToRoute('user_home');
+        }
 
         $form = $this->createForm(LoginType::class);
 
@@ -20,13 +22,6 @@ class LoginController extends AbstractController
 
         // last username entered by the user
         $lastUsername = $authenticationUtils->getLastUsername();
-//        $key = $params->get('encryption_key');//Key::loadFromAsciiSafeString($params->get('encryption_key'));
-
-//        $key = Key::createNewRandomKey()->saveToAsciiSafeString();
-
-//        $baseKey = $params->get('encryption_key');//getenv('ENCRYPTION_KEY');
-////        $rawKey = $baseKey->getRawBytes();
-//        $key = Key::loadFromAsciiSafeString($baseKey);
 
         return $this->render('user/login.html.twig', [
              'form'          => $form,
