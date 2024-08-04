@@ -1,3 +1,12 @@
+title: 'Welcome!'
+header:
+  dashboard: "Dashboard"
+  login: "Login"
+  logout: "Logout"
+  registration: "Registration"
+  pricing: "Pricing"
+  faqs: "FAQs"
+  about: "About"
 form:
   label:
     customer_name: 'Nickname or whatever'
@@ -14,6 +23,7 @@ form:
     customer_second_question_answer: 'Answer. We will never save it - we will encode all your notes with a hash from this answer. Forget this answer and the previous one = lose all your notes.'
     customer_second_question_answer_repeat: 'Repeat the Answer'
     customer_social_app: 'Social App for tracking your activity. This feature minimizes interaction with this service.'
+    customer_social_app_link: 'Link to your Social App profile.'
     customer_okay_password: 'This will be used to check if you are okay. Pick something mundane (like "The day was great") so it seems normal to anyone who might see this interaction.'
     customer_okay_password_repeat: 'Repeat the Okay Password'
     password: 'Normal password for entering our service. If you lose it or it gets leaked, others will still not be able to see your notes without your answers.'
@@ -39,3 +49,31 @@ form:
       vkcom: 'vkcom'
       telegram: 'telegram'
 Submit: 'Submit'
+create_your_heir: 'Create Your Heir'
+edit_your_secure_envelope: 'Edit Your Secure Envelope'
+create_your_secure_envelope: 'Create Your Secure Envelope'
+create_your_pipeline: 'Create Your Pipeline'
+make_a_payment: 'Make A Payment'
+decrypt_your_secure_envelope: 'Decrypt Your Secure Envelope'
+decrypt_first: 'To Edit Your Secure Envelope Decrypt It First'
+enter_answer: 'Enter Your Answer To One Of The Questions Below and Push The Button'
+do_some_staff: 'Now You Can Do Some Staff'
+
+about_page:
+  title: "About 'The Digital Heir'"
+  introduction:
+    our_service: "Our service offers a secure and reliable solution for leaving your digital assets as an inheritance."
+    no_watching: "We do not watch you. We do not sale your data in any way."
+    privacy_priority: "We prioritize your privacy and security at every step."
+    encrypted_details: "Your contact details are encrypted before they are stored, ensuring they remain confidential."
+    encrypted_envelopes: "We also encrypt your secret envelopes with answers to your security questions."
+    no_decoding: "Once encrypted, these answers are deleted from our database, leaving only you and God with the knowledge."
+    no_way_decode: "There is no way to decode your secret envelopes without the answers provided by you!"
+  how_it_works: "Here's how it works:"
+  section_titles:
+    registration: "Registration"
+    secret_questions: "Secret Questions"
+    create_envelope: "Create Envelope"
+    add_beneficiary: "Add Beneficiary To Envelope"
+  beneficiary_info: "All encrypted notes are stored securely on our servers. If something happens to you, or your device is compromised, your trusted contacts will still be able to access the necessary information using their personalized security questions."
+  assurance: "With our service, you can rest assured that your sensitive information is safe and accessible only to those you trust."

@@ -44,4 +44,6 @@ services:
         tags:
             - { name: 'messenger.middleware', priority: 100 }
 
+    App\EventSubscriber\LocaleSubscriber: ~
+
 

@@ -17,17 +17,17 @@
         }
     </style>
     <div class="container">
-        <h1 style="padding-top: 3em; font-size: 2rem;">Dashboard</h1>
+        <h1 style="padding-top: 3em; font-size: 2rem;">{{ 'header.dashboard'|trans }}</h1>
 
         <div class="row">
             <div class="col-md-12">
                 {% if not decodedNote %}
-                    <h1 class="form-header" style="padding-top: 2em;">To Edit Your Secure Envelope Decrypt It First</h1>
-                    <h4 style="padding-bottom: 3em;">Enter Your Answer To One Of The Questions Below and Push The Button</h4>
+                    <h1 class="form-header" style="padding-top: 2em;">{{ 'decrypt_first'|trans }}</h1>
+                    <h4 style="padding-bottom: 3em;">{{ 'enter_answer'|trans }}</h4>
                 {% endif %}
                 {% if decodedNote %}
-                    <h1 class="form-header" style="padding-top: 2em;">Edit Your Secure Envelope</h1>
-                    <h4 style="padding-bottom: 3em;">Now You Can Do Some Staff</h4>
+                    <h1 class="form-header" style="padding-top: 2em;">{{ 'edit_your_secure_envelope'|trans }}</h1>
+                    <h4 style="padding-bottom: 3em;">{{ 'do_some_staff'|trans }}</h4>
                 {% endif %}
                 {{ form(form) }}
             </div>

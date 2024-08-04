@@ -17,11 +17,11 @@
         }
     </style>
     <div class="container">
-        <h1 style="padding-top: 3em; font-size: 2rem;">Dashboard</h1>
+        <h1 style="padding-top: 3em; font-size: 2rem;">{{ 'header.dashboard'|trans }}</h1>
 
         <div class="row">
             <div class="col-md-12">
-                <h1 class="form-header" style="padding-top: 2em;">Create Secure Envelope</h1>
+                <h1 class="form-header" style="padding-top: 2em;">{{ 'create_your_secure_envelope'|trans }}</h1>
                 {{ form_start(form) }}
                 {% if decodedNote %}
                     <div class="form-group">
