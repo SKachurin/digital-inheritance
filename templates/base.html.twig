@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <title>{% block title %}Welcome!{% endblock %}</title>
+    <title>{% block title %}{{ 'title'|trans }}{% endblock %}</title>
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>">
     {% block stylesheets %}
 {#        {{ encore_entry_link_tags('app') }}#}
@@ -30,19 +30,20 @@
 
             <ul class="nav nav-pills ">
                 {% if is_granted('ROLE_USER') %}
-                    <li class="nav-item"><a href="{{ path('user_home') }}" class="nav-link" aria-current="page"><b>Dashboard</b></a></li>
-                    <li class="nav-item"><a href="{{ path('_logout_main') }}" class="nav-link" aria-current="page"><b>Logout</b></a></li>
+                    <li class="nav-item"><a href="{{ path('user_home') }}" class="nav-link" aria-current="page"><b>{{ 'header.dashboard'|trans }}<</b></a></li>
+                    <li class="nav-item"><a href="{{ path('_logout_main') }}" class="nav-link" aria-current="page"><b>{{ 'header.logout'|trans }}</b></a></li>
                 {% else %}
-                    <li class="nav-item"><a href="{{ path('user_login') }}" class="nav-link" aria-current="page"><b>Login</b></a></li>
-                    <li class="nav-item"><a href="{{ path('user_registration') }}" class="nav-link"><b>Registration</b></a></li>
+                    <li class="nav-item"><a href="{{ path('user_login') }}" class="nav-link" aria-current="page"><b>{{ 'header.login'|trans }}</b></a></li>
+                    <li class="nav-item"><a href="{{ path('user_registration') }}" class="nav-link"><b>{{ 'header.registration'|trans }}</b></a></li>
                 {% endif %}
-                <li class="nav-item"><a href="#" class="nav-link disabled">Pricing</a></li>
-                <li class="nav-item"><a href="#" class="nav-link disabled">FAQs</a></li>
-                <li class="nav-item"><a href="{{ path('about') }}" class="nav-link">About</a></li>
+                <li class="nav-item"><a href="#" class="nav-link disabled">{{ 'header.pricing'|trans }}</a></li>
+                <li class="nav-item"><a href="#" class="nav-link disabled">{{ 'header.faqs'|trans }}</a></li>
+                <li class="nav-item"><a href="{{ path('about') }}" class="nav-link">{{ 'header.about'|trans }}</a></li>
             </ul>
         </header>
 
         <main class="flex-fill">
+            lang="{{ app.request.locale }}"
             {% block content %}{% endblock %}
         </main>
 
