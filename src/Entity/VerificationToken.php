@@ -26,13 +26,13 @@ class VerificationToken
     #[ORM\Column(type: 'datetime_immutable')]
     private DateTimeImmutable $expiresAt;
 
-    #[ORM\ManyToOne(targetEntity: Customer::class, inversedBy: 'verificationTokens')]
+    #[ORM\OneToOne(targetEntity: Contact::class, inversedBy: 'verificationToken')]
     #[ORM\JoinColumn(nullable: false)]
-    private Customer $customer;
+    private Contact $contact;
 
-    public function __construct(Customer $customer, string $type, string $token, DateTimeImmutable $expiresAt)
+    public function __construct(Contact $contact, string $type, string $token, DateTimeImmutable $expiresAt)
     {
-        $this->customer = $customer;
+        $this->contact = $contact;
         $this->type = $type;
         $this->token = $token;
         $this->expiresAt = $expiresAt;
@@ -58,14 +58,14 @@ class VerificationToken
         return $this->expiresAt;
     }
 
-    public function getCustomer(): Customer
+    public function getContact(): Contact
     {
-        return $this->customer;
+        return $this->contact;
     }
 
-    public function setCustomer(Customer $customer): void
+    public function setContact(Contact $contact): void
     {
-        $this->customer = $customer;
+        $this->contact = $contact;
     }
 
     public function isExpired(): bool

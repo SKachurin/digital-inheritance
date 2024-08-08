@@ -5,10 +5,13 @@ declare(strict_types=1);
 namespace App\CommandHandler\Beneficiary\Create;
 
 use App\CommandHandler\Customer\Create\CustomerCreateInputDto;
+use App\Entity\Contact;
 use App\Queue\Doctrine\Customer\CustomerCreatedProducer;
+use App\Repository\BeneficiaryRepository;
 use App\Repository\CustomerRepository;
-use App\Entity\Customer;
+use App\Entity\Beneficiary;
 use App\Queue\Doctrine\Customer\CustomerCreatedMessage;
+use App\Service\CryptoService;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Query\QueryException;
 use phpDocumentor\Reflection\Types\Void_;
@@ -20,29 +23,106 @@ use Symfony\Component\Routing\Annotation\Route;
 #[AsMessageHandler]
 class BeneficiaryCreateHandler
 {
+    private CryptoService $cryptoService;
+    private EntityManagerInterface $entityManager;
+    protected UserPasswordHasherInterface $passwordHasher;
+
     public function __construct(
-//        private EntityManagerInterface $entityManager,
-        private CustomerRepository $customerRepository,
-        private CustomerCreatedProducer $customerCreatedProducer,
-    ) {}
+        EntityManagerInterface $entityManager,
+         CryptoService $cryptoService,
+         UserPasswordHasherInterface $passwordHasher,
+    ) {
+        $this->entityManager = $entityManager;
+        $this->cryptoService = $cryptoService;
+    }
 
     /**
      * @throws QueryException
      */
-    public function __invoke(CustomerCreateInputDto $input): void //CustomerCreateOutputDto
+    public function __invoke(BeneficiaryCreateInputDto $input): Beneficiary
     {
-        $isDouble = $this->customerRepository->findOneBy(['customerEmail' => $input->getCustomerEmail()]);
+        $beneficiary = new Beneficiary($input->getBeneficiaryName());
 
-        if (null !== $isDouble) {
-            throw new UnprocessableEntityHttpException('Customer already exists.');
+        $beneficiary
+            ->setBeneficiaryFullName(
+                $this->cryptoService->encryptData(
+                    $input->getBeneficiaryFullName()
+                )
+            )
+            ->setBeneficiaryFirstQuestion(
+                $this->cryptoService->encryptData(
+                    $input->getBeneficiaryFirstQuestion()
+                )
+            )
+            ->setBeneficiaryFirstQuestionAnswer(
+                $this->passwordHasher->hashPassword(
+                    $beneficiary,
+                    $input->getBeneficiaryFirstQuestionAnswer()
+                )
+            )
+            ->setBeneficiarySecondQuestion(
+                $this->cryptoService->encryptData(
+                    $input->getBeneficiarySecondQuestion()
+                )
+            )
+            ->setBeneficiarySecondQuestionAnswer(
+                $this->passwordHasher->hashPassword(
+                    $beneficiary,
+                    $input->getBeneficiarySecondQuestionAnswer()
+                )
+            )
+        ;
+
+        $this->entityManager->persist($beneficiary);
+
+        if ($input->getBeneficiaryEmail()){
+            $this->persistContact($beneficiary, 'email',
+                $this->cryptoService->encryptData(
+                    $input->getBeneficiaryEmail()
+                )
+            );
         }
 
-        $message = $this->createCustomerCreatedMessage($input);
-        $this->customerCreatedProducer->produce($message);
+        if ($input->getBeneficiarySecondEmail()){
+            $this->persistContact($beneficiary, 'email',
+                $this->cryptoService->encryptData(
+                    $input->getBeneficiarySecondEmail()
+                )
+            );
+        }
+
+        if ($input->getBeneficiaryFirstPhone()){
+            $this->persistContact($beneficiary, 'phone',
+                $this->cryptoService->encryptData(
+                    $input->getBeneficiaryFirstPhone()
+                ), $input->getBeneficiaryCountryCode());
+        }
+
+        if ($input->getBeneficiarySecondPhone()){
+            $this->persistContact($beneficiary, 'phone',
+                $this->cryptoService->encryptData(
+                    $input->getBeneficiarySecondPhone()
+                ), $input->getBeneficiaryCountryCode());
+        }
+
+        $this->entityManager->flush();
+
+        return $beneficiary;
     }
 
-    private function createCustomerCreatedMessage(CustomerCreateInputDto $customer): CustomerCreatedMessage
+    private function persistContact(Beneficiary $beneficiary, string $type, ?string $value, ?string $countryCode = null): void
     {
-        return new CustomerCreatedMessage($customer);
+        if ($value) {
+            $contact = new Contact();
+            $contact->setBeneficiary($beneficiary)
+                ->setContactTypeEnum($type)
+                ->setValue($value);
+
+            if ($countryCode && $type === 'phone' ) {
+                $contact->setCountryCode($countryCode);
+            }
+
+            $this->entityManager->persist($contact);
+        }
     }
 }

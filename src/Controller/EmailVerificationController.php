@@ -13,7 +13,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class EmailVerificationController extends AbstractController
 {
-    #[Route('/verify-email/{token}', name: 'email_verification_route')]
+//    #[Route('/verify-email/{token}', name: 'email_verification_route')]
     public function verifyEmail(
         string $token,
         VerificationTokenRepository $tokenRepository,
@@ -25,13 +25,17 @@ class EmailVerificationController extends AbstractController
             throw $this->createNotFoundException('Invalid or expired verification token.');
         }
 
-        $customer = $verificationToken->getCustomer();
+        $contact = $verificationToken->getContact();
 
-        // logic to mark the customer as verified
-        // $customer->setEmailVerified(true);
+        // Mark the specific contact as verified
+        $contact->setIsVerified(true);
+
+        // Remove the token to prevent reuse
         $entityManager->remove($verificationToken);
         $entityManager->flush();
 
-        return new RedirectResponse($this->generateUrl('homepage'));
+
+        $this->addFlash('success', 'Your email address has been verified.');
+        return new RedirectResponse($this->generateUrl('user_home'));
     }
 }

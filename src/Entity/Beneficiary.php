@@ -9,11 +9,13 @@ use App\Repository\BeneficiaryRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: BeneficiaryRepository::class)]
 #[ORM\HasLifecycleCallbacks]
-class Beneficiary
+class Beneficiary implements UserInterface, PasswordAuthenticatedUserInterface
 {
     use Timestamps;
 
@@ -239,4 +241,36 @@ class Beneficiary
         return $this;
     }
 
+    /**
+     * @return string[]
+     */
+    public function getRoles(): array
+    {
+        // TODO: Implement getRoles() method.
+        return[];
+    }
+    /**
+     * @return void
+     */
+    public function eraseCredentials(): void
+    {
+        // TODO: Implement eraseCredentials() method.
+    }
+    /**
+     * @return string
+     */
+    public function getUserIdentifier(): string
+    {
+        // TODO: Implement getUserIdentifier() method.
+        return (string) $this->id;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getPassword(): ?string
+    {
+        // TODO: Implement getPassword() method.
+        return (string) $this->id;
+    }
 }

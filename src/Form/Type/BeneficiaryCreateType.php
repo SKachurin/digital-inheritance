@@ -106,29 +106,10 @@ class BeneficiaryCreateType extends AbstractType
                 'first_options'  => ['label' => 'form.label.beneficiary_second_question_answer'],
                 'second_options' => ['label' => 'form.label.beneficiary_second_question_answer_repeat'],
             ])
-            ->add('beneficiarySocialApp',  ChoiceType::class, [
-                'label' => 'form.label.beneficiary_social_app',
-                'choices' => [
-                    'form.choice.beneficiary_social_app.none' => 'none',
-                    'form.choice.beneficiary_social_app.facebook' => 'facebook',
-                    'form.choice.beneficiary_social_app.instagram' => 'instagram',
-                    'form.choice.beneficiary_social_app.vkcom' => 'vk.com',
-                    'form.choice.beneficiary_social_app.telegram' => 'telegram',
-                ],
-                'required' => false,
-            ])
-            ->add('beneficiarySocialAppLink', TextType::class, [
-                'label' => 'form.label.beneficiary_social_app_link',
-                'help' => 'form.help.beneficiary_social_app_link',
-                'required' => false,
-            ])
-
             ->add('submit', SubmitType::class, [
                 'attr' => ['class' => 'btn btn-primary'],
             ]);
 
-        // Transform the 'beneficiarySocialApp' to handle Enum values
-        $builder->get('beneficiarySocialApp')->addModelTransformer(new EnumToStringTransformer);
     }
 
     public function configureOptions(OptionsResolver $resolver): void
