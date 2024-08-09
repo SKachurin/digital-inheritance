@@ -4,7 +4,9 @@ namespace App\Service;
 
 use App\Entity\Contact;
 use App\Entity\VerificationToken;
+use App\Repository\VerificationTokenRepository;
 use DateTimeImmutable;
+use Doctrine\DBAL\Exception;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mailer\MailerInterface;
@@ -18,25 +20,33 @@ class VerificationEmailService
     private UrlGeneratorInterface $urlGenerator;
     private EntityManagerInterface $entityManager;
     private CryptoService $cryptoService;
+    private VerificationTokenRepository $tokenRepository;
 
     public function __construct(
         MailerInterface $mailer,
         UrlGeneratorInterface $urlGenerator,
         EntityManagerInterface $entityManager,
-        CryptoService $cryptoService
+        CryptoService $cryptoService,
+        VerificationTokenRepository $tokenRepository
     ) {
         $this->mailer = $mailer;
         $this->urlGenerator = $urlGenerator;
         $this->entityManager = $entityManager;
         $this->cryptoService = $cryptoService;
+        $this->tokenRepository = $tokenRepository;
     }
 
     /**
      * @throws TransportExceptionInterface
      * @throws \SodiumException
+     * @throws Exception
      */
     public function sendVerificationEmail(Contact $contact): void
     {
+        $verificationToken = $this->tokenRepository->findOneBy(['contact' => $contact->getId()]);
+        if ($verificationToken) {
+            $this->tokenRepository->delete($verificationToken);
+        }
         $token = new VerificationToken(
             $contact,
             'email',

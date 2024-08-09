@@ -2,17 +2,13 @@
 
 declare(strict_types=1);
 
-namespace App\CommandHandler\Contact;
+namespace App\CommandHandler\Contact\Edit;
 
-use App\CommandHandler\Note\Edit\NoteEditInputDto;
-use App\CommandHandler\Note\Edit\NoteEditOutputDto;
 use App\Entity\Contact;
 use App\Service\CryptoService;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Exception\ORMException;
 use Exception;
-use Psr\Log\LoggerInterface;
-use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
 #[AsMessageHandler]
@@ -37,9 +33,10 @@ class ContactEditHandler
      * @throws Exception
      * @throws ORMException
      */
-    public function __invoke(ContactEditInputDto $input): Contact
+    public function __invoke(ContactEditInputDto $input): ContactEditInputDto
     {
         $contact = $this->entityManager->find(Contact::class, $input->getId());
+
 
         if (!$contact) {
             throw new \Exception('Contact not found.');
@@ -47,16 +44,21 @@ class ContactEditHandler
 
         $newValue = $input->getValue();
 
-        if ($newValue !== null) {
+        if ($newValue !== null && $newValue !== $this->cryptoService->decryptData($contact->getValue())) {
             $encryptedValue = $this->cryptoService->encryptData($newValue);
             $contact->setValue($encryptedValue);
 
-//            $this->logger->info('Updating contact value.', ['contact_id' => $contact->getId(), 'new_value' => $newValue]);
+//            TODO change email in Customer or Heir
+//            $customer = $input->getCustomer();
+//            if ($customer->getCustomerEmail())
+
+            $input->setValue($newValue);
+
+            $this->entityManager->persist($contact);
+            $this->entityManager->flush();
         }
 
-        $this->entityManager->persist($contact);
-        $this->entityManager->flush();
 
-        return $contact;
+        return $input;
     }
 }

@@ -66,40 +66,27 @@ class CustomerContactStatusListener
             $emailsCounter = 0;
 
             foreach ($contacts as $contact) {
-                if ($contact->getContactTypeEnum() === 'email') {
-                    $emailsCounter++;
-                    $customerFirstEmail = $contact->getId();
-                    if ($contact->getIsVerified() && $emailsCounter === 1) {
-                        $customerFirstEmailVerified = true;
-                    }
-
-                    if ($emailsCounter === 2) {
-                        $customerSecondEmail = $contact->getId();
-
-                        if ($contact->getIsVerified()) {
-                            $customerSecondEmailVerified = true;
+                switch ($contact->getContactTypeEnum()) {
+                    case 'email':
+                        $emailsCounter++;
+                        if ($emailsCounter === 1) {
+                            $customerFirstEmail = $contact->getId();
+                            $customerFirstEmailVerified = $contact->getIsVerified();
+                        } elseif ($emailsCounter === 2) {
+                            $customerSecondEmail = $contact->getId();
+                            $customerSecondEmailVerified = $contact->getIsVerified();
                         }
-                    }
-
-
-                } elseif ($contact->getContactTypeEnum() === 'phone') {
-                    $phonesCounter++;
-                    if ($phonesCounter === 1) {
-                        $customerFirstPhone = $contact->getId();
-
-                        if ($contact->getIsVerified()) {
-                            $customerPhoneVerified = true;
+                        break;
+                    case 'phone':
+                        $phonesCounter++;
+                        if ($phonesCounter === 1) {
+                            $customerFirstPhone = $contact->getId();
+                            $customerPhoneVerified = $contact->getIsVerified();
+                        } elseif ($phonesCounter === 2) {
+                            $customerSecondPhone = $contact->getId();
+                            $customerSecondPhoneVerified = $contact->getIsVerified();
                         }
-                    }
-
-                    if ($phonesCounter === 2) {
-                        $customerSecondPhone = $contact->getId();
-
-                        if ($contact->getIsVerified()) {
-                            $customerSecondPhoneVerified = true;
-                        }
-                    }
-
+                        break;
                 }
             }
 

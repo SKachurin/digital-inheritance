@@ -1,6 +1,6 @@
 <?php
 
-namespace App\CommandHandler\Contact;
+namespace App\CommandHandler\Contact\Edit;
 
 use App\Entity\Customer;
 use Symfony\Component\Validator\Constraints as Assert;

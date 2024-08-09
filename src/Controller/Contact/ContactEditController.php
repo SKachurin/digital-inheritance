@@ -2,17 +2,11 @@
 
 namespace App\Controller\Contact;
 
-use App\CommandHandler\Contact\ContactEditInputDto;
-use App\CommandHandler\Note\Decrypt\NoteDecryptInputDto;
-use App\CommandHandler\Note\Edit\NoteEditInputDto;
+use App\CommandHandler\Contact\Edit\ContactEditInputDto;
 use App\Entity\Contact;
 use App\Form\Type\ContactDecryptType;
 use App\Form\Type\ContactEditType;
-use App\Form\Type\NoteDecryptType1;
-use App\Form\Type\NoteEditType;
-use App\Form\Type\NoteEditType1;
 use App\Repository\ContactRepository;
-use App\Repository\NoteRepository;
 use App\Service\CryptoService;
 use App\Service\VerificationEmailService;
 use Random\RandomException;

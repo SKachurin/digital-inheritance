@@ -40,6 +40,11 @@ form:
     customer_okay_password_repeat: 'Repeat the Okay Password'
     password: 'Normal password for entering our service. If you lose it or it gets leaked, others will still not be able to see your notes without your answers.'
     password_repeat: 'Repeat Password'
+    contact_edit: 'Edit Contact'
+    is_verified: 'Is Verified'
+    value: 'Value'
+    countryCode: 'Country Code'
+    contactTypeEnum: 'Type of the Contact'
 
   help:
     customer_name: 'This field will be used to address you in our communications.'
@@ -79,6 +84,13 @@ decrypt_your_secure_envelope: 'Decrypt Your Secure Envelope'
 decrypt_first: 'To Edit Your Secure Envelope Decrypt It First'
 enter_answer: 'Enter Your Answer To One Of The Questions Below and Push The Button'
 do_some_staff: 'Now You Can Do Some Staff'
+edit_your_email: 'Edit Email Address'
+edit_your_phone: 'Edit Your Phone'
+verify_edit_your_email: 'Verify/Edit Email Address'
+add_your_second_email: 'Add Email Address'
+add_your_phone: 'Add Your Phone'
+verify_edit_your_phone: 'Verify/Edit Your Phone'
+add_your_second_phone: 'Add Your Second Phone'
 
 about_page:
   title: "About 'The Digital Heir'"

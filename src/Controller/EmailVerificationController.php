@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Repository\VerificationTokenRepository;
+use Doctrine\DBAL\Exception;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -14,6 +15,9 @@ use Symfony\Component\Routing\Annotation\Route;
 class EmailVerificationController extends AbstractController
 {
 //    #[Route('/verify-email/{token}', name: 'email_verification_route')]
+    /**
+     * @throws Exception
+     */
     public function verifyEmail(
         string $token,
         VerificationTokenRepository $tokenRepository,
@@ -27,11 +31,13 @@ class EmailVerificationController extends AbstractController
 
         $contact = $verificationToken->getContact();
 
-        // Mark the specific contact as verified
+        // Mark the contact as verified
         $contact->setIsVerified(true);
+        $entityManager->persist($contact);
 
         // Remove the token to prevent reuse
-        $entityManager->remove($verificationToken);
+//        $entityManager->remove($verificationToken);
+        $tokenRepository->delete($verificationToken);
         $entityManager->flush();
 
 
