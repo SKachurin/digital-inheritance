@@ -39,10 +39,10 @@ class RegistrationController extends AbstractController
             'password',
             CustomerSocialAppEnum::NONE,
             'https://fb.com/something/',
-            'viva-natura111@yandex.ru',
+            'viva-n@yandex.ru',
             'Winnie the Pooh',
             '995',
-            '9109019184',
+            '555555555',
             '',
             'All we need is:',
             'Love'

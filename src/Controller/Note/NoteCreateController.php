@@ -4,6 +4,7 @@ namespace App\Controller\Note;
 
 
 use App\CommandHandler\Note\Create\NoteCreateInputDto;
+use App\Entity\Note;
 use App\Form\Type\NoteCreationType;
 use App\Form\Type\NoteCreationType1;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -57,6 +58,8 @@ class NoteCreateController extends AbstractController
                 $this->addFlash('success', 'Your Envelope is being processed.');
 
                 $note = $handledStamp->getResult();
+
+                /** @var Note $note */
                 $noteId = $note->getId();
 
                 $form1 = $this->createForm(NoteCreationType1::class, $note, ['customerId' => $customer->getId()]);

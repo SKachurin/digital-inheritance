@@ -9,7 +9,9 @@ use App\Entity\Customer;
 use App\Entity\VerificationToken;
 use App\Service\CryptoService;
 use App\Service\VerificationEmailService;
+use Doctrine\DBAL\Exception;
 use Doctrine\ORM\EntityManagerInterface;
+use Random\RandomException;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
@@ -32,8 +34,8 @@ class CustomerCreatedConsumer
         protected MessageBusInterface $commandBus,
         protected UserPasswordHasherInterface $passwordHasher,
         private EntityManagerInterface $entityManager,
-        private MailerInterface $mailer,
-        private UrlGeneratorInterface $urlGenerator,
+//        private MailerInterface $mailer,
+//        private UrlGeneratorInterface $urlGenerator,
         private ContactRepository $contactRepository,
         private CryptoService $cryptoService,
         private VerificationEmailService $verificationEmailService
@@ -43,6 +45,12 @@ class CustomerCreatedConsumer
 //        $this->logger = $logger;
     }
 
+    /**
+     * @throws RandomException
+     * @throws TransportExceptionInterface
+     * @throws Exception
+     * @throws \SodiumException
+     */
     public function __invoke(CustomerCreatedMessage $message,): void
     {
 
@@ -159,6 +167,7 @@ class CustomerCreatedConsumer
     /**
      * @throws TransportExceptionInterface
      * @throws \SodiumException
+     * @throws Exception
      */
     private function sendVerificationEmail(Customer $customer): void
     {

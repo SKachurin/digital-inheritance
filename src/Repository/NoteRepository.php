@@ -34,6 +34,10 @@ class NoteRepository extends BaseRepository
             ->getQuery()
             ->getOneOrNullResult();
 
-        return $note ? $note['id'] : null;
+        if (is_array($note) && isset($note['id'])) {
+            return (int) $note['id'];
+        }
+        return null;
+
     }
 }

@@ -40,6 +40,7 @@ class VerificationEmailService
      * @throws TransportExceptionInterface
      * @throws \SodiumException
      * @throws Exception
+     * @throws \Exception
      */
     public function sendVerificationEmail(Contact $contact): void
     {
@@ -63,13 +64,17 @@ class VerificationEmailService
 
         $email = $this->cryptoService->decryptData($contact->getValue());
 
-        $email = (new Email())
-            ->from('info@thedigitalheir.com')
-            ->to($email)
-            ->subject('Email Verification TheDigitalHeir')
-            ->html('<p>Thank you for registering! Please verify your email by clicking on the following link: <a href="' . $verificationUrl . '">Verify Email</a></p>')
-            ->text('Click the link to verify your email address: '.$verificationUrl);
+        if (is_string($email)) {
+            $email = (new Email())
+                ->from('info@thedigitalheir.com')
+                ->to($email)
+                ->subject('Email Verification TheDigitalHeir')
+                ->html('<p>Thank you for registering! Please verify your email by clicking on the following link: <a href="' . $verificationUrl . '">Verify Email</a></p>')
+                ->text('Click the link to verify your email address: ' . $verificationUrl);
 
-        $this->mailer->send($email);
+            $this->mailer->send($email);
+        } else {
+            throw new \Exception("Invalid email address.");
+        }
     }
 }

@@ -11,8 +11,6 @@ use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @extends ServiceEntityRepository<VerificationToken>
- *
  * @method VerificationToken|null find($id, $lockMode = null, $lockVersion = null)
  * @method VerificationToken|null findOneBy(array $criteria, array $orderBy = null)
  * @method VerificationToken[]    findAll()

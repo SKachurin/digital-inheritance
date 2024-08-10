@@ -12,7 +12,7 @@ use Psr\Log\LoggerInterface;
 class CryptoService
 {
     private string $key;
-    private LoggerInterface $logger;
+//    private LoggerInterface $logger;
 
     private ?string $personalString;
 
@@ -21,12 +21,12 @@ class CryptoService
      */
     public function __construct(
         ParameterBagInterface $params,
-        LoggerInterface $logger,
+//        LoggerInterface $logger,
         ?string $personalString = ''
 
     )
     {
-        $this->logger = $logger;
+//        $this->logger = $logger;
         $this->personalString = $personalString;
 
         $baseKey = $params->get('encryption_key');

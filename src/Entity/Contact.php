@@ -27,7 +27,7 @@ class Contact
 
     #[ORM\Column(type: 'string', length: 512)]
     #[Assert\NotBlank]
-    private string $value;
+    private ?string $value;
 
     #[ORM\Column(type: 'boolean')]
     private bool $isVerified = false;
@@ -72,11 +72,11 @@ class Contact
         $this->countryCode = $countryCode;
         return $this;
     }
-    public function getValue(): string
+    public function getValue(): ?string
     {
         return $this->value;
     }
-    public function setValue(string $value): self
+    public function setValue(?string $value): self
     {
         $this->value = $value;
         return $this;
@@ -118,7 +118,7 @@ class Contact
         return $this;
     }
 
-    public function getVerificationTokens(): VerificationToken
+    public function getVerificationTokens(): ?VerificationToken
     {
         return $this->verificationToken;
     }
