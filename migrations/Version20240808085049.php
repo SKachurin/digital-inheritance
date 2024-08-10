@@ -19,6 +19,7 @@ final class Version20240808085049 extends AbstractMigration
 
     public function up(Schema $schema): void
     {
+        $this->addSql('ALTER TABLE verification_token ADD contact_id INT NOT NULL');
         // this up() migration is auto-generated, please modify it to your needs
         $this->addSql('ALTER TABLE verification_token ADD CONSTRAINT FK_C1CC006BE7A1254A FOREIGN KEY (contact_id) REFERENCES contact (id)');
         $this->addSql('CREATE UNIQUE INDEX UNIQ_C1CC006BE7A1254A ON verification_token (contact_id)');
