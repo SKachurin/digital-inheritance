@@ -26,8 +26,8 @@ services:
     # please note that last definitions always *replace* previous ones
     App\Queue\Doctrine\Customer\CustomerCreatedConsumer:
         arguments:
-            $mailer: '@mailer'
-            $urlGenerator: '@router.default'
+#            $mailer: '@mailer'
+#            $urlGenerator: '@router.default'
 
     Symfony\Component\PasswordHasher\Hasher\NativePasswordHasher:
         public: true
