@@ -38,16 +38,10 @@ class BeneficiaryCreateInputDto
     #[Assert\Length(max: 1000)]
     private ?string $beneficiarySecondQuestionAnswer = null;
 
-    private ?CustomerSocialAppEnum $beneficiarySocialApp;
-
-    #[Assert\Length(max: 1000)]
-    private ?string $beneficiarySocialAppLink = null;
 
     private ?string $beneficiaryActionsOrder = null;
 
-    public function __construct(
-        CustomerSocialAppEnum $beneficiarySocialApp = CustomerSocialAppEnum::NONE
-    )
+    public function __construct()
     {}
 
     public function getBeneficiaryName(): string
@@ -182,23 +176,4 @@ class BeneficiaryCreateInputDto
         return $this;
     }
 
-    public function getBeneficiarySocialApp(): ?CustomerSocialAppEnum
-    {
-        return $this->beneficiarySocialApp;
-    }
-    public function setBeneficiarySocialApp(?CustomerSocialAppEnum $beneficiarySocialApp): self
-    {
-        $this->beneficiarySocialApp = $beneficiarySocialApp;
-        return $this;
-    }
-
-    public function getBeneficiarySocialAppLink(): ?string
-    {
-        return $this->beneficiarySocialAppLink;
-    }
-    public function setBeneficiarySocialAppLink(?string $beneficiarySocialAppLink): self
-    {
-        $this->beneficiarySocialAppLink = $beneficiarySocialAppLink;
-        return $this;
-    }
 }

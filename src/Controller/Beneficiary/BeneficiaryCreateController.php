@@ -6,6 +6,8 @@ use App\CommandHandler\Customer\Create\CustomerCreateInputDto;
 use App\Enum\CustomerSocialAppEnum;
 use App\Form\Type\BeneficiaryCreateType;
 use App\Form\Type\RegistrationType;
+use App\Repository\BeneficiaryRepository;
+use App\Repository\NoteRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -16,12 +18,12 @@ use Symfony\Component\Messenger\Stamp\HandledStamp;
 class BeneficiaryCreateController extends AbstractController
 {
     private MessageBusInterface $commandBus;
+    private NoteRepository $noteRepository;
 
-
-
-    public function __construct(MessageBusInterface $commandBus)
+    public function __construct(MessageBusInterface $commandBus, NoteRepository $noteRepository)
     {
         $this->commandBus = $commandBus;
+        $this->noteRepository = $noteRepository;
     }
 
     public function create(Request $request): Response
@@ -32,18 +34,20 @@ class BeneficiaryCreateController extends AbstractController
             return $this->redirectToRoute('user_login');
         }
 
-        $customer = new BeneficiaryCreateInputDto();
+        $beneficiary = new BeneficiaryCreateInputDto();
 
-        $form = $this->createForm(BeneficiaryCreateType::class, $customer);
+        //TODO $note = $this->noteRepository->customerHasNote($customer); $note->setBeneficiary();
+
+        $form = $this->createForm(BeneficiaryCreateType::class, $beneficiary);
 
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
 
-            /** @var BeneficiaryCreateInputDto $customerData */
-            $customerData = $form->getData();
+            /** @var BeneficiaryCreateInputDto $beneficiaryData */
+            $beneficiaryData = $form->getData();
 
-            $envelope = $this->commandBus->dispatch($customerData);
+            $envelope = $this->commandBus->dispatch($beneficiaryData);
 
             $handledStamp = $envelope->last(HandledStamp::class);
 

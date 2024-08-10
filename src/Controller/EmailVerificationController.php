@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Repository\VerificationTokenRepository;
+use Doctrine\DBAL\Exception;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
@@ -13,7 +14,10 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class EmailVerificationController extends AbstractController
 {
-    #[Route('/verify-email/{token}', name: 'email_verification_route')]
+//    #[Route('/verify-email/{token}', name: 'email_verification_route')]
+    /**
+     * @throws Exception
+     */
     public function verifyEmail(
         string $token,
         VerificationTokenRepository $tokenRepository,
@@ -25,13 +29,19 @@ class EmailVerificationController extends AbstractController
             throw $this->createNotFoundException('Invalid or expired verification token.');
         }
 
-        $customer = $verificationToken->getCustomer();
+        $contact = $verificationToken->getContact();
 
-        // logic to mark the customer as verified
-        // $customer->setEmailVerified(true);
-        $entityManager->remove($verificationToken);
+        // Mark the contact as verified
+        $contact->setIsVerified(true);
+        $entityManager->persist($contact);
+
+        // Remove the token to prevent reuse
+//        $entityManager->remove($verificationToken);
+        $tokenRepository->delete($verificationToken);
         $entityManager->flush();
 
-        return new RedirectResponse($this->generateUrl('homepage'));
+
+        $this->addFlash('success', 'Your email address has been verified.');
+        return new RedirectResponse($this->generateUrl('user_home'));
     }
 }

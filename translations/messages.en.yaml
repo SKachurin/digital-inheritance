@@ -10,35 +10,61 @@ header:
 form:
   label:
     customer_name: 'Nickname or whatever'
+    beneficiary_name: 'Nickname or whatever'
     customer_email: 'Your Email'
+    beneficiary_email: 'Your Heir Email'
     customer_second_email: 'Your Second Email (optional)'
+    beneficiary_second_email: 'Your Second Email (optional)'
     customer_full_name: 'Full Name (optional)'
+    beneficiary_full_name:
     customer_country_code: 'Country Code (optional)'
+    beneficiary_country_code:
     customer_first_phone: 'First Phone Number (optional)'
+    beneficiary_first_phone:
     customer_second_phone: 'Second Phone Number (optional)'
+    beneficiary_second_phone:
     customer_first_question: 'First Security Question'
+    beneficiary_first_question:
     customer_first_question_answer: 'Answer. We will never save it - we will encode all your notes with a hash from this answer. Forget this answer = lose all your notes.'
+    beneficiary_first_question_answer:
     customer_first_question_answer_repeat: 'Repeat the Answer'
     customer_second_question: 'Second Security Question (optional)'
+    beneficiary_second_question:
     customer_second_question_answer: 'Answer. We will never save it - we will encode all your notes with a hash from this answer. Forget this answer and the previous one = lose all your notes.'
+    beneficiary_second_question_answer:
     customer_second_question_answer_repeat: 'Repeat the Answer'
+    beneficiary_second_question_answer_repeat:
     customer_social_app: 'Social App for tracking your activity. This feature minimizes interaction with this service.'
     customer_social_app_link: 'Link to your Social App profile.'
     customer_okay_password: 'This will be used to check if you are okay. Pick something mundane (like "The day was great") so it seems normal to anyone who might see this interaction.'
     customer_okay_password_repeat: 'Repeat the Okay Password'
     password: 'Normal password for entering our service. If you lose it or it gets leaked, others will still not be able to see your notes without your answers.'
     password_repeat: 'Repeat Password'
+    contact_edit: 'Edit Contact'
+    is_verified: 'Is Verified'
+    value: 'Value'
+    countryCode: 'Country Code'
+    contactTypeEnum: 'Type of the Contact'
 
   help:
     customer_name: 'This field will be used to address you in our communications.'
+    beneficiary_name: 'This field is only for you - to remember who is this person'
     customer_email: 'This will be your ID in our system. We will encode it with our best algorithm.'
+    beneficiary_email:
     customer_second_email: 'This field will be used to mail you if you use it in Pipeline Constructor. It will also be encrypted.'
+    beneficiary_second_email:
     customer_full_name: 'This field will be used to mention you in the letter to your heir. It will also be encrypted.'
+    beneficiary_full_name:
     customer_country_code: 'If you plan to use SMS in Pipeline Constructor, we recommend filling in the Country Code.'
+    beneficiary_country_code:
     customer_first_phone: 'This field will be used to send SMS notifications if you use it in Pipeline Constructor. It will also be encrypted.'
+    beneficiary_first_phone:
     customer_second_phone: 'This field will be used to send SMS notifications if you use it in Pipeline Constructor. It will also be encrypted.'
+    beneficiary_second_phone:
     customer_first_question: 'Your answer to this question will be used for encoding and decoding purposes.'
+    beneficiary_first_question:
     customer_second_question: 'We strongly recommend using a second question as well - this way the risk of forgetting the answer is lower.'
+    beneficiary_second_question:
     customer_okay_password: 'This will be used to check if you are okay. Pick something mundane (like "The day was great") so it seems normal to anyone who might see this interaction.'
     password: 'A normal password for entering our service. If you lose it or it gets leaked, others will still not be able to see your notes without your answers.'
   choice:
@@ -58,6 +84,13 @@ decrypt_your_secure_envelope: 'Decrypt Your Secure Envelope'
 decrypt_first: 'To Edit Your Secure Envelope Decrypt It First'
 enter_answer: 'Enter Your Answer To One Of The Questions Below and Push The Button'
 do_some_staff: 'Now You Can Do Some Staff'
+edit_your_email: 'Edit Email Address'
+edit_your_phone: 'Edit Your Phone'
+verify_edit_your_email: 'Verify/Edit Email Address'
+add_your_second_email: 'Add Email Address'
+add_your_phone: 'Add Your Phone'
+verify_edit_your_phone: 'Verify/Edit Your Phone'
+add_your_second_phone: 'Add Your Second Phone'
 
 about_page:
   title: "About 'The Digital Heir'"

@@ -40,6 +40,9 @@ class Contact
     #[ORM\JoinColumn(nullable: true)]
     private ?Beneficiary $beneficiary = null;
 
+    #[ORM\OneToOne(targetEntity: VerificationToken::class, mappedBy: 'contact', cascade: ['persist', 'remove'])]
+    private ?VerificationToken $verificationToken;
+
 
     public function getId(): int
     {
@@ -78,11 +81,11 @@ class Contact
         $this->value = $value;
         return $this;
     }
-    public function isVerified(): bool
+    public function getIsVerified(): bool
     {
         return $this->isVerified;
     }
-    public function setVerified(bool $isVerified): self
+    public function setIsVerified(bool $isVerified): self
     {
         $this->isVerified = $isVerified;
         return $this;
@@ -107,5 +110,16 @@ class Contact
     {
         $this->beneficiary = $beneficiary;
         return $this;
+    }
+
+    public function setVerificationToken(VerificationToken $token): self
+    {
+        $this->verificationToken = $token;
+        return $this;
+    }
+
+    public function getVerificationTokens(): VerificationToken
+    {
+        return $this->verificationToken;
     }
 }

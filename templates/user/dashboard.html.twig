@@ -12,10 +12,111 @@
             }
         </style>
         <div class="container">
-            <h1 style="padding-top: 3em;font-size: 2rem;">{ 'header.dashboard'|trans }}</h1>
+            <h1 style="padding-top: 3em;font-size: 2rem;">{{ 'header.dashboard'|trans }}</h1>
 
             {#    Vue render    #}
 {#            <div id="app"></div>#}
+
+            {% if customerFirstEmailVerified %}
+                <section class="mb-4">
+                    <a class="btn btn-outline-dark btn-floating m-1 mt-4" href="/contact/{{ customerFirstEmail }}/edit" role="button">
+                        <i class="">{{ 'edit_your_email'|trans }}</i>
+                    </a>
+                </section>
+                <p>explanation</p>
+            {% endif %}
+
+            {% if customerSecondEmailVerified %}
+                <section class="mb-4">
+                    <a class="btn btn-outline-dark btn-floating m-1 mt-4" href="/contact/{{ customerSecondEmail }}/edit" role="button">
+                        <i class="">{{ 'edit_your_email'|trans }}</i>
+                    </a>
+                </section>
+                <p>explanation</p>
+            {% endif %}
+
+            {% if customerPhoneVerified %}
+                <section class="mb-4">
+                    <a class="btn btn-outline-dark btn-floating m-1 mt-4" href="/contact/{{ customerFirstPhone }}/edit" role="button">
+                        <i class="">{{ 'edit_your_phone'|trans }}</i>
+                    </a>
+                </section>
+                <p>explanation</p>
+            {% endif %}
+
+            {% if customerSecondPhoneVerified %}
+                <section class="mb-4">
+                    <a class="btn btn-outline-dark btn-floating m-1 mt-4" href="/contact/{{ customerSecondPhone }}/edit" role="button">
+                        <i class="">{{ 'edit_your_phone'|trans }}</i>
+                    </a>
+                </section>
+                <p>explanation</p>
+            {% endif %}
+
+
+            {% if not customerFirstEmailVerified %}
+                <section class="mb-4">
+                    <a class="btn btn-outline-dark btn-floating m-1 mt-4" href="/contact/{{ customerFirstEmail }}/edit" role="button">
+                        <i class="">{{ 'verify_edit_your_email'|trans }}</i>
+                    </a>
+                </section>
+                <p>explanation</p>
+            {% endif %}
+
+            {% if customerSecondEmail is not defined or not customerSecondEmail %}
+                <section class="mb-4">
+                    <a class="btn btn-outline-dark btn-floating m-1 mt-4" href="/contact/email/create" role="button">
+                        <i class="">{{ 'add_your_second_email'|trans }}</i>
+                    </a>
+                </section>
+                <p>explanation</p>
+            {% endif %}
+
+            {% if customerSecondEmail is defined and customerSecondEmail and not customerSecondEmailVerified %}
+                <section class="mb-4">
+                    <a class="btn btn-outline-dark btn-floating m-1 mt-4" href="/contact/{{ customerSecondEmail }}/edit" role="button">
+                        <i class="">{{ 'verify_edit_your_email'|trans }}</i>
+                    </a>
+                </section>
+                <p>explanation</p>
+            {% endif %}
+
+            {% if customerFirstPhone is not defined or not customerFirstPhone %}
+                <section class="mb-4">
+                    <a class="btn btn-outline-dark btn-floating m-1 mt-4" href="/contact/phone/create" role="button">
+                        <i class="">{{ 'add_your_phone'|trans }}</i>
+                    </a>
+                </section>
+                <p>explanation</p>
+            {% endif %}
+
+            {% if customerFirstPhone is defined and customerFirstPhone and not customerPhoneVerified %}
+                <section class="mb-4">
+                    <a class="btn btn-outline-dark btn-floating m-1 mt-4" href="/contact/{{ customerFirstPhone }}/edit" role="button">
+                        <i class="">{{ 'verify_edit_your_phone'|trans }}</i>
+                    </a>
+                </section>
+                <p>explanation</p>
+            {% endif %}
+
+            {% if customerSecondPhone is not defined or not customerSecondPhone %}
+                <section class="mb-4">
+                    <a class="btn btn-outline-dark btn-floating m-1 mt-4" href="/contact/phone/create" role="button">
+                        <i class="">{{ 'add_your_second_phone'|trans }}</i>
+                    </a>
+                </section>
+                <p>explanation</p>
+            {% endif %}
+
+            {% if customerSecondPhone is defined and customerSecondPhone and not customerSecondPhoneVerified %}
+                <section class="mb-4">
+                    <a class="btn btn-outline-dark btn-floating m-1 mt-4" href="/contact/{{ customerSecondPhone }}/edit" role="button">
+                        <i class="">{{ 'verify_edit_your_phone'|trans }}</i>
+                    </a>
+                </section>
+                <p>explanation</p>
+            {% endif %}
+
 
             {% if customerHasNote is defined and customerHasNote %}
                 <section class="mb-4">

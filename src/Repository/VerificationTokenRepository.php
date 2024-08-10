@@ -6,6 +6,8 @@ namespace App\Repository;
 
 use App\Entity\VerificationToken;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\DBAL\Exception;
+use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -16,11 +18,21 @@ use Doctrine\Persistence\ManagerRegistry;
  * @method VerificationToken[]    findAll()
  * @method VerificationToken[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class VerificationTokenRepository extends ServiceEntityRepository
+class VerificationTokenRepository extends BaseRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    private EntityManagerInterface $entityManager;
+    public function __construct(ManagerRegistry $registry, EntityManagerInterface $entityManager)
     {
         parent::__construct($registry, VerificationToken::class);
+        $this->entityManager = $entityManager;
     }
 
+    /**
+     * @throws Exception
+     */
+    public function delete(VerificationToken $token): void
+    {
+        // in order to entityManager->remove() work, Entity id had to be Nullable
+        $this->entityManager->getConnection()->executeStatement('DELETE FROM verification_token WHERE id = :id', ['id' => $token->getId()]);
+    }
 }

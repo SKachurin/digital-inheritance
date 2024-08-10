@@ -109,12 +109,6 @@ class Customer implements UserInterface, PasswordAuthenticatedUserInterface
     private array $roles = [];
 
     /**
-     * @var Collection<int, VerificationToken>
-     */
-    #[ORM\OneToMany(targetEntity: VerificationToken::class, mappedBy: 'customer', cascade: ['persist', 'remove'])]
-    private Collection $verificationTokens;
-
-    /**
      * @var Collection<int, Contact>
      */
     #[ORM\OneToMany(targetEntity: Contact::class, mappedBy: 'customer', cascade: ['persist', 'remove'])]
@@ -127,7 +121,6 @@ class Customer implements UserInterface, PasswordAuthenticatedUserInterface
         $this->transactions = new ArrayCollection();
         $this->pipelines = new ArrayCollection();
         $this->actions = new ArrayCollection();
-        $this->verificationTokens = new ArrayCollection();
         $this->contacts = new ArrayCollection();
     }
 
@@ -441,32 +434,6 @@ class Customer implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function addVerificationToken(VerificationToken $token): self
-    {
-        if (!$this->verificationTokens->contains($token)) {
-            $this->verificationTokens[] = $token;
-            $token->setCustomer($this);
-        }
-
-        return $this;
-    }
-
-    public function removeVerificationToken(VerificationToken $token): self
-    {
-        if ($this->verificationTokens->contains($token)) {
-            $this->verificationTokens->removeElement($token);
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, VerificationToken>
-     */
-    public function getVerificationTokens(): Collection
-    {
-        return $this->verificationTokens;
-    }
 
     public function addContact(Contact $contact): self
     {
