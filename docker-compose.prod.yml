@@ -45,8 +45,8 @@ services:
     container_name: digital-mysql
     environment:
       MYSQL_ROOT_HOST: '%'
-      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
-      MYSQL_DATABASE: ${MYSQL_DATABASE}
+      MYSQL_ROOT_PASSWORD: "${MYSQL_ROOT_PASSWORD}"
+      MYSQL_DATABASE: "${MYSQL_DATABASE}"
     volumes:
       - ./docker/mysql-data:/var/lib/mysql:rw
     ports:
