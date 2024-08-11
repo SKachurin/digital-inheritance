@@ -59,18 +59,13 @@ class NoteCreateController extends AbstractController
 
                 $note = $handledStamp->getResult();
 
-                /** @var Note $note */
-                $noteId = $note->getId();
+//                /** @var Note $note */
+//                $noteId = $note->getId();
 
-                $form1 = $this->createForm(NoteCreationType1::class, $note, ['customerId' => $customer->getId()]);
+//                $form1 = $this->createForm(NoteCreationType1::class, $note, ['customerId' => $customer->getId()]);
 
-                return $this->render('noteCreate.html.twig', [
-                    'form' => $form1,
-                    'decodedNote' => true,
-                    'noteId' => $noteId
-                ]);
+                return $this->redirectToRoute('user_home');
 
-    //            return $this->redirectToRoute('customer_creating');
             }
 
             return $this->render('noteCreate.html.twig', [
