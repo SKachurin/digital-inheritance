@@ -1,37 +1,37 @@
 controllers:
     resource:
-        path: ../src/Controller/
+        path:    ../src/Controller/
         namespace: App\Controller
     type: attribute
 
 user_registration:
-    path: /reg
+    path:       /reg
     controller: App\Controller\Customer\RegistrationController::new
 
 user_registration_done:
-    path: /compare
+    path:       /compare
     controller: App\Controller\Customer\CustomerCompareController::compare
 
 user_login:
-    path: /log
+    path:       /log
     controller: App\Controller\Customer\LoginController::index
 
 user_home:
-    path: /lk
+    path:       /lk
     defaults:
         _controller: Symfony\Bundle\FrameworkBundle\Controller\TemplateController::templateAction
         template:    user/dashboard.html.twig
 
 note_create:
-    path: /note/create
+    path:       /note/create
     controller: App\Controller\Note\NoteCreateController::create
 
 note_edit:
-    path: /note/{noteId}/edit
+    path:       /note/{noteId}/edit
     controller: App\Controller\Note\NoteEditController::edit
 
 note_decrypt:
-    path: /note/{noteId}/decrypt/{question}
+    path:       /note/{noteId}/decrypt/{question}
     controller: App\Controller\Note\NoteDecryptController::decrypt
     requirements:
         question: '\w+' # Regex to ensure the question parameter only contains word characters
@@ -39,35 +39,39 @@ note_decrypt:
         question: 'default' # Default value if question is not provided
 
 beneficiary_create:
-    path: /beneficiary/create
+    path:       /beneficiary/create
     controller: App\Controller\Beneficiary\BeneficiaryCreateController::create
 
 
 home:
-    path:          /
-    controller:    Symfony\Bundle\FrameworkBundle\Controller\TemplateController
+    path:       /
+    controller: Symfony\Bundle\FrameworkBundle\Controller\TemplateController
     defaults:
         # the path of the template to render
         template:  'base.html.twig'
 
 about:
-    path:          /about
-    controller:    Symfony\Bundle\FrameworkBundle\Controller\TemplateController
+    path:       /about
+    controller: Symfony\Bundle\FrameworkBundle\Controller\TemplateController
     defaults:
         # the path of the template to render
         template:  'about.html.twig'
 
 email_verification_route:
-    path: /verify-email/{token}
+    path:       /verify-email/{token}
     controller: App\Controller\EmailVerificationController::verifyEmail
 
 contact_edit:
-    path: /contact/{contactId}/edit
+    path:       /contact/{contactId}/edit
     controller: App\Controller\Contact\ContactEditController::edit
 
+contact_create:
+    path:       /contact/{type}/create
+    controller: App\Controller\Contact\ContactCreateController::create
+
 customer_creating:
-    path:          /creating
-    controller:    Symfony\Bundle\FrameworkBundle\Controller\TemplateController
+    path:        /creating
+    controller:  Symfony\Bundle\FrameworkBundle\Controller\TemplateController
     defaults:
         # the path of the template to render
         template:  'user/creating.html.twig'

@@ -2,9 +2,12 @@
 
 namespace App\Controller\Contact;
 
+use App\CommandHandler\Contact\Create\ContactCreateInputDto;
 use App\CommandHandler\Contact\Edit\ContactEditInputDto;
 use App\Entity\Contact;
 //use App\Form\Type\ContactDecryptType;
+use App\Entity\Customer;
+use App\Form\Type\ContactCreateType;
 use App\Form\Type\ContactEditType;
 use App\Repository\ContactRepository;
 use App\Service\CryptoService;
@@ -12,6 +15,7 @@ use App\Service\VerificationEmailService;
 use Random\RandomException;
 use SodiumException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Finder\Exception\AccessDeniedException;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
@@ -20,7 +24,7 @@ use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Messenger\Stamp\HandledStamp;
 use Symfony\Component\Routing\Annotation\Route;
 
-class ContactEditController extends AbstractController
+class ContactCreateController extends AbstractController
 {
     private MessageBusInterface $commandBus;
     private ContactRepository $repository;
@@ -44,41 +48,22 @@ class ContactEditController extends AbstractController
      * @throws SodiumException|RandomException
      * @throws TransportExceptionInterface|\Doctrine\DBAL\Exception
      */
-    public function edit(int $contactId, Request $request): Response
+    public function create(string $type, Request $request): Response
     {
         $currentCustomer = $this->getUser();
 
-        $contact = $this->repository->getOneBy(['id' => $contactId]);
-        if (!$contact instanceof Contact) {
-            throw new \UnexpectedValueException('There is no Contact with id ' . $contactId);
+        if (!$currentCustomer instanceof Customer) {
+            throw new AccessDeniedException('You must be logged in as a customer to create a contact.');
         }
-
-        $contactCustomer = $contact->getCustomer();
-
-        if ($contactCustomer !== $currentCustomer) {
-            throw new \UnexpectedValueException('It is not your Contact');
-        }
-
-        $dto = new ContactEditInputDto($contactCustomer, $contact->getId());
-
-        $dto
-            ->setContactTypeEnum($contact->getContactTypeEnum())
-            ->setCountryCode($contact->getCountryCode())
-            ->setValue(
-                $this->cryptoService->decryptData(
-                    $contact->getValue()
-                )
-            )
-            ->setIsVerified($contact->getIsVerified())
-        ;
+        $dto = new ContactCreateInputDto($currentCustomer);
 
 
         $form = $this->createForm(
-            ContactEditType::class,
+            ContactCreateType::class,
             $dto,
             [
-                'countryCode' => $contact->getCountryCode(),
-                'isVerified' => $contact->getIsVerified(),
+                'type' => $type,
+                'customer' => $dto->getCustomer(),
             ]
         );
 
@@ -86,16 +71,7 @@ class ContactEditController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
 
-            if ($form->get('resend_verification')->isClicked()) {
-
-                $this->verificationEmailService->sendVerificationEmail($contact);
-
-                $this->addFlash('info', 'Verification email resent successfully.');
-
-                return $this->redirectToRoute('user_home');
-            }
-
-            /** @var ContactEditInputDto $contactData */
+            /** @var ContactCreateInputDto $contactData */
             $contactData = $form->getData();
 
             $envelope = $this->commandBus->dispatch($contactData);
@@ -106,16 +82,9 @@ class ContactEditController extends AbstractController
                 throw new UnprocessableEntityHttpException('500 internal error (CommandBus not responding).');
             }
 
-            $handledResult = $handledStamp->getResult();
+            $this->addFlash('info', 'Contact created! Would you like to send Verification email now?');
 
-            $form1 = $this->createForm(ContactEditType::class, $handledResult);
-
-            $this->addFlash('info', 'Contact updated! Would you like to send Verification email now?');
-
-            return $this->render('contactEdit.html.twig', [
-                'form' => $form1->createView(),
-                'decodedNote' => true,
-            ]);
+            return $this->redirectToRoute('user_home');
         }
 
         return $this->render('contactEdit.html.twig', [
