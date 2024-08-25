@@ -68,7 +68,7 @@ class RegistrationController extends AbstractController
 
             $this->addFlash('success', 'Your registration is being processed. You will receive a confirmation email once it is complete.');
 
-            return $this->redirectToRoute('customer_creating');
+            return $this->redirectToRoute('user_login');
         }
 
        return $this->render('user/registration.html.twig', [

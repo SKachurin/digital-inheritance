@@ -1,12 +1,14 @@
 title: 'Welcome!'
 header:
-  dashboard: "Dashboard"
-  login: "Login"
-  logout: "Logout"
-  registration: "Registration"
-  pricing: "Pricing"
-  faqs: "FAQs"
-  about: "About"
+  dashboard: 'Dashboard'
+  login: 'Login'
+  logout: 'Logout'
+  registration: 'Registration'
+  pricing: 'Pricing'
+  faqs: 'FAQs'
+  about: 'About'
+  new_heir_explain: 'You will as many info about your Heir - this will help as reach this person in case of events you will describe in Pipeline section'
+  new_heir_explain_1: 'Please be specially precise with contacts (like phone and email) as we is not going to verify it now'
 form:
   label:
     customer_name: 'Nickname or whatever'
@@ -14,26 +16,27 @@ form:
     customer_email: 'Your Email'
     beneficiary_email: 'Your Heir Email'
     customer_second_email: 'Your Second Email (optional)'
-    beneficiary_second_email: 'Your Second Email (optional)'
+    beneficiary_second_email: 'Second Email (optional)'
     customer_full_name: 'Full Name (optional)'
-    beneficiary_full_name:
-    customer_country_code: 'Country Code (optional)'
-    beneficiary_country_code:
+    beneficiary_full_name: 'Full Name Of Your Heir (optional)'
+    customer_country_code: 'Country Code His/Hers PHone (optional)'
+    beneficiary_country_code: 'Country Code (optional)'
     customer_first_phone: 'First Phone Number (optional)'
-    beneficiary_first_phone:
+    beneficiary_first_phone: 'First Phone Number (optional)'
     customer_second_phone: 'Second Phone Number (optional)'
-    beneficiary_second_phone:
+    beneficiary_second_phone: 'Second Phone Number (optional)'
     customer_first_question: 'First Security Question'
-    beneficiary_first_question:
+    beneficiary_first_question: 'First Security Question For Your Heir'
     customer_first_question_answer: 'Answer. We will never save it - we will encode all your notes with a hash from this answer. Forget this answer = lose all your notes.'
-    beneficiary_first_question_answer:
+    beneficiary_first_question_answer: 'Answer. We will never save it - we will encode all your notes with a hash from this answer. If Your Heir would not be able to answer it with reasonable amount of tries = your note will be lost.'
     customer_first_question_answer_repeat: 'Repeat the Answer'
+    beneficiary_first_question_answer_repeat: 'Repeat the Answer'
     customer_second_question: 'Second Security Question (optional)'
-    beneficiary_second_question:
-    customer_second_question_answer: 'Answer. We will never save it - we will encode all your notes with a hash from this answer. Forget this answer and the previous one = lose all your notes.'
-    beneficiary_second_question_answer:
+    beneficiary_second_question: 'Second Security Question For Your Heir'
+    customer_second_question_answer: 'Second Answer. The Second Question - it is a failsafe. Your envelope can be decoded with answers for ether of this questions.'
+    beneficiary_second_question_answer: 'Second Answer. The Second Question - it is a failsafe. Your envelope can be decoded with answers for ether of this questions.'
     customer_second_question_answer_repeat: 'Repeat the Answer'
-    beneficiary_second_question_answer_repeat:
+    beneficiary_second_question_answer_repeat: 'Repeat the Answer'
     customer_social_app: 'Social App for tracking your activity. This feature minimizes interaction with this service.'
     customer_social_app_link: 'Link to your Social App profile.'
     customer_okay_password: 'This will be used to check if you are okay. Pick something mundane (like "The day was great") so it seems normal to anyone who might see this interaction.'
@@ -41,30 +44,27 @@ form:
     password: 'Normal password for entering our service. If you lose it or it gets leaked, others will still not be able to see your notes without your answers.'
     password_repeat: 'Repeat Password'
     contact_edit: 'Edit Contact'
-    is_verified: 'Is Verified'
-    value: 'Value'
-    countryCode: 'Country Code'
-    contactTypeEnum: 'Type of the Contact'
+
 
   help:
     customer_name: 'This field will be used to address you in our communications.'
     beneficiary_name: 'This field is only for you - to remember who is this person'
     customer_email: 'This will be your ID in our system. We will encode it with our best algorithm.'
-    beneficiary_email:
+    beneficiary_email: 'This will be your Heir ID in our system. And we will use this email if/when it comes to delivering your Envelope.'
     customer_second_email: 'This field will be used to mail you if you use it in Pipeline Constructor. It will also be encrypted.'
-    beneficiary_second_email:
+    beneficiary_second_email: 'This field will be used to cc mail for your Heir'
     customer_full_name: 'This field will be used to mention you in the letter to your heir. It will also be encrypted.'
-    beneficiary_full_name:
+    beneficiary_full_name: 'Full Name. We will use it in invitation for You Heir to answer your questions in strive/effort to decode your Envelope'
     customer_country_code: 'If you plan to use SMS in Pipeline Constructor, we recommend filling in the Country Code.'
-    beneficiary_country_code:
+    beneficiary_country_code: 'It is required if you filling up the phone number of your Heir'
     customer_first_phone: 'This field will be used to send SMS notifications if you use it in Pipeline Constructor. It will also be encrypted.'
-    beneficiary_first_phone:
+    beneficiary_first_phone: 'filling up the phone number of your Heir could help us to achieve our delivery goal faster'
     customer_second_phone: 'This field will be used to send SMS notifications if you use it in Pipeline Constructor. It will also be encrypted.'
-    beneficiary_second_phone:
+    beneficiary_second_phone:  'filling up the phone number of your Heir could help us to achieve our delivery goal faster'
     customer_first_question: 'Your answer to this question will be used for encoding and decoding purposes.'
-    beneficiary_first_question:
+    beneficiary_first_question: 'First Security Question For Your Heir'
     customer_second_question: 'We strongly recommend using a second question as well - this way the risk of forgetting the answer is lower.'
-    beneficiary_second_question:
+    beneficiary_second_question: 'Another Security Question For Your Heir'
     customer_okay_password: 'This will be used to check if you are okay. Pick something mundane (like "The day was great") so it seems normal to anyone who might see this interaction.'
     password: 'A normal password for entering our service. If you lose it or it gets leaked, others will still not be able to see your notes without your answers.'
   choice:
@@ -75,7 +75,7 @@ form:
       vkcom: 'vkcom'
       telegram: 'telegram'
 Submit: 'Submit'
-create_your_heir: 'Create Your Heir'
+create_your_heir: 'Create Your Digital Heir'
 edit_your_secure_envelope: 'Edit Your Secure Envelope'
 create_your_secure_envelope: 'Create Your Secure Envelope'
 create_your_pipeline: 'Create Your Pipeline'
@@ -91,22 +91,33 @@ add_your_second_email: 'Add Email Address'
 add_your_phone: 'Add Your Phone'
 verify_edit_your_phone: 'Verify/Edit Your Phone'
 add_your_second_phone: 'Add Your Second Phone'
+contact_can_edit: 'You can edit contact'
+contact_edit: 'Edit Contact'
+updateContact: 'Update Contact'
+resendVerificationCode: 'Resend Verification Code'
+is_verified: 'Is Verified'
+value: 'Value'
+countryCode: 'Country Code'
+contact_type_enum: 'Type of the Contact'
+create_contact: 'Add Contact'
+edit_your_heir: 'Edit Your Heir'
+
 
 about_page:
-  title: "About 'The Digital Heir'"
+  title: 'About "The Digital Heir"'
   introduction:
-    our_service: "Our service offers a secure and reliable solution for leaving your digital assets as an inheritance."
-    no_watching: "We do not watch you. We do not sale your data in any way."
-    privacy_priority: "We prioritize your privacy and security at every step."
-    encrypted_details: "Your contact details are encrypted before they are stored, ensuring they remain confidential."
-    encrypted_envelopes: "We also encrypt your secret envelopes with answers to your security questions."
-    no_decoding: "Once encrypted, these answers are deleted from our database, leaving only you and God with the knowledge."
-    no_way_decode: "There is no way to decode your secret envelopes without the answers provided by you!"
-  how_it_works: "Here's how it works:"
+    our_service: 'Our service offers a secure and reliable solution for leaving your digital assets as an inheritance.'
+    no_watching: 'We do not watch you. We do not sale your data in any way.'
+    privacy_priority: 'We prioritize your privacy and security at every step.'
+    encrypted_details: 'Your contact details are encrypted before they are stored, ensuring they remain confidential.'
+    encrypted_envelopes: 'We also encrypt your secret envelopes with answers to your security questions.'
+    no_decoding: 'Once encrypted, these answers are deleted from our database, leaving only you and God with the knowledge.'
+    no_way_decode: 'There is no way to decode your secret envelopes without the answers provided by you!'
+  how_it_works: 'Here is how it works:'
   section_titles:
-    registration: "Registration"
-    secret_questions: "Secret Questions"
-    create_envelope: "Create Envelope"
-    add_beneficiary: "Add Beneficiary To Envelope"
-  beneficiary_info: "All encrypted notes are stored securely on our servers. If something happens to you, or your device is compromised, your trusted contacts will still be able to access the necessary information using their personalized security questions."
-  assurance: "With our service, you can rest assured that your sensitive information is safe and accessible only to those you trust."
+    registration: 'Registration'
+    secret_questions: 'Secret Questions'
+    create_envelope: 'Create Envelope'
+    add_beneficiary: 'Add Beneficiary To Envelope'
+  beneficiary_info: 'All encrypted notes are stored securely on our servers. If something happens to you, or your device is compromised, your trusted contacts will still be able to access the necessary information using their personalized security questions.'
+  assurance: 'With our service, you can rest assured that your sensitive information is safe and accessible only to those you trust.'

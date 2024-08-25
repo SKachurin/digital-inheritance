@@ -75,8 +75,27 @@ class NoteEditController extends AbstractController
             )
         ;
 
+        if ($note->getBeneficiary()) {
+            $dto
+                ->setBeneficiaryTextAnswerOne($note->getBeneficiaryTextAnswerOne())
+                ->setBeneficiaryFirstQuestion(
+                    $this->cryptoService->decryptData(
+                        $note->getBeneficiary()->getBeneficiaryFirstQuestion()
+                    )
+                )
+            ;
+            $dto
+                ->setBeneficiaryTextAnswerTwo($note->getBeneficiaryTextAnswerTwo())
+                ->setBeneficiarySecondQuestion(
+                    $this->cryptoService->decryptData(
+                        $note->getBeneficiary()->getBeneficiarySecondQuestion()
+                    )
+                )
+            ;
+        }
 
-        $form = $this->createForm(NoteEditType::class, $dto);
+
+        $form = $this->createForm(NoteEditType::class, $dto, ['beneficiary' => $note->getBeneficiary()]);
 
         $form->handleRequest($request);
 

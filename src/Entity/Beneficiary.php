@@ -24,7 +24,7 @@ class Beneficiary implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'integer')]
     private int $id = 0;
 
-    #[ORM\Column(type: 'string', length: 64, nullable: true)]
+    #[ORM\Column(type: 'string', length: 200, nullable: true)]
     private ?string $beneficiaryName;
 
 //    #[ORM\Column(type: 'string', length: 64, unique: true, nullable: true)]
@@ -35,7 +35,7 @@ class Beneficiary implements UserInterface, PasswordAuthenticatedUserInterface
 //    #[Assert\Email]
 //    private ?string $beneficiarySecondEmail = null;
 
-    #[ORM\Column(type: 'string', length: 150, nullable: true)]
+    #[ORM\Column(type: 'string', length: 512, nullable: true)]
     private ?string $beneficiaryFullName = null;
 
 //    #[ORM\Column(type: 'string',  length: 64, nullable: true)]
@@ -47,16 +47,16 @@ class Beneficiary implements UserInterface, PasswordAuthenticatedUserInterface
 //    #[ORM\Column(type: 'string', length: 64, nullable: true)]
 //    private ?string $beneficiarySecondPhone = null;
 
-    #[ORM\Column(type: 'string', length: 200, nullable: true)]
+    #[ORM\Column(type: 'string', length: 1024, nullable: true)]
     private ?string $beneficiaryFirstQuestion = null;
 
-    #[ORM\Column(type: 'string', length: 64, nullable: true)]
+    #[ORM\Column(type: 'string', length: 512, nullable: true)]
     private ?string $beneficiaryFirstQuestionAnswer = null;
 
-    #[ORM\Column(type: 'string', length: 200, nullable: true)]
+    #[ORM\Column(type: 'string', length: 1024, nullable: true)]
     private ?string $beneficiarySecondQuestion = null;
 
-    #[ORM\Column(type: 'string', length: 64, nullable: true)]
+    #[ORM\Column(type: 'string', length: 512, nullable: true)]
     private ?string $beneficiarySecondQuestionAnswer = null;
 
     #[ORM\Column(type: 'text', nullable: true)]

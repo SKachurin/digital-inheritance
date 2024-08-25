@@ -1,7 +1,10 @@
 {% extends 'base.html.twig' %}
     {% block content %}
         <div class="container">
-            <h1 style="padding-top: 4em;">{{ 'create_your_heir:'|trans }}</h1>
+            <h1 style="padding-top: 4em;">{{ 'create_your_heir'|trans }}</h1>
+
+            <p>{{ 'header.new_heir_explain'|trans }}</p>
+            <p>{{ 'header.new_heir_explain_1'|trans }}</p>
             {{ form(form) }}
 
         </div>

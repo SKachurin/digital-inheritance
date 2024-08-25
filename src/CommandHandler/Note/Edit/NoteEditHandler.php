@@ -35,24 +35,39 @@ class NoteEditHandler
         $cryptoService = null;
         $note->setCustomer($input->getCustomer());
 
+        $decryptedText = null;
+
         if ($input->getCustomerFirstQuestionAnswer() !== null) {
             $personalString = $input->getCustomerFirstQuestionAnswer();
-//            $personalStringDecrypted = $personalString;//$this->cryptoService->decryptData($personalString);
-
             $cryptoService = new CryptoService($this->params, $this->logger, $personalString);
-
-//            $this->logger->info('getCustomerTextAnswerOne() !== null)  decryptedText.', ['$input->getCustomerTextAnswerOne()' => $input->getCustomerTextAnswerOne()]);
-
             $decryptedText = $cryptoService->decryptData($input->getCustomerTextAnswerOne());
-
-            if ($decryptedText === false) {
-                // Handle decryption failure
-//                throw new \RuntimeException('Decryption failed for CustomerTextAnswerOne.');
-                $decryptedText = null;
-                //TODO Set timer x2 for each next decryption try. From 30 sec. + sent email "Is it you? or Would you like to change pass for the App."
-            }
-            $note->setCustomerText($decryptedText);
         }
+
+        if ($decryptedText === null && $input->getCustomerSecondQuestionAnswer() !== null) {
+            $personalString = $input->getCustomerSecondQuestionAnswer();
+            $cryptoService = new CryptoService($this->params, $this->logger, $personalString);
+            $decryptedText = $cryptoService->decryptData($input->getCustomerTextAnswerTwo());
+        }
+
+        if ($decryptedText === null && $input->getBeneficiaryFirstQuestionAnswer() !== null) {
+            $personalString = $input->getBeneficiaryFirstQuestionAnswer();
+            $cryptoService = new CryptoService($this->params, $this->logger, $personalString);
+            $decryptedText = $cryptoService->decryptData($input->getBeneficiaryTextAnswerOne());
+        }
+
+        if ($decryptedText === null && $input->getBeneficiarySecondQuestionAnswer() !== null) {
+            $personalString = $input->getBeneficiarySecondQuestionAnswer();
+            $cryptoService = new CryptoService($this->params, $this->logger, $personalString);
+            $decryptedText = $cryptoService->decryptData($input->getBeneficiaryTextAnswerTwo());
+        }
+
+
+        if ($decryptedText === false) {
+            $decryptedText = null;
+            // TODO Set timer x2 for each next decryption try. From 30 sec. + sent email "Is it you? or Would you like to change pass for the App."
+        }
+
+        $note->setCustomerText($decryptedText);
 
         return $note;
     }

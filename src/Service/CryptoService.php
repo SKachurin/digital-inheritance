@@ -12,7 +12,7 @@ use Psr\Log\LoggerInterface;
 class CryptoService
 {
     private string $key;
-//    private LoggerInterface $logger;
+    private LoggerInterface $logger;
 
     private ?string $personalString;
 
@@ -39,8 +39,8 @@ class CryptoService
 //            $this->logger->info('NO STRING.',  ['$personalString' => $this->personalString]);
         }
 
-        $this->logger->info('$baseKey.', ['$baseKey' => $baseKey]);
-        $this->logger->info('$personalString.', ['$personalString' => $this->personalString]);
+//        $this->logger->info('$baseKey.', ['$baseKey' => $baseKey]);
+//        $this->logger->info('$personalString.', ['$personalString' => $this->personalString]);
 
 
         if (!is_string($personalString)) {
@@ -51,7 +51,7 @@ class CryptoService
 
 
         $finalKey = $hashedPersonalString ^ $hashedBaseKey; //xor
-        $this->logger->info('$finalKey.', ['$finalKey' => $finalKey]);
+//        $this->logger->info('$finalKey.', ['$finalKey' => $finalKey]);
 
         if (strlen($finalKey) !== 32) {
             throw new Exception('Combined key is not 32 bytes long');
@@ -79,8 +79,8 @@ class CryptoService
         // Encrypt the data
         $encrypted = sodium_crypto_secretbox($data, $nonce, $this->key);
 
-        $this->logger->info(' encryptData Nonce length:', ['length' => strlen($nonce)]);
-        $this->logger->info('encryptData once:', ['nonce' => bin2hex($nonce)]);
+//        $this->logger->info(' encryptData Nonce length:', ['length' => strlen($nonce)]);
+//        $this->logger->info('encryptData once:', ['nonce' => bin2hex($nonce)]);
 
         // Combine nonce and encrypted data
         return base64_encode($nonce . $encrypted);
@@ -97,18 +97,19 @@ class CryptoService
 
         // Decode the base64 encoded data
         $decoded = base64_decode($encryptedData);
+//        $this->logger->info('Base64 Decoded Data:', ['decoded' => bin2hex($decoded)]);
 
         // Extract the nonce and encrypted message
         $nonce = substr($decoded, 0, SODIUM_CRYPTO_SECRETBOX_NONCEBYTES);
-        $this->logger->info(' decryptData $nonce.', ['$nonce' => bin2hex($nonce)]);
+//        $this->logger->info(' decryptData $nonce.', ['$nonce' => bin2hex($nonce)]);
 
         $ciphertext = substr($decoded, SODIUM_CRYPTO_SECRETBOX_NONCEBYTES);
-        $this->logger->info('decryptData $ciphertext.', ['$ciphertext' => $ciphertext]);
+//        $this->logger->info('decryptData $ciphertext.', ['$ciphertext' => $ciphertext]);
 
         // Decrypt the message
 //        return
-        return sodium_crypto_secretbox_open($ciphertext, $nonce, $this->key);
-        $this->logger->info('decryptData $x.', ['$x' => $x]);
-//        return $x;
+        $x = sodium_crypto_secretbox_open($ciphertext, $nonce, $this->key);
+//        $this->logger->info('decryptData $x.', ['$x' => $x]);
+        return $x;
     }
 }

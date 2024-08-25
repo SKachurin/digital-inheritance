@@ -57,12 +57,7 @@ class NoteCreateController extends AbstractController
 
                 $this->addFlash('success', 'Your Envelope is being processed.');
 
-                $note = $handledStamp->getResult();
-
-//                /** @var Note $note */
-//                $noteId = $note->getId();
-
-//                $form1 = $this->createForm(NoteCreationType1::class, $note, ['customerId' => $customer->getId()]);
+//                $note = $handledStamp->getResult();
 
                 return $this->redirectToRoute('user_home');
 

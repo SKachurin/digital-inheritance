@@ -2,6 +2,7 @@
 
 namespace App\Form\Type;
 
+use App\CommandHandler\Contact\Create\ContactCreateInputDto;
 use App\CommandHandler\Contact\Edit\ContactEditInputDto;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -11,28 +12,29 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\Length;
 
-class ContactEditType extends AbstractType
+class ContactCreateType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-        $countryCode = $options['countryCode'];
-        $isVerified = $options['isVerified'];
+        $type = $options['type'];
+        $customer = $options['customer'];
 
         $builder
             ->add('contactTypeEnum', TextareaType::class, [
                 'label' => 'contact_type_enum',
                 'attr' => [
                     'readonly' => true
-                ]
+                ],
+                'data' => $type,
             ])
         ;
-        if ($countryCode) {
+        if ($type === 'phone') {
             $builder
                 ->add('countryCode', TextareaType::class, [
                     'label' => 'countryCode',
                     'required' => false,
                     'attr' => [
-                        'readonly' => true
+//                        'readonly' => true
                     ]
                 ])
             ;
@@ -56,17 +58,13 @@ class ContactEditType extends AbstractType
                 'required' => false,
                 'mapped' => false, // Temporarily unmapped for transformation
                 'attr' => [
-                    'readonly' => true,
+//                    'readonly' => true,
                 ],
                 'data' => $options['isVerified'] ? 'Yes' : 'No',
             ])
             ->add('submit', SubmitType::class, [
-                'label' => 'updateContact',
+                'label' => 'create_contact',
                 'attr' => ['class' => 'btn btn-primary'],
-            ])
-            ->add('resend_verification', SubmitType::class, [
-                'label' => 'resendVerificationCode',
-                'attr' => ['class' => 'btn btn-secondary'],
             ])
         ;
 
@@ -75,9 +73,10 @@ class ContactEditType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => ContactEditInputDto::class,
-            'countryCode' => null,
-            'isVerified' => null
+            'data_class' => ContactCreateInputDto::class,
+            'type' => null,
+            'customer' => null,
+            'isVerified' => false,
         ]);
     }
 }

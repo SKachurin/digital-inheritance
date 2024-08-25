@@ -62,7 +62,7 @@ class NoteCreateHandler
                     )
                 );
             //delete key after
-            $customer->setCustomerFirstQuestionAnswer(' ');
+//            $customer->setCustomerFirstQuestionAnswer(' ');
         }
 
         if ($personalString2) {
@@ -74,7 +74,7 @@ class NoteCreateHandler
                     )
                 );
             //delete key after
-            $customer->setCustomerSecondQuestionAnswer(' ');
+//            $customer->setCustomerSecondQuestionAnswer(' ');
         }
         $this->entityManager->persist($note);
         $this->entityManager->persist($customer);

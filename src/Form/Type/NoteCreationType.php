@@ -54,20 +54,21 @@ class NoteCreationType extends AbstractType
                     'style' => 'height: 15em',
                 ],
             ])
-            ->add('beneficiaryId', EntityType::class, [
-                'class' => Beneficiary::class,
-                'choice_label' => 'beneficiaryName',
-                'label' => 'Beneficiary',
-                'required' => false,
-                'query_builder' => function (EntityRepository $entityRepository)  use ($customerId):  QueryBuilder {
-                    return $entityRepository->createQueryBuilder('c')
-                        ->select('b')
-                        ->from(Beneficiary::class, 'b')
-                        ->innerJoin('b.notes', 'n')
-                        ->where('n.customer = :customer')
-                        ->setParameter('customer', $customerId);
-                },
-            ]);
+//            ->add('beneficiaryId', EntityType::class, [
+//                'class' => Beneficiary::class,
+//                'choice_label' => 'beneficiaryName',
+//                'label' => 'Beneficiary',
+//                'required' => false,
+//                'query_builder' => function (EntityRepository $entityRepository)  use ($customerId):  QueryBuilder {
+//                    return $entityRepository->createQueryBuilder('c')
+//                        ->select('b')
+//                        ->from(Beneficiary::class, 'b')
+//                        ->innerJoin('b.notes', 'n')
+//                        ->where('n.customer = :customer')
+//                        ->setParameter('customer', $customerId);
+//                },
+//            ])
+        ;
             if ($decodedNote)
             {
                 $builder ->
