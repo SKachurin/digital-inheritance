@@ -1,12 +1,14 @@
 title: 'Welcome!'
 header:
-  dashboard: "Dashboard"
-  login: "Login"
-  logout: "Logout"
-  registration: "Registration"
-  pricing: "Pricing"
-  faqs: "FAQs"
-  about: "About"
+  dashboard: 'Dashboard'
+  login: 'Login'
+  logout: 'Logout'
+  registration: 'Registration'
+  pricing: 'Pricing'
+  faqs: 'FAQs'
+  about: 'About'
+  new_heir_explain: 'You will as many info about your Heir - this will help as reach this person in case of events you will describe in Pipeline section'
+  new_heir_explain_1: 'Please be specially precise with contacts (like phone and email) as we is not going to verify it now'
 form:
   label:
     customer_name: 'Nickname or whatever'
@@ -14,7 +16,7 @@ form:
     customer_email: 'Your Email'
     beneficiary_email: 'Your Heir Email'
     customer_second_email: 'Your Second Email (optional)'
-    beneficiary_second_email: 'Your Second Email (optional)'
+    beneficiary_second_email: 'Second Email (optional)'
     customer_full_name: 'Full Name (optional)'
     beneficiary_full_name: 'Full Name Of Your Heir (optional)'
     customer_country_code: 'Country Code His/Hers PHone (optional)'
@@ -73,7 +75,7 @@ form:
       vkcom: 'vkcom'
       telegram: 'telegram'
 Submit: 'Submit'
-create_your_heir: 'Create Your Heir'
+create_your_heir: 'Create Your Digital Heir'
 edit_your_secure_envelope: 'Edit Your Secure Envelope'
 create_your_secure_envelope: 'Create Your Secure Envelope'
 create_your_pipeline: 'Create Your Pipeline'
@@ -98,23 +100,24 @@ value: 'Value'
 countryCode: 'Country Code'
 contact_type_enum: 'Type of the Contact'
 create_contact: 'Add Contact'
+edit_your_heir: 'Edit Your Heir'
 
 
 about_page:
-  title: "About 'The Digital Heir'"
+  title: 'About "The Digital Heir"'
   introduction:
-    our_service: "Our service offers a secure and reliable solution for leaving your digital assets as an inheritance."
-    no_watching: "We do not watch you. We do not sale your data in any way."
-    privacy_priority: "We prioritize your privacy and security at every step."
-    encrypted_details: "Your contact details are encrypted before they are stored, ensuring they remain confidential."
-    encrypted_envelopes: "We also encrypt your secret envelopes with answers to your security questions."
-    no_decoding: "Once encrypted, these answers are deleted from our database, leaving only you and God with the knowledge."
-    no_way_decode: "There is no way to decode your secret envelopes without the answers provided by you!"
-  how_it_works: "Here's how it works:"
+    our_service: 'Our service offers a secure and reliable solution for leaving your digital assets as an inheritance.'
+    no_watching: 'We do not watch you. We do not sale your data in any way.'
+    privacy_priority: 'We prioritize your privacy and security at every step.'
+    encrypted_details: 'Your contact details are encrypted before they are stored, ensuring they remain confidential.'
+    encrypted_envelopes: 'We also encrypt your secret envelopes with answers to your security questions.'
+    no_decoding: 'Once encrypted, these answers are deleted from our database, leaving only you and God with the knowledge.'
+    no_way_decode: 'There is no way to decode your secret envelopes without the answers provided by you!'
+  how_it_works: 'Here is how it works:'
   section_titles:
-    registration: "Registration"
-    secret_questions: "Secret Questions"
-    create_envelope: "Create Envelope"
-    add_beneficiary: "Add Beneficiary To Envelope"
-  beneficiary_info: "All encrypted notes are stored securely on our servers. If something happens to you, or your device is compromised, your trusted contacts will still be able to access the necessary information using their personalized security questions."
-  assurance: "With our service, you can rest assured that your sensitive information is safe and accessible only to those you trust."
+    registration: 'Registration'
+    secret_questions: 'Secret Questions'
+    create_envelope: 'Create Envelope'
+    add_beneficiary: 'Add Beneficiary To Envelope'
+  beneficiary_info: 'All encrypted notes are stored securely on our servers. If something happens to you, or your device is compromised, your trusted contacts will still be able to access the necessary information using their personalized security questions.'
+  assurance: 'With our service, you can rest assured that your sensitive information is safe and accessible only to those you trust.'

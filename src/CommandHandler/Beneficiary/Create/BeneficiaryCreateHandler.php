@@ -28,12 +28,13 @@ class BeneficiaryCreateHandler
     protected UserPasswordHasherInterface $passwordHasher;
 
     public function __construct(
-        EntityManagerInterface $entityManager,
+         EntityManagerInterface $entityManager,
          CryptoService $cryptoService,
          UserPasswordHasherInterface $passwordHasher,
     ) {
         $this->entityManager = $entityManager;
         $this->cryptoService = $cryptoService;
+        $this->passwordHasher = $passwordHasher;
     }
 
     /**
@@ -55,8 +56,7 @@ class BeneficiaryCreateHandler
                 )
             )
             ->setBeneficiaryFirstQuestionAnswer(
-                $this->passwordHasher->hashPassword(
-                    $beneficiary,
+                $this->cryptoService->encryptData(
                     $input->getBeneficiaryFirstQuestionAnswer()
                 )
             )
@@ -66,8 +66,7 @@ class BeneficiaryCreateHandler
                 )
             )
             ->setBeneficiarySecondQuestionAnswer(
-                $this->passwordHasher->hashPassword(
-                    $beneficiary,
+                $this->cryptoService->encryptData(
                     $input->getBeneficiarySecondQuestionAnswer()
                 )
             )

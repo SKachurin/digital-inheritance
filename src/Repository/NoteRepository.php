@@ -10,7 +10,7 @@ use App\Repository\Collection\PageCollection;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @method PageCollection    getAll(int $page = 1, int $pageSize = 100, array $criteria = [])
+ * @method PageCollection   getAll(int $page = 1, int $pageSize = 100, array $criteria = [])
  * @method Note            getOneBy(array $criteria, array $orderBy = null)
  * @method null|Note       find($id, $lockMode = null, $lockVersion = null)
  * @method null|Note       findOneBy(array $criteria, array $orderBy = null)
@@ -39,5 +39,16 @@ class NoteRepository extends BaseRepository
         }
         return null;
 
+    }
+
+    public function customerHasNoteWithBeneficiary(Customer $customer): ?Note
+    {
+        return $this->createQueryBuilder('n')
+            ->andWhere('n.customer = :customer')
+            ->andWhere('n.beneficiary IS NOT NULL')
+            ->setParameter('customer', $customer)
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult();
     }
 }

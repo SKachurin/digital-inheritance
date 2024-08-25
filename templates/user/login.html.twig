@@ -10,6 +10,15 @@
             {% endif %}
 {#            {{ key }}#}
 
+
+            {% for label, messages in app.flashes %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ label }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endfor %}
+
             {{ form_start(form) }}
             {{ form_row(form.email, {'full_name': '_username'}) }}
             {{ form_row(form.password, {'full_name': '_password'}) }}
