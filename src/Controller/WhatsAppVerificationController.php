@@ -12,7 +12,7 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-class EmailVerificationController extends AbstractController
+class WhatsAppVerificationController extends AbstractController
 {
     /**
      * @throws Exception
@@ -39,7 +39,7 @@ class EmailVerificationController extends AbstractController
         $entityManager->flush();
 
 
-        $this->addFlash('success', 'Your email address has been verified.');
+        $this->addFlash('success', 'Your WhatsApp has been verified.');
         return new RedirectResponse($this->generateUrl('user_home'));
     }
 }

@@ -9,6 +9,7 @@ use App\Form\Type\ContactEditType;
 use App\Repository\ContactRepository;
 use App\Service\CryptoService;
 use App\Service\VerificationEmailService;
+use App\Service\VerificationWhatsAppService;
 use Random\RandomException;
 use SodiumException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -26,17 +27,20 @@ class ContactEditController extends AbstractController
     private ContactRepository $repository;
     private CryptoService $cryptoService;
     private VerificationEmailService $verificationEmailService;
+    private VerificationWhatsAppService $verificationWhatsAppService;
     public function __construct(
         ContactRepository $repository,
         MessageBusInterface $commandBus,
         CryptoService $cryptoService,
-        VerificationEmailService $verificationEmailService
+        VerificationEmailService $verificationEmailService,
+        VerificationWhatsAppService $verificationWhatsAppService
     )
     {
         $this->repository = $repository;
         $this->commandBus = $commandBus;
         $this->cryptoService = $cryptoService;
         $this->verificationEmailService = $verificationEmailService;
+        $this->verificationWhatsAppService = $verificationWhatsAppService;
     }
 
     /**
@@ -88,9 +92,17 @@ class ContactEditController extends AbstractController
 
             if ($form->get('resend_verification')->isClicked()) {
 
-                $this->verificationEmailService->sendVerificationEmail($contact);
+                switch ($contact->getContactTypeEnum()) {
+                    case 'email':
+                        $this->verificationEmailService->sendVerificationEmail($contact);
+                        $this->addFlash('info', 'Verification email resent successfully.');
+                        break;
 
-                $this->addFlash('info', 'Verification email resent successfully.');
+                    case 'phone':
+                        $this->verificationWhatsAppService->sendVerificationWhatsApp($contact);
+                        $this->addFlash('info', 'Verification phone resent successfully.');
+                        break;
+                }
 
                 return $this->redirectToRoute('user_home');
             }
