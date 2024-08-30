@@ -36,6 +36,11 @@ services:
         arguments:
             $params: '@parameter_bag'
 
+    App\Service\VerificationWhatsAppService:
+        arguments:
+            $apiUrl: '%env(WAZZUP_API_URL)%'
+            $apiToken: '%env(WAZZUP_API_TOKEN)%'
+
     App\EventListener\CustomerHasNoteListener:
         tags:
             - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest }

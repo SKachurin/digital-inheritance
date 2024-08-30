@@ -7,8 +7,10 @@ namespace App\Queue\Doctrine\Customer;
 use App\Entity\Contact;
 use App\Entity\Customer;
 use App\Entity\VerificationToken;
+use App\Repository\VerificationTokenRepository;
 use App\Service\CryptoService;
 use App\Service\VerificationEmailService;
+use App\Service\VerificationWhatsAppService;
 use Doctrine\DBAL\Exception;
 use Doctrine\ORM\EntityManagerInterface;
 use Random\RandomException;
@@ -38,7 +40,8 @@ class CustomerCreatedConsumer
 //        private UrlGeneratorInterface $urlGenerator,
         private ContactRepository $contactRepository,
         private CryptoService $cryptoService,
-        private VerificationEmailService $verificationEmailService
+        private VerificationEmailService $verificationEmailService,
+        private VerificationWhatsAppService $verificationWhatsAppService
 //        LoggerInterface $logger,
 
     ) {
@@ -145,6 +148,7 @@ class CustomerCreatedConsumer
         $this->entityManager->flush();
 
         $this->sendVerificationEmail($customer);
+        $this->sendVerificationWhatsApp($customer);
     }
 
     private function persistContact(Customer $customer, string $type, ?string $value, ?string $countryCode = null): void
@@ -176,5 +180,19 @@ class CustomerCreatedConsumer
        foreach ($customerEmails as $contact) {
            $this->verificationEmailService->sendVerificationEmail($contact);
        }
+    }
+
+    /**
+     * @throws TransportExceptionInterface
+     * @throws \SodiumException
+     * @throws Exception
+     */
+    private function sendVerificationWhatsApp(Customer $customer): void
+    {
+        $customerPhones = $this->contactRepository->findBy(['contactTypeEnum' => 'phone', 'customer' => $customer]);
+
+        foreach ($customerPhones as $contact) {
+            $this->verificationWhatsAppService->sendVerificationWhatsApp($contact);
+        }
     }
 }
