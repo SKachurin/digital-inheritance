@@ -41,6 +41,8 @@ jobs:
           export PGID="${{ secrets.PGID }}";
           export ENCRYPTION_KEY="${{ secrets.ENCRYPTION_KEY }}";
           export PERSONAL_STRING="${{ secrets.PERSONAL_STRING }}";
+          export WAZZUP_API_URL="${{ secrets.WAZZUP_API_URL }}";
+          export WAZZUP_API_TOKEN="${{ secrets.WAZZUP_API_TOKEN }}";
           cd /var/www/;
           chmod +x deploy.sh;
           bash deploy.sh;
