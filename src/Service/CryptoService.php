@@ -56,9 +56,9 @@ class CryptoService
         if (strlen($finalKey) !== 32) {
             throw new Exception('Combined key is not 32 bytes long');
         }
-        error_log("Final Key (Hex): " . bin2hex($finalKey));
-        error_log("Hashed Personal String: " . bin2hex($hashedPersonalString));
-        error_log("Hashed baseKey String: " . bin2hex($hashedBaseKey));
+//        error_log("Final Key (Hex): " . bin2hex($finalKey));
+//        error_log("Hashed Personal String: " . bin2hex($hashedPersonalString));
+//        error_log("Hashed baseKey String: " . bin2hex($hashedBaseKey));
 
         $this->key = $finalKey;
     }
