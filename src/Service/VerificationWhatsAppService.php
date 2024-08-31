@@ -1,46 +1,5 @@
 <?php
 
-//namespace App\Service;
-//
-//use Symfony\Contracts\HttpClient\HttpClientInterface;
-//use Symfony\Component\HttpFoundation\Response;
-//
-//class WazzupService
-//{
-//    private HttpClientInterface $client;
-//    private string $apiUrl;
-//    private string $apiToken;
-//
-//    public function __construct(HttpClientInterface $client, string $apiUrl, string $apiToken)
-//    {
-//        $this->client = $client;
-//        $this->apiUrl = $apiUrl;
-//        $this->apiToken = $apiToken;
-//    }
-//
-//    public function sendOtp(string $channelId, string $phoneNumber, string $otp): bool
-//    {
-//        $url = $this->apiUrl . '/v3/messages';
-//        $response = $this->client->request('POST', $url, [
-//            'headers' => [
-//                'Authorization' => 'Bearer ' . $this->apiToken,
-//                'Content-Type' => 'application/json',
-//            ],
-//            'json' => [
-//                'channelId' => $channelId,
-//                'to' => $phoneNumber,
-//                'message' => [
-//                    'type' => 'text',
-//                    'text' => 'Your OTP code is: ' . $otp,
-//                ],
-//            ],
-//        ]);
-//
-//        return $response->getStatusCode() === Response::HTTP_OK;
-//    }
-//}
-
-
 namespace App\Service;
 
 use App\Entity\Contact;
@@ -49,9 +8,7 @@ use App\Repository\VerificationTokenRepository;
 use DateTimeImmutable;
 use Doctrine\DBAL\Exception;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mailer\MailerInterface;
-use Symfony\Component\Mime\Email;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Uid\Uuid;
 use Symfony\Contracts\HttpClient\Exception\DecodingExceptionInterface;

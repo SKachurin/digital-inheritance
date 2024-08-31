@@ -35,6 +35,8 @@ services:
       MAILER_DSN: "${MAILER_DSN}"
       ENCRYPTION_KEY: "${ENCRYPTION_KEY}"
       PERSONAL_STRING: "${PERSONAL_STRING}"
+      WAZZUP_API_URL: "${WAZZUP_API_URL}"
+      WAZZUP_API_TOKEN: "${WAZZUP_API_TOKEN}"
     extra_hosts:
       - "host.docker.internal:host-gateway"
     networks:

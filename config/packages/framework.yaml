@@ -11,6 +11,9 @@ framework:
     #esi: true
     #fragments: true
 
+    router:
+        default_uri: '%env(HOST)%'
+
 when@test:
     framework:
         test: true
