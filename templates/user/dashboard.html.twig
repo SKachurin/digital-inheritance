@@ -80,6 +80,7 @@
                 <p>explanation</p>
             {% endif %}
 
+
             {% if customerFirstPhone is not defined or not customerFirstPhone %}
                 <section class="mb-4">
                     <a class="btn btn-outline-dark btn-floating m-1 mt-4" href="/contact/phone/create" role="button">
@@ -111,6 +112,33 @@
                 <section class="mb-4">
                     <a class="btn btn-outline-dark btn-floating m-1 mt-4" href="/contact/{{ customerSecondPhone }}/edit" role="button">
                         <i class="">{{ 'verify_edit_your_phone'|trans }}</i>
+                    </a>
+                </section>
+                <p>explanation</p>
+            {% endif %}
+
+            {% if customerSocial is not defined or not customerSocial %}
+                <section class="mb-4">
+                    <a class="btn btn-outline-dark btn-floating m-1 mt-4" href="/contact/social/create" role="button">
+                        <i class="">{{ 'add_your_social'|trans }}</i>
+                    </a>
+                </section>
+                <p>explanation</p>
+            {% endif %}
+
+            {% if customerSocial is defined and customerSocial and not customerSocialVerified %}
+                <section class="mb-4">
+                    <a class="btn btn-outline-dark btn-floating m-1 mt-4" href="/contact/{{ customerSocial }}/edit" role="button">
+                        <i class="">{{ 'verify_edit_your_social'|trans }}</i>
+                    </a>
+                </section>
+                <p>explanation</p>
+            {% endif %}
+
+            {% if customerSocialVerified %}
+                <section class="mb-4">
+                    <a class="btn btn-outline-dark btn-floating m-1 mt-4" href="/contact/{{ customerSocial }}/edit" role="button">
+                        <i class="">{{ 'edit_your_social'|trans }}</i>
                     </a>
                 </section>
                 <p>explanation</p>

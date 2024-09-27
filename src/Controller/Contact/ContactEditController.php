@@ -10,6 +10,7 @@ use App\Repository\ContactRepository;
 use App\Service\CryptoService;
 use App\Service\VerificationEmailService;
 use App\Service\VerificationWhatsAppService;
+use App\Service\VerificationSocialService;
 use Random\RandomException;
 use SodiumException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -28,12 +29,14 @@ class ContactEditController extends AbstractController
     private CryptoService $cryptoService;
     private VerificationEmailService $verificationEmailService;
     private VerificationWhatsAppService $verificationWhatsAppService;
+    private VerificationSocialService $verificationSocialService;
     public function __construct(
         ContactRepository $repository,
         MessageBusInterface $commandBus,
         CryptoService $cryptoService,
         VerificationEmailService $verificationEmailService,
-        VerificationWhatsAppService $verificationWhatsAppService
+        VerificationWhatsAppService $verificationWhatsAppService,
+        VerificationSocialService $verificationSocialService
     )
     {
         $this->repository = $repository;
@@ -41,6 +44,7 @@ class ContactEditController extends AbstractController
         $this->cryptoService = $cryptoService;
         $this->verificationEmailService = $verificationEmailService;
         $this->verificationWhatsAppService = $verificationWhatsAppService;
+        $this->verificationSocialService = $verificationSocialService;
     }
 
     /**
@@ -102,6 +106,11 @@ class ContactEditController extends AbstractController
                         $this->verificationWhatsAppService->sendVerificationWhatsApp($contact);
                         $this->addFlash('info', 'Verification phone resent successfully.');
                         break;
+
+                    case 'social':
+                        $this->verificationSocialService->sendVerificationSocial($contact);
+                        $this->addFlash('info', 'Verification social resent successfully.');
+                        break;
                 }
 
                 return $this->redirectToRoute('user_home');
@@ -122,7 +131,7 @@ class ContactEditController extends AbstractController
 
             $form1 = $this->createForm(ContactEditType::class, $handledResult);
 
-            $this->addFlash('info', 'Contact updated! Would you like to send Verification email now?');
+            $this->addFlash('info', 'Contact updated! Would you like to send Verification message now?');
 
             return $this->render('contactEdit.html.twig', [
                 'form' => $form1->createView(),

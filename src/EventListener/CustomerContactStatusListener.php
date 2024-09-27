@@ -62,6 +62,9 @@ class CustomerContactStatusListener
             $customerSecondPhone = null;
             $customerSecondPhoneVerified = false;
 
+            $customerSocial = null;
+            $customerSocialVerified = false;
+
             $phonesCounter = 0;
             $emailsCounter = 0;
 
@@ -87,6 +90,10 @@ class CustomerContactStatusListener
                             $customerSecondPhoneVerified = $contact->getIsVerified();
                         }
                         break;
+                    case 'social':
+                        $customerSocial = $contact->getId();
+                        $customerSocialVerified = $contact->getIsVerified();
+                        break;
                 }
             }
 
@@ -101,6 +108,9 @@ class CustomerContactStatusListener
 
             $this->twig->addGlobal('customerSecondPhone', $customerSecondPhone);
             $this->twig->addGlobal('customerSecondPhoneVerified', $customerSecondPhoneVerified);
+
+            $this->twig->addGlobal('customerSocial', $customerSocial);
+            $this->twig->addGlobal('customerSocialVerified', $customerSocialVerified);
         }
     }
 }

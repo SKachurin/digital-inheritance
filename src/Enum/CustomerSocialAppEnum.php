@@ -6,9 +6,9 @@ namespace App\Enum;
 
 enum CustomerSocialAppEnum: string implements TransformableEnumInterface
 {
-    case FACEBOOK = 'facebook';
-    case INSTAGRAM = 'instagram';
-    case VKCOM = 'vk.com';
+//    case FACEBOOK = 'facebook';
+//    case INSTAGRAM = 'instagram';
+//    case VKCOM = 'vk.com';
     case TELEGRAM = 'telegram';
     case NONE = 'none';
 
@@ -19,9 +19,9 @@ enum CustomerSocialAppEnum: string implements TransformableEnumInterface
     public static function getValues(): array
     {
         return [
-            self::FACEBOOK->value,
-            self::INSTAGRAM->value,
-            self::VKCOM->value,
+//            self::FACEBOOK->value,
+//            self::INSTAGRAM->value,
+//            self::VKCOM->value,
             self::TELEGRAM->value,
             self::NONE->value,
         ];

@@ -69,6 +69,14 @@ contact_create:
     path:       /contact/{type}/create
     controller: App\Controller\Contact\ContactCreateController::create
 
+test_tg:
+    path: /tg
+    controller: App\Controller\PythonServiceController::callPythonService
+
+pipeline_create:
+    path:       /pipeline/create
+    controller: App\Controller\Pipeline\PipelineCreateController::create
+
 customer_creating:
     path:        /creating
     controller:  Symfony\Bundle\FrameworkBundle\Controller\TemplateController

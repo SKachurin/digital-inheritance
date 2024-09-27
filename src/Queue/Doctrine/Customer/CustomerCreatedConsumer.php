@@ -137,10 +137,9 @@ class CustomerCreatedConsumer
         }
 
         if ($input->getCustomerSocialAppLink()) {
+            $normalizedSocialAppLink = $this->normalizeSocialAppLink($input->getCustomerSocialAppLink());
             $this->persistContact($customer, 'social',
-                $this->cryptoService->encryptData(
-                    $input->getCustomerSocialAppLink()
-                )
+                $this->cryptoService->encryptData($normalizedSocialAppLink)
             );
         }
 
@@ -194,5 +193,34 @@ class CustomerCreatedConsumer
         foreach ($customerPhones as $contact) {
             $this->verificationWhatsAppService->sendVerificationWhatsApp($contact);
         }
+    }
+
+
+    private function normalizeSocialAppLink(string $link): string
+    {
+        $link = trim($link);
+
+        if (str_starts_with($link, '@')) {
+            return $link;
+        }
+
+        if (preg_match('/^\+/', $link)) {
+            return preg_replace('/[^+\d]/', '', $link);
+        }
+
+        if (str_starts_with($link, 'https://t.me/')) {
+            $parsedLink = parse_url($link, PHP_URL_PATH);
+            $username = trim($parsedLink, '/');
+            return '@' . $username;
+        }
+
+        if (str_starts_with($link, 't.me/')) {
+            $username = substr($link, strlen('t.me/'));
+            $username = trim($username, '/');
+            return '@' . $username;
+        }
+
+        // Assume any remaining input is a username and prepend '@'
+        return '@' . ltrim($link, '@');
     }
 }

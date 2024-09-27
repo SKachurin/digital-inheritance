@@ -89,7 +89,7 @@ class VerificationWhatsAppService
                 'body' => [
                     "channelId" => "058a7934-be60-4fa0-b943-61aab4818f23",
                     "chatType"=> "whatsapp",
-                    "text" => 'Thank you for registering! Please verify your phone by clicking on the following link: <a href="' . $verificationUrl . '">Verify Phone',
+                    "text" => 'Thank you for registering! Please verify your phone by clicking on the following link: <a href="' . $verificationUrl . '">Verify Phone</a>',
                     "chatId"=> $phoneNumber,
                     "contentUri" => "",
                     "templateId" => ""
