@@ -11,6 +11,7 @@ use App\Service\CryptoService;
 use App\Service\VerificationEmailService;
 use App\Service\VerificationWhatsAppService;
 use App\Service\VerificationSocialService;
+use Doctrine\DBAL\Exception;
 use Random\RandomException;
 use SodiumException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -21,6 +22,7 @@ use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Messenger\Stamp\HandledStamp;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Contracts\HttpClient\Exception\DecodingExceptionInterface;
 
 class ContactEditController extends AbstractController
 {

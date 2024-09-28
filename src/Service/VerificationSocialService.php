@@ -59,7 +59,7 @@ class VerificationSocialService
         $this->entityManager->persist($token);
         $this->entityManager->flush();
 
-        $verificationUrl = $this->urlGenerator->generate('email_verification_route', [
+        $verificationUrl = $this->urlGenerator->generate('social_verification_route', [
             'token' => $token->getToken()
         ], UrlGeneratorInterface::ABSOLUTE_URL);
 
@@ -71,7 +71,7 @@ class VerificationSocialService
         $message = 'Thank you for registering! Please verify your Telegram by clicking on the following link: (' . $verificationUrl . ') or copy/paste it in browser';
 //        $message = 'Thank you for registering! Please verify your Telegram by clicking on the following link: '. $verificationUrl;
 
-
+    // PythonService does both - check and verification message -- refactoring??
         $this->pythonServiceController->callPythonService([$user], $message);
     }
 }

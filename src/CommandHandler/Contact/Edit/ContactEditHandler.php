@@ -57,6 +57,7 @@ class ContactEditHandler
 //            if ($customer->getCustomerEmail())
 
             $input->setValue($newValue);
+            $input->setIsVerified(false);
 
             $this->entityManager->persist($contact);
             $this->entityManager->flush();

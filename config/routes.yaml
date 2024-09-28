@@ -61,6 +61,14 @@ email_verification_route:
     path:       /verify-email/{token}
     controller: App\Controller\EmailVerificationController::verifyEmail
 
+wa_verification_route:
+    path:       /verify-wa/{token}
+    controller: App\Controller\WhatsAppVerificationController::verifyWa
+
+social_verification_route:
+    path:       /verify-social/{token}
+    controller: App\Controller\SocialVerificationController::verifySocial
+
 contact_edit:
     path:       /contact/{contactId}/edit
     controller: App\Controller\Contact\ContactEditController::edit

@@ -18,7 +18,7 @@ class ContactEditInputDto
 
     private ?string $value = null;
 
-    private ?string $isVerified = null;
+    private ?bool $isVerified = null;
 
 
     public function __construct(Customer $customer, int $id)
@@ -74,11 +74,11 @@ class ContactEditInputDto
         $this->value = $value;
         return $this;
     }
-    public function getIsVerified(): ?string
+    public function getIsVerified(): ?bool
     {
         return $this->isVerified;
     }
-    public function setIsVerified(?string $isVerified): self
+    public function setIsVerified(?bool $isVerified): self
     {
         $this->isVerified = $isVerified;
         return $this;

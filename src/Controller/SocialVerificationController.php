@@ -12,12 +12,12 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-class WhatsAppVerificationController extends AbstractController
+class SocialVerificationController extends AbstractController
 {
     /**
      * @throws Exception
      */
-    public function verifyWa(
+    public function verifySocial(
         string $token,
         VerificationTokenRepository $tokenRepository,
         EntityManagerInterface $entityManager
@@ -39,7 +39,7 @@ class WhatsAppVerificationController extends AbstractController
         $entityManager->flush();
 
 
-        $this->addFlash('success', 'Your WhatsApp has been verified.');
+        $this->addFlash('success', 'Your Social has been verified.');
         return new RedirectResponse($this->generateUrl('user_home'));
     }
 }

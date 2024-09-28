@@ -68,7 +68,7 @@ class VerificationWhatsAppService
         $this->entityManager->persist($token);
         $this->entityManager->flush();
 
-        $verificationUrl = $this->urlGenerator->generate('email_verification_route', [
+        $verificationUrl = $this->urlGenerator->generate('wa_verification_route', [
             'token' => $token->getToken()
         ], UrlGeneratorInterface::ABSOLUTE_URL);
 
