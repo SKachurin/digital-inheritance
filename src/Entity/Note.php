@@ -42,20 +42,6 @@ class Note
     #[ORM\Column(type: 'text', nullable: true)]
     private ?string $beneficiaryTextAnswerTwo = null;
 
-    #[ORM\OneToOne(targetEntity: Pipeline::class, mappedBy: 'note')]
-    private ?Pipeline $pipeline = null;
-
-    /**
-     * @var Collection<int, Action>
-     */
-    #[ORM\OneToMany(targetEntity: Action::class, mappedBy: 'note', cascade: ['persist'])]
-    private Collection $actions;
-
-    public function __construct(
-
-    ) {
-        $this->actions = new ArrayCollection();
-    }
     public function getId(): int
     {
         return $this->id;
@@ -112,38 +98,6 @@ class Note
     public function setBeneficiaryTextAnswerTwo(string $beneficiaryTextAnswerTwo): self
     {
         $this->beneficiaryTextAnswerTwo = $beneficiaryTextAnswerTwo;
-        return $this;
-    }
-
-    public function getPipeline(): ?Pipeline
-    {
-        return $this->pipeline;
-    }
-    public function setPipeline(Pipeline $pipeline): self
-    {
-        $this->pipeline = $pipeline;
-        return $this;
-    }
-
-    public function addAction(Action $action): self
-    {
-        if (!$this->actions->contains($action)) {
-            $this->actions[] = $action;
-            $action->setNote($this);
-        }
-
-        return $this;
-    }
-
-    public function removeAction(Action $action): self
-    {
-        if ($this->actions->removeElement($action)) {
-            // set the owning side to null (unless already changed)
-            if ($action->getNote() === $this) {
-                $action->setNote($this);
-            }
-        }
-
         return $this;
     }
 }

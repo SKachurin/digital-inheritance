@@ -5,18 +5,11 @@ declare(strict_types=1);
 namespace App\Entity;
 
 use App\Enum\ActionTypeEnum;
-use App\Enum\CustomerSocialAppEnum;
 use App\Enum\CustomerPaymentStatuseEnum;
 use App\Enum\IntervalEnum;
 use App\Repository\CustomerRepository;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Doctrine\ORM\Mapping\ManyToOne;
 use App\Entity\Traits\Timestamps;
-use Symfony\Bridge\Doctrine\Types\UuidType;
-use Symfony\Component\Uid\Uuid;
-use Symfony\Component\Uid\UuidV4;
-use Symfony\Component\Validator\Constraints\NotBlank;
 
 #[ORM\Entity(repositoryClass: CustomerRepository::class)]
 #[ORM\HasLifecycleCallbacks]
@@ -37,14 +30,11 @@ class Action
     private ActionTypeEnum $actionType = ActionTypeEnum::SOCIAL_CHECK;
 
     #[ORM\Column(type: 'string', enumType: IntervalEnum::class)]
-    private ?IntervalEnum $interval;
+    private ?IntervalEnum $timeInterval;
 
     #[ORM\Column(type: 'string', length: 64, nullable: true)]
-    private string $status;
+    private string $status; // Create Enum for this pending, done
 
-    #[ORM\ManyToOne(targetEntity: Note::class, inversedBy: 'actions')]
-    #[ORM\JoinColumn(name: 'note_id', nullable: false)]
-    private ?Note $note;
 
     public function __construct(
         Customer $customer,
@@ -72,13 +62,13 @@ class Action
     {
         return $this->actionType;
     }
-    public function getInterval(): ?IntervalEnum
+    public function getTimeInterval(): ?IntervalEnum
     {
-        return $this->interval;
+        return $this->timeInterval;
     }
-    public function setInterval(IntervalEnum $interval): Action
+    public function setTimeInterval(IntervalEnum $timeInterval): Action
     {
-        $this->interval = $interval;
+        $this->timeInterval = $timeInterval;
         return $this;
     }
     public function getStatus(): string
@@ -88,15 +78,6 @@ class Action
     public function setStatus(string $status): Action
     {
         $this->status = $status;
-        return $this;
-    }
-    public function getNote(): ?Note
-    {
-        return $this->note;
-    }
-    public function setNote(Note $note): Action
-    {
-        $this->note = $note;
         return $this;
     }
 }

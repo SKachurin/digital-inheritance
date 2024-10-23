@@ -5,7 +5,7 @@
                 padding-top: 4em;
             }
             .form-header {
-                margin-bottom: 1em; /* Add some space between the header and the form */
+                margin-bottom: 1em;
             }
             #demonstration_type2{
                 padding-top: 6em;
@@ -16,6 +16,13 @@
 
             {#    Vue render    #}
 {#            <div id="app"></div>#}
+            {% for label, messages in app.flashes %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ label }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endfor %}
 
             {% if customerFirstEmailVerified %}
                 <section class="mb-4">
@@ -171,29 +178,25 @@
                 <p>explanation</p>
             {% endif %}
 
-{#            <section class="mb-4">#}
-{#                <a class="btn btn-outline-dark btn-floating m-1 mt-4" href="/note/{{ customerHasNote }}/encode_for_heir" role="button"><i class="">{{ 'encode_for_heir'|trans }}</i></a>#}
-{#            </section>#}
-{#            <p>explanation</p>#}
+            {% if customerHasPipeline is defined and customerHasPipeline %}
+                <section class="mb-4">
+                    <a class="btn btn-outline-dark btn-floating m-1 mt-4" href="/pipeline/{{ customerHasPipeline }}/edit" role="button"><i class="">{{ 'edit_your_pipeline'|trans }}</i></a>
+                </section>
+                <p>explanation</p>
+            {% endif %}
 
-            <section class="mb-4">
-                <a class="btn btn-outline-dark btn-floating m-1 mt-4" href="/pipeline/create" role="button"><i class="">{{ 'create_your_pipeline'|trans }}</i></a>
-            </section>
-            <p>explanation</p>
+            {% if customerHasPipeline is defined and not customerHasPipeline %}
+                <section class="mb-4">
+                    <a class="btn btn-outline-dark btn-floating m-1 mt-4" href="/pipeline/create" role="button"><i class="">{{ 'create_your_pipeline'|trans }}</i></a>
+                </section>
+                <p>explanation</p>
+            {% endif %}
 
             <section class="mb-4">
                 <a class="btn btn-outline-dark btn-floating m-1 mt-4" href="/pipeline/create" role="button"><i class="">{{ 'make_a_payment'|trans }}</i></a>
             </section>
             <p>explanation</p>
 
-
-            {% for label, messages in app.flashes %}
-                {% for message in messages %}
-                    <div class="alert alert-{{ label }}">
-                        {{ message }}
-                    </div>
-                {% endfor %}
-            {% endfor %}
         </div>
 
     {% endblock %}

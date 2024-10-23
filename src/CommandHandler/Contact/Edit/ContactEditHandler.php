@@ -56,6 +56,9 @@ class ContactEditHandler
 //            $customer = $input->getCustomer();
 //            if ($customer->getCustomerEmail())
 
+
+//            TODO Delete OLD Action
+
             $input->setValue($newValue);
             $input->setIsVerified(false);
 

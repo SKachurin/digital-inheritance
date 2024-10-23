@@ -33,21 +33,21 @@ class Pipeline
     #[ORM\Column(type: 'string', enumType: ActionTypeEnum::class)]
     private ?ActionTypeEnum $actionType = ActionTypeEnum::SOCIAL_CHECK;
 
-    #[ORM\OneToOne(targetEntity: Note::class, inversedBy: 'pipeline')]
-    #[ORM\JoinColumn(name: 'note_id', referencedColumnName: 'id')]
-    private Note $note;
-
+    //TODO ActionStatusEnum to PipelineStatusEnum
     #[ORM\Column(type: 'string', enumType: ActionStatusEnum::class)]
     private ActionStatusEnum $pipelineStatus;
 
+    #[ORM\Column(type: 'json')]
+    private array $actionSequence = [];
+
     public function __construct(
-        Note $note,
+        Customer $customer,
         ActionStatusEnum $pipelineStatus,
-        ?ActionTypeEnum $actionType
+        array $actionSequence = []
     ) {
-        $this->note = $note;
+        $this->customer = $customer;
         $this->pipelineStatus = $pipelineStatus;
-        $this->actionType = $actionType;
+        $this->actionSequence = $actionSequence;
     }
 
     public function getId(): int
@@ -72,15 +72,7 @@ class Pipeline
         $this->actionStatus = $actionStatus;
         return $this;
     }
-    public function getNote(): Note
-    {
-        return $this->note;
-    }
-    public function setNote(Note $note): self
-    {
-        $this->note = $note;
-        return $this;
-    }
+
     public function getPipelineStatus(): ?ActionStatusEnum
     {
         return $this->pipelineStatus;
@@ -97,6 +89,17 @@ class Pipeline
     public function setActionType(ActionTypeEnum $actionType): self
     {
         $this->actionType = $actionType;
+        return $this;
+    }
+
+    public function getActionSequence(): array
+    {
+        return $this->actionSequence;
+    }
+
+    public function setActionSequence(array $actionSequence): self
+    {
+        $this->actionSequence = $actionSequence;
         return $this;
     }
 

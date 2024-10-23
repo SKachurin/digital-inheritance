@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace App\Repository;
 
 use App\Entity\Action;
+use App\Entity\Customer;
+use App\Enum\ActionTypeEnum;
 use App\Repository\Collection\PageCollection;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -22,5 +24,28 @@ class ActionRepository extends BaseRepository
     {
         // @phpstan-ignore-next-line
         parent::__construct($registry, Action::class);
+    }
+
+    public function customerVerifiedSecondEmail(Customer $customer): bool
+    {
+        $firstEmail = $this->createQueryBuilder('n')
+            ->select('1') // Only checking if the record exists
+            ->where('n.customer = :customer')
+            ->andWhere('n.actionType = :actionType')
+            ->setParameter('customer', $customer->getId())
+            ->setParameter('actionType', ActionTypeEnum::EMAIL_SEND)
+            ->getQuery()
+            ->getOneOrNullResult();
+
+        return $firstEmail !== null;
+    }
+
+    public function customerHasActions(Customer $customer): array
+    {
+        return $this->createQueryBuilder('a')
+            ->where('a.customer = :customer')
+            ->setParameter('customer', $customer)
+            ->getQuery()
+            ->getResult();
     }
 }

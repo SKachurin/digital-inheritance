@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Enum;
 
-enum ActionStatusEnum: string implements TransformableEnumInterface
+enum PipelineStatusEnum: string implements TransformableEnumInterface
 {
-    case ACTIVATED = 'active';
+    case ACTIVATED = 'activated';
     case PENDING = 'pending';
     case SUCCESS = 'success';
     case FAIL = 'fail';

@@ -1,0 +1,86 @@
+{% extends 'base.html.twig' %}
+{% block content %}
+    <style>
+        .form-container {
+            padding-top: 4em;
+        }
+        .form-header {
+            margin-bottom: 1em;
+        }
+        .button-group {
+            display: flex;
+            align-items: center;
+            margin-top: 0.5em;
+        }
+        .button-group a {
+            margin-left: 1em;
+        }
+        p {
+            margin-bottom: 3em !important;
+            margin-top: 3em !important;
+        }
+        .divider {
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+        }
+
+        .divider::before, .divider::after {
+            flex: 1;
+            content: '';
+            padding: 1px;
+            background-color: #bbbb;
+            margin: 2em !important;
+        }
+
+    </style>
+    <div class="container">
+        <h1 style="padding-top: 3em; font-size: 2rem;">{{ 'header.dashboard'|trans }}</h1>
+
+        <div class="row">
+            <div class="col-md-12">
+                <h1 class="form-header" style="padding-top: 2em;">{{ 'pipeline'|trans }}</h1>
+                <h4 style="padding-bottom: 3em;">{{ 'create_edit_your_pipeline'|trans }}</h4>
+                <p>{{ 'text_pipeline'|trans }}</p>
+                {{ 'text_pipeline_your_actions'|trans }}
+                {% for action in actions %}
+                    {% if action.actionType  %}
+                        "{{ action.actionType.value |trans  }}",
+                    {% endif %}
+                {% endfor %}
+
+                <p>{{ 'text_pipeline_your_actions_edit'|trans }}</p>
+                <ul>
+                    {% for action in actions %}
+                        <li>
+                            "{% if action.actionType %}{{ action.actionType.value|trans }}{% else %}N/A{% endif %}"
+                            {{ '_for_'|trans }}
+                            "{% if action.interval %}{{ action.interval.value|trans }}{% else %}N/A{% endif %}"
+                        </li>
+                    {% endfor %}
+                </ul>
+
+                {{ form_start(form) }}
+
+                {{ form_errors(form) }}
+
+                {% for actionForm in form.actions %}
+                    <div class="action-item">
+                        <div class="divider">Action {{ loop.index }} </div>
+                        {{ form_row(actionForm.position) }}
+                        {{ form_errors(actionForm.position) }}
+                        {{ form_row(actionForm.actionType) }}
+                        {{ form_row(actionForm.interval) }}
+                    </div>
+                {% endfor %}
+
+                <p>{{ 'text_add_action_button'|trans }}</p>
+
+                {{ form_row(form.submit_add) }}
+                {{ form_row(form.submit) }}
+
+                {{ form_end(form) }}
+            </div>
+        </div>
+    </div>
+{% endblock %}

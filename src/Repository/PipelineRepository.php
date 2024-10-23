@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Repository;
 
+use App\Entity\Customer;
 use App\Entity\Pipeline;
 use App\Repository\Collection\PageCollection;
 use Doctrine\Persistence\ManagerRegistry;
@@ -22,5 +23,20 @@ class PipelineRepository extends BaseRepository
     {
         // @phpstan-ignore-next-line
         parent::__construct($registry, Pipeline::class);
+    }
+
+    public function customerHasPipeline(Customer $customer): ?int
+    {
+        $pipeline = $this->createQueryBuilder('n')
+            ->select('n.id')
+            ->where('n.customer = :customer')
+            ->setParameter('customer', $customer)
+            ->getQuery()
+            ->getOneOrNullResult();
+
+        if (is_array($pipeline) && isset($pipeline['id'])) {
+            return (int) $pipeline['id'];
+        }
+        return null;
     }
 }

@@ -59,15 +59,15 @@ about:
 
 email_verification_route:
     path:       /verify-email/{token}
-    controller: App\Controller\EmailVerificationController::verifyEmail
+    controller: App\Controller\Contact\EmailVerificationController::verifyEmail
 
 wa_verification_route:
     path:       /verify-wa/{token}
-    controller: App\Controller\WhatsAppVerificationController::verifyWa
+    controller: App\Controller\Contact\WhatsAppVerificationController::verifyWa
 
 social_verification_route:
     path:       /verify-social/{token}
-    controller: App\Controller\SocialVerificationController::verifySocial
+    controller: App\Controller\Contact\SocialVerificationController::verifySocial
 
 contact_edit:
     path:       /contact/{contactId}/edit
@@ -84,6 +84,10 @@ test_tg:
 pipeline_create:
     path:       /pipeline/create
     controller: App\Controller\Pipeline\PipelineCreateController::create
+
+pipeline_edit:
+    path:       /pipeline/{pipelineId}/edit
+    controller: App\Controller\Pipeline\PipelineEditController::edit
 
 customer_creating:
     path:        /creating

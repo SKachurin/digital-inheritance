@@ -2,25 +2,27 @@
 
 declare(strict_types=1);
 
-namespace App\Controller;
+namespace App\Controller\Contact;
 
+use App\Event\ContactVerifiedEvent;
 use App\Repository\VerificationTokenRepository;
 use Doctrine\DBAL\Exception;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 
-class SocialVerificationController extends AbstractController
+class EmailVerificationController extends AbstractController
 {
     /**
      * @throws Exception
      */
-    public function verifySocial(
+    public function verifyEmail(
         string $token,
         VerificationTokenRepository $tokenRepository,
-        EntityManagerInterface $entityManager
+        EntityManagerInterface $entityManager,
+        EventDispatcherInterface $eventDispatcher
     ): Response {
         $verificationToken = $tokenRepository->findOneBy(['token' => $token]);
 
@@ -38,8 +40,10 @@ class SocialVerificationController extends AbstractController
         $tokenRepository->delete($verificationToken);
         $entityManager->flush();
 
+        // Dispatch the event to create Actions
+        $eventDispatcher->dispatch(new ContactVerifiedEvent($contact));
 
-        $this->addFlash('success', 'Your Social has been verified.');
+        $this->addFlash('success', 'Your email address has been verified.');
         return new RedirectResponse($this->generateUrl('user_home'));
     }
 }

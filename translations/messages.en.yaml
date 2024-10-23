@@ -105,7 +105,21 @@ countryCode: 'Country Code'
 contact_type_enum: 'Type of the Contact'
 create_contact: 'Add Contact'
 edit_your_heir: 'Edit Your Heir'
+pipeline: 'Pipeline'
+create_edit_your_pipeline: 'Here you can create or edit your Pipeline.'
+text_pipeline: 'If you verified any of your Contacts you have Action Types to choose from (for each verified Contact we created an Action for you). So now you can choose what system will do and how often (Interval) to check if you are okay. '
+text_pipeline_2:
 
+edit_your_pipeline: 'Edit Your Pipeline'
+
+text_pipeline_your_actions: "Now you have this Actions to build your custom Pipeline"
+text_pipeline_your_actions_edit: "Here is your sequence now:"
+social_check: "If I was online in Telegram more than the selected time interval ago"
+messenger_send: "Send message via Messenger and wait"
+email_send: "Send email and wait"
+email_send_2: "Send secondary email and wait"
+_for_: "for"
+text_add_action_button: "You can add another Form and add one of existing Actions with another interval for example."
 
 about_page:
   title: 'About "The Digital Heir"'

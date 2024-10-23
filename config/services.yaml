@@ -53,10 +53,19 @@ services:
         tags:
             - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest }
 
+    App\EventListener\CustomerHasPipelineListener:
+        tags:
+            - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest }
+
     App\Middleware\CheckCustomerExistenceMiddleware:
         tags:
             - { name: 'messenger.middleware', priority: 100 }
 
     App\EventSubscriber\LocaleSubscriber: ~
 
+    App\EventListener\ContactVerifiedListener:
+        tags:
+            - { name: 'kernel.event_listener', event: 'App\Event\ContactVerifiedEvent', method: '__invoke' }
 
+    App\CommandHandler\Action\Create\ActionCreateHandler:
+        tags: [ 'messenger.message_handler' ]
