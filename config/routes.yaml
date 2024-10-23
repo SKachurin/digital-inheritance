@@ -89,6 +89,11 @@ pipeline_edit:
     path:       /pipeline/{pipelineId}/edit
     controller: App\Controller\Pipeline\PipelineEditController::edit
 
+change_language:
+    path:       /change_language/{lang}
+    controller: App\Controller\Customer\LangController::changeLanguage
+
+
 customer_creating:
     path:        /creating
     controller:  Symfony\Bundle\FrameworkBundle\Controller\TemplateController

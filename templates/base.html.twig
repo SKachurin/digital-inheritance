@@ -39,6 +39,18 @@
                 <li class="nav-item"><a href="#" class="nav-link disabled">{{ 'header.pricing'|trans }}</a></li>
                 <li class="nav-item"><a href="#" class="nav-link disabled">{{ 'header.faqs'|trans }}</a></li>
                 <li class="nav-item"><a href="{{ path('about') }}" class="nav-link">{{ 'header.about'|trans }}</a></li>
+
+                <!-- Language Selector -->
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="languageDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        {{ 'language'|trans }}
+                    </a>
+                    <ul class="dropdown-menu" aria-labelledby="languageDropdown">
+                        <li><a class="dropdown-item" href="{{ path('change_language', {'lang': 'en'}) }}">English</a></li>
+                        <li><a class="dropdown-item" href="{{ path('change_language', {'lang': 'ru'}) }}">Русский</a></li>
+                        <li><a class="dropdown-item" href="{{ path('change_language', {'lang': 'es'}) }}">Español</a></li>
+                    </ul>
+                </li>
             </ul>
         </header>
 

@@ -10,6 +10,7 @@ use Symfony\Component\HttpKernel\KernelEvents;
 class LocaleSubscriber implements EventSubscriberInterface
 {
     private string $defaultLocale;
+    private const LANGUAGE_COOKIE = 'preferred_language';
 
     public function __construct(string $defaultLocale = 'en')
     {
@@ -20,20 +21,34 @@ class LocaleSubscriber implements EventSubscriberInterface
     {
         $request = $event->getRequest();
 
-        $preferredLanguage = $request->getPreferredLanguage();
+        if (!$event->isMainRequest()) {
+            return;
+        }
+
+        $preferredLanguage = $request->cookies->get(self::LANGUAGE_COOKIE);
+
         if ($preferredLanguage) {
             $request->setLocale($preferredLanguage);
         } else {
-            $locale = $request->getSession()->get('_locale', $this->defaultLocale);
+            // Fallback to the 'Accept-Language' header
+            $preferredLanguage = $request->getPreferredLanguage(['en', 'ru', 'es']);
 
-            if (is_string($locale)) {
-                $request->setLocale($locale);
+            if ($preferredLanguage) {
+                $request->setLocale($preferredLanguage);
             } else {
-                $request->setLocale($this->defaultLocale);
+                // Fallback to session locale
+                $locale = $request->getSession()->get('_locale', $this->defaultLocale);
+
+                if (is_string($locale)) {
+                    $request->setLocale($locale);
+                } else {
+                    //Use default locale
+                    $request->setLocale($this->defaultLocale);
+                }
             }
         }
 
-        // to debug the locale
+        // Debug the locale
         // dump($request->getLocale());
     }
 
