@@ -2,8 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\CommandHandler\Note\Create;
+namespace App\CommandHandler\Note\Edit;
 
+use App\CommandHandler\Note\Create\NoteCreateInputDto;
 use App\Entity\Note;
 use App\Service\CryptoService;
 use Doctrine\ORM\EntityManagerInterface;
@@ -13,7 +14,7 @@ use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 use Psr\Log\LoggerInterface;
 
 #[AsMessageHandler]
-class NoteCreateHandler
+class NoteEditTextHandler
 {
     private LoggerInterface $logger;
     private ParameterBagInterface $params;
@@ -36,9 +37,11 @@ class NoteCreateHandler
     /**
      * @throws Exception
      */
-    public function __invoke(NoteCreateInputDto $input): Note
+    public function __invoke(NoteEditTextInputDto $input): Note
     {
-        $customer = $input->getCustomer();
+        $note = $input->getNote();
+        $customer = $note->getCustomer();
+
         $customer
             ->setCustomerFirstQuestion(
                 $this->cryptoService->encryptData(
@@ -71,9 +74,7 @@ class NoteCreateHandler
         $this->entityManager->persist($customer);
         $this->entityManager->flush();
 
-        $note = new Note();
-        $note->setCustomer($customer);
-        $cryptoService = null;
+//        $cryptoService = null;
 
         $personalString1 = $this->cryptoService->decryptData(
             $customer->getCustomerFirstQuestionAnswer()
@@ -104,8 +105,7 @@ class NoteCreateHandler
             ;
         }
         $this->entityManager->persist($note);
-        $this->entityManager->persist($customer);
-//    TODO    $this->entityManager->persist($beneficiary); + add $beneficiary questions
+//        $this->entityManager->persist($customer);
         $this->entityManager->flush();
 
         return $note;

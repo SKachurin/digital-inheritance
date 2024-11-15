@@ -40,6 +40,20 @@ class ActionRepository extends BaseRepository
         return $firstEmail !== null;
     }
 
+    public function customerVerifiedSecondPhone(Customer $customer): bool
+    {
+        $firstPhone = $this->createQueryBuilder('n')
+            ->select('1') // Only checking if the record exists
+            ->where('n.customer = :customer')
+            ->andWhere('n.actionType = :actionType')
+            ->setParameter('customer', $customer->getId())
+            ->setParameter('actionType', ActionTypeEnum::MESSENGER_SEND)
+            ->getQuery()
+            ->getOneOrNullResult();
+
+        return $firstPhone !== null;
+    }
+
     public function customerHasActions(Customer $customer): array
     {
         return $this->createQueryBuilder('a')

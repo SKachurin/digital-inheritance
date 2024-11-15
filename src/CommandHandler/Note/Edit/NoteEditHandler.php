@@ -72,6 +72,11 @@ class NoteEditHandler
 
         $note->setCustomerText($decryptedText);
 
+        $note->setCustomerFirstQuestion($input->getCustomerFirstQuestion());
+        $note->setCustomerSecondQuestion($input->getCustomerSecondQuestion());
+        $note->setBeneficiaryFirstQuestion($input->getBeneficiaryFirstQuestion());
+        $note->setBeneficiarySecondQuestion($input->getBeneficiarySecondQuestion());
+
         return $note;
     }
 }

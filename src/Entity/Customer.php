@@ -24,7 +24,7 @@ class Customer implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Id]
     #[ORM\GeneratedValue(strategy: 'AUTO')]
     #[ORM\Column(type: 'integer')]
-    private int $id = 0;
+    private ?int $id = 0; //https://github.com/doctrine/orm/issues/8452
 
     #[ORM\Column(type: 'string', length: 64, nullable: true)]
     private string $customerName;

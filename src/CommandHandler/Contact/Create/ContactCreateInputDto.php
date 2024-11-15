@@ -14,6 +14,8 @@ class ContactCreateInputDto
 
     private ?string $contactTypeEnum = null;
 
+    private ?string $customerSocialApp = null;
+
     private ?string $countryCode = null;
 
     private ?string $value = null;
@@ -53,6 +55,15 @@ class ContactCreateInputDto
     public function setContactTypeEnum(?string $contactTypeEnum): self
     {
         $this->contactTypeEnum = $contactTypeEnum;
+        return $this;
+    }
+    public function getCustomerSocialApp(): ?string
+    {
+        return $this->customerSocialApp;
+    }
+    public function setCustomerSocialApp(?string $customerSocialApp): self
+    {
+        $this->customerSocialApp = $customerSocialApp;
         return $this;
     }
     public function getCountryCode(): ?string

@@ -9,9 +9,15 @@ class NoteEditOutputDto
 {
     #[Assert\NotBlank]
     private Customer $customer;
-
     private ?string $customerText;
-
+    private ?string $customerFirstQuestion = null;
+    private ?string $customerFirstQuestionAnswer = null;
+    private ?string $customerSecondQuestion = null;
+    private ?string $customerSecondQuestionAnswer = null;
+    private ?string $beneficiaryFirstQuestion = null;
+    private ?string $beneficiaryFirstQuestionAnswer = null;
+    private ?string $beneficiarySecondQuestion = null;
+    private ?string $beneficiarySecondQuestionAnswer = null;
     private string $customerCongrats = 'If you can read your text You done everything right!';
 
 
@@ -50,6 +56,94 @@ class NoteEditOutputDto
     public function setCustomerCongrats(string $customerCongrats): self
     {
         $this->customerCongrats = $customerCongrats;
+        return $this;
+    }
+
+    public function getCustomerFirstQuestion(): ?string
+    {
+        return $this->customerFirstQuestion;
+    }
+
+    public function setCustomerFirstQuestion(?string $customerFirstQuestion): self
+    {
+        $this->customerFirstQuestion = $customerFirstQuestion;
+        return $this;
+    }
+
+    public function getBeneficiaryFirstQuestion(): ?string
+    {
+        return $this->beneficiaryFirstQuestion;
+    }
+
+    public function setBeneficiaryFirstQuestion(?string $beneficiaryFirstQuestion): self
+    {
+        $this->beneficiaryFirstQuestion = $beneficiaryFirstQuestion;
+        return $this;
+    }
+
+    public function getCustomerFirstQuestionAnswer(): ?string
+    {
+        return $this->customerFirstQuestionAnswer;
+    }
+
+    public function setCustomerFirstQuestionAnswer(?string $customerFirstQuestionAnswer): self
+    {
+        $this->customerFirstQuestionAnswer = $customerFirstQuestionAnswer;
+        return $this;
+    }
+
+    public function getBeneficiaryFirstQuestionAnswer(): ?string
+    {
+        return $this->beneficiaryFirstQuestionAnswer;
+    }
+
+    public function setBeneficiaryFirstQuestionAnswer(?string $beneficiaryFirstQuestionAnswer): self
+    {
+        $this->beneficiaryFirstQuestionAnswer = $beneficiaryFirstQuestionAnswer;
+        return $this;
+    }
+
+    public function getCustomerSecondQuestion(): ?string
+    {
+        return $this->customerSecondQuestion;
+    }
+
+    public function setCustomerSecondQuestion(?string $customerSecondQuestion): self
+    {
+        $this->customerSecondQuestion = $customerSecondQuestion;
+        return $this;
+    }
+
+    public function getBeneficiarySecondQuestion(): ?string
+    {
+        return $this->beneficiarySecondQuestion;
+    }
+
+    public function setBeneficiarySecondQuestion(?string $beneficiarySecondQuestion): self
+    {
+        $this->beneficiarySecondQuestion = $beneficiarySecondQuestion;
+        return $this;
+    }
+
+    public function getCustomerSecondQuestionAnswer(): ?string
+    {
+        return $this->customerSecondQuestionAnswer;
+    }
+
+    public function setCustomerSecondQuestionAnswer(?string $customerSecondQuestionAnswer): self
+    {
+        $this->customerSecondQuestionAnswer = $customerSecondQuestionAnswer;
+        return $this;
+    }
+
+    public function getBeneficiarySecondQuestionAnswer(): ?string
+    {
+        return $this->beneficiarySecondQuestionAnswer;
+    }
+
+    public function setBeneficiarySecondQuestionAnswer(?string $beneficiarySecondQuestionAnswer): self
+    {
+        $this->beneficiarySecondQuestionAnswer = $beneficiarySecondQuestionAnswer;
         return $this;
     }
 

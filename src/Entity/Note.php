@@ -20,7 +20,7 @@ class Note
     #[ORM\Id]
     #[ORM\GeneratedValue(strategy: 'AUTO')]
     #[ORM\Column(type: 'integer')]
-    private int $id = 0;
+    private ?int $id = 0; //https://github.com/doctrine/orm/issues/8452
 
     #[ORM\ManyToOne(targetEntity: Customer::class, inversedBy: 'notes')]
     #[ORM\JoinColumn(name: 'customer_id', nullable: false)]

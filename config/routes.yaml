@@ -30,6 +30,11 @@ note_edit:
     path:       /note/{noteId}/edit
     controller: App\Controller\Note\NoteEditController::edit
 
+note_delete:
+    path:       /note/{noteId}/delete
+    controller: App\Controller\Note\NoteDeleteController::delete
+
+#?? Do i need it note_decrypt ??
 note_decrypt:
     path:       /note/{noteId}/decrypt/{question}
     controller: App\Controller\Note\NoteDecryptController::decrypt

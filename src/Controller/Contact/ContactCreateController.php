@@ -82,7 +82,7 @@ class ContactCreateController extends AbstractController
                 throw new UnprocessableEntityHttpException('500 internal error (CommandBus not responding).');
             }
 
-            $this->addFlash('info', 'Contact created! Would you like to send Verification email now?');
+            $this->addFlash('info', 'Contact created! Would you like to verify it now?');
 
             return $this->redirectToRoute('user_home');
         }

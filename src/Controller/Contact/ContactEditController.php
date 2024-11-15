@@ -87,6 +87,7 @@ class ContactEditController extends AbstractController
             ContactEditType::class,
             $dto,
             [
+                'type' => $contact->getContactTypeEnum(),
                 'countryCode' => $contact->getCountryCode(),
                 'isVerified' => $contact->getIsVerified(),
             ]

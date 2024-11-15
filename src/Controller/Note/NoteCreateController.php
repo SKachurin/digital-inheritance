@@ -6,23 +6,26 @@ namespace App\Controller\Note;
 use App\CommandHandler\Note\Create\NoteCreateInputDto;
 use App\Entity\Note;
 use App\Form\Type\NoteCreationType;
-use App\Form\Type\NoteCreationType1;
+//use App\Form\Type\NoteCreationType1;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Messenger\Stamp\HandledStamp;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 
 class NoteCreateController extends AbstractController
 {
     private MessageBusInterface $commandBus;
+    private TranslatorInterface $translator;
 
 
-    public function __construct(MessageBusInterface $commandBus)
+    public function __construct(MessageBusInterface $commandBus, TranslatorInterface $translator)
     {
         $this->commandBus = $commandBus;
+        $this->translator = $translator;
     }
 
 
@@ -33,10 +36,10 @@ class NoteCreateController extends AbstractController
 
         if ($customer instanceof \App\Entity\Customer) {
 
+            $defaultText = $this->translator->trans('note_creation.default_text');
             $note = new NoteCreateInputDto(
                 $customer,
-                "Replace this text with your data. \nThere are no limits to what you can enter here (though the field limit is 5000 characters). This could include crypto wallet credentials, online bank credentials, etc. \nThis envelope will be encrypted with half of our security key and half of the hash from your answer to the security question. \nOnce encrypted, your answers will be deleted from our database, leaving only you and God with the knowledge.",
-
+                $defaultText
             );
 
             $form = $this->createForm(NoteCreationType::class, $note, ['customerId' => $customer->getId(),'decodedNote' => false]);

@@ -11,31 +11,32 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 
 class NoteDecryptType1 extends AbstractType
 {
-    public function buildForm(FormBuilderInterface $builder, array $options): void
-    {
-        $builder
-            ->add('customerCongrats', TextType::class, [
-                'label' => 'Congratulations',
-                'required' => true,
-                'attr' => [
-                    'readonly' => true,
-                ],
-            ])
-            ->add('customerText', TextareaType::class, [
-                'label' => 'Your Text',
-                'required' => false,
-                'attr' => [
-                    'rows' => 10,
-                    'placeholder' => 'if decrypted your text will appear here.',
-                ],
-            ])
-        ;
-    }
-
-    public function configureOptions(OptionsResolver $resolver): void
-    {
-        $resolver->setDefaults([
-            'data_class' => NoteDecryptOutputDto::class,
-        ]);
-    }
+//    TODO DELETE THIS FILE
+//    public function buildForm(FormBuilderInterface $builder, array $options): void
+//    {
+//        $builder
+//            ->add('customerCongrats', TextType::class, [
+//                'label' => 'Congratulations',
+//                'required' => true,
+//                'attr' => [
+//                    'readonly' => true,
+//                ],
+//            ])
+//            ->add('customerText', TextareaType::class, [
+//                'label' => 'Your Text',
+//                'required' => false,
+//                'attr' => [
+//                    'rows' => 10,
+//                    'placeholder' => 'if decrypted your text will appear here.',
+//                ],
+//            ])
+//        ;
+//    }
+//
+//    public function configureOptions(OptionsResolver $resolver): void
+//    {
+//        $resolver->setDefaults([
+//            'data_class' => NoteDecryptOutputDto::class,
+//        ]);
+//    }
 }

@@ -38,6 +38,10 @@ class ActionCreateHandler
                 break;
             case ContactTypeEnum::MESSENGER:
             case ContactTypeEnum::PHONE:
+                if ($this->actionRepository->customerVerifiedSecondPhone($customer)) {
+                    $actionType = ActionTypeEnum::MESSENGER_SEND_2;
+                    break;
+                }
                 $actionType = ActionTypeEnum::MESSENGER_SEND;
                 break;
             case ContactTypeEnum::SOCIAL:

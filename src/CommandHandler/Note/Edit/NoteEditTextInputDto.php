@@ -1,45 +1,41 @@
 <?php
 
-namespace App\CommandHandler\Note\Create;
+namespace App\CommandHandler\Note\Edit;
 
 use App\Entity\Customer;
+use App\Entity\Note;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Context\ExecutionContextInterface;
 
-class NoteCreateInputDto
+class NoteEditTextInputDto
 {
     #[Assert\NotBlank]
     private Customer $customer;
-
+    #[Assert\NotBlank]
+    private Note $note;
     #[Assert\NotBlank]
     private ?string $customerText;
-
     private ?int $pipelineId;
-
     #[Assert\NotBlank]
     private ?string $customerFirstQuestion = null;
-
     #[Assert\NotBlank]
     private ?string $customerFirstQuestionAnswer = null;
-
     private ?string $customerSecondQuestion = null;
-
     private ?string $customerSecondQuestionAnswer = null;
-
     #[Assert\Length(max: 10000)]
     private ?string $customerTextAnswerOne;
-
     #[Assert\Length(max: 10000)]
     private ?string $customerTextAnswerTwo;
-
     private ?int $beneficiaryId;
-
+    private ?string $beneficiaryFirstQuestion = null;
+    #[Assert\NotBlank]
+    private ?string $beneficiaryFirstQuestionAnswer = null;
+    private ?string $beneficiarySecondQuestion = null;
+    private ?string $beneficiarySecondQuestionAnswer = null;
     #[Assert\Length(max: 10000)]
     private ?string $beneficiaryTextAnswerOne;
-
     #[Assert\Length(max: 10000)]
     private ?string $beneficiaryTextAnswerTwo;
-
     #[Assert\Callback]
     public function validate(ExecutionContextInterface $context, $payload): void
     {
@@ -52,10 +48,12 @@ class NoteCreateInputDto
 
     public function __construct(
         Customer $customer,
+        Note $note,
         ?string $customerText = null,
 
     ) {
         $this->customer = $customer;
+        $this->note = $note;
         $this->customerText = $customerText;
     }
 
@@ -68,6 +66,15 @@ class NoteCreateInputDto
     public function setCustomer(Customer $customer): self
     {
         $this->customer = $customer;
+        return $this;
+    }
+    public function getNote(): Note
+    {
+        return $this->note;
+    }
+    public function setNote(Note $note): self
+    {
+        $this->note = $note;
         return $this;
     }
 
@@ -189,6 +196,50 @@ class NoteCreateInputDto
     public function setCustomerSecondQuestionAnswer(?string $customerSecondQuestionAnswer): self
     {
         $this->customerSecondQuestionAnswer = $customerSecondQuestionAnswer;
+        return $this;
+    }
+
+    public function setBeneficiaryFirstQuestion(?string $beneficiaryFirstQuestion): self
+    {
+        $this->beneficiaryFirstQuestion = $beneficiaryFirstQuestion;
+        return $this;
+    }
+
+    public function getBeneficiaryFirstQuestion(): ?string
+    {
+        return $this->beneficiaryFirstQuestion;
+    }
+
+    public function getBeneficiaryFirstQuestionAnswer(): ?string
+    {
+        return $this->beneficiaryFirstQuestionAnswer;
+    }
+
+    public function setBeneficiaryFirstQuestionAnswer(?string $beneficiaryFirstQuestionAnswer): self
+    {
+        $this->beneficiaryFirstQuestionAnswer = $beneficiaryFirstQuestionAnswer;
+        return $this;
+    }
+
+    public function setBeneficiarySecondQuestion(?string $beneficiarySecondQuestion): self
+    {
+        $this->beneficiarySecondQuestion = $beneficiarySecondQuestion;
+        return $this;
+    }
+
+    public function getBeneficiarySecondQuestion(): ?string
+    {
+        return $this->beneficiarySecondQuestion;
+    }
+
+    public function getBeneficiarySecondQuestionAnswer(): ?string
+    {
+        return $this->beneficiarySecondQuestionAnswer;
+    }
+
+    public function setBeneficiarySecondQuestionAnswer(?string $beneficiarySecondQuestionAnswer): self
+    {
+        $this->beneficiarySecondQuestionAnswer = $beneficiarySecondQuestionAnswer;
         return $this;
     }
 }

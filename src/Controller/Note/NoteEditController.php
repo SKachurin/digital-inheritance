@@ -4,9 +4,10 @@ namespace App\Controller\Note;
 
 use App\CommandHandler\Note\Decrypt\NoteDecryptInputDto;
 use App\CommandHandler\Note\Edit\NoteEditInputDto;
+use App\CommandHandler\Note\Edit\NoteEditOutputDto;
+use App\CommandHandler\Note\Edit\NoteEditTextHandler;
+use App\CommandHandler\Note\Edit\NoteEditTextInputDto;
 use App\Entity\Note;
-use App\Form\Type\NoteDecryptType;
-use App\Form\Type\NoteDecryptType1;
 use App\Form\Type\NoteEditType;
 use App\Form\Type\NoteEditType1;
 use App\Repository\NoteRepository;
@@ -26,20 +27,24 @@ class NoteEditController extends AbstractController
     private MessageBusInterface $commandBus;
     private NoteRepository $repository;
     private CryptoService $cryptoService;
+    private NoteEditTextHandler $noteEditTextHandler;
     public function __construct(
         NoteRepository $repository,
         MessageBusInterface $commandBus,
-        CryptoService $cryptoService
+        CryptoService $cryptoService,
+        NoteEditTextHandler $noteEditTextHandler
     )
     {
         $this->repository = $repository;
         $this->commandBus = $commandBus;
         $this->cryptoService = $cryptoService;
+        $this->noteEditTextHandler = $noteEditTextHandler;
     }
 
     /**
      * @Route("/note/{noteId}/edit/", name="note_edit")
      * @throws SodiumException|RandomException
+     * @throws \Exception
      */
     public function edit(int $noteId, Request $request): Response
     {
@@ -118,8 +123,48 @@ class NoteEditController extends AbstractController
 
             return $this->render('noteEdit.html.twig', [
                 'form' => $form1->createView(),
+                'beneficiary' => $note->getBeneficiary(),
                 'decodedNote' => true,
             ]);
+        }
+
+        if ($request->request->has('note_edit_type1')) {
+
+            $noteEditOutputDto = new NoteEditOutputDto($currentCustomer);
+
+            $form1 = $this->createForm(NoteEditType1::class, $noteEditOutputDto);
+
+            $form1->handleRequest($request);
+
+            if ($form1->isSubmitted() && $form1->isValid()) {
+
+                /** @var NoteEditOutputDto $data */
+                $data = $form1->getData();
+
+                $inputDto = new NoteEditTextInputDto($currentCustomer, $note);
+                $inputDto->setCustomerText($data->getCustomerText());
+
+                $inputDto->setCustomerFirstQuestion($data->getCustomerFirstQuestion());
+                $inputDto->setCustomerFirstQuestionAnswer($data->getCustomerFirstQuestionAnswer());
+                $inputDto->setCustomerSecondQuestion($data->getCustomerSecondQuestion());
+                $inputDto->setCustomerSecondQuestionAnswer($data->getCustomerSecondQuestionAnswer());
+
+                if ($data->getBeneficiaryFirstQuestion()){
+                    $inputDto->setBeneficiaryFirstQuestion($data->getBeneficiaryFirstQuestion());
+                    $inputDto->setBeneficiaryFirstQuestionAnswer($data->getBeneficiaryFirstQuestionAnswer());
+                }
+               if ($data->getBeneficiarySecondQuestion()){
+                   $inputDto->setBeneficiarySecondQuestion($data->getBeneficiarySecondQuestion());
+                   $inputDto->setBeneficiarySecondQuestionAnswer($data->getBeneficiarySecondQuestionAnswer());
+               }
+
+                $this->noteEditTextHandler->__invoke($inputDto); // handler
+
+                $this->addFlash('success', 'Your note has been updated.');
+
+                return $this->redirectToRoute('user_home');
+            }
+
         }
 
         return $this->render('noteEdit.html.twig', [

@@ -31,9 +31,9 @@ class RegistrationController extends AbstractController
         }
 
         $customer = new CustomerCreateInputDto(
-            'enter something',
-            'viva-natura1@yandex.ru',
-            'it should be not obvious for strangers',
+            '',
+            '',
+            '',
             'Love',
             'passwordOkay',
             'password',

@@ -51,4 +51,13 @@ class NoteRepository extends BaseRepository
             ->getQuery()
             ->getOneOrNullResult();
     }
+
+    public function delete(Note $note): void
+    {
+        $em = $this->getEntityManager();
+        $em->remove($note);
+        $em->flush();
+//        $em->clear();
+//        $em->detach($note);
+    }
 }

@@ -43,7 +43,7 @@
                 <!-- Language Selector -->
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="languageDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        {{ 'language'|trans }}
+                        {{ 'header.language'|trans }}
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="languageDropdown">
                         <li><a class="dropdown-item" href="{{ path('change_language', {'lang': 'en'}) }}">English</a></li>
@@ -108,6 +108,9 @@
 
     .mt-auto {
         margin-top: auto;
+    }
+    .bg-gray{
+        background-color: #eaedf0 !important;
     }
 </style>
 </body>

@@ -6,6 +6,7 @@ namespace App\CommandHandler\Contact\Edit;
 
 use App\Entity\Contact;
 use App\Service\CryptoService;
+use App\Service\SocialAppLinkNormalizer;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Exception\ORMException;
 use Exception;
@@ -16,15 +17,19 @@ class ContactEditHandler
 {
     private CryptoService $cryptoService;
     private EntityManagerInterface $entityManager;
+    private SocialAppLinkNormalizer $socialAppLinkNormalizer;
+
 //    private LoggerInterface $logger;
 
     public function __construct(
         CryptoService $cryptoService,
         EntityManagerInterface $entityManager,
+        SocialAppLinkNormalizer $socialAppLinkNormalizer
 //        LoggerInterface $logger
     ) {
         $this->cryptoService = $cryptoService;
         $this->entityManager = $entityManager;
+        $this->socialAppLinkNormalizer = $socialAppLinkNormalizer;
 //        $this->logger = $logger;
     }
 
@@ -45,7 +50,7 @@ class ContactEditHandler
         $newValue = $input->getValue();
 
         if ($input->getContactTypeEnum() == 'social'){
-            $newValue = $this->normalizeSocialAppLink($input->getValue());
+            $newValue = $this->socialAppLinkNormalizer->normalize($input->getValue());
         }
 
         if ($newValue !== null && $newValue !== $this->cryptoService->decryptData($contact->getValue())) {
@@ -68,33 +73,5 @@ class ContactEditHandler
 
 
         return $input;
-    }
-
-    private function normalizeSocialAppLink(string $link): string
-    {
-        $link = trim($link);
-
-        if (str_starts_with($link, '@')) {
-            return $link;
-        }
-
-        if (preg_match('/^\+/', $link)) {
-            return preg_replace('/[^+\d]/', '', $link);
-        }
-
-        if (str_starts_with($link, 'https://t.me/')) {
-            $parsedLink = parse_url($link, PHP_URL_PATH);
-            $username = trim($parsedLink, '/');
-            return '@' . $username;
-        }
-
-        if (str_starts_with($link, 't.me/')) {
-            $username = substr($link, strlen('t.me/'));
-            $username = trim($username, '/');
-            return '@' . $username;
-        }
-
-        // Assume any remaining input is a username and prepend '@'
-        return '@' . ltrim($link, '@');
     }
 }

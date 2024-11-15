@@ -7,9 +7,15 @@ header:
   pricing: 'Precios'
   faqs: 'Preguntas Frecuentes'
   about: 'Acerca de'
+  language: 'EN | ESP | RU'  # Added missing key
   new_heir_explain: 'Proporciona tanta información como sea posible sobre tu heredero; esto nos ayudará a contactar a esta persona en caso de los eventos que describirás en la sección Pipeline'
   new_heir_explain_1: 'Por favor, sé especialmente preciso con los contactos (como teléfono y correo electrónico) ya que no los vamos a verificar ahora'
+
 form:
+  attr:
+    placeholder:  # Added missing section
+      fail_decrypt: 'Parece que no funcionó. Puedes volver al Panel de Control e intentarlo de nuevo.'
+      for_question: 'Marcador de posición para la pregunta'
   label:
     customer_name: 'Apodo o lo que sea'
     beneficiary_name: 'Apodo o lo que sea'
@@ -25,11 +31,11 @@ form:
     beneficiary_first_phone: 'Primer número de teléfono (opcional)'
     customer_second_phone: 'Segundo número de teléfono (opcional)'
     beneficiary_second_phone: 'Segundo número de teléfono (opcional)'
-    customer_first_question: 'Primera pregunta de seguridad'
+    customer_first_question: 'Primera pregunta de seguridad (*)'
     beneficiary_first_question: 'Primera pregunta de seguridad para tu heredero'
-    customer_first_question_answer: 'Respuesta. Nunca la guardaremos; codificaremos todas tus notas con un hash de esta respuesta. Olvidar esta respuesta = perder todas tus notas.'
+    customer_first_question_answer: 'Respuesta (*). Nunca la guardaremos; codificaremos todas tus notas con un hash de esta respuesta. Olvidar esta respuesta = perder todas tus notas.'
     beneficiary_first_question_answer: 'Respuesta. Nunca la guardaremos; codificaremos todas tus notas con un hash de esta respuesta. Si tu heredero no puede responderla en una cantidad razonable de intentos = tu nota se perderá.'
-    customer_first_question_answer_repeat: 'Repite la respuesta'
+    customer_first_question_answer_repeat: 'Repite la respuesta (*)'
     beneficiary_first_question_answer_repeat: 'Repite la respuesta'
     customer_second_question: 'Segunda pregunta de seguridad (opcional)'
     beneficiary_second_question: 'Segunda pregunta de seguridad para tu heredero'
@@ -44,6 +50,9 @@ form:
     password: 'Contraseña normal para ingresar a nuestro servicio. Si la pierdes o se filtra, otros aún no podrán ver tus notas sin tus respuestas.'
     password_repeat: 'Repite la contraseña'
     contact_edit: 'Editar contacto'
+    congratulations: 'Felicitaciones'  # Added missing key
+    your_text: 'Tu Texto'  # Added missing key
+    edit_envelope: 'Editar Sobre'  # Added missing key
 
   help:
     customer_name: 'Este campo se usará para dirigirse a ti en nuestras comunicaciones.'
@@ -75,10 +84,16 @@ form:
       instagram: 'instagram'
       vkcom: 'vkcom'
       telegram: 'telegram'
+
 Submit: 'Enviar'
 create_your_heir: 'Crea tu heredero digital'
 edit_your_secure_envelope: 'Edita tu sobre seguro'
 create_your_secure_envelope: 'Crea tu sobre seguro'
+create_your_secure_envelope_text: |
+  No hay límites para lo que puedes ingresar aquí (aunque el límite del campo es de 5000 caracteres). Esto podría incluir credenciales de monederos de criptomonedas, credenciales de bancos en línea, etc.
+  Este sobre será encriptado con la mitad de nuestra clave de seguridad y la mitad del hash de tu respuesta a las preguntas de seguridad.
+  Una vez encriptado, tus respuestas serán eliminadas de nuestra base de datos, dejando solo a ti y a Dios con el conocimiento necesario para desencriptar esta nota.
+  Y nunca volveremos a guardar tus respuestas; todo el descifrado se hará en el momento a partir de la cadena que ingreses en el formulario.
 create_your_pipeline: 'Crea tu Pipeline'
 make_a_payment: 'Realizar un pago'
 decrypt_your_secure_envelope: 'Descifrar tu sobre seguro'
@@ -109,6 +124,8 @@ pipeline: 'Pipeline'
 create_edit_your_pipeline: 'Aquí puedes crear o editar tu Pipeline.'
 text_pipeline: 'Si verificaste alguno de tus contactos, tienes tipos de acción para elegir (para cada contacto verificado, creamos una acción para ti). Así que ahora puedes elegir qué hará el sistema y con qué frecuencia (intervalo) para comprobar si estás bien.'
 text_pipeline_2:
+delete_your_secure_envelope: 'Eliminar tu Sobre Seguro'
+confirm_delete_note: '¿Estás seguro de que deseas eliminar tu sobre seguro?'
 edit_your_pipeline: 'Editar tu Pipeline'
 text_pipeline_your_actions: "Ahora tienes estas acciones para construir tu Pipeline personalizado"
 text_pipeline_your_actions_edit: "Aquí está tu secuencia ahora:"
@@ -118,6 +135,7 @@ email_send: "Enviar correo electrónico y esperar"
 email_send_2: "Enviar correo electrónico secundario y esperar"
 _for_: "por"
 text_add_action_button: "Puedes agregar otro formulario y agregar una de las acciones existentes con otro intervalo, por ejemplo."
+
 about_page:
   title: 'Acerca de "El Heredero Digital"'
   introduction:
@@ -136,3 +154,15 @@ about_page:
     add_beneficiary: 'Agregar Beneficiario al Sobre'
   beneficiary_info: 'Todas las notas encriptadas se almacenan de forma segura en nuestros servidores. Si te sucede algo, o tu dispositivo se ve comprometido, tus contactos de confianza aún podrán acceder a la información necesaria usando sus preguntas de seguridad personalizadas.'
   assurance: 'Con nuestro servicio, puedes estar seguro de que tu información sensible está segura y accesible solo para aquellos en quienes confías.'
+
+note_creation:
+  default_text: |
+    Reemplaza este texto con tus datos.
+    No hay límites para lo que puedes ingresar aquí (aunque el límite del campo es de 5000 caracteres). Esto podría incluir credenciales de monederos de criptomonedas, credenciales de bancos en línea, etc.
+    Este sobre será encriptado con la mitad de nuestra clave de seguridad y la mitad del hash de tu respuesta a las preguntas de seguridad.
+    Una vez encriptado, tus respuestas serán eliminadas de nuestra base de datos, dejando solo a ti y a Dios con el conocimiento necesario para desencriptar esta nota.
+    Y nunca volveremos a guardar tus respuestas; todo el descifrado se hará en el momento a partir de la cadena que ingreses en el formulario.
+
+if_decoded_can_edit: |
+  Si lograste descifrar tu texto y ves el texto descifrado arriba, puedes editarlo allí mismo.
+  Pero no olvides completar todas las respuestas secretas, ya que necesitamos codificar esta nueva versión de tu texto con cada respuesta secreta.

@@ -69,3 +69,5 @@ services:
 
     App\CommandHandler\Action\Create\ActionCreateHandler:
         tags: [ 'messenger.message_handler' ]
+
+    App\Service\SocialAppLinkNormalizer: ~

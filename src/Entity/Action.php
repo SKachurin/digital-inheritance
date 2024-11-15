@@ -20,7 +20,7 @@ class Action
     #[ORM\Id]
     #[ORM\GeneratedValue(strategy: 'AUTO')]
     #[ORM\Column(type: 'integer')]
-    private int $id = 0;
+    private ?int $id = 0;
 
     #[ORM\ManyToOne(targetEntity: Customer::class, inversedBy: 'actions')]
     #[ORM\JoinColumn(name: 'customer_id', nullable: false)]

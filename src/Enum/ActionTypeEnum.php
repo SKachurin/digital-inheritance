@@ -8,6 +8,7 @@ enum ActionTypeEnum: string
 {
     case SOCIAL_CHECK = 'social_check';
     case MESSENGER_SEND = 'messenger_send';
+    case MESSENGER_SEND_2 = 'messenger_send_2';
     case EMAIL_SEND = 'email_send';
     case EMAIL_SEND_2 = 'email_send_2';
 //    case SMS_SEND = 'sms_send';
@@ -24,6 +25,7 @@ enum ActionTypeEnum: string
         return [
             self::SOCIAL_CHECK->value,
             self::MESSENGER_SEND->value,
+            self::MESSENGER_SEND_2->value,
             self::EMAIL_SEND->value,
             self::EMAIL_SEND_2->value,
 //            self::SMS_SEND->value,

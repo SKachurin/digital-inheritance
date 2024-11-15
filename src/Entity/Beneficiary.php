@@ -22,7 +22,7 @@ class Beneficiary implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Id]
     #[ORM\GeneratedValue(strategy: 'AUTO')]
     #[ORM\Column(type: 'integer')]
-    private int $id = 0;
+    private ?int $id = 0;
 
     #[ORM\Column(type: 'string', length: 200, nullable: true)]
     private ?string $beneficiaryName;

@@ -7,9 +7,14 @@ header:
   pricing: 'Pricing'
   faqs: 'FAQs'
   about: 'About'
+  language: 'EN | ESP | RU'
   new_heir_explain: 'You will as many info about your Heir - this will help as reach this person in case of events you will describe in Pipeline section'
   new_heir_explain_1: 'Please be specially precise with contacts (like phone and email) as we is not going to verify it now'
 form:
+  attr:
+    placeholder:
+      fail_decrypt: 'Looks like it did not work. You can go back to Dashboard and try again.'
+      for_question: 'Placeholder for Question'
   label:
     customer_name: 'Nickname or whatever'
     beneficiary_name: 'Nickname or whatever'
@@ -25,11 +30,11 @@ form:
     beneficiary_first_phone: 'First Phone Number (optional)'
     customer_second_phone: 'Second Phone Number (optional)'
     beneficiary_second_phone: 'Second Phone Number (optional)'
-    customer_first_question: 'First Security Question'
+    customer_first_question: 'First Security Question (*)'
     beneficiary_first_question: 'First Security Question For Your Heir'
-    customer_first_question_answer: 'Answer. We will never save it - we will encode all your notes with a hash from this answer. Forget this answer = lose all your notes.'
+    customer_first_question_answer: 'Answer (*). We will never save it - we will encode all your notes with a hash from this answer. Forget this answer = lose all your notes.'
     beneficiary_first_question_answer: 'Answer. We will never save it - we will encode all your notes with a hash from this answer. If Your Heir would not be able to answer it with reasonable amount of tries = your note will be lost.'
-    customer_first_question_answer_repeat: 'Repeat the Answer'
+    customer_first_question_answer_repeat: 'Repeat the Answer (*)'
     beneficiary_first_question_answer_repeat: 'Repeat the Answer'
     customer_second_question: 'Second Security Question (optional)'
     beneficiary_second_question: 'Second Security Question For Your Heir'
@@ -41,10 +46,12 @@ form:
     customer_social_app_link: 'Link to your Telegram profile (login or phone or link)'
     customer_okay_password: 'This will be used to check if you are okay. Pick something mundane (like "The day was great") so it seems normal to anyone who might see this interaction.'
     customer_okay_password_repeat: 'Repeat the Okay Password'
-    password: 'Normal password for entering our service. If you lose it or it gets leaked, others will still not be able to see your notes without your answers.'
+    password: 'Normal password for entering our service. If you lose it or it gets leaked, others will still not be able to see your notes without your secret answers.'
     password_repeat: 'Repeat Password'
     contact_edit: 'Edit Contact'
-
+    congratulations: 'Congratulations'
+    your_text: 'Your Text'
+    edit_envelope: 'Edit Envelope'
 
   help:
     customer_name: 'This field will be used to address you in our communications.'
@@ -66,7 +73,7 @@ form:
     customer_second_question: 'We strongly recommend using a second question as well - this way the risk of forgetting the answer is lower.'
     beneficiary_second_question: 'Another Security Question For Your Heir'
     customer_okay_password: 'This will be used to check if you are okay. Pick something mundane (like "The day was great") so it seems normal to anyone who might see this interaction.'
-    password: 'A normal password for entering our service. If you lose it or it gets leaked, others will still not be able to see your notes without your answers.'
+    password: 'A normal password for entering our service. If you lose it or it gets leaked, others will still not be able to see your notes without your secret answers.'
     customer_social_app_link: 'You can enter https://t.me/login or @login or +995 555544433'
   choice:
     customer_social_app:
@@ -75,10 +82,16 @@ form:
       instagram: 'instagram'
       vkcom: 'vkcom'
       telegram: 'telegram'
+
 Submit: 'Submit'
 create_your_heir: 'Create Your Digital Heir'
 edit_your_secure_envelope: 'Edit Your Secure Envelope'
 create_your_secure_envelope: 'Create Your Secure Envelope'
+create_your_secure_envelope_text: |
+  There are no limits to what you can enter here (though the field limit is 5000 characters). This could include crypto wallet credentials, online bank credentials, etc.
+  This envelope will be encrypted with half of our security key and half of the hash from your answer to the security questions.
+  Once encrypted, your answers will be deleted from our database, leaving only you and God with the knowledge required to decrypt this note.
+  And we will never save your answers again - all decryption will be done on the fly from the string you enter in the form.
 create_your_pipeline: 'Create Your Pipeline'
 make_a_payment: 'Make A Payment'
 decrypt_your_secure_envelope: 'Decrypt Your Secure Envelope'
@@ -109,6 +122,8 @@ pipeline: 'Pipeline'
 create_edit_your_pipeline: 'Here you can create or edit your Pipeline.'
 text_pipeline: 'If you verified any of your Contacts you have Action Types to choose from (for each verified Contact we created an Action for you). So now you can choose what system will do and how often (Interval) to check if you are okay. '
 text_pipeline_2:
+delete_your_secure_envelope: 'Delete Your Secure Envelope'
+confirm_delete_note: 'Are you sure you want to delete your secure envelope?'
 
 edit_your_pipeline: 'Edit Your Pipeline'
 
@@ -139,3 +154,15 @@ about_page:
     add_beneficiary: 'Add Beneficiary To Envelope'
   beneficiary_info: 'All encrypted notes are stored securely on our servers. If something happens to you, or your device is compromised, your trusted contacts will still be able to access the necessary information using their personalized security questions.'
   assurance: 'With our service, you can rest assured that your sensitive information is safe and accessible only to those you trust.'
+
+note_creation:
+  default_text: |
+    Replace this text with your data.
+    There are no limits to what you can enter here (though the field limit is 5000 characters). This could include crypto wallet credentials, online bank credentials, etc.
+    This envelope will be encrypted with half of our security key and half of the hash from your answer to the security questions.
+    Once encrypted, your answers will be deleted from our database, leaving only you and God with the knowledge required to decrypt this note.
+    And we will never save your answers again - all decryption will be done on the fly from the string you enter in the form.
+
+if_decoded_can_edit: |
+  If you succeeded in decrypting you Text, and you see decoded Text above this - you can edit it right there.
+  But don't forget to fill all secret answers as we need to encode this new version of your Text with every secret answer.
