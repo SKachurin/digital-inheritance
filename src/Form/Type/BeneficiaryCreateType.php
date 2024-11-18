@@ -37,6 +37,12 @@ class BeneficiaryCreateType extends AbstractType
                     ]),
                 ],
             ])
+            ->add('beneficiaryFullName', TextType::class, [
+                'label' => 'form.label.beneficiary_full_name',
+                'help' => 'form.help.beneficiary_full_name',
+                'required' => false,
+            ])
+
             ->add('beneficiaryEmail', EmailType::class, [
                 'label' => 'form.label.beneficiary_email',
                 'help' => 'form.help.beneficiary_email',
@@ -59,11 +65,7 @@ class BeneficiaryCreateType extends AbstractType
                     ]),
                 ],
             ])
-            ->add('beneficiaryFullName', TextType::class, [
-                'label' => 'form.label.beneficiary_full_name',
-                'help' => 'form.help.beneficiary_full_name',
-                'required' => false,
-            ])
+
             ->add('beneficiaryCountryCode', TextType::class, [
                 'label' => 'form.label.beneficiary_country_code',
                 'help' => 'form.help.beneficiary_country_code',
@@ -78,6 +80,7 @@ class BeneficiaryCreateType extends AbstractType
                 'help' => 'form.help.beneficiary_second_phone',
                 'required' => false,
             ])
+
             ->add('beneficiaryFirstQuestion', TextType::class, [
                 'label' => 'form.label.beneficiary_first_question',
                 'help' => 'form.help.beneficiary_first_question',

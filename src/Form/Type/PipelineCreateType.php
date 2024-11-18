@@ -27,12 +27,12 @@ class PipelineCreateType extends AbstractType
                 'prototype' => true, //for JS additions
             ])
             ->add('submit_add', SubmitType::class, [
-                'label' => 'Add Action',
+                'label' => 'form.label.action_add',
                 'attr' => ['class' => 'btn btn-secondary'],
             ])
 
             ->add('submit', SubmitType::class, [
-                'label' => 'Save Pipeline',
+                'label' => 'form.label.pipeline_save',
                 'attr' => ['class' => 'btn btn-primary'],
             ]);
     }

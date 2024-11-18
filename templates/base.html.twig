@@ -29,6 +29,9 @@
             </a>
 
             <ul class="nav nav-pills ">
+                <li class="nav-item alert alert-error" style="margin-bottom: 1rem; color: #dc3545; background-color: #f0d0cf">
+                    <b class="alert alert-error" aria-current="page"> {{ 'header.test_mode'|trans }}</b>
+                </li>
                 {% if is_granted('ROLE_USER') %}
                     <li class="nav-item"><a href="{{ path('user_home') }}" class="nav-link" aria-current="page"><b>{{ 'header.dashboard'|trans }}</b></a></li>
                     <li class="nav-item"><a href="{{ path('_logout_main') }}" class="nav-link" aria-current="page"><b>{{ 'header.logout'|trans }}</b></a></li>

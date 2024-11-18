@@ -57,7 +57,5 @@ class NoteRepository extends BaseRepository
         $em = $this->getEntityManager();
         $em->remove($note);
         $em->flush();
-//        $em->clear();
-//        $em->detach($note);
     }
 }

@@ -29,7 +29,7 @@ class ActionType extends AbstractType
 
         $builder
             ->add('position', IntegerType::class, [
-                'label' => 'Position Number',
+                'label' => 'form.label.position_number',
                 'help' => 'form.help.position',
                 'required' => true,
             ])
@@ -37,16 +37,17 @@ class ActionType extends AbstractType
                 'choices' => $actionTypeChoices,
                 'choice_label' => fn($choice) => $choice->value,
                 'choice_value' => fn($choice) => $choice ? $choice->value : '',
-                'label' => 'Action Type',
-                'help' => 'form.help.action_type',
+                'label' => 'form.label.action_name',
+                'help' => 'form.help.action_name',
                 'required' => false,
             ])
             ->add('interval', ChoiceType::class, [
                 'choices' => IntervalEnum::cases(),
                 'choice_label' => fn(IntervalEnum $enum) => $enum->value,
-                'label' => 'Action Interval',
-                'help' => 'form.help.interval',
+                'label' => 'form.label.action_interval',
+                'help' => 'form.help.action_interval',
                 'required' => false,
+                'data' => IntervalEnum::NOT_SET,
             ]);
 
     }

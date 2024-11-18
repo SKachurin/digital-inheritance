@@ -7,162 +7,193 @@ header:
   pricing: 'Precios'
   faqs: 'Preguntas Frecuentes'
   about: 'Acerca de'
-  language: 'EN | ESP | RU'  # Added missing key
-  new_heir_explain: 'Proporciona tanta información como sea posible sobre tu heredero; esto nos ayudará a contactar a esta persona en caso de los eventos que describirás en la sección Pipeline'
-  new_heir_explain_1: 'Por favor, sé especialmente preciso con los contactos (como teléfono y correo electrónico) ya que no los vamos a verificar ahora'
+  language: 'EN | ESP | RU'
+  new_heir_explain: 'Por favor, proporcione tanta información sobre su Heredero como sea posible—esto nos ayudará a contactar a esta persona en caso de los eventos que describa en la sección Pipeline.'
+  new_heir_explain_1: "Sea especialmente preciso con los detalles de contacto (como teléfono y correo electrónico), ya que no se verificarán ahora."
+  test_mode: 'Atención: Este servicio está actualmente en Modo de Prueba. Por favor, no ingrese datos sensibles.'
 
 form:
   attr:
-    placeholder:  # Added missing section
-      fail_decrypt: 'Parece que no funcionó. Puedes volver al Panel de Control e intentarlo de nuevo.'
-      for_question: 'Marcador de posición para la pregunta'
+    placeholder:
+      fail_decrypt: 'Parece que no funcionó. Puede volver al Panel de Control y intentarlo de nuevo.'
+      for_question: 'Escriba su pregunta aquí'
   label:
-    customer_name: 'Apodo o lo que sea'
-    beneficiary_name: 'Apodo o lo que sea'
-    customer_email: 'Tu correo electrónico'
-    beneficiary_email: 'Correo electrónico de tu heredero'
-    customer_second_email: 'Tu segundo correo electrónico (opcional)'
-    beneficiary_second_email: 'Segundo correo electrónico (opcional)'
-    customer_full_name: 'Nombre completo (opcional)'
-    beneficiary_full_name: 'Nombre completo de tu heredero (opcional)'
-    customer_country_code: 'Código de país de su teléfono (opcional)'
-    beneficiary_country_code: 'Código de país (opcional)'
-    customer_first_phone: 'Primer número de teléfono (opcional)'
-    beneficiary_first_phone: 'Primer número de teléfono (opcional)'
-    customer_second_phone: 'Segundo número de teléfono (opcional)'
-    beneficiary_second_phone: 'Segundo número de teléfono (opcional)'
-    customer_first_question: 'Primera pregunta de seguridad (*)'
-    beneficiary_first_question: 'Primera pregunta de seguridad para tu heredero'
-    customer_first_question_answer: 'Respuesta (*). Nunca la guardaremos; codificaremos todas tus notas con un hash de esta respuesta. Olvidar esta respuesta = perder todas tus notas.'
-    beneficiary_first_question_answer: 'Respuesta. Nunca la guardaremos; codificaremos todas tus notas con un hash de esta respuesta. Si tu heredero no puede responderla en una cantidad razonable de intentos = tu nota se perderá.'
-    customer_first_question_answer_repeat: 'Repite la respuesta (*)'
-    beneficiary_first_question_answer_repeat: 'Repite la respuesta'
-    customer_second_question: 'Segunda pregunta de seguridad (opcional)'
-    beneficiary_second_question: 'Segunda pregunta de seguridad para tu heredero'
-    customer_second_question_answer: 'Segunda respuesta. La segunda pregunta es una salvaguarda. Tu sobre puede ser decodificado con las respuestas a cualquiera de estas preguntas.'
-    beneficiary_second_question_answer: 'Segunda respuesta. La segunda pregunta es una salvaguarda. Tu sobre puede ser decodificado con las respuestas a cualquiera de estas preguntas.'
-    customer_second_question_answer_repeat: 'Repite la respuesta'
-    beneficiary_second_question_answer_repeat: 'Repite la respuesta'
-    customer_social_app: 'Aplicación de Telegram para rastrear tu actividad. Esta característica minimiza la interacción con este servicio.'
-    customer_social_app_link: 'Enlace a tu perfil de Telegram (usuario o teléfono o enlace)'
-    customer_okay_password: 'Esto se usará para verificar si estás bien. Elige algo mundano (como "El día fue genial") para que parezca normal a cualquiera que pueda ver esta interacción.'
-    customer_okay_password_repeat: 'Repite la contraseña de "Estoy bien"'
-    password: 'Contraseña normal para ingresar a nuestro servicio. Si la pierdes o se filtra, otros aún no podrán ver tus notas sin tus respuestas.'
-    password_repeat: 'Repite la contraseña'
-    contact_edit: 'Editar contacto'
-    congratulations: 'Felicitaciones'  # Added missing key
-    your_text: 'Tu Texto'  # Added missing key
-    edit_envelope: 'Editar Sobre'  # Added missing key
+    customer_name: 'Apodo o Nombre Preferido'
+    beneficiary_name: "Ingrese un Nombre para el Heredero (Apodo o Nombre Preferido)"
+    customer_email: 'Su Correo Electrónico'
+    beneficiary_email: "Correo Electrónico de su Heredero"
+    customer_second_email: 'Su Segundo Correo Electrónico (opcional)'
+    beneficiary_second_email: 'Segundo Correo Electrónico del Heredero (opcional)'
+    customer_full_name: 'Nombre Completo (opcional)'
+    beneficiary_full_name: "Nombre Completo del Heredero (opcional)"
+    customer_country_code: 'Su Código de País (opcional)'
+    beneficiary_country_code: "Código de País del Heredero (opcional)"
+    customer_first_phone: 'Primer Número de Teléfono (opcional)'
+    beneficiary_first_phone: "Primer Número de Teléfono del Heredero (opcional)"
+    customer_second_phone: 'Segundo Número de Teléfono (opcional)'
+    beneficiary_second_phone: "Segundo Número de Teléfono del Heredero (opcional)"
+    customer_first_question: 'Primera Pregunta de Seguridad (*)'
+    beneficiary_first_question: 'Primera Pregunta de Seguridad para su Heredero'
+    customer_first_question_answer: 'Respuesta (*). Nunca la guardaremos; codificaremos todas sus notas con un hash de esta respuesta. Si olvida esta respuesta, perderá todas sus notas.'
+    beneficiary_first_question_answer: 'Respuesta. Nunca la guardaremos; codificaremos sus notas con un hash de esta respuesta. Si su Heredero no puede proporcionar la respuesta correcta después de varios intentos, su nota se perderá.'
+    customer_first_question_answer_repeat: 'Repita la Respuesta (*)'
+    beneficiary_first_question_answer_repeat: 'Repita la Respuesta'
+    customer_second_question: 'Segunda Pregunta de Seguridad (opcional)'
+    beneficiary_second_question: 'Segunda Pregunta de Seguridad para su Heredero'
+    customer_second_question_answer: 'Segunda Respuesta. La segunda pregunta es un mecanismo de seguridad. Su sobre puede ser decodificado con las respuestas a cualquiera de estas preguntas.'
+    beneficiary_second_question_answer: 'Segunda Respuesta. La segunda pregunta es un mecanismo de seguridad. Su sobre puede ser decodificado con las respuestas a cualquiera de estas preguntas.'
+    customer_second_question_answer_repeat: 'Repita la Respuesta'
+    beneficiary_second_question_answer_repeat: 'Repita la Respuesta'
+    customer_social_app: 'Aplicación de Telegram para rastrear su actividad. Esta función minimiza la interacción con nuestro servicio.'
+    customer_social_app_link: 'Enlace a su perfil de Telegram (nombre de usuario, número de teléfono o enlace)'
+    customer_okay_password: 'Esto se utilizará para verificar si está bien. Elija algo mundano (como "El día fue genial") para que parezca normal para cualquiera que pueda ver esta interacción.'
+    customer_okay_password_repeat: 'Repita la Contraseña de Verificación'
+    password: 'Una contraseña regular para iniciar sesión en nuestro servicio. Si la pierde o es filtrada, otros aún no podrán ver sus notas sin sus respuestas secretas.'
+    password_repeat: 'Repita la Contraseña'
+    contact_edit: 'Editar Contacto'
+    congratulations: '¡Felicidades!'
+    your_text: 'Su Texto'
+    edit_envelope: 'Editar Sobre'
+    position_number: 'Número de Posición'
+    action_name: 'Nombre de la Acción'
+    action_interval: 'Intervalo de Acción'
+    action_add: 'Agregar Acción'
+    pipeline_save: 'Guardar Pipeline'
 
   help:
-    customer_name: 'Este campo se usará para dirigirse a ti en nuestras comunicaciones.'
-    beneficiary_name: 'Este campo es solo para ti, para recordar quién es esta persona'
-    customer_email: 'Este será tu ID en nuestro sistema. Lo codificaremos con nuestro mejor algoritmo.'
-    beneficiary_email: 'Este será el ID de tu heredero en nuestro sistema. Y usaremos este correo electrónico si/cuando llegue el momento de entregar tu sobre.'
-    customer_second_email: 'Este campo se usará para enviarte correo si lo utilizas en el Constructor de Pipeline. También será encriptado.'
-    beneficiary_second_email: 'Este campo se usará para enviar copia al carbón (cc) a tu heredero'
-    customer_full_name: 'Este campo se usará para mencionarte en la carta a tu heredero. También será encriptado.'
-    beneficiary_full_name: 'Nombre completo. Lo usaremos en la invitación a tu heredero para responder tus preguntas en el esfuerzo por decodificar tu sobre'
-    customer_country_code: 'Si planeas usar SMS en el Constructor de Pipeline, recomendamos completar el código de país.'
-    beneficiary_country_code: 'Es necesario si completas el número de teléfono de tu heredero'
-    customer_first_phone: 'Este campo se usará para enviar notificaciones SMS si lo utilizas en el Constructor de Pipeline. También será encriptado.'
-    beneficiary_first_phone: 'Completar el número de teléfono de tu heredero podría ayudarnos a lograr nuestro objetivo de entrega más rápido'
-    customer_second_phone: 'Este campo se usará para enviar notificaciones SMS si lo utilizas en el Constructor de Pipeline. También será encriptado.'
-    beneficiary_second_phone: 'Completar el número de teléfono de tu heredero podría ayudarnos a lograr nuestro objetivo de entrega más rápido'
-    customer_first_question: 'Tu respuesta a esta pregunta se usará para propósitos de codificación y decodificación.'
-    beneficiary_first_question: 'Primera pregunta de seguridad para tu heredero'
-    customer_second_question: 'Recomendamos encarecidamente usar una segunda pregunta también; de esta manera, el riesgo de olvidar la respuesta es menor.'
-    beneficiary_second_question: 'Otra pregunta de seguridad para tu heredero'
-    customer_okay_password: 'Esto se usará para verificar si estás bien. Elige algo mundano (como "El día fue genial") para que parezca normal a cualquiera que pueda ver esta interacción.'
-    password: 'Una contraseña normal para ingresar a nuestro servicio. Si la pierdes o se filtra, otros aún no podrán ver tus notas sin tus respuestas.'
-    customer_social_app_link: 'Puedes ingresar https://t.me/login o @usuario o +995 555544433'
+    customer_name: 'Este campo se utilizará para dirigirse a usted en nuestras comunicaciones.'
+    beneficiary_name: 'Este campo es para su referencia—para recordar quién es esta persona.'
+    customer_email: 'Este será su ID en nuestro sistema. Lo encriptaremos con nuestro mejor algoritmo.'
+    beneficiary_email: "Este será el ID de su Heredero en nuestro sistema. Utilizaremos este correo electrónico si/cuando sea necesario entregar su sobre."
+    customer_second_email: 'Este campo se utilizará para enviarle correos electrónicos si lo usa en el Constructor de Pipeline. También estará encriptado.'
+    beneficiary_second_email: 'Este campo se utilizará como correo electrónico CC para su Heredero.'
+    customer_full_name: 'Este campo se utilizará para mencionarlo en la carta a su Heredero. También estará encriptado.'
+    beneficiary_full_name: 'Nombre Completo. Lo utilizaremos en la invitación para que su Heredero responda sus preguntas en un esfuerzo por decodificar su sobre.'
+    customer_country_code: 'Si planea usar SMS en el Constructor de Pipeline, le recomendamos completar el Código de País.'
+    beneficiary_country_code: 'Es necesario si proporciona el número de teléfono de su Heredero.'
+    customer_first_phone: 'Este campo se utilizará para enviar notificaciones SMS si lo usa en el Constructor de Pipeline. También estará encriptado.'
+    beneficiary_first_phone: 'Proporcionar el número de teléfono de su Heredero podría ayudarnos a lograr nuestro objetivo de entrega más rápido.'
+    customer_second_phone: 'Este campo se utilizará para enviar notificaciones SMS si lo usa en el Constructor de Pipeline. También estará encriptado.'
+    beneficiary_second_phone: 'Proporcionar el número de teléfono de su Heredero podría ayudarnos a lograr nuestro objetivo de entrega más rápido.'
+    customer_first_question: 'Su respuesta a esta pregunta se utilizará para propósitos de codificación y decodificación.'
+    beneficiary_first_question: 'Primera pregunta de seguridad para su Heredero. Su respuesta se utilizará para decodificar su sobre.'
+    customer_second_question: 'Recomendamos encarecidamente utilizar una segunda pregunta también—de esta manera, el riesgo de olvidar la respuesta es menor.'
+    beneficiary_second_question: 'Segunda pregunta de seguridad para su Heredero. Actúa como un mecanismo de seguridad en caso de que no pueda responder la primera pregunta.'
+    customer_okay_password: 'Esto se utilizará para verificar si está bien. Elija algo mundano (como "El día fue genial") para que parezca normal para cualquiera que pueda ver esta interacción.'
+    password: 'Una contraseña regular para iniciar sesión en nuestro servicio. Si la pierde o es filtrada, otros aún no podrán ver sus notas sin sus respuestas secretas.'
+    customer_social_app_link: 'Puede ingresar un enlace a su perfil de Telegram, su nombre de usuario o su número de teléfono (por ejemplo, https://t.me/usuario, @usuario o +995555444333).'
+    position: 'El orden en que el sistema debe ejecutar las acciones.'
+    action_name: 'Lo que el sistema va a hacer.'
+    action_interval: 'Especifique cuánto tiempo debe esperar el sistema por su respuesta antes de pasar a la siguiente acción.'
 
   choice:
     customer_social_app:
-      none: 'ninguno'
-      facebook: 'facebook'
-      instagram: 'instagram'
-      vkcom: 'vkcom'
-      telegram: 'telegram'
+      none: 'Ninguno'
+      facebook: 'Facebook'
+      instagram: 'Instagram'
+      vkcom: 'VK.com'
+      telegram: 'Telegram'
 
 Submit: 'Enviar'
-create_your_heir: 'Crea tu heredero digital'
-edit_your_secure_envelope: 'Edita tu sobre seguro'
-create_your_secure_envelope: 'Crea tu sobre seguro'
+create_your_heir: 'Cree su Heredero Digital'
+edit_your_secure_envelope: 'Editar su Sobre Seguro'
+create_your_secure_envelope: 'Crear su Sobre Seguro'
 create_your_secure_envelope_text: |
-  No hay límites para lo que puedes ingresar aquí (aunque el límite del campo es de 5000 caracteres). Esto podría incluir credenciales de monederos de criptomonedas, credenciales de bancos en línea, etc.
-  Este sobre será encriptado con la mitad de nuestra clave de seguridad y la mitad del hash de tu respuesta a las preguntas de seguridad.
-  Una vez encriptado, tus respuestas serán eliminadas de nuestra base de datos, dejando solo a ti y a Dios con el conocimiento necesario para desencriptar esta nota.
-  Y nunca volveremos a guardar tus respuestas; todo el descifrado se hará en el momento a partir de la cadena que ingreses en el formulario.
-create_your_pipeline: 'Crea tu Pipeline'
-make_a_payment: 'Realizar un pago'
-decrypt_your_secure_envelope: 'Descifrar tu sobre seguro'
-decrypt_first: 'Para editar tu sobre seguro, descífralo primero'
-enter_answer: 'Ingresa tu respuesta a una de las preguntas a continuación y presiona el botón'
-do_some_staff: 'Ahora puedes hacer algunas cosas'
-edit_your_email: 'Editar dirección de correo electrónico'
-edit_your_phone: 'Editar tu teléfono'
-verify_edit_your_email: 'Verificar/Editar dirección de correo electrónico'
-add_your_second_email: 'Agregar dirección de correo electrónico'
-add_your_phone: 'Agregar tu teléfono'
-verify_edit_your_phone: 'Verificar/Editar tu teléfono'
-add_your_second_phone: 'Agregar tu segundo teléfono'
-verify_edit_your_social: 'Verificar/Editar tus redes sociales'
-add_your_social: 'Agregar tus redes sociales'
-edit_your_social: 'Editar tus redes sociales'
-contact_can_edit: 'Puedes editar el contacto'
-contact_edit: 'Editar contacto'
-updateContact: 'Actualizar contacto'
-resendVerificationCode: 'Reenviar código de verificación'
-is_verified: 'Está verificado'
+  No hay límites para lo que puede ingresar aquí (aunque el límite del campo es de 5000 caracteres). Esto podría incluir credenciales de billeteras de criptomonedas, credenciales de banca en línea, etc.
+  Este sobre será encriptado con la mitad de nuestra clave de seguridad y la mitad del hash de su respuesta a las preguntas de seguridad.
+  Una vez encriptado, sus respuestas serán eliminadas de nuestra base de datos, dejando solo a usted y a Dios con el conocimiento necesario para descifrar esta nota.
+  Nunca volveremos a guardar sus respuestas—toda la decodificación se realizará en el momento a partir de las respuestas que proporcione al acceder a la nota.
+create_your_pipeline: 'Crear su Pipeline'
+make_a_payment: 'Realizar un Pago'
+decrypt_your_secure_envelope: 'Descifrar su Sobre Seguro'
+decrypt_first: 'Para editar su sobre seguro, por favor descífrelo primero.'
+enter_answer: 'Ingrese su respuesta a una de las preguntas a continuación y haga clic en el botón.'
+do_some_staff: 'Ahora puede continuar.'
+edit_your_email: 'Editar Dirección de Correo Electrónico'
+edit_your_phone: 'Editar Número de Teléfono'
+verify_edit_your_email: 'Verificar/Editar Dirección de Correo Electrónico'
+add_your_second_email: 'Agregar Otra Dirección de Correo Electrónico'
+add_your_phone: 'Agregar Número de Teléfono'
+verify_edit_your_phone: 'Verificar/Editar Número de Teléfono'
+add_your_second_phone: 'Agregar Segundo Número de Teléfono'
+verify_edit_your_social: 'Verificar/Editar sus Redes Sociales'
+add_your_social: 'Agregar sus Redes Sociales'
+edit_your_social: 'Editar sus Redes Sociales'
+contact_can_edit: 'Puede editar el contacto'
+contact_edit: 'Editar Contacto'
+updateContact: 'Actualizar Contacto'
+resendVerificationCode: 'Reenviar Código de Verificación'
+is_verified: 'Está Verificado'
 value: 'Valor'
-countryCode: 'Código de país'
-contact_type_enum: 'Tipo de contacto'
-create_contact: 'Agregar contacto'
-edit_your_heir: 'Editar tu heredero'
+countryCode: 'Código de País'
+contact_type_enum: 'Tipo de Contacto'
+create_contact: 'Agregar Contacto'
+edit_your_heir: 'Editar su Heredero'
 pipeline: 'Pipeline'
-create_edit_your_pipeline: 'Aquí puedes crear o editar tu Pipeline.'
-text_pipeline: 'Si verificaste alguno de tus contactos, tienes tipos de acción para elegir (para cada contacto verificado, creamos una acción para ti). Así que ahora puedes elegir qué hará el sistema y con qué frecuencia (intervalo) para comprobar si estás bien.'
-text_pipeline_2:
-delete_your_secure_envelope: 'Eliminar tu Sobre Seguro'
-confirm_delete_note: '¿Estás seguro de que deseas eliminar tu sobre seguro?'
-edit_your_pipeline: 'Editar tu Pipeline'
-text_pipeline_your_actions: "Ahora tienes estas acciones para construir tu Pipeline personalizado"
-text_pipeline_your_actions_edit: "Aquí está tu secuencia ahora:"
-social_check: "Si estuve en línea en Telegram hace más tiempo que el intervalo de tiempo seleccionado"
-messenger_send: "Enviar mensaje a través de Messenger y esperar"
-email_send: "Enviar correo electrónico y esperar"
-email_send_2: "Enviar correo electrónico secundario y esperar"
-_for_: "por"
-text_add_action_button: "Puedes agregar otro formulario y agregar una de las acciones existentes con otro intervalo, por ejemplo."
+create_edit_your_pipeline: 'Aquí puede crear o editar su Pipeline.'
+text_pipeline: 'Si ha verificado alguno de sus contactos, tiene tipos de acción para elegir (creamos una acción para cada contacto verificado). Ahora puede elegir qué hará el sistema y con qué frecuencia (intervalo) verificará si está bien.'
+text_pipeline_2: ''
+delete_your_secure_envelope: 'Eliminar su Sobre Seguro'
+confirm_delete_note: '¿Está seguro de que desea eliminar su sobre seguro?'
+
+edit_your_pipeline: 'Editar su Pipeline'
+
+text_pipeline_your_actions: 'Ahora tiene estas acciones para construir su pipeline personalizado'
+pipeline_create_help: |
+  Originalmente, pretendíamos que utilizara "Si estaba en línea" como la primera acción en su pipeline, para que el sistema pudiera verificar automáticamente sin molestarlo con mensajes excesivos.
+  Pero, por supuesto, es su elección.
+  Esta opción estará accesible una vez que verifique sus redes sociales.
+
+text_pipeline_your_actions_edit: 'Esta es su secuencia ahora:'
+social_check: 'Si he estado en línea en Telegram hace más tiempo que el intervalo de tiempo seleccionado'
+messenger_send: 'Enviar mensaje vía Messenger y esperar'
+email_send: 'Enviar correo electrónico y esperar'
+email_send_2: 'Enviar al segundo correo electrónico y esperar'
+_for_: 'por'
+text_add_action_button: 'Puede agregar otro formulario e incluir una de las acciones existentes con un intervalo diferente, por ejemplo.'
+action: 'Acción'
+heir_contacts: 'Contactos del Heredero'
+heir_questions: 'Preguntas de Seguridad para su Heredero'
+heir_contacts_explain: 'Usaremos estos contactos para enviar una invitación a descifrar su sobre cuando su pipeline alcance su fin.'
+heir_questions_explain: 'Codificaremos su sobre con las respuestas a estas preguntas. Si su Heredero adivina cualquiera de ellas correctamente, el sobre será descifrado.'
+
+not_set: 'No Establecido'
+TEST_1_min: 'PRUEBA 1 min'
+1_hour: '1 hora'
+5_hours: '5 horas'
+12_hours: '12 horas'
+1_day: '1 día'
+3_days: '3 días'
+7_days: '7 días'
+1_month: '1 mes'
 
 about_page:
   title: 'Acerca de "El Heredero Digital"'
   introduction:
-    our_service: 'Nuestro servicio ofrece una solución segura y confiable para dejar tus activos digitales como herencia.'
-    no_watching: 'No te observamos. No vendemos tus datos de ninguna manera.'
-    privacy_priority: 'Priorizamos tu privacidad y seguridad en cada paso.'
-    encrypted_details: 'Tus detalles de contacto se encriptan antes de ser almacenados, asegurando que permanezcan confidenciales.'
-    encrypted_envelopes: 'También encriptamos tus sobres secretos con las respuestas a tus preguntas de seguridad.'
-    no_decoding: 'Una vez encriptadas, estas respuestas se eliminan de nuestra base de datos, dejándote solo a ti y a Dios con el conocimiento.'
-    no_way_decode: '¡No hay forma de decodificar tus sobres secretos sin las respuestas proporcionadas por ti!'
+    our_service: 'Nuestro servicio ofrece una solución segura y confiable para dejar sus activos digitales como herencia.'
+    no_watching: 'No lo vigilamos. No vendemos sus datos de ninguna manera.'
+    privacy_priority: 'Priorizamos su privacidad y seguridad en cada paso.'
+    encrypted_details: 'Sus datos de contacto se encriptan antes de almacenarse, asegurando que permanezcan confidenciales.'
+    encrypted_envelopes: 'También encriptamos sus sobres secretos con las respuestas a sus preguntas de seguridad.'
+    no_decoding: 'Una vez encriptadas, sus respuestas se eliminan de nuestra base de datos, dejando solo a usted y a Dios con el conocimiento.'
+    no_way_decode: '¡No hay forma de descifrar sus sobres secretos sin las respuestas proporcionadas por usted!'
   how_it_works: 'Así es como funciona:'
   section_titles:
     registration: 'Registro'
     secret_questions: 'Preguntas Secretas'
     create_envelope: 'Crear Sobre'
     add_beneficiary: 'Agregar Beneficiario al Sobre'
-  beneficiary_info: 'Todas las notas encriptadas se almacenan de forma segura en nuestros servidores. Si te sucede algo, o tu dispositivo se ve comprometido, tus contactos de confianza aún podrán acceder a la información necesaria usando sus preguntas de seguridad personalizadas.'
-  assurance: 'Con nuestro servicio, puedes estar seguro de que tu información sensible está segura y accesible solo para aquellos en quienes confías.'
+  beneficiary_info: 'Todas las notas encriptadas se almacenan de forma segura en nuestros servidores. Si algo le sucede a usted o su dispositivo es comprometido, sus contactos de confianza aún podrán acceder a la información necesaria utilizando sus preguntas de seguridad personalizadas.'
+  assurance: 'Con nuestro servicio, puede estar seguro de que su información sensible está segura y accesible solo para quienes usted confía.'
 
 note_creation:
   default_text: |
-    Reemplaza este texto con tus datos.
-    No hay límites para lo que puedes ingresar aquí (aunque el límite del campo es de 5000 caracteres). Esto podría incluir credenciales de monederos de criptomonedas, credenciales de bancos en línea, etc.
-    Este sobre será encriptado con la mitad de nuestra clave de seguridad y la mitad del hash de tu respuesta a las preguntas de seguridad.
-    Una vez encriptado, tus respuestas serán eliminadas de nuestra base de datos, dejando solo a ti y a Dios con el conocimiento necesario para desencriptar esta nota.
-    Y nunca volveremos a guardar tus respuestas; todo el descifrado se hará en el momento a partir de la cadena que ingreses en el formulario.
+    Reemplace este texto con su información.
+    No hay límites para lo que puede ingresar aquí (aunque el límite del campo es de 5000 caracteres). Esto podría incluir credenciales de billeteras de criptomonedas, credenciales de banca en línea, etc.
+    Este sobre será encriptado con la mitad de nuestra clave de seguridad y la mitad del hash de su respuesta a las preguntas de seguridad.
+    Una vez encriptado, sus respuestas serán eliminadas de nuestra base de datos, dejando solo a usted y a Dios con el conocimiento necesario para descifrar esta nota.
+    Nunca volveremos a guardar sus respuestas—toda la decodificación se realizará en el momento a partir de las respuestas que proporcione al acceder a la nota.
 
 if_decoded_can_edit: |
-  Si lograste descifrar tu texto y ves el texto descifrado arriba, puedes editarlo allí mismo.
-  Pero no olvides completar todas las respuestas secretas, ya que necesitamos codificar esta nueva versión de tu texto con cada respuesta secreta.
+  Si logró descifrar su texto y ve el texto decodificado arriba, puede editarlo directamente allí.
+  Pero no olvide completar todas las respuestas secretas, ya que necesitamos codificar esta nueva versión de su texto con cada respuesta secreta.

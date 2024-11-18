@@ -8,80 +8,91 @@ header:
   faqs: 'FAQs'
   about: 'About'
   language: 'EN | ESP | RU'
-  new_heir_explain: 'You will as many info about your Heir - this will help as reach this person in case of events you will describe in Pipeline section'
-  new_heir_explain_1: 'Please be specially precise with contacts (like phone and email) as we is not going to verify it now'
+  new_heir_explain: 'Please provide as much information about your Heir as possible—this will help us reach this person in case of the events you describe in the Pipeline section.'
+  new_heir_explain_1: "Please be especially precise with contact details (like phone and email) as they are not going to be verified now."
+  test_mode: 'Attention: This service is currently in Test Mode. Please do not enter any sensitive data.'
+
 form:
   attr:
     placeholder:
-      fail_decrypt: 'Looks like it did not work. You can go back to Dashboard and try again.'
+      fail_decrypt: 'Looks like it did not work. You can go back to the Dashboard and try again.'
       for_question: 'Placeholder for Question'
   label:
-    customer_name: 'Nickname or whatever'
-    beneficiary_name: 'Nickname or whatever'
+    customer_name: 'Nickname or Preferred Name'
+    beneficiary_name: "Enter a Name for the Heir (Nickname or Preferred Name)"
     customer_email: 'Your Email'
-    beneficiary_email: 'Your Heir Email'
+    beneficiary_email: "Your Heir's Email"
     customer_second_email: 'Your Second Email (optional)'
-    beneficiary_second_email: 'Second Email (optional)'
+    beneficiary_second_email: "Heir's Second Email (optional)"
     customer_full_name: 'Full Name (optional)'
-    beneficiary_full_name: 'Full Name Of Your Heir (optional)'
-    customer_country_code: 'Country Code His/Hers PHone (optional)'
-    beneficiary_country_code: 'Country Code (optional)'
+    beneficiary_full_name: "Heir's Full Name (optional)"
+    customer_country_code: 'Your Country Code (optional)'
+    beneficiary_country_code: "Heir's Country Code (optional)"
     customer_first_phone: 'First Phone Number (optional)'
-    beneficiary_first_phone: 'First Phone Number (optional)'
+    beneficiary_first_phone: "Heir's First Phone Number (optional)"
     customer_second_phone: 'Second Phone Number (optional)'
-    beneficiary_second_phone: 'Second Phone Number (optional)'
+    beneficiary_second_phone: "Heir's Second Phone Number (optional)"
     customer_first_question: 'First Security Question (*)'
-    beneficiary_first_question: 'First Security Question For Your Heir'
-    customer_first_question_answer: 'Answer (*). We will never save it - we will encode all your notes with a hash from this answer. Forget this answer = lose all your notes.'
-    beneficiary_first_question_answer: 'Answer. We will never save it - we will encode all your notes with a hash from this answer. If Your Heir would not be able to answer it with reasonable amount of tries = your note will be lost.'
+    beneficiary_first_question: 'First Security Question for Your Heir'
+    customer_first_question_answer: 'Answer (*). We will never save it — we will encode all your notes with a hash from this answer. If you forget this answer, you will lose all your notes.'
+    beneficiary_first_question_answer: 'Answer. We will never save it—we will encode your notes with a hash from this answer. If your Heir is unable to provide the correct answer within a reasonable number of attempts, your note will be lost.'
     customer_first_question_answer_repeat: 'Repeat the Answer (*)'
     beneficiary_first_question_answer_repeat: 'Repeat the Answer'
     customer_second_question: 'Second Security Question (optional)'
-    beneficiary_second_question: 'Second Security Question For Your Heir'
-    customer_second_question_answer: 'Second Answer. The Second Question - it is a failsafe. Your envelope can be decoded with answers for ether of this questions.'
-    beneficiary_second_question_answer: 'Second Answer. The Second Question - it is a failsafe. Your envelope can be decoded with answers for ether of this questions.'
+    beneficiary_second_question: 'Second Security Question for Your Heir'
+    customer_second_question_answer: 'Second Answer. The second question is a failsafe. Your envelope can be decoded with answers to either of these questions.'
+    beneficiary_second_question_answer: 'Second Answer. The second question is a failsafe. Your envelope can be decoded with answers to either of these questions.'
     customer_second_question_answer_repeat: 'Repeat the Answer'
     beneficiary_second_question_answer_repeat: 'Repeat the Answer'
-    customer_social_app: 'Telegram App for tracking your activity. This feature minimizes interaction with this service.'
-    customer_social_app_link: 'Link to your Telegram profile (login or phone or link)'
+    customer_social_app: 'Telegram App for tracking your activity. This feature minimizes interaction with our service.'
+    customer_social_app_link: 'Link to your Telegram profile (username, phone number, or link)'
     customer_okay_password: 'This will be used to check if you are okay. Pick something mundane (like "The day was great") so it seems normal to anyone who might see this interaction.'
     customer_okay_password_repeat: 'Repeat the Okay Password'
-    password: 'Normal password for entering our service. If you lose it or it gets leaked, others will still not be able to see your notes without your secret answers.'
+    password: 'A regular password for logging into our service. If you lose it or it gets leaked, others will still not be able to see your notes without your secret answers.'
     password_repeat: 'Repeat Password'
     contact_edit: 'Edit Contact'
     congratulations: 'Congratulations'
     your_text: 'Your Text'
     edit_envelope: 'Edit Envelope'
+    position_number: 'Position Number'
+    action_name: 'Action Name'
+    action_interval: 'Action Interval'
+    action_add: 'Add Action'
+    pipeline_save: 'Save Pipeline'
 
   help:
     customer_name: 'This field will be used to address you in our communications.'
-    beneficiary_name: 'This field is only for you - to remember who is this person'
-    customer_email: 'This will be your ID in our system. We will encode it with our best algorithm.'
-    beneficiary_email: 'This will be your Heir ID in our system. And we will use this email if/when it comes to delivering your Envelope.'
-    customer_second_email: 'This field will be used to mail you if you use it in Pipeline Constructor. It will also be encrypted.'
-    beneficiary_second_email: 'This field will be used to cc mail for your Heir'
-    customer_full_name: 'This field will be used to mention you in the letter to your heir. It will also be encrypted.'
-    beneficiary_full_name: 'Full Name. We will use it in invitation for You Heir to answer your questions in strive/effort to decode your Envelope'
-    customer_country_code: 'If you plan to use SMS in Pipeline Constructor, we recommend filling in the Country Code.'
-    beneficiary_country_code: 'It is required if you filling up the phone number of your Heir'
-    customer_first_phone: 'This field will be used to send SMS notifications if you use it in Pipeline Constructor. It will also be encrypted.'
-    beneficiary_first_phone: 'filling up the phone number of your Heir could help us to achieve our delivery goal faster'
-    customer_second_phone: 'This field will be used to send SMS notifications if you use it in Pipeline Constructor. It will also be encrypted.'
-    beneficiary_second_phone:  'filling up the phone number of your Heir could help us to achieve our delivery goal faster'
+    beneficiary_name: 'This field is for your reference—to remember who this person is.'
+    customer_email: 'This will be your ID in our system. We will encrypt it with our best algorithm.'
+    beneficiary_email: "This will be your Heir's ID in our system. We will use this email if/when it comes to delivering your envelope."
+    customer_second_email: 'This field will be used to email you if you use it in the Pipeline Constructor. It will also be encrypted.'
+    beneficiary_second_email: 'This field will be used as a CC email for your Heir.'
+    customer_full_name: 'This field will be used to mention you in the letter to your Heir. It will also be encrypted.'
+    beneficiary_full_name: 'Full Name. We will use it in the invitation for your Heir to answer your questions in an effort to decode your envelope.'
+    customer_country_code: 'If you plan to use SMS in the Pipeline Constructor, we recommend filling in the Country Code.'
+    beneficiary_country_code: 'It is required if you are providing the phone number of your Heir.'
+    customer_first_phone: 'This field will be used to send SMS notifications if you use it in the Pipeline Constructor. It will also be encrypted.'
+    beneficiary_first_phone: 'Providing the phone number of your Heir could help us achieve our delivery goal faster.'
+    customer_second_phone: 'This field will be used to send SMS notifications if you use it in the Pipeline Constructor. It will also be encrypted.'
+    beneficiary_second_phone: 'Providing the phone number of your Heir could help us achieve our delivery goal faster.'
     customer_first_question: 'Your answer to this question will be used for encoding and decoding purposes.'
-    beneficiary_first_question: 'First Security Question For Your Heir'
-    customer_second_question: 'We strongly recommend using a second question as well - this way the risk of forgetting the answer is lower.'
-    beneficiary_second_question: 'Another Security Question For Your Heir'
+    beneficiary_first_question: 'First security question for your Heir. Their answer will be used to decode your envelope.'
+    customer_second_question: 'We strongly recommend using a second question as well—this way the risk of forgetting the answer is lower.'
+    beneficiary_second_question: 'Second security question for your Heir. Acts as a failsafe in case they cannot answer the first question.'
     customer_okay_password: 'This will be used to check if you are okay. Pick something mundane (like "The day was great") so it seems normal to anyone who might see this interaction.'
-    password: 'A normal password for entering our service. If you lose it or it gets leaked, others will still not be able to see your notes without your secret answers.'
-    customer_social_app_link: 'You can enter https://t.me/login or @login or +995 555544433'
+    password: 'A regular password for logging into our service. If you lose it or it gets leaked, others will still not be able to see your notes without your secret answers.'
+    customer_social_app_link: 'You can enter a link to your Telegram profile, your username, or your phone number (e.g., https://t.me/username, @username, or +995555444333).'
+    position: 'The order in which the system should execute actions.'
+    action_name: 'What the system is going to do.'
+    action_interval: 'Specify how long the system should wait for your response before moving to the next action.'
+
   choice:
     customer_social_app:
-      none: 'none'
-      facebook: 'facebook'
-      instagram: 'instagram'
-      vkcom: 'vkcom'
-      telegram: 'telegram'
+      none: 'None'
+      facebook: 'Facebook'
+      instagram: 'Instagram'
+      vkcom: 'VK.com'
+      telegram: 'Telegram'
 
 Submit: 'Submit'
 create_your_heir: 'Create Your Digital Heir'
@@ -91,68 +102,88 @@ create_your_secure_envelope_text: |
   There are no limits to what you can enter here (though the field limit is 5000 characters). This could include crypto wallet credentials, online bank credentials, etc.
   This envelope will be encrypted with half of our security key and half of the hash from your answer to the security questions.
   Once encrypted, your answers will be deleted from our database, leaving only you and God with the knowledge required to decrypt this note.
-  And we will never save your answers again - all decryption will be done on the fly from the string you enter in the form.
+  We will never save your answers again—all decryption will be done on the fly from the answers you provide when accessing the note.
 create_your_pipeline: 'Create Your Pipeline'
-make_a_payment: 'Make A Payment'
+make_a_payment: 'Make a Payment'
 decrypt_your_secure_envelope: 'Decrypt Your Secure Envelope'
-decrypt_first: 'To Edit Your Secure Envelope Decrypt It First'
-enter_answer: 'Enter Your Answer To One Of The Questions Below and Push The Button'
-do_some_staff: 'Now You Can Do Some Staff'
+decrypt_first: 'To edit your secure envelope, please decrypt it first.'
+enter_answer: 'Enter your answer to one of the questions below and click the button.'
+do_some_staff: 'Now you can proceed.'
 edit_your_email: 'Edit Email Address'
-edit_your_phone: 'Edit Your Phone'
+edit_your_phone: 'Edit Phone Number'
 verify_edit_your_email: 'Verify/Edit Email Address'
-add_your_second_email: 'Add Email Address'
-add_your_phone: 'Add Your Phone'
-verify_edit_your_phone: 'Verify/Edit Your Phone'
-add_your_second_phone: 'Add Your Second Phone'
-verify_edit_your_social: 'Verify/Edit Your Social'
-add_your_social: 'Add Your Social'
-edit_your_social: 'Edit your Social'
-contact_can_edit: 'You can edit contact'
+add_your_second_email: 'Add Another Email Address'
+add_your_phone: 'Add Phone Number'
+verify_edit_your_phone: 'Verify/Edit Phone Number'
+add_your_second_phone: 'Add Second Phone Number'
+verify_edit_your_social: 'Verify/Edit Your Social Media'
+add_your_social: 'Add Your Social Media'
+edit_your_social: 'Edit Your Social Media'
+contact_can_edit: 'You can edit the contact'
 contact_edit: 'Edit Contact'
 updateContact: 'Update Contact'
 resendVerificationCode: 'Resend Verification Code'
 is_verified: 'Is Verified'
 value: 'Value'
 countryCode: 'Country Code'
-contact_type_enum: 'Type of the Contact'
+contact_type_enum: 'Contact Type'
 create_contact: 'Add Contact'
 edit_your_heir: 'Edit Your Heir'
 pipeline: 'Pipeline'
 create_edit_your_pipeline: 'Here you can create or edit your Pipeline.'
-text_pipeline: 'If you verified any of your Contacts you have Action Types to choose from (for each verified Contact we created an Action for you). So now you can choose what system will do and how often (Interval) to check if you are okay. '
-text_pipeline_2:
+text_pipeline: 'If you have verified any of your contacts, you have action types to choose from (we created an action for each verified contact). Now you can choose what the system will do and how often (interval) to check if you are okay.'
+text_pipeline_2: ''
 delete_your_secure_envelope: 'Delete Your Secure Envelope'
 confirm_delete_note: 'Are you sure you want to delete your secure envelope?'
 
 edit_your_pipeline: 'Edit Your Pipeline'
 
-text_pipeline_your_actions: "Now you have this Actions to build your custom Pipeline"
-text_pipeline_your_actions_edit: "Here is your sequence now:"
-social_check: "If I was online in Telegram more than the selected time interval ago"
-messenger_send: "Send message via Messenger and wait"
-email_send: "Send email and wait"
-email_send_2: "Send secondary email and wait"
-_for_: "for"
-text_add_action_button: "You can add another Form and add one of existing Actions with another interval for example."
+text_pipeline_your_actions: 'Now you have these actions to build your custom pipeline'
+pipeline_create_help: |
+  We originally intended for you to use "If I was online" as the first action in your pipeline, so the system could check automatically without bothering you with excessive messages.
+  But of course, it's your choice.
+  This option will become accessible once you verify your social media.
+
+text_pipeline_your_actions_edit: 'Here is your sequence now:'
+social_check: 'If I was online in Telegram more than the selected time interval ago'
+messenger_send: 'Send message via Messenger and wait'
+email_send: 'Send email and wait'
+email_send_2: 'Send to secondary email and wait'
+_for_: 'for'
+text_add_action_button: 'You can add another form and include one of the existing actions with a different interval, for example.'
+action: 'Action'
+heir_contacts: 'Heir Contacts'
+heir_questions: 'Security Questions for Your Heir'
+heir_contacts_explain: 'We will use these contacts to send an invitation to decrypt your envelope when your pipeline reaches its end.'
+heir_questions_explain: 'We will encode your envelope with the answers to these questions. If your Heir guesses either of them correctly, the envelope will be decoded.'
+
+not_set: 'Not Set'
+TEST_1_min: 'TEST 1 min'
+1_hour: '1 hour'
+5_hours: '5 hours'
+12_hours: '12 hours'
+1_day: '1 day'
+3_days: '3 days'
+7_days: '7 days'
+1_month: '1 month'
 
 about_page:
   title: 'About "The Digital Heir"'
   introduction:
     our_service: 'Our service offers a secure and reliable solution for leaving your digital assets as an inheritance.'
-    no_watching: 'We do not watch you. We do not sale your data in any way.'
+    no_watching: 'We do not watch you. We do not sell your data in any way.'
     privacy_priority: 'We prioritize your privacy and security at every step.'
     encrypted_details: 'Your contact details are encrypted before they are stored, ensuring they remain confidential.'
     encrypted_envelopes: 'We also encrypt your secret envelopes with answers to your security questions.'
-    no_decoding: 'Once encrypted, these answers are deleted from our database, leaving only you and God with the knowledge.'
+    no_decoding: 'Once encrypted, your answers are deleted from our database, leaving only you and God with the knowledge.'
     no_way_decode: 'There is no way to decode your secret envelopes without the answers provided by you!'
   how_it_works: 'Here is how it works:'
   section_titles:
     registration: 'Registration'
     secret_questions: 'Secret Questions'
     create_envelope: 'Create Envelope'
-    add_beneficiary: 'Add Beneficiary To Envelope'
-  beneficiary_info: 'All encrypted notes are stored securely on our servers. If something happens to you, or your device is compromised, your trusted contacts will still be able to access the necessary information using their personalized security questions.'
+    add_beneficiary: 'Add Beneficiary to Envelope'
+  beneficiary_info: 'All encrypted notes are stored securely on our servers. If something happens to you or your device is compromised, your trusted contacts will still be able to access the necessary information using their personalized security questions.'
   assurance: 'With our service, you can rest assured that your sensitive information is safe and accessible only to those you trust.'
 
 note_creation:
@@ -161,8 +192,8 @@ note_creation:
     There are no limits to what you can enter here (though the field limit is 5000 characters). This could include crypto wallet credentials, online bank credentials, etc.
     This envelope will be encrypted with half of our security key and half of the hash from your answer to the security questions.
     Once encrypted, your answers will be deleted from our database, leaving only you and God with the knowledge required to decrypt this note.
-    And we will never save your answers again - all decryption will be done on the fly from the string you enter in the form.
+    We will never save your answers again—all decryption will be done on the fly from the answers you provide when accessing the note.
 
 if_decoded_can_edit: |
-  If you succeeded in decrypting you Text, and you see decoded Text above this - you can edit it right there.
-  But don't forget to fill all secret answers as we need to encode this new version of your Text with every secret answer.
+  If you succeeded in decrypting your text and you see the decoded text above, you can edit it right there.
+  But don't forget to fill in all secret answers, as we need to encode this new version of your text with every secret answer.

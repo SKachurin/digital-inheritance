@@ -1,12 +1,56 @@
 {% extends 'base.html.twig' %}
     {% block content %}
+        <style>
+            .form-container {
+                padding-top: 4em;
+            }
+            .form-header {
+                margin-bottom: 1em;
+            }
+            .button-group {
+                display: flex;
+                align-items: center;
+                margin-top: 0.5em;
+            }
+            .button-group a {
+                margin-left: 1em;
+            }
+            p {
+                margin-bottom: 3em !important;
+                margin-top: 3em !important;
+            }
+            .divider {
+                font-size: 1.5em;
+                display: flex;
+                align-items: center;
+            }
+
+            .divider::before, .divider::after {
+                flex: 1;
+                content: '';
+                padding: 1px;
+                background-color: #bbbb;
+                margin: 2em !important;
+            }
+        </style>
         <div class="container">
             <h1 style="padding-top: 4em;">{{ 'create_your_heir'|trans }}</h1>
 
             <p>{{ 'header.new_heir_explain'|trans }}</p>
-            <p>{{ 'header.new_heir_explain_1'|trans }}</p>
-            {{ form(form) }}
-
+            <p class="alert alert-success">{{ 'header.new_heir_explain_1'|trans }}</p>
+            {{ form_start(form) }}
+            {{ form_row(form.beneficiaryName) }}
+            {{ form_row(form.beneficiaryFullName) }}
+            <div class="divider">{{ 'heir_contacts'|trans }}</div>
+            <p>{{ 'heir_contacts_explain'|trans }}</p>
+            {{ form_row(form.beneficiaryEmail) }}
+            {{ form_row(form.beneficiarySecondEmail) }}
+            {{ form_row(form.beneficiaryCountryCode) }}
+            {{ form_row(form.beneficiaryFirstPhone) }}
+            {{ form_row(form.beneficiarySecondPhone) }}
+            <div class="divider">{{ 'heir_questions'|trans }}</div>
+            <p>{{ 'heir_questions_explain'|trans }}</p>
+            {{ form_end(form) }}
         </div>
         {% for label, messages in app.flashes %}
             {% for message in messages %}

@@ -43,8 +43,9 @@
                 <p>{{ 'text_pipeline'|trans }}</p>
                 {{ 'text_pipeline_your_actions'|trans }}
                 {% for action in actions %}
-                   "{{ action.actionType.value |trans  }}",
+                   "{{ action.actionType.value |trans }}",
                 {% endfor %}
+                <p class="alert alert-success"> {{ 'pipeline_create_help'|trans|nl2br }}</p>
 
                 {{ form_start(form) }}
 
@@ -52,7 +53,7 @@
 
                 {% for actionForm in form.actions %}
                     <div class="action-item">
-                        <div class="divider">Action</div>
+                        <div class="divider">{{ 'action'|trans }}</div>
                         {{ form_row(actionForm.position) }}
                         {{ form_errors(actionForm.position) }}
                         {{ form_row(actionForm.actionType) }}

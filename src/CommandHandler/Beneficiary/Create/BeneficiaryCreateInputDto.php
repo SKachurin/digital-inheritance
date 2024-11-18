@@ -10,13 +10,10 @@ class BeneficiaryCreateInputDto
     #[Assert\NotBlank]
     #[Assert\Length(min: 2, max: 64)]
     private string $beneficiaryName;
-
     #[Assert\Email]
     private ?string $beneficiaryEmail = null;
-
     #[Assert\Email]
     private ?string $beneficiarySecondEmail = null;
-
     #[Assert\Length(max: 1000)]
     private ?string $beneficiaryFullName = null;
     #[Assert\Length(max: 64)]
@@ -37,7 +34,6 @@ class BeneficiaryCreateInputDto
 
     #[Assert\Length(max: 1000)]
     private ?string $beneficiarySecondQuestionAnswer = null;
-
 
     private ?string $beneficiaryActionsOrder = null;
 
