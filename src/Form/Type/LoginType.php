@@ -22,24 +22,24 @@ class LoginType extends AbstractType
          */
         $builder
             ->add('email', EmailType::class, [
-                'label' => 'Your Email Is Your Login',
+                'label' => 'form.label.your_login',
                 'constraints' => [
                     new Email([
-                        'message' => 'Please enter your login.',
+                        'message' => 'form.constraints.your_login',
                     ]),
                 ],
             ])
             ->add('password', PasswordType::class, [
-                'label' => 'password',
+                'label' => 'form.label.login_password',
                 'constraints' => [
                     new NotBlank([
-                        'message' => 'Please enter a password.',
+                        'message' => 'form.constraints.not_blank',
                     ]),
                 ],
             ])
             ->add('remember_me', CheckboxType::class, [
                 'mapped'=> false,
-                'label'    => 'remember me',
+                'label'    => 'form.label.remember_me',
                 'label_attr' => [
                     'class' => 'checkbox-inline checkbox-switch',
                 ],

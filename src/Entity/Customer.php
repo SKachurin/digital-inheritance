@@ -84,25 +84,31 @@ class Customer implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @var Collection<int, Note>
      */
-    #[ORM\OneToMany(targetEntity: Note::class, mappedBy: 'customer', cascade: ['persist'])]
+    #[ORM\OneToMany(targetEntity: Note::class, mappedBy: 'customer', cascade: ['remove'], orphanRemoval: true)]
     private Collection $notes;
+
+    /**
+     * @var Collection<int, Beneficiary>
+     */
+    #[ORM\OneToMany(targetEntity: Beneficiary::class, mappedBy: 'customer', cascade: ['remove'], orphanRemoval: true)]
+    private Collection $beneficiaries;
 
     /**
      * @var Collection<int, Transaction>
      */
-    #[ORM\OneToMany(targetEntity: Transaction::class, mappedBy: 'customer', cascade: ['persist'])]
+    #[ORM\OneToMany(targetEntity: Transaction::class, mappedBy: 'customer')]
     private Collection $transactions;
 
     /**
      * @var Collection<int, Pipeline>
      */
-    #[ORM\OneToMany(targetEntity: Pipeline::class, mappedBy: 'customer', cascade: ['persist'])]
+    #[ORM\OneToMany(targetEntity: Pipeline::class, mappedBy: 'customer', cascade: ['remove'], orphanRemoval: true)]
     private Collection $pipelines;
 
     /**
      * @var Collection<int, Action>
      */
-    #[ORM\OneToMany(targetEntity: Action::class, mappedBy: 'customer', cascade: ['persist'])]
+    #[ORM\OneToMany(targetEntity: Action::class, mappedBy: 'customer', cascade: ['remove'], orphanRemoval: true)]
     private Collection $actions;
 
     #[ORM\Column(type: 'json')]
@@ -111,7 +117,7 @@ class Customer implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @var Collection<int, Contact>
      */
-    #[ORM\OneToMany(targetEntity: Contact::class, mappedBy: 'customer', cascade: ['persist', 'remove'])]
+    #[ORM\OneToMany(targetEntity: Contact::class, mappedBy: 'customer', cascade: ['remove'])]
     private Collection $contacts;
 
     public function __construct()
@@ -119,6 +125,7 @@ class Customer implements UserInterface, PasswordAuthenticatedUserInterface
         $this->customerPaymentStatus = CustomerPaymentStatusEnum::FREE;
         $this->notes = new ArrayCollection();
         $this->transactions = new ArrayCollection();
+        $this->beneficiaries = new ArrayCollection();
         $this->pipelines = new ArrayCollection();
         $this->actions = new ArrayCollection();
         $this->contacts = new ArrayCollection();
@@ -151,16 +158,6 @@ class Customer implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-//    public function getCustomerSecondEmail(): ?string
-//    {
-//        return $this->customerSecondEmail;
-//    }
-//
-//    public function setCustomerSecondEmail(?string $customerSecondEmail): self
-//    {
-//        $this->customerSecondEmail = $customerSecondEmail;
-//        return $this;
-//    }
 
     public function getCustomerFullName(): ?string
     {
@@ -172,39 +169,6 @@ class Customer implements UserInterface, PasswordAuthenticatedUserInterface
         $this->customerFullName = $customerFullName;
         return $this;
     }
-
-//    public function getCustomerCountryCode(): ?string
-//    {
-//        return $this->customerCountryCode;
-//    }
-//
-//    public function setCustomerCountryCode(?string $customerCountryCode): self
-//    {
-//        $this->customerCountryCode = $customerCountryCode;
-//        return $this;
-//    }
-
-//    public function getCustomerFirstPhone(): ?string
-//    {
-//        return $this->customerFirstPhone;
-//    }
-//
-//    public function setCustomerFirstPhone(?string $customerFirstPhone): self
-//    {
-//        $this->customerFirstPhone = $customerFirstPhone;
-//        return $this;
-//    }
-//
-//    public function getCustomerSecondPhone(): ?string
-//    {
-//        return $this->customerSecondPhone;
-//    }
-//
-//    public function setCustomerSecondPhone(?string $customerSecondPhone): self
-//    {
-//        $this->customerSecondPhone = $customerSecondPhone;
-//        return $this;
-//    }
 
     public function getCustomerFirstQuestion(): ?string
     {
@@ -315,6 +279,31 @@ class Customer implements UserInterface, PasswordAuthenticatedUserInterface
     public function removeNote(Note $note): self
     {
         $this->notes->removeElement($note);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Beneficiary>
+     */
+    public function getBeneficiary(): Collection
+    {
+        return $this->beneficiaries;
+    }
+
+    public function addBeneficiary(Beneficiary $beneficiary): self
+    {
+        if (!$this->beneficiaries->contains($beneficiary)) {
+            $this->beneficiaries->add($beneficiary);
+            $beneficiary->setCustomer($this);
+        }
+
+        return $this;
+    }
+
+    public function removeBeneficiary(Beneficiary $beneficiary): self
+    {
+        $this->beneficiaries->removeElement($beneficiary);
 
         return $this;
     }

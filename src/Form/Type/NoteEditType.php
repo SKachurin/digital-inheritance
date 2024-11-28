@@ -21,32 +21,32 @@ class NoteEditType extends AbstractType
 
         $builder
             ->add('customerTextAnswerOne', TextareaType::class, [
-                'label' => 'Customer Text Answer One',
+                'label' => 'form.label.text_encoded_customer_first',
                 'required' => false,
                 'constraints' => [
                     new Length([
                         'max' => 10000,
-                        'maxMessage' => 'Customer Text Answer One cannot be longer than {{ limit }} characters.',
+                        'maxMessage' => 'form.constraints.too_long_1000',
                     ]),
                 ],
                 'attr' => [
-                    'placeholder' => 'This field is intended for encrypted data.',
+                    'placeholder' => 'form.attr.placeholder.for_encrypted_text',
                     'rows' => 10,
                     'style' => 'height: 15em',
                     'readonly' => true
                 ]
             ])
             ->add('customerTextAnswerTwo', TextareaType::class, [
-                'label' => 'Customer Text Answer Two',
+                'label' => 'form.label.text_encoded_customer_second',
                 'required' => false,
                 'constraints' => [
                     new Length([
                         'max' => 10000,
-                        'maxMessage' => 'Customer Text Answer One cannot be longer than {{ limit }} characters.',
+                        'maxMessage' => 'form.constraints.too_long_1000',
                     ]),
                 ],
                 'attr' => [
-                    'placeholder' => 'This field is intended for encrypted data.',
+                    'placeholder' => 'form.attr.placeholder.for_encrypted_text',
                     'rows' => 10,
                     'style' => 'height: 15em',
                     'readonly' => true
@@ -55,7 +55,7 @@ class NoteEditType extends AbstractType
         if ($beneficiary) {
             $builder
                 ->add('beneficiaryTextAnswerOne', TextareaType::class, [
-                    'label' => 'beneficiary Text Answer One',
+                    'label' => 'form.label.text_encoded_beneficiary_first',
                     'required' => false,
                     'constraints' => [
                         new Length([
@@ -64,23 +64,23 @@ class NoteEditType extends AbstractType
                         ]),
                     ],
                     'attr' => [
-                        'placeholder' => 'This field is intended for encrypted data.',
+                        'placeholder' => 'form.attr.placeholder.for_encrypted_text',
                         'rows' => 10,
                         'style' => 'height: 15em',
                         'readonly' => true
                     ]
                 ])
                 ->add('beneficiaryTextAnswerTwo', TextareaType::class, [
-                    'label' => 'beneficiary Text Answer Two',
+                    'label' => 'form.label.text_encoded_beneficiary_second',
                     'required' => false,
                     'constraints' => [
                         new Length([
                             'max' => 10000,
-                            'maxMessage' => 'beneficiary Text Answer One cannot be longer than {{ limit }} characters.',
+                            'maxMessage' => 'form.constraints.too_long_1000',
                         ]),
                     ],
                     'attr' => [
-                        'placeholder' => 'This field is intended for encrypted data.',
+                        'placeholder' => 'form.attr.placeholder.for_encrypted_text',
                         'rows' => 10,
                         'style' => 'height: 15em',
                         'readonly' => true
@@ -89,63 +89,63 @@ class NoteEditType extends AbstractType
         }
         $builder
             ->add('customerFirstQuestion', TextType::class, [
-                'label' => 'Customer First Question',
+                'label' => 'form.label.customer_first_question',
                 'required' => false,
                 'attr' => [
-                    'placeholder' => 'Placeholder for Question',
+                    'placeholder' => 'form.attr.placeholder.for_question',
                     'readonly' => true
                 ]
 
             ])
             ->add('customerFirstQuestionAnswer', TextType::class, [
-                'label' => 'Customer First Question Answer',
+                'label' => 'form.label.customer_first_question_answer',
                 'required' => false,
             ])
             ->add('customerSecondQuestion', TextType::class, [
-                'label' => 'Customer Second Question',
+                'label' => 'form.label.customer_second_question',
                 'required' => false,
                 'attr' => [
-                    'placeholder' => 'Placeholder for Question',
+                    'placeholder' => 'form.attr.placeholder.for_question',
                     'readonly' => true
                 ]
             ])
             ->add('customerSecondQuestionAnswer', TextType::class, [
-                'label' => 'Customer Second Question Answer',
+                'label' => 'form.label.customer_second_question_answer',
                 'required' => false,
             ]);
 
         if ($beneficiary) {
             $builder
                 ->add('beneficiaryFirstQuestion', TextType::class, [
-                    'label' => 'Beneficiary First Question',
+                    'label' => 'form.label.beneficiary_first_question',
                     'required' => false,
                     'attr' => [
-                        'placeholder' => 'Placeholder for Question',
+                        'placeholder' => 'form.attr.placeholder.for_question',
                         'readonly' => true
                     ]
 
                 ])
                 ->add('beneficiaryFirstQuestionAnswer', TextType::class, [
-                    'label' => 'Beneficiary First Question Answer',
+                    'label' => 'form.label.beneficiary_first_question_answer',
                     'required' => false,
                 ])
                 ->add('beneficiarySecondQuestion', TextType::class, [
-                    'label' => 'Beneficiary Second Question',
+                    'label' => 'form.label.beneficiary_second_question',
                     'required' => false,
                     'attr' => [
-                        'placeholder' => 'Placeholder for Question',
+                        'placeholder' => 'form.attr.placeholder.for_question',
                         'readonly' => true
                     ]
                 ])
                 ->add('beneficiarySecondQuestionAnswer', TextType::class, [
-                    'label' => 'Beneficiary Second Question Answer',
+                    'label' => 'form.label.beneficiary_second_question_answer',
                     'required' => false,
                 ]);
         }
 
         $builder
             ->add('submit', SubmitType::class, [
-                'label' => 'Try to decrypt this with my answer',
+                'label' => 'form.label.try_decrypt',
                 'attr' => ['class' => 'btn btn-primary'],
             ]);
     }

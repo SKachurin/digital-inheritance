@@ -66,7 +66,7 @@ class ContactCreateType extends AbstractType
                     'required' => true,
                     'constraints' => [
                         new NotBlank([
-                            'message' => 'Please enter something to address you.', //TODO error to messages
+                            'message' => 'form.constraints.not_blank',
                         ]),
                         new Length([
                             'min' => 2,

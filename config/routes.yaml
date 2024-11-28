@@ -47,6 +47,14 @@ beneficiary_create:
     path:       /beneficiary/create
     controller: App\Controller\Beneficiary\BeneficiaryCreateController::create
 
+beneficiary_edit:
+    path:       /beneficiary/{beneficiaryId}/edit
+    controller: App\Controller\Beneficiary\BeneficiaryEditController::edit
+
+beneficiary_delete:
+    path: /note/{beneficiaryId}/delete
+    controller: App\Controller\Note\BeneficiaryDeleteController::delete
+
 
 home:
     path:       /
@@ -97,6 +105,14 @@ pipeline_edit:
 change_language:
     path:       /change_language/{lang}
     controller: App\Controller\Customer\LangController::changeLanguage
+
+forgot_pass:
+    path:       /forgot_pass
+    controller: App\Controller\Customer\PasswordResetController::restore
+
+password_reset_reset:
+    path: /reset-password/{token}
+    controller: App\Controller\Customer\PasswordResetController::reset
 
 
 customer_creating:

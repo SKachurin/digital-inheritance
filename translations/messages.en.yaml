@@ -8,7 +8,7 @@ header:
   faqs: 'FAQs'
   about: 'About'
   language: 'EN | ESP | RU'
-  new_heir_explain: 'Please provide as much information about your Heir as possible—this will help us reach this person in case of the events you describe in the Pipeline section.'
+  new_heir_explain: 'Please provide as much information about your Heir as possible — this will help us reach this person in case of the events you describe in the Pipeline section.'
   new_heir_explain_1: "Please be especially precise with contact details (like phone and email) as they are not going to be verified now."
   test_mode: 'Attention: This service is currently in Test Mode. Please do not enter any sensitive data.'
 
@@ -17,6 +17,8 @@ form:
     placeholder:
       fail_decrypt: 'Looks like it did not work. You can go back to the Dashboard and try again.'
       for_question: 'Placeholder for Question'
+      for_encrypted_text: 'This field is intended for encrypted data.'
+
   label:
     customer_name: 'Nickname or Preferred Name'
     beneficiary_name: "Enter a Name for the Heir (Nickname or Preferred Name)"
@@ -34,8 +36,8 @@ form:
     beneficiary_second_phone: "Heir's Second Phone Number (optional)"
     customer_first_question: 'First Security Question (*)'
     beneficiary_first_question: 'First Security Question for Your Heir'
-    customer_first_question_answer: 'Answer (*). We will never save it — we will encode all your notes with a hash from this answer. If you forget this answer, you will lose all your notes.'
-    beneficiary_first_question_answer: 'Answer. We will never save it—we will encode your notes with a hash from this answer. If your Heir is unable to provide the correct answer within a reasonable number of attempts, your note will be lost.'
+    customer_first_question_answer: 'Answer (*). We need at least one answer.'
+    beneficiary_first_question_answer: 'Answer.'
     customer_first_question_answer_repeat: 'Repeat the Answer (*)'
     beneficiary_first_question_answer_repeat: 'Repeat the Answer'
     customer_second_question: 'Second Security Question (optional)'
@@ -59,6 +61,23 @@ form:
     action_interval: 'Action Interval'
     action_add: 'Add Action'
     pipeline_save: 'Save Pipeline'
+    your_login: 'Your Email Is Your Login'
+    login_password: 'Password'
+    remember_me: 'Remember me'
+    send: 'Send'
+    edit: 'Edit'
+    note: 'Text for your Envelope'
+    note_create: 'Create Note'
+    try_decrypt: 'Try to decrypt this with my answer'
+    text_encoded_customer_first: 'Text encoded with answer to your security question one'
+    text_encoded_customer_second: 'Text encoded with answer to your security question two'
+    text_encoded_beneficiary_first: "Text encoded with answer to your Beneficiary's security question one"
+    text_encoded_beneficiary_second: "Text encoded with answer to your Beneficiary's security question two"
+
+  constraints:
+    your_login: 'Please enter your login.'
+    not_blank: "This field couldn't be empty"
+    too_long_1000: 'Text cannot be longer than 1000 characters.'
 
   help:
     customer_name: 'This field will be used to address you in our communications.'
@@ -95,7 +114,12 @@ form:
       telegram: 'Telegram'
 
 Submit: 'Submit'
+forgot_pass: 'Forgot password?'
+click_here: 'Click here'
+restore_pass: 'Password Recovery'
+enter_email: "Please enter your first email(It's your login). Email should be previously verified"
 create_your_heir: 'Create Your Digital Heir'
+edit_your_heir: 'Edit Your Digital Heir'
 edit_your_secure_envelope: 'Edit Your Secure Envelope'
 create_your_secure_envelope: 'Create Your Secure Envelope'
 create_your_secure_envelope_text: |
@@ -128,15 +152,22 @@ value: 'Value'
 countryCode: 'Country Code'
 contact_type_enum: 'Contact Type'
 create_contact: 'Add Contact'
-edit_your_heir: 'Edit Your Heir'
 pipeline: 'Pipeline'
 create_edit_your_pipeline: 'Here you can create or edit your Pipeline.'
 text_pipeline: 'If you have verified any of your contacts, you have action types to choose from (we created an action for each verified contact). Now you can choose what the system will do and how often (interval) to check if you are okay.'
 text_pipeline_2: ''
 delete_your_secure_envelope: 'Delete Your Secure Envelope'
 confirm_delete_note: 'Are you sure you want to delete your secure envelope?'
+delete_your_beneficiary: 'Delete Your Heir'
+confirm_delete_beneficiary: 'Are you sure you want to delete your Heir?'
 
 edit_your_pipeline: 'Edit Your Pipeline'
+
+your_questions: 'Security Questions to encrypt your Envelope'
+your_questions_explain: |
+  Below are the Security Questions to protect your sensitive data. When you submit this form we going to encrypt your text from field "Text for your Envelope" with all answers you provided.
+  Even the Questions itself going to be encrypted (but with our own cryptography)
+  We will never save your answers. If you forget this answer, you will lose all your data.
 
 text_pipeline_your_actions: 'Now you have these actions to build your custom pipeline'
 pipeline_create_help: |
@@ -156,6 +187,7 @@ heir_contacts: 'Heir Contacts'
 heir_questions: 'Security Questions for Your Heir'
 heir_contacts_explain: 'We will use these contacts to send an invitation to decrypt your envelope when your pipeline reaches its end.'
 heir_questions_explain: 'We will encode your envelope with the answers to these questions. If your Heir guesses either of them correctly, the envelope will be decoded.'
+heir_questions_edit: 'You can edit your security questions and answers in Edit Envelope in DashBoard ... Or here is the button below'
 
 not_set: 'Not Set'
 TEST_1_min: 'TEST 1 min'
@@ -188,7 +220,7 @@ about_page:
 
 note_creation:
   default_text: |
-    Replace this text with your data.
+    Replace this text with your data:
     There are no limits to what you can enter here (though the field limit is 5000 characters). This could include crypto wallet credentials, online bank credentials, etc.
     This envelope will be encrypted with half of our security key and half of the hash from your answer to the security questions.
     Once encrypted, your answers will be deleted from our database, leaving only you and God with the knowledge required to decrypt this note.

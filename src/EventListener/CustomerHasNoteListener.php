@@ -30,7 +30,7 @@ class CustomerHasNoteListener
         $request = $event->getRequest();
         $route = $request->attributes->get('_route');
 
-        $targetRoutes = ['user_home'];
+        $targetRoutes = ['user_home', 'beneficiary_edit'];
 
         if (in_array($route, $targetRoutes, true)) {
 

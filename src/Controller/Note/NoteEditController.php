@@ -119,9 +119,9 @@ class NoteEditController extends AbstractController
 
             $handledResult = $handledStamp->getResult();
 
-            $form1 = $this->createForm(NoteEditType1::class, $handledResult);
+            $form1 = $this->createForm(NoteEditType1::class, $handledResult, ['beneficiary' => $note->getBeneficiary()]);
 
-            return $this->render('noteEdit.html.twig', [
+            return $this->render('note/noteEdit.html.twig', [
                 'form' => $form1->createView(),
                 'beneficiary' => $note->getBeneficiary(),
                 'decodedNote' => true,
@@ -132,7 +132,7 @@ class NoteEditController extends AbstractController
 
             $noteEditOutputDto = new NoteEditOutputDto($currentCustomer);
 
-            $form1 = $this->createForm(NoteEditType1::class, $noteEditOutputDto);
+            $form1 = $this->createForm(NoteEditType1::class, $noteEditOutputDto, ['beneficiary' => $note->getBeneficiary()]);
 
             $form1->handleRequest($request);
 
@@ -167,7 +167,7 @@ class NoteEditController extends AbstractController
 
         }
 
-        return $this->render('noteEdit.html.twig', [
+        return $this->render('note/noteEdit.html.twig', [
             'form' => $form,
             'decodedNote' => false,
         ]);

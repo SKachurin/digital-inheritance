@@ -26,6 +26,16 @@ class NoteCreateInputDto
 
     private ?string $customerSecondQuestionAnswer = null;
 
+    #[Assert\NotBlank]
+    private ?string $beneficiaryFirstQuestion = null;
+
+    #[Assert\NotBlank]
+    private ?string $beneficiaryFirstQuestionAnswer = null;
+
+    private ?string $beneficiarySecondQuestion = null;
+
+    private ?string $beneficiarySecondQuestionAnswer = null;
+
     #[Assert\Length(max: 10000)]
     private ?string $customerTextAnswerOne;
 
@@ -189,6 +199,51 @@ class NoteCreateInputDto
     public function setCustomerSecondQuestionAnswer(?string $customerSecondQuestionAnswer): self
     {
         $this->customerSecondQuestionAnswer = $customerSecondQuestionAnswer;
+        return $this;
+    }
+
+
+    public function getBeneficiaryFirstQuestion(): ?string
+    {
+        return $this->beneficiaryFirstQuestion;
+    }
+
+    public function setBeneficiaryFirstQuestion(?string $beneficiaryFirstQuestion): self
+    {
+        $this->beneficiaryFirstQuestion = $beneficiaryFirstQuestion;
+        return $this;
+    }
+
+    public function getBeneficiaryFirstQuestionAnswer(): ?string
+    {
+        return $this->beneficiaryFirstQuestionAnswer;
+    }
+
+    public function setBeneficiaryFirstQuestionAnswer(?string $beneficiaryFirstQuestionAnswer): self
+    {
+        $this->beneficiaryFirstQuestionAnswer = $beneficiaryFirstQuestionAnswer;
+        return $this;
+    }
+
+    public function getBeneficiarySecondQuestion(): ?string
+    {
+        return $this->beneficiarySecondQuestion;
+    }
+
+    public function setBeneficiarySecondQuestion(?string $beneficiarySecondQuestion): self
+    {
+        $this->beneficiarySecondQuestion = $beneficiarySecondQuestion;
+        return $this;
+    }
+
+    public function getBeneficiarySecondQuestionAnswer(): ?string
+    {
+        return $this->beneficiarySecondQuestionAnswer;
+    }
+
+    public function setBeneficiarySecondQuestionAnswer(?string $beneficiarySecondQuestionAnswer): self
+    {
+        $this->beneficiarySecondQuestionAnswer = $beneficiarySecondQuestionAnswer;
         return $this;
     }
 }

@@ -1,15 +1,14 @@
 <?php
 
-namespace App\CommandHandler\Beneficiary\Create;
+namespace App\CommandHandler\Beneficiary\Edit;
 
-use App\Entity\Customer;
 use App\Enum\CustomerSocialAppEnum;
 use Symfony\Component\Validator\Constraints as Assert;
 
-class BeneficiaryCreateInputDto
+class BeneficiaryEditOutputDto
 {
     #[Assert\NotBlank]
-    private Customer $customer;
+    private ?int $id;
     #[Assert\NotBlank]
     #[Assert\Length(min: 2, max: 64)]
     private string $beneficiaryName;
@@ -26,21 +25,17 @@ class BeneficiaryCreateInputDto
     #[Assert\Length(max: 64)]
     private ?string $beneficiarySecondPhone = null;
 
-    private ?string $beneficiaryActionsOrder = null;
 
-    public function __construct(Customer $customer)
+    public function __construct()
+    {}
+
+    public function getId(): int
     {
-        $this->customer = $customer;
+        return $this->id;
     }
-
-    public function getCustomer(): Customer
+    public function setId(int $id): self
     {
-        return $this->customer;
-    }
-
-    public function setCustomer(Customer $customer): self
-    {
-        $this->customer = $customer;
+        $this->id = $id;
         return $this;
     }
 
@@ -120,16 +115,4 @@ class BeneficiaryCreateInputDto
         $this->beneficiarySecondPhone = $beneficiarySecondPhone;
         return $this;
     }
-
-    public function getBeneficiaryActionsOrder(): ?string
-    {
-        return $this->beneficiaryActionsOrder;
-    }
-
-    public function setBeneficiaryActionsOrder(?string $beneficiaryActionsOrder): self
-    {
-        $this->beneficiaryActionsOrder = $beneficiaryActionsOrder;
-        return $this;
-    }
-
 }

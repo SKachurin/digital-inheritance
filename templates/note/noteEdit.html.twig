@@ -1,4 +1,4 @@
-{% extends 'base.html.twig' %}
+{% extends './base.html.twig' %}
 {% block content %}
     <style>
         .form-container {
@@ -14,6 +14,19 @@
         }
         .button-group a {
             margin-left: 1em; /* Space between the buttons and the text area */
+        }
+        .divider {
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+        }
+
+        .divider::before, .divider::after {
+            flex: 1;
+            content: '';
+            padding: 1px;
+            background-color: #bbbb;
+            margin: 2em !important;
         }
     </style>
     <div class="container">
@@ -34,6 +47,12 @@
                     {{ form_row(form.customerCongrats) }}
                     {{ form_row(form.customerText) }}
                     <p class="alert alert-success" style="padding: 2em;">{{ 'if_decoded_can_edit'|trans|nl2br }}</p>
+                    {{ form_row(form.customerFirstQuestion) }}
+                    {{ form_row(form.customerFirstQuestionAnswer) }}
+                    {{ form_row(form.customerSecondQuestion) }}
+                    {{ form_row(form.customerSecondQuestionAnswer) }}
+                    <div class="divider">{{ 'heir_questions'|trans }}</div>
+                    <p>{{ 'heir_questions_explain'|trans }}</p>
                     {{ form_end(form) }}
 
                 {% endif %}

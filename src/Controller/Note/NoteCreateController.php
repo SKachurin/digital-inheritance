@@ -33,6 +33,13 @@ class NoteCreateController extends AbstractController
     {
         $customer = $this->getUser();
         $note = null;
+        $beneficiaries = $customer->getBeneficiary();
+
+        if ($beneficiaries->isEmpty()) {
+            $this->addFlash('info', 'Create Heir first.'); //TODO transl
+
+            return $this->redirectToRoute('user_home');
+        }
 
         if ($customer instanceof \App\Entity\Customer) {
 
@@ -66,7 +73,7 @@ class NoteCreateController extends AbstractController
 
             }
 
-            return $this->render('noteCreate.html.twig', [
+            return $this->render('note/noteCreate.html.twig', [
                 'form' => $form,
                 'decodedNote' => false,
             ]);

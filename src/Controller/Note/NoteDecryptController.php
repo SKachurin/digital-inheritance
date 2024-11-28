@@ -102,12 +102,12 @@ class NoteDecryptController extends AbstractController
 
             $form1 = $this->createForm(NoteDecryptType1::class, $handledResult);
 
-            return $this->render('noteDecrypt.html.twig', [
+            return $this->render('note/noteDecrypt.html.twig', [
                 'form' => $form1->createView(),
             ]);
         }
 
-        return $this->render('noteDecrypt.html.twig', [
+        return $this->render('note/noteDecrypt.html.twig', [
             'form' => $form
         ]);
     }

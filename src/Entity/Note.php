@@ -23,7 +23,7 @@ class Note
     private ?int $id = 0; //https://github.com/doctrine/orm/issues/8452
 
     #[ORM\ManyToOne(targetEntity: Customer::class, inversedBy: 'notes')]
-    #[ORM\JoinColumn(name: 'customer_id', nullable: false)]
+    #[ORM\JoinColumn(name: 'customer_id', nullable: false, onDelete: 'CASCADE')]
     private Customer $customer;
 
     #[ORM\Column(type: 'text', nullable: true)]
@@ -33,7 +33,7 @@ class Note
     private ?string $customerTextAnswerTwo = null;
 
     #[ORM\ManyToOne(targetEntity: Beneficiary::class, inversedBy: 'notes')]
-    #[ORM\JoinColumn(name: 'beneficiary_id', nullable: true)]
+    #[ORM\JoinColumn(name: 'beneficiary_id', referencedColumnName: 'id', nullable: true, onDelete: 'SET NULL')]
     private ?Beneficiary $beneficiary = null;
 
     #[ORM\Column(type: 'text', nullable: true)]

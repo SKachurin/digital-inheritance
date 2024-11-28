@@ -49,7 +49,7 @@ services:
         tags:
             - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest }
 
-    App\EventListener\CustomerNoteHasBeneficiaryListener:
+    App\EventListener\CustomerHasBeneficiaryListener:
         tags:
             - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest }
 

@@ -39,15 +39,11 @@ class NoteCreateHandler
     public function __invoke(NoteCreateInputDto $input): Note
     {
         $customer = $input->getCustomer();
+
         $customer
             ->setCustomerFirstQuestion(
                 $this->cryptoService->encryptData(
                     $input->getCustomerFirstQuestion()
-                )
-            )
-            ->setCustomerFirstQuestionAnswer(
-                $this->cryptoService->encryptData(
-                    $input->getCustomerFirstQuestionAnswer()
                 )
             )
         ;
@@ -60,27 +56,41 @@ class NoteCreateHandler
                 )
             ;
         }
-        if ($input->getCustomerSecondQuestionAnswer()) {
-            $customer
-                ->setCustomerSecondQuestionAnswer(
+
+        $beneficiaries = $customer->getBeneficiary();
+        $beneficiary = $beneficiaries[0];
+
+        $beneficiary
+            ->setBeneficiaryFirstQuestion(
+                $this->cryptoService->encryptData(
+                    $input->getBeneficiaryFirstQuestion()
+                )
+            )
+        ;
+
+        if ($input->getCustomerSecondQuestion()) {
+            $beneficiary
+                ->setBeneficiarySecondQuestion(
                     $this->cryptoService->encryptData(
-                        $input->getCustomerSecondQuestionAnswer()
+                        $input->getBeneficiarySecondQuestion()
                     )
-                );
+                )
+            ;
         }
+
         $this->entityManager->persist($customer);
+        $this->entityManager->persist($beneficiary);
         $this->entityManager->flush();
 
         $note = new Note();
         $note->setCustomer($customer);
+        $note->setBeneficiary($beneficiary);
         $cryptoService = null;
 
-        $personalString1 = $this->cryptoService->decryptData(
-            $customer->getCustomerFirstQuestionAnswer()
-        );
-        $personalString2 = $this->cryptoService->decryptData(
-            $customer->getCustomerSecondQuestionAnswer()
-        );
+        $personalString1 = $input->getCustomerFirstQuestionAnswer();
+        $personalString2 = $input->getCustomerSecondQuestionAnswer();
+        $personalString3 = $input->getBeneficiaryFirstQuestionAnswer();
+        $personalString4 = $input->getBeneficiarySecondQuestionAnswer();
 
         if ($personalString1) {
             $cryptoService = new CryptoService($this->params, $this->logger, $personalString1);
@@ -103,9 +113,31 @@ class NoteCreateHandler
                 )
             ;
         }
+
+        if ($personalString3) {
+            $cryptoService = new CryptoService($this->params, $this->logger, $personalString3);
+            $note
+                ->setBeneficiaryTextAnswerOne(
+                    $cryptoService->encryptData(
+                        $input->getCustomerText()
+                    )
+                )
+            ;
+        }
+
+        if ($personalString4) {
+            $cryptoService = new CryptoService($this->params, $this->logger, $personalString4);
+            $note
+                ->setBeneficiaryTextAnswerTwo(
+                    $cryptoService->encryptData(
+                        $input->getCustomerText()
+                    )
+                )
+            ;
+        }
         $this->entityManager->persist($note);
         $this->entityManager->persist($customer);
-//    TODO    $this->entityManager->persist($beneficiary); + add $beneficiary questions
+
         $this->entityManager->flush();
 
         return $note;

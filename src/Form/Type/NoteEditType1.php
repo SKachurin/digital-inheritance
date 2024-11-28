@@ -86,7 +86,8 @@ class NoteEditType1 extends AbstractType
                 ->add('beneficiarySecondQuestionAnswer', TextType::class, [
                     'label' => 'form.label.beneficiary_second_question_answer',
                     'required' => false,
-                ]);
+                ])
+            ;
         }
         $builder
             ->add('submit', SubmitType::class, [

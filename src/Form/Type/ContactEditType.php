@@ -64,7 +64,7 @@ class ContactEditType extends AbstractType
                     'required' => true,
                     'constraints' => [
                         new NotBlank([
-                            'message' => 'Please enter something to address you.',
+                            'message' => 'form.constraints.not_blank',
                         ]),
                         new Length([
                             'min' => 2,

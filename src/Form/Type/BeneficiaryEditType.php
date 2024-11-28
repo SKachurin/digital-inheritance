@@ -2,7 +2,7 @@
 
 namespace App\Form\Type;
 
-use App\CommandHandler\Beneficiary\Create\BeneficiaryCreateInputDto;
+use App\CommandHandler\Beneficiary\Edit\BeneficiaryEditOutputDto;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -11,13 +11,11 @@ use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
-use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Validator\Constraints\Email;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
-use App\Form\DataTransformer\EnumToStringTransformer;
 
-class BeneficiaryCreateType extends AbstractType
+class BeneficiaryEditType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
@@ -110,6 +108,7 @@ class BeneficiaryCreateType extends AbstractType
 //                'second_options' => ['label' => 'form.label.beneficiary_second_question_answer_repeat'],
 //            ])
             ->add('submit', SubmitType::class, [
+                'label' => 'form.label.edit',
                 'attr' => ['class' => 'btn btn-primary'],
             ]);
 
@@ -118,7 +117,7 @@ class BeneficiaryCreateType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => BeneficiaryCreateInputDto::class
+            'data_class' => BeneficiaryEditOutputDto::class
         ]);
     }
 }

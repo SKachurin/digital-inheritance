@@ -40,8 +40,9 @@ class Contact
     #[ORM\JoinColumn(nullable: true)]
     private ?Beneficiary $beneficiary = null;
 
-    #[ORM\OneToOne(targetEntity: VerificationToken::class, mappedBy: 'contact', cascade: ['persist', 'remove'])]
+    #[ORM\OneToOne(targetEntity: VerificationToken::class, mappedBy: 'contact', cascade: ['persist', 'remove'], orphanRemoval: true)]
     private ?VerificationToken $verificationToken;
+
 
 
     public function getId(): int

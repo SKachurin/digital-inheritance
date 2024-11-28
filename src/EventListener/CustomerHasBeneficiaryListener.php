@@ -3,25 +3,25 @@
 namespace App\EventListener;
 
 use App\Entity\Customer;
-use App\Repository\NoteRepository;
+use App\Repository\BeneficiaryRepository;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Twig\Environment;
 
-class CustomerNoteHasBeneficiaryListener
+class CustomerHasBeneficiaryListener
 {
     private TokenStorageInterface $tokenStorage;
     private Environment $twig;
-    private NoteRepository $noteRepository;
+    private BeneficiaryRepository $beneficiaryRepository;
 
     public function __construct(
         TokenStorageInterface $tokenStorage,
         Environment $twig,
-        NoteRepository $noteRepository
+        BeneficiaryRepository $beneficiaryRepository
     ) {
         $this->tokenStorage = $tokenStorage;
         $this->twig = $twig;
-        $this->noteRepository = $noteRepository;
+        $this->beneficiaryRepository = $beneficiaryRepository;
     }
 
     public function onKernelRequest(RequestEvent $event): void
@@ -45,11 +45,16 @@ class CustomerNoteHasBeneficiaryListener
             }
 
             // Check if the customer's note has a beneficiary
-            $note = $this->noteRepository->customerHasNoteWithBeneficiary($customer);
-            $hasBeneficiary = $note !== null;
+            $beneficiary = $this->beneficiaryRepository->findOneBy(['customer' => $customer]);
 
-            // Add the result to Twig globals
-            $this->twig->addGlobal('customerNoteHasBeneficiary', $hasBeneficiary);
+            if ($beneficiary !== null) {
+                $beneficiaryId = $beneficiary->getId();
+
+                // Add the beneficiary ID to Twig globals
+                $this->twig->addGlobal('customerHasBeneficiary', $beneficiaryId);
+            } else {
+                $this->twig->addGlobal('customerHasBeneficiary', null);
+            }
         }
     }
 }

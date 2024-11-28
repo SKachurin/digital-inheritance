@@ -41,17 +41,6 @@ class NoteRepository extends BaseRepository
 
     }
 
-    public function customerHasNoteWithBeneficiary(Customer $customer): ?Note
-    {
-        return $this->createQueryBuilder('n')
-            ->andWhere('n.customer = :customer')
-            ->andWhere('n.beneficiary IS NOT NULL')
-            ->setParameter('customer', $customer)
-            ->setMaxResults(1)
-            ->getQuery()
-            ->getOneOrNullResult();
-    }
-
     public function delete(Note $note): void
     {
         $em = $this->getEntityManager();

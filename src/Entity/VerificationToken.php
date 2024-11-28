@@ -15,7 +15,7 @@ class VerificationToken
     #[ORM\Id]
     #[ORM\GeneratedValue(strategy: 'AUTO')]
     #[ORM\Column(type: 'integer')]
-    private int $id = 0;
+    private ?int $id = 0;
 
     #[ORM\Column(type: 'string', length: 255, unique: true)]
     private string $token;
@@ -27,7 +27,7 @@ class VerificationToken
     private DateTimeImmutable $expiresAt;
 
     #[ORM\OneToOne(targetEntity: Contact::class, inversedBy: 'verificationToken')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(nullable: false, onDelete: 'CASCADE')]
     private Contact $contact;
 
     public function __construct(Contact $contact, string $type, string $token, DateTimeImmutable $expiresAt)

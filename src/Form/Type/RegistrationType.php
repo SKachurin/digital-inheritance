@@ -28,7 +28,7 @@ class RegistrationType extends AbstractType
                 'help' => 'form.help.customer_name',
                 'constraints' => [
                     new NotBlank([
-                        'message' => 'Please enter something to address you.',
+                        'message' => 'form.constraints.not_blank',
                     ]),
                     new Length([
                         'min' => 2,
@@ -43,7 +43,7 @@ class RegistrationType extends AbstractType
                 'help' => 'form.help.customer_email',
                 'constraints' => [
                     new NotBlank([
-                        'message' => 'Please enter your email address.',
+                        'message' => 'form.constraints.not_blank',
                     ]),
                     new Email([
                         'message' => 'Please enter a valid email address.',

@@ -1,4 +1,4 @@
-{% extends 'base.html.twig' %}
+{% extends './base.html.twig' %}
 {% block content %}
     <style>
         .form-container {
@@ -17,6 +17,19 @@
         }
         p {
             margin-bottom: 2em; /* Add some space between the header and the form */
+        }
+        .divider {
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+        }
+
+        .divider::before, .divider::after {
+            flex: 1;
+            content: '';
+            padding: 1px;
+            background-color: #bbbb;
+            margin: 2em !important;
         }
     </style>
     <div class="container">
@@ -50,7 +63,17 @@
                         </div>
                     </div>
                 {% endif %}
-                {{ form_rest(form) }}
+                {{ form_row(form.customerText) }}
+
+                <div class="divider">{{ 'your_questions'|trans }}</div>
+                <p>{{ 'your_questions_explain'|trans }}</p>
+                {{ form_row(form.customerFirstQuestion) }}
+                {{ form_row(form.customerFirstQuestionAnswer) }}
+                {{ form_row(form.customerSecondQuestion) }}
+                {{ form_row(form.customerSecondQuestionAnswer) }}
+
+                <div class="divider">{{ 'heir_questions'|trans }}</div>
+                <p>{{ 'heir_questions_explain'|trans }}</p>
                 {{ form_end(form) }}
             </div>
         </div>

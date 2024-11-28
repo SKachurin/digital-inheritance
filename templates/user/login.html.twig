@@ -7,6 +7,7 @@
                 <div class="alert alert-warning" role="alert">
                     {{ error.messageKey|trans(error.messageData, 'security') }}
                 </div>
+                <p>{{ 'forgot_pass'|trans }} <a href="{{ path('forgot_pass') }}">{{ 'click_here'|trans }}</a>.</p>
             {% endif %}
 {#            {{ key }}#}
 

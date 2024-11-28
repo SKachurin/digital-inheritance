@@ -37,19 +37,8 @@ class NoteCreationType extends AbstractType
 
         $builder
 
-//            ->add('customer', EntityType::class, [
-//                'class' => Customer::class,
-//                'query_builder' => function (EntityRepository $entityRepository)  use ($customerId):  QueryBuilder {
-//                    return $entityRepository->createQueryBuilder('c')
-//                        ->select('c')
-//                        ->from(Customer::class, 'b')
-//                        ->where('c.id = :customer')
-//                        ->setParameter('customer', $customerId);
-//                },
-//            ])
-
             ->add('customerText', TextareaType::class, [
-                'label' => 'Text for your Envelope',
+                'label' => 'form.label.note',
                 'required' => false,
                 'attr' => [
                     'rows' => 10,
@@ -86,6 +75,35 @@ class NoteCreationType extends AbstractType
                     'required' => false,
                     'first_options' => ['label' => 'form.label.customer_second_question_answer'],
                     'second_options' => ['label' => 'form.label.customer_second_question_answer_repeat'],
+                ])
+
+                ->add('beneficiaryFirstQuestion', TextType::class, [
+                    'label' => 'form.label.beneficiary_first_question',
+                    'help' => 'form.help.beneficiary_first_question',
+                    'required' => true,
+                ])
+                ->add('beneficiaryFirstQuestionAnswer', RepeatedType::class, [
+                    'type' => PasswordType::class,
+                    'help' => '',
+                    'invalid_message' => 'The password fields must match.',
+                    'options' => ['attr' => ['class' => 'password-field']],
+                    'required' => true,
+                    'first_options'  => ['label' => 'form.label.beneficiary_first_question_answer'],
+                    'second_options' => ['label' => 'form.label.beneficiary_first_question_answer_repeat'],
+                ])
+                ->add('beneficiarySecondQuestion', TextType::class, [
+                    'label' => 'form.label.beneficiary_second_question',
+                    'help' => 'form.help.beneficiary_second_question',
+                    'required' => false,
+                ])
+                ->add('beneficiarySecondQuestionAnswer', RepeatedType::class, [
+                    'type' => PasswordType::class,
+                    'help' => 'form.help.beneficiary_second_question_answer',
+                    'invalid_message' => 'The password fields must match.',
+                    'options' => ['attr' => ['class' => 'password-field']],
+                    'required' => false,
+                    'first_options'  => ['label' => 'form.label.beneficiary_second_question_answer'],
+                    'second_options' => ['label' => 'form.label.beneficiary_second_question_answer_repeat'],
                 ])
             ;
         }
@@ -147,7 +165,7 @@ class NoteCreationType extends AbstractType
         }
 
         $builder->add('submit', SubmitType::class, [
-            'label' => 'Create Note',
+            'label' => 'form.label.note_create',
             'attr' => ['class' => 'btn btn-primary'],
         ]);
     }

@@ -2,8 +2,9 @@
 
 declare(strict_types=1);
 
-namespace App\CommandHandler\Beneficiary\Create;
+namespace App\CommandHandler\Beneficiary\Edit;
 
+use App\CommandHandler\Beneficiary\Create\BeneficiaryCreateInputDto;
 use App\CommandHandler\Customer\Create\CustomerCreateInputDto;
 use App\Entity\Contact;
 use App\Queue\Doctrine\Customer\CustomerCreatedProducer;
@@ -21,57 +22,39 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
 
 #[AsMessageHandler]
-class BeneficiaryCreateHandler
+class BeneficiaryEditHandler
 {
     private CryptoService $cryptoService;
     private EntityManagerInterface $entityManager;
+    private BeneficiaryRepository $beneficiaryRepository;
     protected UserPasswordHasherInterface $passwordHasher;
 
     public function __construct(
          EntityManagerInterface $entityManager,
          CryptoService $cryptoService,
+         BeneficiaryRepository $beneficiaryRepository,
          UserPasswordHasherInterface $passwordHasher,
     ) {
         $this->entityManager = $entityManager;
         $this->cryptoService = $cryptoService;
+        $this->beneficiaryRepository = $beneficiaryRepository;
         $this->passwordHasher = $passwordHasher;
     }
 
     /**
      * @throws QueryException
      */
-    public function __invoke(BeneficiaryCreateInputDto $input): Beneficiary
+    public function __invoke(BeneficiaryEditInputDto $input): Beneficiary
     {
-        $beneficiary = new Beneficiary($input->getBeneficiaryName());
-        $customer = $input->getCustomer();
+        $beneficiary = $this->beneficiaryRepository->find($input->getId());
 
         $beneficiary
-            ->setCustomer($customer)
+            ->setBeneficiaryName($input->getBeneficiaryName())
             ->setBeneficiaryFullName(
                 $this->cryptoService->encryptData(
                     $input->getBeneficiaryFullName()
                 )
             )
-//            ->setBeneficiaryFirstQuestion(
-//                $this->cryptoService->encryptData(
-//                    $input->getBeneficiaryFirstQuestion()
-//                )
-//            )
-//            ->setBeneficiaryFirstQuestionAnswer(
-//                $this->cryptoService->encryptData(
-//                    $input->getBeneficiaryFirstQuestionAnswer()
-//                )
-//            )
-//            ->setBeneficiarySecondQuestion(
-//                $this->cryptoService->encryptData(
-//                    $input->getBeneficiarySecondQuestion()
-//                )
-//            )
-//            ->setBeneficiarySecondQuestionAnswer(
-//                $this->cryptoService->encryptData(
-//                    $input->getBeneficiarySecondQuestionAnswer()
-//                )
-//            )
         ;
 
         $this->entityManager->persist($beneficiary);

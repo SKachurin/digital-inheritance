@@ -151,6 +151,28 @@
                 <p>explanation</p>
             {% endif %}
 
+            {% if customerHasBeneficiary is defined and customerHasBeneficiary %}
+                <section class="mb-4">
+                    <a class="btn btn-outline-dark btn-floating m-1 mt-4" href="/beneficiary/{{ customerHasBeneficiary }}/edit" role="button">
+                        <i class="">{{ 'edit_your_heir'|trans }}</i>
+                    </a>
+                    <form action="{{ path('beneficiary_delete', {'beneficiaryId': customerHasBeneficiary}) }}" method="post" style="display:inline-block;" onsubmit="return confirm('{{ 'confirm_delete_beneficiary'|trans }}');">
+                        <input type="hidden" name="_token" value="{{ csrf_token('delete_beneficiary') }}">
+                        <button type="submit" class="btn btn-outline-danger btn-floating m-1 mt-4">
+                            <i class="">{{ 'delete_your_beneficiary'|trans }}</i>
+                        </button>
+                    </form>
+                </section>
+                <p>explanation</p>
+            {% endif %}
+
+            {% if customerHasBeneficiary is defined and not customerHasBeneficiary %}
+                <section class="mb-4">
+                    <a class="btn btn-outline-dark btn-floating m-1 mt-4" href="/beneficiary/create" role="button"><i class="">{{ 'create_your_heir'|trans }}</i></a>
+                </section>
+                <p>explanation</p>
+            {% endif %}
+
             {% if customerHasNote is defined and customerHasNote %}
                 <section class="mb-4">
                     <a class="btn btn-outline-dark btn-floating m-1 mt-4" href="/note/{{ customerHasNote }}/edit" role="button">
@@ -168,20 +190,6 @@
             {% if customerHasNote is defined and not customerHasNote %}
                 <section class="mb-4">
                     <a class="btn btn-outline-dark btn-floating m-1 mt-4" href="/note/create" role="button"><i class="">{{ 'create_your_secure_envelope'|trans }}</i></a>
-                </section>
-                <p>explanation</p>
-            {% endif %}
-
-            {% if customerNoteHasBeneficiary is defined and customerNoteHasBeneficiary %}
-                <section class="mb-4">
-                    <a class="btn btn-outline-dark btn-floating m-1 mt-4" href="/beneficiary/{{ customerNoteHasBeneficiary }}/edit" role="button"><i class="">{{ 'edit_your_heir'|trans }}</i></a>
-                </section>
-                <p>explanation</p>
-            {% endif %}
-
-            {% if customerNoteHasBeneficiary is defined and not customerNoteHasBeneficiary %}
-                <section class="mb-4">
-                    <a class="btn btn-outline-dark btn-floating m-1 mt-4" href="/beneficiary/create" role="button"><i class="">{{ 'create_your_heir'|trans }}</i></a>
                 </section>
                 <p>explanation</p>
             {% endif %}

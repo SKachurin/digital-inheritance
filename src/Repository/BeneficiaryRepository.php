@@ -23,4 +23,11 @@ class BeneficiaryRepository extends BaseRepository
         // @phpstan-ignore-next-line
         parent::__construct($registry, Beneficiary::class);
     }
+
+    public function delete(Beneficiary $beneficiary): void
+    {
+        $em = $this->getEntityManager();
+        $em->remove($beneficiary);
+        $em->flush();
+    }
 }

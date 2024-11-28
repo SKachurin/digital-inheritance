@@ -24,28 +24,15 @@ class Beneficiary implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'integer')]
     private ?int $id = 0;
 
+    #[ORM\ManyToOne(targetEntity: Customer::class, inversedBy: 'beneficiaries')]
+    #[ORM\JoinColumn(name: 'customer_id', nullable: false)]
+    private Customer $customer;
+
     #[ORM\Column(type: 'string', length: 200, nullable: true)]
     private ?string $beneficiaryName;
 
-//    #[ORM\Column(type: 'string', length: 64, unique: true, nullable: true)]
-//    #[Assert\Email]
-//    private ?string $beneficiaryEmail = null;
-//
-//    #[ORM\Column(type: 'string', length: 64, unique: true, nullable: true)]
-//    #[Assert\Email]
-//    private ?string $beneficiarySecondEmail = null;
-
     #[ORM\Column(type: 'string', length: 512, nullable: true)]
     private ?string $beneficiaryFullName = null;
-
-//    #[ORM\Column(type: 'string',  length: 64, nullable: true)]
-//    private ?string $beneficiaryCountryCode = null;
-//
-//    #[ORM\Column(type: 'string', length: 64, nullable: true)]
-//    private ?string $beneficiaryFirstPhone = null;
-//
-//    #[ORM\Column(type: 'string', length: 64, nullable: true)]
-//    private ?string $beneficiarySecondPhone = null;
 
     #[ORM\Column(type: 'string', length: 1024, nullable: true)]
     private ?string $beneficiaryFirstQuestion = null;
@@ -71,7 +58,7 @@ class Beneficiary implements UserInterface, PasswordAuthenticatedUserInterface
     /**
      * @var Collection<int, Contact>
      */
-    #[ORM\OneToMany(targetEntity: Contact::class, mappedBy: 'beneficiary', cascade: ['persist', 'remove'])]
+    #[ORM\OneToMany(targetEntity: Contact::class, mappedBy: 'beneficiary', cascade: ['remove'])]
     private Collection $contacts;
 
     public function __construct(
@@ -85,6 +72,17 @@ class Beneficiary implements UserInterface, PasswordAuthenticatedUserInterface
     {
         return $this->id;
     }
+
+    public function getCustomer(): Customer
+    {
+        return $this->customer;
+    }
+    public function setCustomer(Customer $customer): self
+    {
+        $this->customer = $customer;
+        return $this;
+    }
+
     public function getBeneficiaryName(): ?string
     {
         return $this->beneficiaryName;
@@ -94,24 +92,7 @@ class Beneficiary implements UserInterface, PasswordAuthenticatedUserInterface
         $this->beneficiaryName = $beneficiaryName;
         return $this;
     }
-//    public function getBeneficiaryEmail(): ?string
-//    {
-//        return $this->beneficiaryEmail;
-//    }
-//    public function setBeneficiaryEmail(?string $beneficiaryEmail): self
-//    {
-//        $this->beneficiaryEmail = $beneficiaryEmail;
-//        return $this;
-//    }
-//    public function getBeneficiarySecondEmail(): ?string
-//    {
-//        return $this->beneficiarySecondEmail;
-//    }
-//    public function setBeneficiarySecondEmail(?string $beneficiarySecondEmail): self
-//    {
-//        $this->beneficiarySecondEmail = $beneficiarySecondEmail;
-//        return $this;
-//    }
+
     public function getBeneficiaryFullName(): ?string
     {
         return $this->beneficiaryFullName;
@@ -121,33 +102,7 @@ class Beneficiary implements UserInterface, PasswordAuthenticatedUserInterface
         $this->beneficiaryFullName = $beneficiaryFullName;
         return $this;
     }
-//    public function getBeneficiaryCountryCode(): ?string
-//    {
-//        return $this->beneficiaryCountryCode;
-//    }
-//    public function setBeneficiaryCountryCode(?string $beneficiaryCountryCode): self
-//    {
-//        $this->beneficiaryCountryCode = $beneficiaryCountryCode;
-//        return $this;
-//    }
-//    public function getBeneficiaryFirstPhone(): ?string
-//    {
-//        return $this->beneficiaryFirstPhone;
-//    }
-//    public function setBeneficiaryFirstPhone(?string $beneficiaryFirstPhone): self
-//    {
-//        $this->beneficiaryFirstPhone = $beneficiaryFirstPhone;
-//        return $this;
-//    }
-//    public function getBeneficiarySecondPhone(): ?string
-//    {
-//        return $this->beneficiarySecondPhone;
-//    }
-//    public function setBeneficiarySecondPhone(?string $beneficiarySecondPhone): self
-//    {
-//        $this->beneficiarySecondPhone = $beneficiarySecondPhone;
-//        return $this;
-//    }
+
     public function getBeneficiaryFirstQuestion(): ?string
     {
         return $this->beneficiaryFirstQuestion;
