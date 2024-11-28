@@ -18,7 +18,7 @@ class NoteEditOutputDto
     private ?string $beneficiaryFirstQuestionAnswer = null;
     private ?string $beneficiarySecondQuestion = null;
     private ?string $beneficiarySecondQuestionAnswer = null;
-    private string $customerCongrats = 'If you can read your text You done everything right!';
+    private string $customerCongrats = 'If you can read your text You done everything right!';  //TODO Translate
 
 
     public function __construct(Customer $customer)

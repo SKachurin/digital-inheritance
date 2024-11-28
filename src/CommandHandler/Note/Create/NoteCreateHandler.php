@@ -80,7 +80,7 @@ class NoteCreateHandler
 
         $this->entityManager->persist($customer);
         $this->entityManager->persist($beneficiary);
-        $this->entityManager->flush();
+//        $this->entityManager->flush();
 
         $note = new Note();
         $note->setCustomer($customer);
@@ -135,9 +135,8 @@ class NoteCreateHandler
                 )
             ;
         }
-        $this->entityManager->persist($note);
-        $this->entityManager->persist($customer);
 
+        $this->entityManager->persist($note);
         $this->entityManager->flush();
 
         return $note;

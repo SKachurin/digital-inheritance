@@ -2,7 +2,6 @@
 
 namespace App\Controller\Note;
 
-use App\CommandHandler\Note\Decrypt\NoteDecryptInputDto;
 use App\CommandHandler\Note\Edit\NoteEditInputDto;
 use App\CommandHandler\Note\Edit\NoteEditOutputDto;
 use App\CommandHandler\Note\Edit\NoteEditTextHandler;
@@ -42,7 +41,6 @@ class NoteEditController extends AbstractController
     }
 
     /**
-     * @Route("/note/{noteId}/edit/", name="note_edit")
      * @throws SodiumException|RandomException
      * @throws \Exception
      */
@@ -52,13 +50,13 @@ class NoteEditController extends AbstractController
 
         $note = $this->repository->getOneBy(['id' => $noteId]);
         if (!$note instanceof Note) {
-            throw new \UnexpectedValueException('There is no note with id ' . $noteId);
+            throw new \UnexpectedValueException('There is no note with id ' . $noteId); //TODO Translate
         }
 
         $noteCustomer = $note->getCustomer();
 
         if ($noteCustomer !== $currentCustomer) {
-            throw new \UnexpectedValueException('It is not your Envelope');
+            throw new \UnexpectedValueException('It is not your Envelope'); //TODO Translate
         }
 
         $dto = new NoteEditInputDto($noteCustomer);
@@ -160,7 +158,7 @@ class NoteEditController extends AbstractController
 
                 $this->noteEditTextHandler->__invoke($inputDto); // handler
 
-                $this->addFlash('success', 'Your note has been updated.');
+                $this->addFlash('success', 'Your note has been updated.'); //TODO Translate
 
                 return $this->redirectToRoute('user_home');
             }

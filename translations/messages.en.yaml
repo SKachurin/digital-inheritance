@@ -76,7 +76,7 @@ form:
 
   constraints:
     your_login: 'Please enter your login.'
-    not_blank: "This field couldn't be empty"
+    not_blank: "This field can't be empty"
     too_long_1000: 'Text cannot be longer than 1000 characters.'
 
   help:
@@ -117,7 +117,7 @@ Submit: 'Submit'
 forgot_pass: 'Forgot password?'
 click_here: 'Click here'
 restore_pass: 'Password Recovery'
-enter_email: "Please enter your first email(It's your login). Email should be previously verified"
+enter_email: "Please enter your first email(It's your login). Email have to be previously verified"
 create_your_heir: 'Create Your Digital Heir'
 edit_your_heir: 'Edit Your Digital Heir'
 edit_your_secure_envelope: 'Edit Your Secure Envelope'
@@ -165,8 +165,8 @@ edit_your_pipeline: 'Edit Your Pipeline'
 
 your_questions: 'Security Questions to encrypt your Envelope'
 your_questions_explain: |
-  Below are the Security Questions to protect your sensitive data. When you submit this form we going to encrypt your text from field "Text for your Envelope" with all answers you provided.
-  Even the Questions itself going to be encrypted (but with our own cryptography)
+  Below are the Security Questions to protect your sensitive data. When you submit this form, we are going to encrypt your text from the field "Text for your Envelope" with all the answers you provided.
+  Even the questions themselves are going to be encrypted (but with our own cryptography).
   We will never save your answers. If you forget this answer, you will lose all your data.
 
 text_pipeline_your_actions: 'Now you have these actions to build your custom pipeline'
@@ -228,4 +228,5 @@ note_creation:
 
 if_decoded_can_edit: |
   If you succeeded in decrypting your text and you see the decoded text above, you can edit it right there.
-  But don't forget to fill in all secret answers, as we need to encode this new version of your text with every secret answer.
+  You can also edit your secret questions right here. 
+  But don't forget to fill in all secret answers, as we need to encode this new version of your Envelope with every secret answer (and we never save them). 

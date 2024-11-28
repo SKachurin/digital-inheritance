@@ -22,7 +22,7 @@ class NoteEditType1 extends AbstractType
                 'label' => 'form.label.congratulations',
                 'required' => true,
                 'attr' => [
-                    'readonly' => true,
+//                    'readonly' => true,
                 ],
             ])
             ->add('customerText', TextareaType::class, [
@@ -38,7 +38,7 @@ class NoteEditType1 extends AbstractType
                 'required' => false,
                 'attr' => [
                     'placeholder' => 'form.attr.placeholder.for_question',
-                    'readonly' => true
+//                    'readonly' => true
                 ]
 
             ])
@@ -51,7 +51,7 @@ class NoteEditType1 extends AbstractType
                 'required' => false,
                 'attr' => [
                     'placeholder' => 'form.attr.placeholder.for_question',
-                    'readonly' => true
+//                    'readonly' => true
                 ]
             ])
             ->add('customerSecondQuestionAnswer', TextType::class, [
@@ -67,7 +67,7 @@ class NoteEditType1 extends AbstractType
                     'required' => false,
                     'attr' => [
                         'placeholder' => 'form.attr.placeholder.for_question',
-                        'readonly' => true
+//                        'readonly' => true
                     ]
 
                 ])
@@ -80,7 +80,7 @@ class NoteEditType1 extends AbstractType
                     'required' => false,
                     'attr' => [
                         'placeholder' => 'form.attr.placeholder.for_question',
-                        'readonly' => true
+//                        'readonly' => true
                     ]
                 ])
                 ->add('beneficiarySecondQuestionAnswer', TextType::class, [
