@@ -6,6 +6,7 @@
 parameters:
     encryption_key: '%env(ENCRYPTION_KEY)%'
     personal_string: '%env(PERSONAL_STRING)%'
+    cron_secret_token: '%env(CRON_SECRET_TOKEN)%'
 
 services:
     # default configuration for services in *this* file

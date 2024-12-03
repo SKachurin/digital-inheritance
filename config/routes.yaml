@@ -114,6 +114,11 @@ password_reset_reset:
     path: /reset-password/{token}
     controller: App\Controller\Customer\PasswordResetController::reset
 
+cron_five_minutes:
+    path: /cron/five-minutes
+    controller: App\Controller\CronController::fiveMinutesCheck
+    methods: [POST]
+
 
 customer_creating:
     path:        /creating

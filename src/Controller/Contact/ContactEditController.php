@@ -50,7 +50,6 @@ class ContactEditController extends AbstractController
     }
 
     /**
-     * @Route("/contact/{contactId}/edit/", name="note_edit")
      * @throws SodiumException|RandomException
      * @throws TransportExceptionInterface|\Doctrine\DBAL\Exception
      */
