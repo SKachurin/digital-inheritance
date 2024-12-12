@@ -60,6 +60,7 @@ class ActionCreateHandler
             $actionCreateDto->getCustomer(),
             $actionCreateDto->getActionType()
         );
+        $action->setContact($contact);
         $action->setTimeInterval($actionCreateDto->getInterval());
         $action->setStatus($actionCreateDto->getStatus());
 

@@ -63,11 +63,7 @@ class NoteEditHandler
 
 
         if ($decryptedText === false) {
-            $decryptedText = null;
-            // TODO
-            // Set limit in DB for each answer - total 5 attempts\
-            // or
-            // Set timer x2 for each next decryption try. From 30 sec. + sent email "Is it you? or Would you like to change pass for the App."
+           $decryptedText = null;
         }
 
         $note->setCustomerText($decryptedText);

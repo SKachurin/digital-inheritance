@@ -21,6 +21,9 @@ class NoteEditInputDto
     private ?string $beneficiaryFirstQuestionAnswer = null;
     private ?string $beneficiarySecondQuestion = null;
     private ?string $beneficiarySecondQuestionAnswer = null;
+    private ?int $attemptCount = null;
+    private ?\DateTimeImmutable $lockoutUntil = null;
+    private string $customerCongrats = '';
 
     public function __construct(Customer $customer)
     {
@@ -167,6 +170,37 @@ class NoteEditInputDto
     public function setBeneficiarySecondQuestionAnswer(?string $beneficiarySecondQuestionAnswer): self
     {
         $this->beneficiarySecondQuestionAnswer = $beneficiarySecondQuestionAnswer;
+        return $this;
+    }
+    public function getAttemptCount(): ?int
+    {
+        return $this->attemptCount;
+    }
+    public function setAttemptCount(?int $attemptCount): self
+    {
+        $this->attemptCount = $attemptCount;
+        return $this;
+    }
+
+    public function setLockoutUntil(?\DateTimeImmutable $dateTime): self
+    {
+        $this->lockoutUntil = $dateTime;
+        return $this;
+    }
+
+    public function getLockoutUntil(): ?\DateTimeImmutable
+    {
+        return $this->lockoutUntil;
+    }
+
+    public function getCustomerCongrats(): string
+    {
+        return $this->customerCongrats;
+    }
+
+    public function setCustomerCongrats(string $customerCongrats): self
+    {
+        $this->customerCongrats = $customerCongrats;
         return $this;
     }
 }

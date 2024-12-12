@@ -37,6 +37,11 @@ class PipelineCreateController extends AbstractController
         // Fetch customer's actions
         $customerActions = $this->actionRepository->customerHasActions($customer);
 
+        if (empty($customerActions)) {
+            $this->addFlash('info', 'Verify at least one Contact (it\'s better be Telegram/Social).');
+            return $this->redirectToRoute('user_home');
+        }
+
         $pipelineDto = new PipelineCreateInputDto($customer);
 
         // Initialize with two empty actions
@@ -82,6 +87,8 @@ class PipelineCreateController extends AbstractController
                 // find Action and update it Interval and fill Actions properties in Pipeline -- it works in Creation / do not works in Edition
                 $action = $this->actionRepository->findOneBy(['customer' => $customer, 'actionType' => $actionDto->getActionType()->value]);
 //                var_dump($action); die();
+
+                //on creation set Pipeline fields from First Action(DTO) in sequence
                 if($actionDto->getPosition() == '1'){
                     $pipeline->setActionType($action->getActionType());
                     $pipeline->setActionStatus(ActionStatusEnum::fromString($action->getStatus()));
@@ -104,7 +111,9 @@ class PipelineCreateController extends AbstractController
             $this->entityManager->persist($pipeline);
             $this->entityManager->flush();
 
-            return $this->redirectToRoute('pipeline_edit', ['pipelineId' => $pipeline->getId()]);
+//            return $this->redirectToRoute('pipeline_edit', ['pipelineId' => $pipeline->getId()]);
+            $this->addFlash('success', 'Your Pipeline is created.');
+            return $this->redirectToRoute('user_home');
         }
 
         return $this->render('pipeline/pipelineCreate.html.twig', [

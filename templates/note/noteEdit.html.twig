@@ -37,14 +37,22 @@
                 {% if not decodedNote %}
                     <h1 class="form-header" style="padding-top: 2em;">{{ 'decrypt_first'|trans }}</h1>
                     <h4 style="padding-bottom: 3em;">{{ 'enter_answer'|trans }}</h4>
+
+                    {% if customerCongrats is defined and customerCongrats %}
+                        <div class="alert alert-info">{{ customerCongrats }}</div>
+                    {% endif %}
+
                     {{ form(form) }}
                 {% endif %}
                 {% if decodedNote %}
                     <h1 class="form-header" style="padding-top: 2em;">{{ 'edit_your_secure_envelope'|trans }}</h1>
                     <h4 style="padding-bottom: 3em;">{{ 'do_some_staff'|trans }}</h4>
 
+                    {% if customerCongrats is defined and customerCongrats  %}
+                        <div class="alert alert-info">{{ customerCongrats }}</div>
+                    {% endif %}
+
                     {{ form_start(form) }}
-                    {{ form_row(form.customerCongrats) }}
                     {{ form_row(form.customerText) }}
                     <p class="alert alert-success" style="padding: 2em;">{{ 'if_decoded_can_edit'|trans|nl2br }}</p>
                     {{ form_row(form.customerFirstQuestion) }}

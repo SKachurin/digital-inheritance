@@ -35,6 +35,10 @@ class Action
     #[ORM\Column(type: 'string', length: 64, nullable: true)]
     private string $status; // Create Enum for this pending, done
 
+    #[ORM\ManyToOne(targetEntity: Contact::class)]
+    #[ORM\JoinColumn(name: 'contact_id', nullable: true, onDelete: 'CASCADE')]
+    private ?Contact $contact = null;
+
 
     public function __construct(
         Customer $customer,
@@ -78,6 +82,15 @@ class Action
     public function setStatus(string $status): Action
     {
         $this->status = $status;
+        return $this;
+    }
+    private function getContact(): ?Contact
+    {
+        return $this->contact;
+    }
+    public function setContact(Contact $contact): Action
+    {
+        $this->contact = $contact;
         return $this;
     }
 }

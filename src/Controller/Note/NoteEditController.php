@@ -2,6 +2,7 @@
 
 namespace App\Controller\Note;
 
+use App\CommandHandler\Note\Edit\NoteEditCounterHandler;
 use App\CommandHandler\Note\Edit\NoteEditInputDto;
 use App\CommandHandler\Note\Edit\NoteEditOutputDto;
 use App\CommandHandler\Note\Edit\NoteEditTextHandler;
@@ -19,7 +20,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Messenger\Stamp\HandledStamp;
-use Symfony\Component\Routing\Annotation\Route;
+use Doctrine\ORM\EntityManagerInterface;
 
 class NoteEditController extends AbstractController
 {
@@ -27,17 +28,23 @@ class NoteEditController extends AbstractController
     private NoteRepository $repository;
     private CryptoService $cryptoService;
     private NoteEditTextHandler $noteEditTextHandler;
+    private NoteEditCounterHandler $noteEditCounterHandler;
+    private EntityManagerInterface $entityManager;
     public function __construct(
         NoteRepository $repository,
         MessageBusInterface $commandBus,
         CryptoService $cryptoService,
-        NoteEditTextHandler $noteEditTextHandler
+        NoteEditTextHandler $noteEditTextHandler,
+        NoteEditCounterHandler $noteEditCounterHandler,
+        EntityManagerInterface $entityManager
     )
     {
         $this->repository = $repository;
         $this->commandBus = $commandBus;
         $this->cryptoService = $cryptoService;
         $this->noteEditTextHandler = $noteEditTextHandler;
+        $this->noteEditCounterHandler = $noteEditCounterHandler;
+        $this->entityManager = $entityManager;
     }
 
     /**
@@ -47,6 +54,7 @@ class NoteEditController extends AbstractController
     public function edit(int $noteId, Request $request): Response
     {
         $currentCustomer = $this->getUser();
+        $decodedNote = false;
 
         $note = $this->repository->getOneBy(['id' => $noteId]);
         if (!$note instanceof Note) {
@@ -97,6 +105,9 @@ class NoteEditController extends AbstractController
             ;
         }
 
+        $dto->setAttemptCount($note->getAttemptCount());
+        $dto->setLockoutUntil($note->getLockoutUntil());
+        //TODO show Statuses for Note when first try
 
         $form = $this->createForm(NoteEditType::class, $dto, ['beneficiary' => $note->getBeneficiary()]);
 
@@ -117,12 +128,31 @@ class NoteEditController extends AbstractController
 
             $handledResult = $handledStamp->getResult();
 
-            $form1 = $this->createForm(NoteEditType1::class, $handledResult, ['beneficiary' => $note->getBeneficiary()]);
+            // Dispatch to NoteEditCounterHandler to update attempts/lockouts:
+            $this->noteEditCounterHandler->__invoke($handledResult);
+
+
+            if ($handledResult->getAttemptCount() != 0) {
+
+                $form1 = $this->createForm(NoteEditType::class, $dto, ['beneficiary' => $note->getBeneficiary()]);
+
+            } else {
+
+                $form1 = $this->createForm(NoteEditType1::class, $handledResult, ['beneficiary' => $note->getBeneficiary()]);
+                $decodedNote = true;
+            }
+
+            $note->setAttemptCount($handledResult->getAttemptCount());
+            $note->setLockoutUntil($handledResult->getLockoutUntil());
+
+            $this->entityManager->persist($note);
+            $this->entityManager->flush();
 
             return $this->render('note/noteEdit.html.twig', [
                 'form' => $form1->createView(),
                 'beneficiary' => $note->getBeneficiary(),
-                'decodedNote' => true,
+                'decodedNote' => $decodedNote,
+                'customerCongrats' => $handledResult->getCustomerCongrats(),
             ]);
         }
 
@@ -167,7 +197,7 @@ class NoteEditController extends AbstractController
 
         return $this->render('note/noteEdit.html.twig', [
             'form' => $form,
-            'decodedNote' => false,
+            'decodedNote' => $decodedNote
         ]);
     }
 }

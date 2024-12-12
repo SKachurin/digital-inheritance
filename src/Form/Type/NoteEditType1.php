@@ -18,13 +18,6 @@ class NoteEditType1 extends AbstractType
         $beneficiary = $options['beneficiary'];
 
         $builder
-            ->add('customerCongrats', TextType::class, [
-                'label' => 'form.label.congratulations',
-                'required' => true,
-                'attr' => [
-//                    'readonly' => true,
-                ],
-            ])
             ->add('customerText', TextareaType::class, [
                 'label' => 'form.label.your_text',
                 'required' => false,

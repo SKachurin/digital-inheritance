@@ -18,7 +18,9 @@ class NoteEditOutputDto
     private ?string $beneficiaryFirstQuestionAnswer = null;
     private ?string $beneficiarySecondQuestion = null;
     private ?string $beneficiarySecondQuestionAnswer = null;
-    private string $customerCongrats = 'If you can read your text You done everything right!';  //TODO Translate
+    private string $customerCongrats = '';
+    private ?int $attemptCount = null;
+    private ?\DateTimeImmutable $lockoutUntil = null;
 
 
     public function __construct(Customer $customer)
@@ -147,4 +149,24 @@ class NoteEditOutputDto
         return $this;
     }
 
+    public function getAttemptCount(): ?int
+    {
+        return $this->attemptCount;
+    }
+    public function setAttemptCount(?int $attemptCount): self
+    {
+        $this->attemptCount = $attemptCount;
+        return $this;
+    }
+
+    public function setLockoutUntil(?\DateTimeImmutable $dateTime): self
+    {
+        $this->lockoutUntil = $dateTime;
+        return $this;
+    }
+
+    public function getLockoutUntil(): ?\DateTimeImmutable
+    {
+        return $this->lockoutUntil;
+    }
 }

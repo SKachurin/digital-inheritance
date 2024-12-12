@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\CommandHandler\Contact\Edit;
 
 use App\Entity\Contact;
+use App\Repository\ActionRepository;
 use App\Service\CryptoService;
 use App\Service\SocialAppLinkNormalizer;
 use Doctrine\ORM\EntityManagerInterface;
@@ -18,18 +19,21 @@ class ContactEditHandler
     private CryptoService $cryptoService;
     private EntityManagerInterface $entityManager;
     private SocialAppLinkNormalizer $socialAppLinkNormalizer;
+    private ActionRepository $actionRepository;
 
 //    private LoggerInterface $logger;
 
     public function __construct(
         CryptoService $cryptoService,
         EntityManagerInterface $entityManager,
-        SocialAppLinkNormalizer $socialAppLinkNormalizer
+        SocialAppLinkNormalizer $socialAppLinkNormalizer,
+        ActionRepository $actionRepository
 //        LoggerInterface $logger
     ) {
         $this->cryptoService = $cryptoService;
         $this->entityManager = $entityManager;
         $this->socialAppLinkNormalizer = $socialAppLinkNormalizer;
+        $this->actionRepository = $actionRepository;
 //        $this->logger = $logger;
     }
 
@@ -41,7 +45,6 @@ class ContactEditHandler
     public function __invoke(ContactEditInputDto $input): ContactEditInputDto
     {
         $contact = $this->entityManager->find(Contact::class, $input->getId());
-
 
         if (!$contact) {
             throw new \Exception('Contact not found.');
@@ -56,16 +59,17 @@ class ContactEditHandler
         if ($newValue !== null && $newValue !== $this->cryptoService->decryptData($contact->getValue())) {
             $encryptedValue = $this->cryptoService->encryptData($newValue);
             $contact->setValue($encryptedValue);
+            $contact->setIsVerified(false);
 
 //            TODO change email in Customer or Heir
 //            $customer = $input->getCustomer();
 //            if ($customer->getCustomerEmail())
 
 
-//            TODO Delete OLD Action
-
-            $input->setValue($newValue);
-            $input->setIsVerified(false);
+            $action = $this->actionRepository->findOneBy(['contact' => $contact]);
+            if (isset($action)) {
+                $this->entityManager->remove($action);
+            }
 
             $this->entityManager->persist($contact);
             $this->entityManager->flush();

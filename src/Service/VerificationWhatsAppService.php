@@ -96,7 +96,15 @@ class VerificationWhatsAppService
                 ],
             ]);
 
-            $responseContent = $response->toArray();
+            try {
+                $responseContent = $response->toArray();
+            } catch (\Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface $e) {
+                // Handle the 4xx error here
+                $statusCode = $response->getStatusCode();
+                $errorContent = $response->getContent(false); //raw response
+                throw new \Exception("WhatsApp failed (HTTP $statusCode). Response: " . $errorContent);
+            }
+
 
             if (!isset($responseContent['messageId'])) {
                 throw new \Exception('Failed to send OTP via WhatsApp. Response: ' . json_encode($responseContent));

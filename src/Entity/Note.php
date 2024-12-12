@@ -42,6 +42,15 @@ class Note
     #[ORM\Column(type: 'text', nullable: true)]
     private ?string $beneficiaryTextAnswerTwo = null;
 
+    #[ORM\Column(type: 'integer', nullable: true)]
+    private ?int $attemptCount = null;
+
+    #[ORM\Column(type: 'datetime_immutable', nullable: true)]
+    private ?\DateTimeImmutable $lastAttemptAt = null;
+
+    #[ORM\Column(type: 'datetime_immutable', nullable: true)]
+    private ?\DateTimeImmutable $lockoutUntil = null;
+
     public function getId(): int
     {
         return $this->id;
@@ -99,5 +108,35 @@ class Note
     {
         $this->beneficiaryTextAnswerTwo = $beneficiaryTextAnswerTwo;
         return $this;
+    }
+    public function getAttemptCount(): ?int
+    {
+        return $this->attemptCount;
+    }
+    public function setAttemptCount(?int $attemptCount): self
+    {
+        $this->attemptCount = $attemptCount;
+        return $this;
+    }
+
+    public function setLastAttemptAtValue(): self
+    {
+        $this->lastAttemptAt = new \DateTimeImmutable();
+        return $this;
+    }
+    public function getLastAttemptAt(): ?\DateTimeImmutable
+    {
+        return $this->lastAttemptAt;
+    }
+
+    public function setLockoutUntil(?\DateTimeImmutable $dateTime): self
+    {
+        $this->lockoutUntil = $dateTime;
+        return $this;
+    }
+
+    public function getLockoutUntil(): ?\DateTimeImmutable
+    {
+        return $this->lockoutUntil;
     }
 }
