@@ -27,20 +27,27 @@ class SocialVerificationController extends AbstractController
         $verificationToken = $tokenRepository->findOneBy(['token' => $token]);
 
         if (!$verificationToken || $verificationToken->isExpired()) {
+
+            $contact = $verificationToken ? $verificationToken->getContact() : null;
+
+            if ($contact && $contact->getIsVerified()) {
+                $this->addFlash('info', 'Your social contact has already been verified.');
+                return new RedirectResponse($this->generateUrl('user_home'));
+            }
+
             throw $this->createNotFoundException('Invalid or expired verification token.');
         }
 
         $contact = $verificationToken->getContact();
 
-        // Mark the contact as verified
         $contact->setIsVerified(true);
         $entityManager->persist($contact);
 
-        // Remove the token to prevent reuse
-        $tokenRepository->delete($verificationToken);
+        // Remove the token later
+//        $tokenRepository->delete($verificationToken);  //would this fix the problem?
         $entityManager->flush();
 
-        // Dispatch the event to create Actions
+        // create Actions
         $eventDispatcher->dispatch(new ContactVerifiedEvent($contact));
 
 

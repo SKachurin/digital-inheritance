@@ -14,16 +14,22 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class PipelineCreateController extends AbstractController
 {
     private EntityManagerInterface $entityManager;
     private ActionRepository $actionRepository;
-
-    public function __construct(EntityManagerInterface $entityManager, ActionRepository $actionRepository)
+    protected UserPasswordHasherInterface $passwordHasher;
+    public function __construct(
+        EntityManagerInterface $entityManager,
+        ActionRepository $actionRepository,
+        UserPasswordHasherInterface $passwordHasher
+    )
     {
         $this->entityManager = $entityManager;
         $this->actionRepository = $actionRepository;
+        $this->passwordHasher = $passwordHasher;
     }
 
     public function create(Request $request): Response
@@ -64,6 +70,15 @@ class PipelineCreateController extends AbstractController
             /** @var PipelineCreateInputDto $pipelineDto */
             $pipelineDto = $form->getData();
 
+            //Set Customer Okay Password Hash
+            $customer->setCustomerOkayPassword(
+                $this->passwordHasher->hashPassword(
+                    $customer,
+                    $pipelineDto->getCustomerOkayPassword()
+                )
+            );
+
+
             // Create a new Pipeline entity
             $pipeline = new Pipeline(
                 $customer,
@@ -83,10 +98,9 @@ class PipelineCreateController extends AbstractController
                 if (!$actionDto->getActionType() || !$actionDto->getInterval()) {
                     continue;
                 }
-                //TODO
-                // find Action and update it Interval and fill Actions properties in Pipeline -- it works in Creation / do not works in Edition
+
+                // find Action and update it Interval and fill Actions properties in Pipeline
                 $action = $this->actionRepository->findOneBy(['customer' => $customer, 'actionType' => $actionDto->getActionType()->value]);
-//                var_dump($action); die();
 
                 //on creation set Pipeline fields from First Action(DTO) in sequence
                 if($actionDto->getPosition() == '1'){
@@ -111,7 +125,6 @@ class PipelineCreateController extends AbstractController
             $this->entityManager->persist($pipeline);
             $this->entityManager->flush();
 
-//            return $this->redirectToRoute('pipeline_edit', ['pipelineId' => $pipeline->getId()]);
             $this->addFlash('success', 'Your Pipeline is created.');
             return $this->redirectToRoute('user_home');
         }

@@ -28,8 +28,19 @@ framework:
             failed_retry: 'doctrine://default?queue_name=failed-retry'
             redelivery: 'doctrine://default?queue_name=redelivery'
 
+            batch:
+                dsn: '%env(MESSENGER_TRANSPORT_DSN)%'
+                options:
+                    auto_setup: false
+                retry_strategy:
+                    max_retries: 3
+                    delay: 10000
+                    multiplier: 2
+                    max_delay: 300000
+
         routing:
             'App\Queue\Doctrine\Customer\CustomerCreatedMessage': async
+            'App\Message\CronBatchMessage': batch
 
         failure_transport: failed
 

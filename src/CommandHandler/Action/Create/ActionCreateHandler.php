@@ -26,45 +26,55 @@ class ActionCreateHandler
         $contact = $command->getContact();
         $contactType = $contact->getContactTypeEnum();
         $customer = $contact->getCustomer();
-        $actionType = 'none';
 
         switch ($contactType) {
             case ContactTypeEnum::EMAIL:
                 if ($this->actionRepository->customerVerifiedSecondEmail($customer)){
-                    $actionType = ActionTypeEnum::EMAIL_SEND_2;
+                    $this->createSingleAction($contact, ActionTypeEnum::EMAIL_SEND_2);
                     break;
                 }
-                $actionType = ActionTypeEnum::EMAIL_SEND;
+                $this->createSingleAction($contact, ActionTypeEnum::EMAIL_SEND);
                 break;
+
             case ContactTypeEnum::MESSENGER:
             case ContactTypeEnum::PHONE:
                 if ($this->actionRepository->customerVerifiedSecondPhone($customer)) {
-                    $actionType = ActionTypeEnum::MESSENGER_SEND_2;
+                    $this->createSingleAction($contact, ActionTypeEnum::MESSENGER_SEND_2);
                     break;
                 }
-                $actionType = ActionTypeEnum::MESSENGER_SEND;
+                $this->createSingleAction($contact, ActionTypeEnum::MESSENGER_SEND);
                 break;
+
             case ContactTypeEnum::SOCIAL:
-                $actionType = ActionTypeEnum::SOCIAL_CHECK;
+                $this->createSingleAction($contact, ActionTypeEnum::SOCIAL_CHECK);
+                $this->createSingleAction($contact, ActionTypeEnum::SOCIAL_SEND);
                 break;
         }
 
+        $this->entityManager->flush();
+    }
+
+    /**
+     * a method to DRY
+     */
+    private function createSingleAction($contact, ActionTypeEnum $actionType): void
+    {
         $actionCreateDto = new ActionCreateDto(
             $contact,
             $actionType,
             IntervalEnum::NOT_SET,
-            'active',                    // Status is 'active', 'pending', 'done'
+            'active'   // or 'pending', 'done', etc.
         );
 
         $action = new Action(
             $actionCreateDto->getCustomer(),
             $actionCreateDto->getActionType()
         );
+
         $action->setContact($contact);
         $action->setTimeInterval($actionCreateDto->getInterval());
         $action->setStatus($actionCreateDto->getStatus());
 
         $this->entityManager->persist($action);
-        $this->entityManager->flush();
     }
 }

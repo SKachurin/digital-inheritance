@@ -110,8 +110,14 @@ class ContactEditController extends AbstractController
                         break;
 
                     case 'social':
-                        $this->verificationSocialService->sendVerificationSocial($contact);
-                        $this->addFlash('info', 'Verification social resent successfully.');
+                        try {
+                            $this->verificationSocialService->sendVerificationSocial($contact);
+                            $this->addFlash('info', 'Verification social resent successfully.');
+                        } catch (\Exception $e) {
+                            //TODO monitoring
+                            //'Error: ' . $e->getMessage()';
+                            $this->addFlash('danger', 'Failed to resend the verification link. Please try again in a few minutes.');
+                        }
                         break;
                 }
 

@@ -73,6 +73,8 @@ form:
     text_encoded_customer_second: 'Text encoded with answer to your security question two'
     text_encoded_beneficiary_first: "Text encoded with answer to your Beneficiary's security question one"
     text_encoded_beneficiary_second: "Text encoded with answer to your Beneficiary's security question two"
+    okayPassword: 'This Okay Password will be used to check if you are okay and reset Pipeline state. Pick something mundane (like "I am fine. How r u?") so it seems normal to anyone who might see this interaction.'
+    okayPassword_repeat: 'Repeat the Okay Password'
 
   constraints:
     your_login: 'Please enter your login.'
@@ -148,7 +150,7 @@ contact_edit: 'Edit Contact'
 updateContact: 'Update Contact'
 resendVerificationCode: 'Resend Verification Code'
 is_verified: 'Is Verified'
-value: 'Value'
+value: 'Value (email address, phone number)'
 countryCode: 'Country Code'
 contact_type_enum: 'Contact Type'
 create_contact: 'Add Contact'

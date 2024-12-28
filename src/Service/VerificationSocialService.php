@@ -43,7 +43,7 @@ class VerificationSocialService
      * @throws Exception
      * @throws \Exception
      */
-    public function sendVerificationSocial(Contact $contact): void
+    public function sendVerificationSocial(Contact $contact): array
     {
         $verificationToken = $this->tokenRepository->findOneBy(['contact' => $contact->getId()]);
         if ($verificationToken) {
@@ -68,10 +68,20 @@ class VerificationSocialService
             throw new \Exception("Invalid Telegram contact.");
         }
 
-        $message = 'Thank you for registering! Please verify your Telegram by clicking on the following link: (' . $verificationUrl . ') or copy/paste it in browser';
-//        $message = 'Thank you for registering! Please verify your Telegram by clicking on the following link: '. $verificationUrl;
+        $message = 'Thank you for registering! Please verify your Telegram by clicking on the following link: ' . $verificationUrl . ' or copy/paste it in browser';
 
-    // PythonService does both - check and verification message -- refactoring??
-        $this->pythonServiceController->callPythonService([$user], $message);
+        $response = $this->pythonServiceController->callPythonService([$user], $message);
+
+        if ($response->getStatusCode() !== 200) {
+            throw new \Exception('Failed to send verification social. Python service error: ' . $response->getContent());
+        }
+
+        // Decode the JSON content of the JsonResponse
+        $responseData = json_decode($response->getContent(), true);
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            throw new \Exception('Invalid JSON returned by Python service.');
+        }
+
+        return $responseData;
     }
 }

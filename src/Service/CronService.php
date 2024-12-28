@@ -1,41 +1,78 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Service;
 
-use Doctrine\ORM\EntityManagerInterface;
-use Psr\Log\LoggerInterface;
+use App\Enum\CustomerPaymentStatusEnum;
+use App\Repository\CustomerRepository;
+use App\Queue\CronBatchProducer;
+//use Doctrine\ORM\EntityManagerInterface;
+//use Psr\Log\LoggerInterface;
+use Symfony\Component\Notifier\Exception\TransportExceptionInterface;
 
 class CronService
 {
-    private $entityManager;
-    private LoggerInterface $logger;
+    public function __construct(
+//        private EntityManagerInterface $entityManager,
+        private CustomerRepository $customerRepository,
+        private CronBatchProducer $batchProducer,
+//        private LoggerInterface $logger
+    ) {}
 
-    public function __construct(EntityManagerInterface $entityManager, LoggerInterface $logger)
-    {
-        $this->entityManager = $entityManager;
-        $this->logger = $logger;
-    }
-
+    /**
+     * @throws \Exception|TransportExceptionInterface
+     */
     public function executeFiveMinuteTasks(): void
     {
-        $this->logger->info('Starting five-minute cron tasks.');
+//        $paidCustomers = $this->customerRepository->findBy(['paymentStatus' => CustomerPaymentStatusEnum::PAID->value]);
+//
+//        foreach ($paidCustomers as $customer) {
+//
+//            /** @var Pipeline|null $pipeline */
+//            $pipeline = $this->pipelineRepository->findOneBy(['customer' => $customer]); //->getId()
+//
+//            if ($pipeline->getPipelineStatus() === ActionStatusEnum::ACTIVATED->value) {
+//                $this->processPipeline($pipeline);
+//
+//                $this->entityManager->persist($pipeline);
+//                $this->entityManager->flush();
+//            }
+//        }
+//
+//        // flush once after all updates - If I have 20 thousand Customers I'll still Flush in the end !!??
+////        $this->entityManager->flush();
+//
+//
+        $batchSize = 30;
+        $offset = 0;
 
-        // Check in the database if it's time to perform operations
-        // Example logic:
-        $tasks = $this->entityManager->getRepository(Task::class)->findPendingTasks();
+        while (true) {
+            // Fetch a batch
+            $customers = $this->customerRepository->findBy(
+                ['paymentStatus' => CustomerPaymentStatusEnum::PAID->value],
+                ['id' => 'ASC'],
+                $batchSize,
+                $offset
+            );
 
-        foreach ($tasks as $task) {
-            // Perform your operations
-            // ...
+            if (count($customers) === 0) {
+                break; // No more customers
+            }
 
-            // Update task status
-            $task->setStatus('completed');
+            //Extract IDs
+            $customerIds = array_map(fn($c) => $c->getId(), $customers);
+
+            //Dispatch them
+            $this->batchProducer->produce($customerIds);
+
+            //Increase offset
+            $offset += $batchSize;
         }
 
-        // Save changes to the database
-        $this->entityManager->flush();
+//        $this->logger->info('All customers have been queued for pipeline processing.');
 
-        $this->logger->info('Five-minute cron tasks completed successfully.');
     }
+
 }
 

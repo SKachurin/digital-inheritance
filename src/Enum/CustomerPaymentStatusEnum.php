@@ -6,7 +6,7 @@ namespace App\Enum;
 
 enum CustomerPaymentStatusEnum: string
 {
-    case FREE = 'free';
+    case NOT_PAID = 'not_paid';
     case PAID = 'paid';
 
 
@@ -16,8 +16,17 @@ enum CustomerPaymentStatusEnum: string
     public static function getValues(): array
     {
         return [
-            self::FREE->value,
+            self::NOT_PAID->value,
             self::PAID->value
         ];
+    }
+
+    public static function fromString(string $status): ?self
+    {
+        return match ($status) {
+            self::NOT_PAID->value => self::NOT_PAID,
+            self::PAID->value => self::PAID,
+            default => null,
+        };
     }
 }

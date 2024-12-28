@@ -84,7 +84,7 @@ class Action
         $this->status = $status;
         return $this;
     }
-    private function getContact(): ?Contact
+    public function getContact(): ?Contact
     {
         return $this->contact;
     }

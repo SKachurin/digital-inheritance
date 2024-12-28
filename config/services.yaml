@@ -38,6 +38,7 @@ services:
             $params: '@parameter_bag'
 
     App\Service\VerificationWhatsAppService:
+    App\Service\SendWhatsAppService:
         arguments:
             $apiUrl: '%env(WAZZUP_API_URL)%'
             $apiToken: '%env(WAZZUP_API_TOKEN)%'

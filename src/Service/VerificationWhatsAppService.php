@@ -52,7 +52,7 @@ class VerificationWhatsAppService
      * @throws \Exception
      * @throws \Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface|DecodingExceptionInterface
      */
-    public function sendVerificationWhatsApp(Contact $contact): void
+    public function sendVerificationWhatsApp(Contact $contact): void //TODO return something
     {
         $verificationToken = $this->tokenRepository->findOneBy(['contact' => $contact->getId()]);
         if ($verificationToken) {
@@ -89,7 +89,7 @@ class VerificationWhatsAppService
                 'body' => [
                     "channelId" => "058a7934-be60-4fa0-b943-61aab4818f23",
                     "chatType"=> "whatsapp",
-                    "text" => 'Thank you for registering! Please verify your phone by clicking on the following link: <a href="' . $verificationUrl . '">Verify Phone</a>',
+                    "text" => 'Thank you for registering! Please verify your phone by clicking on the following link: ' . $verificationUrl, //TODO Transl
                     "chatId"=> $phoneNumber,
                     "contentUri" => "",
                     "templateId" => ""

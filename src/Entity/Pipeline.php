@@ -33,7 +33,7 @@ class Pipeline
     #[ORM\Column(type: 'string', enumType: ActionTypeEnum::class)]
     private ?ActionTypeEnum $actionType = ActionTypeEnum::SOCIAL_CHECK;
 
-    //TODO ActionStatusEnum to PipelineStatusEnum
+    //TODO ActionStatusEnum to PipelineStatusEnum ?! or not
     #[ORM\Column(type: 'string', enumType: ActionStatusEnum::class)]
     private ActionStatusEnum $pipelineStatus;
 

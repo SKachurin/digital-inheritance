@@ -36,7 +36,7 @@ class ContactCreateType extends AbstractType
             $builder
                 ->add('countryCode', TextareaType::class, [
                     'label' => 'countryCode',
-                    'required' => false,
+                    'required' => false,   // true if it's a phone !!
                     'attr' => [
 //                        'readonly' => true
                     ]
@@ -103,7 +103,8 @@ class ContactCreateType extends AbstractType
                 'required' => false,
                 'mapped' => false, // Temporarily unmapped for transformation
                 'attr' => [
-//                    'readonly' => true,
+//                    'disabled' => true, // is it working?
+                    'readonly' => true,
                 ],
                 'data' => $options['isVerified'] ? 'Yes' : 'No',
             ])

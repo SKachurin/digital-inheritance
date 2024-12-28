@@ -32,22 +32,9 @@ class Customer implements UserInterface, PasswordAuthenticatedUserInterface
     #[Assert\Email]
     #[ORM\Column(type: 'string', length: 64, unique: true)] //not encoding it for now
     private string $customerEmail;
-//
-//    #[ORM\Column(type: 'string', length: 64, unique: true, nullable: true)]
-//    #[Assert\Email]
-//    private ?string $customerSecondEmail = null;
 
     #[ORM\Column(type: 'string', length: 512, nullable: true)]
     private ?string $customerFullName = null;
-
-//    #[ORM\Column(type: 'string',  length: 64, nullable: true)]
-//    private ?string $customerCountryCode = null;
-//
-//    #[ORM\Column(type: 'string', length: 64, nullable: true)]
-//    private ?string $customerFirstPhone = null;
-//
-//    #[ORM\Column(type: 'string', length: 64, nullable: true)]
-//    private ?string $customerSecondPhone = null;
 
     #[ORM\Column(type: 'string', length: 1024, nullable: true)]
     private ?string $customerFirstQuestion = null;
@@ -77,9 +64,6 @@ class Customer implements UserInterface, PasswordAuthenticatedUserInterface
      */
     #[ORM\Column(type: 'string', length: 512, nullable: true)]
     private string $password;
-
-    #[ORM\Column(type: 'text', nullable: true)]
-    private ?string $customerActionsOrder = null;
 
     /**
      * @var Collection<int, Note>
@@ -122,7 +106,7 @@ class Customer implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function __construct()
     {
-        $this->customerPaymentStatus = CustomerPaymentStatusEnum::FREE;
+        $this->customerPaymentStatus = CustomerPaymentStatusEnum::NOT_PAID;
         $this->notes = new ArrayCollection();
         $this->transactions = new ArrayCollection();
         $this->beneficiaries = new ArrayCollection();
@@ -233,17 +217,6 @@ class Customer implements UserInterface, PasswordAuthenticatedUserInterface
     public function setCustomerOkayPassword(string $customerOkayPassword): self
     {
         $this->customerOkayPassword = $customerOkayPassword;
-        return $this;
-    }
-
-    public function getCustomerActionsOrder(): ?string
-    {
-        return $this->customerActionsOrder;
-    }
-
-    public function setCustomerActionsOrder(?string $customerActionsOrder): self
-    {
-        $this->customerActionsOrder = $customerActionsOrder;
         return $this;
     }
 

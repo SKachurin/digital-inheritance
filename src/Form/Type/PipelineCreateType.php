@@ -5,6 +5,8 @@ namespace App\Form\Type;
 use App\CommandHandler\Pipeline\Create\PipelineCreateInputDto;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
+use Symfony\Component\Form\Extension\Core\Type\PasswordType;
+use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -16,6 +18,14 @@ class PipelineCreateType extends AbstractType
         $customerActions = $options['customerActions'];
 
         $builder
+            ->add('okayPassword', RepeatedType::class, [
+                'type' => PasswordType::class,
+                'invalid_message' => 'The password fields must match.',
+                'options' => ['attr' => ['class' => 'password-field']],
+                'required' => true,
+                'first_options'  => ['label' => 'form.label.okayPassword'],
+                'second_options' => ['label' => 'form.label.okayPassword_repeat'],
+            ])
             ->add('actions', CollectionType::class, [
                 'entry_type' => ActionType::class,
                 'entry_options' => [

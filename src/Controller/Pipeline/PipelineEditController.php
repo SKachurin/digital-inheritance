@@ -5,6 +5,7 @@ namespace App\Controller\Pipeline;
 use App\CommandHandler\Pipeline\Create\ActionDto;
 use App\CommandHandler\Pipeline\Create\PipelineCreateInputDto;
 use App\Entity\Customer;
+use App\Enum\ActionStatusEnum;
 use App\Enum\ActionTypeEnum;
 use App\Enum\IntervalEnum;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -123,6 +124,18 @@ class PipelineEditController extends AbstractController
                     if (!$actionDto->getActionType() || !$actionDto->getInterval()) {
                         continue;
                     }
+
+                    // find Action and update it Interval and fill Actions properties in Pipeline
+                    $action = $this->actionRepository->findOneBy(['customer' => $customer, 'actionType' => $actionDto->getActionType()->value]);
+
+                    //on edit set Pipeline fields from First Action(DTO) in sequence
+                    if($actionDto->getPosition() == '1'){
+                        $pipeline->setActionType($action->getActionType());
+                        $pipeline->setActionStatus(ActionStatusEnum::fromString($action->getStatus()));
+                    }
+                    $action->setTimeInterval($actionDto->getInterval());
+                    $this->entityManager->persist($action);
+
                     $actionSequence[] = [
                         'position' => $actionDto->getPosition(),
                         'actionType' => $actionDto->getActionType()->value,

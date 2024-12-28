@@ -11,6 +11,9 @@ class PipelineCreateInputDto
     #[Assert\NotBlank]
     private Customer $customer;
 
+    #[Assert\NotBlank]
+    private string $customerOkayPassword;
+
     /**
      * @var ActionDto[]
      *
@@ -37,9 +40,19 @@ class PipelineCreateInputDto
         }
     }
 
-    public function __construct(Customer $customer = null)
+    public function __construct(string  $customerOkayPassword, Customer $customer = null)
     {
         $this->customer = $customer;
+        $this->customerOkayPassword = $customerOkayPassword;
+    }
+
+    public function getCustomerOkayPassword(): string
+    {
+        return $this->customerOkayPassword;
+    }
+    public function setCustomerOkayPassword(string $customerOkayPassword): void
+    {
+        $this->customerOkayPassword = $customerOkayPassword;
     }
 
     public function getCustomer(): Customer
