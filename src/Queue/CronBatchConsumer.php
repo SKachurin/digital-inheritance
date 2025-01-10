@@ -3,6 +3,7 @@
 namespace App\Queue;
 
 use App\Entity\Action;
+use App\Entity\Contact;
 use App\Entity\Pipeline;
 use App\Enum\ActionStatusEnum;
 use App\Enum\ActionTypeEnum;
@@ -17,6 +18,7 @@ use App\Service\SendSocialService;
 use App\Service\SendWhatsAppService;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 
@@ -70,7 +72,8 @@ class CronBatchConsumer
     }
 
     /**
-     * @throws \Exception|TransportExceptionInterface
+     * @throws \Exception
+     * @throws TransportExceptionInterface
      */
     private function processPipeline(Pipeline $pipeline): void
     {
@@ -127,40 +130,11 @@ class CronBatchConsumer
                         case ActionStatusEnum::FAIL:     // already 'not Okay'
 
                             $this->processFailedAction($pipeline, $actionData, $now);
-
-//                            // set next Action from $actionSequence
-//                            $nextActionPosition = $actionData['position'] + 1;
-//
-//                            // Find the next action in the sequence
-//                            $nextAction = array_filter($actionSequence, fn($a) => $a['position'] === $nextActionPosition);
-//
-//                            if (!empty($nextAction)) {
-//                                $nextAction = reset($nextAction); // Get the first matching action
-//                                $this->logger->info(sprintf('Setting next action: %s for pipeline ID %d', $nextAction['actionType'], $pipeline->getId()));
-//
-//                                // Update pipeline with next action
-//                                $pipeline->setActionType($nextAction['actionType']);
-//                                $pipeline->setActionStatus(ActionStatusEnum::ACTIVATED);
-//
-//                            } else {
-//
-//                                //pipeline ended - release Envelope to Heir
-//                                $pipeline->setActionStatus(ActionStatusEnum::FAIL);
-//                                $this->logger->info(sprintf('No next action found for pipeline ID %d', $pipeline->getId()));
-//                                $pipeline->setPipelineStatus(ActionStatusEnum::FAIL);
-//
-//                                // process Failed Pipeline Function?
-//                                $result = $this->processFailedPipeline($pipeline, $actionData, $now);
-//
-//                                if (!empty($result)) {
-//                                    //done
-//                                    $this->logger->info(sprintf('Pipeline ID %d ended at %c',$pipeline, $now));
-//                                }
-//                            }
                             break;
 
                         case ActionStatusEnum::PENDING:
-                            // nothing here: Message was sent to Contact and system waiting for response
+                            // Message was sent to Contact and system waiting for response
+                            $pipeline->setActionStatus(ActionStatusEnum::PENDING);
 
                             break;
 
@@ -188,93 +162,26 @@ class CronBatchConsumer
         return $lastUpdate->add($interval);
     }
 
-
     /**
-     * @throws \SodiumException
      * @throws TransportExceptionInterface
+     * @throws \SodiumException
      */
     private function executeActiveAction(Pipeline $pipeline, array $actionData, \DateTimeImmutable $now): ActionStatusEnum
     {
         $actionType = ActionTypeEnum::tryFrom($actionData['actionType']);
-        $message = 'Hey! Are u okay?';                                          //TODO Transl
+        $message = 'Hey! Are you okay?';    //TODO Transl
 
-        switch ($actionType) {
+        // Action & Contact
+        [$action, $contact] = $this->retrieveActionAndContact($pipeline, $actionType);
 
-            case ActionTypeEnum::SOCIAL_CHECK:
-
-                /** @var Action $action */
-                $action = $this->actionRepository->findBy(['customer' => $pipeline->getCustomer(),'actionType' => $actionType]);
-                $contact = $this->contactRepository->getOneBy(['id' => $action->getContact()->getId()]);
-
-                $response = $this->socialService->sendMessageSocial($contact);
-
-                // $response is a JsonResponse returned from PythonServiceController
-                $data = json_decode($response->getContent(), true);
-
-                if (isset($data['output'])) {
-                    $result = $data['output'];
-
-                    foreach ($result as $user => $timestamp) {
-                        try {
-                            $lastOnlineTime = new \DateTimeImmutable($timestamp, new \DateTimeZone('UTC'));
-
-                            // Calculate the $maxTime time: $now - interval
-                            $interval = IntervalEnum::fromString($actionData['interval'])->toDateInterval();
-                            $maxAllowedTime = $now->sub($interval);
-
-                            if ($lastOnlineTime < $maxAllowedTime) {
-
-                                return ActionStatusEnum::FAIL;
-
-                            } else {
-
-                                return ActionStatusEnum::ACTIVATED;
-                            }
-
-                        } catch (\Exception $e) {
-                            // Log invalid timestamp
-                            $this->logger->info(sprintf('Invalid timestamp for user %s: %s', $user, $timestamp));
-                        }
-                    }
-
-                }
-
-                //next try
-                return ActionStatusEnum::ACTIVATED;
-
-            case ActionTypeEnum::MESSENGER_SEND:
-            case ActionTypeEnum::MESSENGER_SEND_2:
-
-                /** @var Action $action */
-                $action = $this->actionRepository->findBy(['customer' => $pipeline->getCustomer(),'actionType' => $actionType]);
-                $contact = $this->contactRepository->getOneBy(['id' => $action->getContact()->getId()]);
-
-                $response = $this->whatsAppService->sendMessageWhatsApp($contact, $message);
-
-                // $response is a JsonResponse
-                $data = json_decode($response->getContent(), true);
-
-                if (isset($data['messageId'])) {
-                    //success. message sent.
-                    return ActionStatusEnum::PENDING;
-                }
-
-                //fail to check  - next try
-                return ActionStatusEnum::ACTIVATED;
-
-            case ActionTypeEnum::EMAIL_SEND:
-            case ActionTypeEnum::EMAIL_SEND_2:
-
-                //TODO send message with token -
-                // token lasts for Interval -
-                // if token correct - redirect to password enter page
-
-                return ActionStatusEnum::PENDING;
-
-            default:
-                throw new \Exception("Unsupported action type: $actionType->value");
-
-        }
+        return match ($actionType) {
+            ActionTypeEnum::SOCIAL_CHECK => $this->sendSocialCheck($actionData, $now, $contact),
+            ActionTypeEnum::MESSENGER_SEND,
+            ActionTypeEnum::MESSENGER_SEND_2 => $this->sendMessenger($action, $contact, $message),
+            ActionTypeEnum::EMAIL_SEND,
+            ActionTypeEnum::EMAIL_SEND_2 => ActionStatusEnum::PENDING, //TODO send message with token - token lasts for Interval - if token correct - redirect to password enter page
+            default => throw new \Exception("Unsupported action type: $actionType->value"),
+        };
     }
 
     /**
@@ -296,8 +203,8 @@ class CronBatchConsumer
             case ActionTypeEnum::EMAIL_SEND:
             case ActionTypeEnum::EMAIL_SEND_2:
                 //waiting answer with Okay Password -> reset Pipeline to beginning.
-                //if time is up, and it's still Pending - it's not good
-
+                //if time is up, and it's still Pending - it's not good.
+                // So:
                 $this->processFailedAction($pipeline, $actionData, $now);
 
                 break;
@@ -346,6 +253,115 @@ class CronBatchConsumer
         // logic to send Envelope to the Heir
 
         return true;
+    }
+
+    /**
+     * @throws \RuntimeException if no Action or Contact is found
+     */
+    private function retrieveActionAndContact(Pipeline $pipeline, ActionTypeEnum $actionType): array
+    {
+        /** @var Action $action */
+        $action = $this->actionRepository->findOneBy([
+            'customer' => $pipeline->getCustomer(),
+            'actionType' => $actionType
+        ]);
+        if (!$action) {
+            throw new \RuntimeException(sprintf(
+                'No Action found for pipeline ID %d and actionType %s',
+                $pipeline->getId(),
+                $actionType->value
+            ));
+        }
+
+        $contact = $this->contactRepository->findOneBy(['id' => $action->getContact()->getId()]);
+        if (!$contact) {
+            throw new \RuntimeException(sprintf(
+                'No Contact found (ID: %d) for pipeline ID %d',
+                $action->getContact()->getId(),
+                $pipeline->getId()
+            ));
+        }
+
+        return [$action, $contact];
+    }
+
+    /**
+     * @param array $actionData
+     * @param \DateTimeImmutable $now
+     * @param Contact $contact
+     * @return ActionStatusEnum
+     * @throws \SodiumException
+     */
+    private function sendSocialCheck(array $actionData, \DateTimeImmutable $now, Contact $contact): ActionStatusEnum
+    {
+        $response = $this->socialService->sendMessageSocial($contact);
+
+        $data = $this->decodeJsonResponse($response);
+
+        // "output" key not found, fallback
+        if (!isset($data['output'])) {
+            // next try
+            return ActionStatusEnum::ACTIVATED;
+        }
+
+        $result = $data['output'];
+        foreach ($result as $user => $timestamp) {
+            try {
+                $lastOnlineTime = new \DateTimeImmutable($timestamp, new \DateTimeZone('UTC'));
+
+                // Calculate the maxTime: now - interval
+                $interval = IntervalEnum::fromString($actionData['interval'])->toDateInterval();
+                $maxAllowedTime = $now->sub($interval);
+
+                if ($lastOnlineTime < $maxAllowedTime) {
+                    return ActionStatusEnum::FAIL; // user is offline too long
+                }
+
+                // else they're within the allowed time
+                return ActionStatusEnum::ACTIVATED;
+
+            } catch (\Exception $e) {
+                $this->logger->info(sprintf(
+                    'Invalid timestamp for user %s: %s',
+                    $user,
+                    $timestamp
+                ));
+            }
+        }
+
+        //next try
+        return ActionStatusEnum::ACTIVATED;
+    }
+
+    /**
+     * @param Action $action
+     * @param Contact $contact
+     * @param string $message
+     * @return ActionStatusEnum
+     * @throws TransportExceptionInterface
+     * @throws \SodiumException
+     */
+    private function sendMessenger(Action $action, Contact $contact, string $message): ActionStatusEnum
+    {
+        $response = $this->whatsAppService->sendMessageWhatsApp($contact, $message);
+
+        $data = $this->decodeJsonResponse($response);
+
+        if (isset($data['messageId'])) {
+            //success. message sent.
+            $action->setChatId($data['chatId']);
+
+            return ActionStatusEnum::PENDING;
+        }
+
+        //fail to check  - next try
+        return ActionStatusEnum::ACTIVATED;
+    }
+
+    private function decodeJsonResponse(JsonResponse $response): array
+    {
+        $data = json_decode($response->getContent(), true);
+        return is_array($data) ? $data : [];
     }
 
 }

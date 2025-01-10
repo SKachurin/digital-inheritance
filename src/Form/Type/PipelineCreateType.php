@@ -18,7 +18,7 @@ class PipelineCreateType extends AbstractType
         $customerActions = $options['customerActions'];
 
         $builder
-            ->add('okayPassword', RepeatedType::class, [
+            ->add('customerOkayPassword', RepeatedType::class, [
                 'type' => PasswordType::class,
                 'invalid_message' => 'The password fields must match.',
                 'options' => ['attr' => ['class' => 'password-field']],

@@ -52,7 +52,7 @@ class PipelineEditController extends AbstractController
             throw $this->createAccessDeniedException('You do not have access to this pipeline.');
         }
 
-        $pipelineDto = new PipelineCreateInputDto($customer);
+        $pipelineDto = new PipelineCreateInputDto($customer->getCustomerOkayPassword() ?? '', $customer);
 
         $actions = [];
         foreach ($pipeline->getActionSequence() as $actionData) {

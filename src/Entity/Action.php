@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Entity;
 
 use App\Enum\ActionTypeEnum;
-use App\Enum\CustomerPaymentStatuseEnum;
 use App\Enum\IntervalEnum;
 use App\Repository\CustomerRepository;
 use Doctrine\ORM\Mapping as ORM;
@@ -33,7 +32,10 @@ class Action
     private ?IntervalEnum $timeInterval;
 
     #[ORM\Column(type: 'string', length: 64, nullable: true)]
-    private string $status; // Create Enum for this pending, done
+    private string $status; // TODO change to enum ActionStatusEnum or delete - it's has no purpose so far
+
+    #[ORM\Column(type: 'string', length: 128, nullable: true)]
+    private ?string $chatId;
 
     #[ORM\ManyToOne(targetEntity: Contact::class)]
     #[ORM\JoinColumn(name: 'contact_id', nullable: true, onDelete: 'CASCADE')]
@@ -82,6 +84,16 @@ class Action
     public function setStatus(string $status): Action
     {
         $this->status = $status;
+        return $this;
+    }
+
+    public function getChatId(): string
+    {
+        return $this->chatId;
+    }
+    public function setChatId(string $chatId): Action
+    {
+        $this->chatId = $chatId;
         return $this;
     }
     public function getContact(): ?Contact

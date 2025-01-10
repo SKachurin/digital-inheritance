@@ -51,6 +51,11 @@
 
                 {{ form_errors(form) }}
 
+                <div class="action-item">
+                    <div class="divider">{{ 'okayPassword'|trans }}</div>
+                    {{ form_row(form.customerOkayPassword) }}
+                </div>
+
                 {% for actionForm in form.actions %}
                     <div class="action-item">
                         <div class="divider">{{ 'action'|trans }}</div>
@@ -64,7 +69,8 @@
 {#                {{ form_row(form.submit_add) }}#}
                 {{ form_row(form.submit) }}
 
-                {{ form_end(form) }}
+                {{ form_row(form._token) }}
+                {{ form_end(form, {'render_rest': false}) }}
             </div>
         </div>
     </div>

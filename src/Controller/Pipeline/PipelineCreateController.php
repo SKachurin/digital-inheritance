@@ -48,7 +48,7 @@ class PipelineCreateController extends AbstractController
             return $this->redirectToRoute('user_home');
         }
 
-        $pipelineDto = new PipelineCreateInputDto($customer);
+        $pipelineDto = new PipelineCreateInputDto($customer->getCustomerOkayPassword() ?? '', $customer);
 
         // Initialize with two empty actions
         $actionDtos = [];

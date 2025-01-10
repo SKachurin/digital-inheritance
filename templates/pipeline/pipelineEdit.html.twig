@@ -64,6 +64,11 @@
 
                 {{ form_errors(form) }}
 
+                <div class="action-item">
+                    <div class="divider">{{ 'okayPassword_edit'|trans }}</div>
+                    {{ form_row(form.customerOkayPassword) }}
+                </div>
+
                 {% for actionForm in form.actions %}
                     <div class="action-item">
                         <div class="divider">Action {{ loop.index }} </div>

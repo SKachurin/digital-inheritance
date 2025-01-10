@@ -57,7 +57,7 @@ class Customer implements UserInterface, PasswordAuthenticatedUserInterface
     private CustomerPaymentStatusEnum $customerPaymentStatus;
 
     #[ORM\Column(type: 'string', length: 512, nullable: true)]
-    private string $customerOkayPassword;
+    private ?string $customerOkayPassword = null;
 
     /**
      * @var string The hashed password
@@ -209,12 +209,12 @@ class Customer implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getCustomerOkayPassword(): string
+    public function getCustomerOkayPassword(): ?string
     {
         return $this->customerOkayPassword;
     }
 
-    public function setCustomerOkayPassword(string $customerOkayPassword): self
+    public function setCustomerOkayPassword(?string $customerOkayPassword): self
     {
         $this->customerOkayPassword = $customerOkayPassword;
         return $this;

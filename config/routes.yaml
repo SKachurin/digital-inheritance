@@ -119,6 +119,10 @@ cron_five_minutes:
     controller: App\Controller\CronController::fiveMinutesCheck
     methods: [POST]
 
+wazzup_webhook:
+    path: /api/wazzup
+    controller: App\Controller\Webhook\WazzupWebhookController::__invoke
+    methods: [POST]
 
 customer_creating:
     path:        /creating
