@@ -43,7 +43,7 @@ services:
       - digital_network
 
   digital-mysql:
-    image: mysql:8.0.32
+    image: mysql:8.0.33
     container_name: digital-mysql
     environment:
       MYSQL_ROOT_HOST: '%'
