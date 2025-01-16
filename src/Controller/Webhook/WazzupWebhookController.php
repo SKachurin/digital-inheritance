@@ -6,7 +6,6 @@ use App\CommandHandler\Webhook\WazzupIncomingMessageHandler;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\Routing\Annotation\Route;
 
 class WazzupWebhookController extends AbstractController
 {
@@ -15,9 +14,6 @@ class WazzupWebhookController extends AbstractController
     ) {
     }
 
-    /**
-     * @Route("/api/wazzup", name="wazzup_webhook", methods={"POST"})
-     */
     public function __invoke(Request $request): JsonResponse
     {
         $payload = json_decode($request->getContent(), true);
@@ -26,19 +22,22 @@ class WazzupWebhookController extends AbstractController
             return new JsonResponse(['error' => 'Invalid JSON'], 400);
         }
 
-        // Example log or debug
         // $this->logger->info('Incoming Wazzup message: ' . $request->getContent());
 
         try {
-            // Pass to your handler for business logic
-            $this->incomingMessageHandler->handle($payload);
+            $result = $this->incomingMessageHandler->handle($payload);
+
+            $statusCode = $result['status_code'] ?? 200;
+            $payload    = $result['payload'] ?? [];
+
+            return new JsonResponse($payload, $statusCode);
+
         } catch (\Throwable $e) {
             return new JsonResponse([
                 'error' => $e->getMessage()
             ], 500);
         }
 
-        return new JsonResponse(['success' => true], 200);
     }
 }
 
