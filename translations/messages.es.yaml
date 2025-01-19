@@ -127,7 +127,7 @@ create_your_secure_envelope: 'Cree su Sobre Seguro'
 create_your_secure_envelope_text: |
   No hay límites en lo que puede introducir aquí (aunque el campo tiene un límite de 5000 caracteres). Podría incluir credenciales de monederos de criptomonedas, bancos en línea, etc.
   Este sobre se cifrará con la mitad de nuestra clave de seguridad y la mitad del hash derivado de sus respuestas a las preguntas de seguridad.
-  Una vez cifrado, sus respuestas se eliminarán de nuestra base de datos, dejando solo a usted y a Dios con el conocimiento necesario para descifrar esta nota.
+  Como nunca guardamos tus respuestas, una vez cifradas, solo tú y Dios tendrán el conocimiento necesario para descifrar esta nota.
   Nunca guardaremos sus respuestas: todo se descifrará al instante cada vez que proporcione las respuestas al acceder a la nota.
 create_your_pipeline: 'Cree su Pipeline'
 make_a_payment: 'Realice un Pago'

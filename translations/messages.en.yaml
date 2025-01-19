@@ -127,7 +127,7 @@ create_your_secure_envelope: 'Create Your Secure Envelope'
 create_your_secure_envelope_text: |
   There are no limits to what you can enter here (though the field limit is 5000 characters). This could include crypto wallet credentials, online bank credentials, etc.
   This envelope will be encrypted with half of our security key and half of the hash from your answer to the security questions.
-  Once encrypted, your answers will be deleted from our database, leaving only you and God with the knowledge required to decrypt this note.
+  As we never save your answers, once encrypted, only you and God will have the knowledge required to decrypt this note.
   We will never save your answers again—all decryption will be done on the fly from the answers you provide when accessing the note.
 create_your_pipeline: 'Create Your Pipeline'
 make_a_payment: 'Make a Payment'

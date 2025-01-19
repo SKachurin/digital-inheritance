@@ -43,6 +43,7 @@ jobs:
           export PERSONAL_STRING="${{ secrets.PERSONAL_STRING }}";
           export WAZZUP_API_URL="${{ secrets.WAZZUP_API_URL }}";
           export WAZZUP_API_TOKEN="${{ secrets.WAZZUP_API_TOKEN }}";
+          export WAZZUP_API_TOKEN="${{ secrets.CRON_SECRET_TOKEN }}";
           cd /var/www/;
           chmod +x deploy.sh;
           bash deploy.sh;
