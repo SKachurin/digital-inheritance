@@ -23,7 +23,7 @@ jobs:
           
       - name: Copy files to server
         run: |
-          rsync -avz --delete ./ root@5.180.181.53:/var/www/thedigitalheir.com/
+          rsync -avz --delete --exclude '/var/lib/mysql-data/' ./ root@5.180.181.53:/var/www/thedigitalheir.com/
           
       - name: Verify copied files on server
         run: |

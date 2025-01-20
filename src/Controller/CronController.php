@@ -19,6 +19,9 @@ class CronController extends AbstractController
         $providedToken = str_replace('Bearer ', '', $request->headers->get('Authorization', ''));
 
         if ($secretToken !== $providedToken) {
+            //TODO CLEAN logs
+            $this->logger->error('Error executing cron tasks: ' . $secretToken);
+            $this->logger->error('Error executing cron tasks: ' . $providedToken);
             return new Response('Unauthorized', Response::HTTP_UNAUTHORIZED);
         }
 

@@ -50,7 +50,7 @@ services:
       MYSQL_ROOT_PASSWORD: "${MYSQL_ROOT_PASSWORD}"
       MYSQL_DATABASE: "${MYSQL_DATABASE}"
     volumes:
-      - ./docker/mysql-data:/var/lib/mysql:rw
+      - /var/lib/mysql-data:/var/lib/mysql:rw
     ports:
       - "13000:3306"
     networks:
