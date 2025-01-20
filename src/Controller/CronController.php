@@ -12,6 +12,11 @@ class CronController extends AbstractController
 {
     private LoggerInterface $logger;
 
+    public function __construct(LoggerInterface $logger)
+    {
+        $this->logger = $logger;
+    }
+
     public function fiveMinutesCheck(Request $request, CronService $cronService): Response
     {
         // Validate the token
