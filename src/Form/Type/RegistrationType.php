@@ -4,6 +4,7 @@ namespace App\Form\Type;
 
 use App\CommandHandler\Customer\Create\CustomerCreateInputDto;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\HiddenType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
@@ -50,22 +51,14 @@ class RegistrationType extends AbstractType
                     ]),
                 ],
             ])
-
-//            ->add('customerFullName', TextType::class, [
-//                'label' => 'form.label.customer_full_name',
-//                'help' => 'form.help.customer_full_name',
-//                'required' => false,
-//            ])
-//
-//            ->add('customerOkayPassword', RepeatedType::class, [
-//                'type' => PasswordType::class,
-//                'help' => '',
-//                'invalid_message' => 'The password fields must match.',
-//                'options' => ['attr' => ['class' => 'password-field']],
-//                'required' => true,
-//                'first_options'  => ['label' => 'form.label.customer_okay_password'],
-//                'second_options' => ['label' => 'form.label.customer_okay_password_repeat'],
-//            ])
+            ->add('full_name', HiddenType::class, [
+                'label' => 'form.label.customer_full_name',
+                'mapped' => false,
+                'required' => false,
+                'attr' => [
+                    'style' => 'display:none;',
+                ],
+            ])
             ->add('password', RepeatedType::class, [
                 'type' => PasswordType::class,
                 'invalid_message' => 'The password fields must match.',

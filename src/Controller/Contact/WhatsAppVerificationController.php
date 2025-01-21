@@ -37,7 +37,7 @@ class WhatsAppVerificationController extends AbstractController
         $entityManager->persist($contact);
 
         // Remove the token to prevent reuse
-        $tokenRepository->delete($verificationToken);
+//        $tokenRepository->delete($verificationToken);  //would this fix the problem?
         $entityManager->flush();
 
         // Dispatch the event to create Actions

@@ -15,8 +15,6 @@ class RegistrationController extends AbstractController
 {
     private MessageBusInterface $commandBus;
 
-
-
     public function __construct(MessageBusInterface $commandBus)
     {
         $this->commandBus = $commandBus;
@@ -34,19 +32,6 @@ class RegistrationController extends AbstractController
             '',
             '',
             '',
-            'Love',
-            'passwordOkay',
-            'password',
-            CustomerSocialAppEnum::NONE,
-            'https://fb.com/something/',
-            'viva-n@yandex.ru',
-            'Winnie the Pooh',
-            '995',
-            '555555555',
-            '',
-            'All we need is:',
-            'Love'
-
         );
 
         $form = $this->createForm(RegistrationType::class, $customer);
@@ -57,6 +42,14 @@ class RegistrationController extends AbstractController
 
             /** @var CustomerCreateInputDto $customerData */
             $customerData = $form->getData();
+
+            // Check for the invisible field
+            if (!empty($data['full_name'])) {
+                // Log or handle suspicious registration attempt
+//                $this->logger->warning('Suspicious registration detected. Invisible field filled.', ['data' => $data]);
+//                throw new AccessDeniedException('Invalid registration attempt.');
+                return $this->redirectToRoute('user_login');
+            }
 
             $envelope = $this->commandBus->dispatch($customerData);
 
