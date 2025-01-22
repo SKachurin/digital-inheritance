@@ -50,7 +50,7 @@ class CronBatchConsumer
         //Load customers
         $customers = $this->customerRepository->findBy([
             'id' => $customerIds,
-            'paymentStatus' => CustomerPaymentStatusEnum::PAID->value
+            'customerPaymentStatus' => CustomerPaymentStatusEnum::PAID->value
         ]);
 
         //Process each customer's pipeline

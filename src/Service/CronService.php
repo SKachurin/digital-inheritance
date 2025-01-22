@@ -28,7 +28,7 @@ class CronService
         while (true) {
             // Fetch a batch
             $customers = $this->customerRepository->findBy(
-                ['paymentStatus' => CustomerPaymentStatusEnum::PAID->value],
+                ['customerPaymentStatus' => CustomerPaymentStatusEnum::PAID->value],
                 ['id' => 'ASC'],
                 $batchSize,
                 $offset
