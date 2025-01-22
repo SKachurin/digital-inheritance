@@ -180,6 +180,7 @@ pipeline_create_help: |
 text_pipeline_your_actions_edit: 'Here is your sequence now:'
 social_check: 'If I was online in Telegram more than the selected time interval ago'
 messenger_send: 'Send message via Messenger and wait'
+messenger_send_2: 'Send message via Messenger (second number) and wait'
 email_send: 'Send email and wait (not working yet)'
 email_send_2: 'Send to secondary email and wait (not working yet)'
 _for_: 'for'

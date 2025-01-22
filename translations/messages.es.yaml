@@ -180,6 +180,7 @@ pipeline_create_help: |
 text_pipeline_your_actions_edit: 'Esta es su secuencia actual:'
 social_check: 'Si estuve desconectado de Telegram más de lo indicado en el intervalo'
 messenger_send: 'Enviar mensaje por Messenger y esperar'
+messenger_send_2: 'Enviar mensaje por Messenger (segundo numero) y esperar'
 email_send: 'Enviar correo electrónico y esperar (todavía no funciona)'
 email_send_2: 'Enviar al correo secundario y esperar (todavía no funciona)'
 _for_: 'durante'
