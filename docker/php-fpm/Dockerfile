@@ -78,6 +78,9 @@ COPY --from=vendor-prod /app/vendor/ /var/www/vendor/
 
 RUN chown -R www-data:www-data /var/www
 
+# Set permissions for Symfony console
+RUN chmod +x /var/www/bin/console
+
 CMD ["supervisord", "--nodaemon", "-c", "/etc/supervisord.conf"]
 
 EXPOSE 9000
