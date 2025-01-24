@@ -39,6 +39,8 @@ services:
       WAZZUP_API_TOKEN: "${WAZZUP_API_TOKEN}"
     extra_hosts:
       - "host.docker.internal:host-gateway"
+    cap_add:
+      - NET_BIND_SERVICE
     networks:
       - digital_network
 
