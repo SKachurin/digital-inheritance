@@ -25,6 +25,22 @@ services:
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
+
+    # Alias the default ReCaptcha to v3
+    ReCaptcha\ReCaptcha: '@ReCaptcha\ReCaptcha\V3'
+
+    # Service for reCAPTCHA v3
+    ReCaptcha\ReCaptcha\V3:
+        class: ReCaptcha\ReCaptcha
+        arguments:
+            $secret: '%env(RECAPTCHA_SECRET_KEY)%'
+
+    # Service for reCAPTCHA v2
+    ReCaptcha\ReCaptcha\V2:
+        class: ReCaptcha\ReCaptcha
+        arguments:
+            $secret: '%env(RECAPTCHA_SECRET_KEY_V2)%'
+
     App\Queue\Doctrine\Customer\CustomerCreatedConsumer:
         arguments:
 #            $mailer: '@mailer'
@@ -77,3 +93,12 @@ services:
         tags: [ 'messenger.message_handler' ]
 
     App\Service\SocialAppLinkNormalizer: ~
+
+    App\Security\LoginFormAuthenticator:
+        arguments:
+            $recaptchaV3: '@ReCaptcha\ReCaptcha\V3'
+            $recaptchaV2: '@ReCaptcha\ReCaptcha\V2'
+
+    App\Controller\Customer\LoginController:
+        arguments:
+            $recaptchaV2: '@ReCaptcha\ReCaptcha\V2'

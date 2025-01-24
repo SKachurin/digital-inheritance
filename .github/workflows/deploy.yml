@@ -44,6 +44,10 @@ jobs:
           export WAZZUP_API_URL="${{ secrets.WAZZUP_API_URL }}";
           export WAZZUP_API_TOKEN="${{ secrets.WAZZUP_API_TOKEN }}";
           export CRON_SECRET_TOKEN="${{ secrets.CRON_SECRET_TOKEN }}";
+          export RECAPTCHA_SITE_KEY="${{ secrets.RECAPTCHA_SITE_KEY }}";
+          export RECAPTCHA_SECRET_KEY="${{ secrets.RECAPTCHA_SECRET_KEY }}";
+          export RECAPTCHA_SITE_KEY_V2="${{ secrets.RECAPTCHA_SITE_KEY_V2 }}";
+          export RECAPTCHA_SECRET_KEY_V2="${{ secrets.RECAPTCHA_SECRET_KEY_V2 }}";
           cd /var/www/;
           chmod +x deploy.sh;
           bash deploy.sh;

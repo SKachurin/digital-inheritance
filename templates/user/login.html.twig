@@ -1,34 +1,93 @@
 {% extends 'base.html.twig' %}
-    {% block content %}
-        <div class="container">
-            <h1 style="padding-top: 3em;">{{ 'header.login'|trans }}</h1>
 
-            {% if error %}
-                <div class="alert alert-warning" role="alert">
-                    {{ error.messageKey|trans(error.messageData, 'security') }}
-                </div>
-                <p>{{ 'forgot_pass'|trans }} <a href="{{ path('forgot_pass') }}">{{ 'click_here'|trans }}</a>.</p>
-            {% endif %}
-{#            {{ key }}#}
+{% block custom_head %}
+    {% if error == 'Suspicious activity detected.' %}
+        <script src="https://www.google.com/recaptcha/api.js?hl={{ app.request.locale }}"></script>
+    {% else %}
+        <script src="https://www.google.com/recaptcha/api.js?render={{ recaptcha_site_key }}&hl={{ app.request.locale }}"></script>
+    {% endif %}
+{% endblock %}
 
+{% block content %}
+    <div class="container">
+        <h1 style="padding-top: 3em;">{{ 'header.login'|trans }}</h1>
 
-            {% for label, messages in app.flashes %}
-                {% for message in messages %}
-                    <div class="alert alert-{{ label }}">
-                        {{ message }}
-                    </div>
-                {% endfor %}
-            {% endfor %}
+        {% if error %}
+            <div class="alert alert-warning" role="alert">
+                {{ error }}
+            </div>
+        {% endif %}
 
-            {{ form_start(form) }}
-            {{ form_row(form.email, {'full_name': '_username'}) }}
-            {{ form_row(form.password, {'full_name': '_password'}) }}
-            {{ form_row(form.remember_me, {'full_name': '_remember_me'}) }}
-{#            {{ form_errors(form) }}#}
-            <input type="hidden" name="_target_path" value="{{ path('user_home') }}">
-            {{ form_end(form) }}
+        {{ form_start(form, { 'id': 'login_form', 'onsubmit': 'onFormSubmit(event)' }) }}
+        {{ form_row(form.email, {'full_name': '_username'}) }}
+        {{ form_row(form.password, {'full_name': '_password'}) }}
+        {{ form_row(form.remember_me, {'full_name': '_remember_me'}) }}
 
+        {# Add reCAPTCHA v2 above the Submit button when suspicious activity is detected #}
+        {% if error == 'Suspicious activity detected.' %}
+            <div id="recaptcha-container" style="margin-bottom: 1em;">
+                <div class="g-recaptcha" data-sitekey="{{ recaptcha_site_key_v2 }}"></div>
+            </div>
+        {% endif %}
 
-        </div>
+        <input type="hidden" name="_target_path" value="{{ path('user_home') }}">
+        {{ form_end(form) }}
 
-    {% endblock %}
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+                const form = document.querySelector('form[name="login"]');
+
+                if (form) {
+                    form.addEventListener('submit', function (event) {
+                        event.preventDefault();
+
+                        {#if (typeof grecaptcha === 'undefined') {#}
+                        {#    console.error('reCAPTCHA library not loaded!');#}
+                        {#    return;#}
+                        {#}#}
+
+                        {#grecaptcha.ready(function () {#}
+                        {#    grecaptcha.execute('{{ recaptcha_site_key }}', { action: 'submit' }).then(function (token) {#}
+                        {#        const recaptchaField = document.getElementById('login_g-recaptcha-response');#}
+
+                        {#        if (recaptchaField) {#}
+                        {#            recaptchaField.value = token;#}
+                        {#            form.submit();#}
+                        {#        } else {#}
+                        {#            console.error('Hidden input field for reCAPTCHA not found!');#}
+                        {#        }#}
+                        {#    });#}
+                        {#});#}
+                        // reCAPTCHA v3 logic
+                        if ('{{ error }}' !== 'Suspicious activity detected.') {
+                            grecaptcha.ready(function () {
+                                grecaptcha.execute('{{ recaptcha_site_key }}', { action: 'submit' }).then(function (token) {
+                                    const recaptchaField = document.getElementById('login_g-recaptcha-response');
+
+                                    if (recaptchaField) {
+                                        recaptchaField.value = token;
+                                        form.submit();
+                                    } else {
+                                        console.error('Hidden input field for reCAPTCHA not found!');
+                                    }
+                                });
+                            });
+                        }
+                        // reCAPTCHA v2 logic
+                        else {
+                            const recaptchaResponse = document.querySelector('[name="g-recaptcha-response"]');
+                            if (!recaptchaResponse || !recaptchaResponse.value) {
+                                console.error('reCAPTCHA v2 response missing!');
+                                return;
+                            }
+                            form.submit();
+                        }
+                    });
+                } else {
+                    console.error('Form with name "login" not found!');
+                }
+            });
+        </script>
+    </div>
+{% endblock %}
+
