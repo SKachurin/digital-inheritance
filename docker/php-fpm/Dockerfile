@@ -78,6 +78,11 @@ COPY --from=vendor-prod /app/vendor/ /var/www/vendor/
 
 RUN chown -R www-data:www-data /var/www
 
+# Ensure /var/log directory and supervisord log file exist with the correct ownership
+RUN mkdir -p /var/log && \
+    touch /var/log/supervisord.log && \
+    chown -R www-data:www-data /var/log
+
 # Set permissions for Symfony console
 RUN chmod +x /var/www/bin/console
 
