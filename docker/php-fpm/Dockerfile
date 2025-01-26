@@ -87,7 +87,11 @@ RUN chown -R www-data:www-data /var/www
 
 RUN mkdir -p /var/log && \
     touch /var/log/supervisord.log && \
-    chown -R www-data:www-data /var/log
+    chmod -R 775 /var/log
+
+RUN mkdir -p /var/www/var/log && \
+    chown -R www-data:www-data /var/www/var/log && \
+    chmod -R 775 /var/www/var/log
 
 RUN mkdir -p /tmp && \
     chown -R www-data:www-data /tmp
