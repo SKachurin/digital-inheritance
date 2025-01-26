@@ -43,10 +43,11 @@ FROM php:8.3.3-fpm-alpine3.19 AS prod
 WORKDIR /var/www
 
 # copy the app code again (or do partial copy if you prefer)
-COPY . /var/www
+#COPY . /var/www
+COPY ../.. /var/www
 
 # copy the vendor folder from the vendor stage
-COPY --from=vendor /app/vendor/ /var/www/vendor/
+COPY --from=vendor-prod /app/vendor/ /var/www/vendor/
 
 # ARG to pass PGID
 ARG PGID
@@ -95,8 +96,8 @@ COPY ./docker/php-fpm/supervisord.conf /etc/supervisord.conf
 COPY ./docker/php-fpm/supervisor.d/prod.ini /etc/supervisor.d/default.ini
 
 # Copy app inside container
-COPY ../.. /var/www
-COPY --from=vendor-prod /app/vendor/ /var/www/vendor/
+#COPY ../.. /var/www
+#COPY --from=vendor-prod /app/vendor/ /var/www/vendor/
 
 RUN chown -R www-data:www-data /var/www
 
