@@ -23,6 +23,10 @@ FROM vendor as vendor-prod
 RUN --mount=type=ssh composer install --no-interaction --no-dev --prefer-dist \
     && composer dump-autoload -o
 
+RUN chown -R 1000:1000 vendor
+
+RUN chmod -R 775 vendor
+
 FROM vendor as vendor-test
 RUN --mount=type=ssh composer install --no-interaction --prefer-dist \
     && composer dump-autoload -o
