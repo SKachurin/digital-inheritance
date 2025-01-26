@@ -53,6 +53,10 @@ ENV DATABASE_URL=${DATABASE_URL}
 # Add docker php ext repo
 ADD https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions /usr/local/bin/
 
+# Install libcap
+RUN apk add --no-cache libcap && \
+    setcap 'cap_net_bind_service=+ep' /usr/local/sbin/php-fpm
+
 # Install dependencies
 RUN apk update && apk upgrade && apk add \
     curl \
@@ -69,6 +73,9 @@ RUN apk update && apk upgrade && apk add \
 # Copy php config
 RUN cp /usr/local/etc/php/php.ini-production /usr/local/etc/php/php.ini
 
+# Copy custom supervisord.conf
+COPY ./docker/php-fpm/supervisord.conf /etc/supervisord.conf
+
 # Copy supervisor config
 COPY ./docker/php-fpm/supervisor.d/prod.ini /etc/supervisor.d/default.ini
 
@@ -81,7 +88,7 @@ RUN chown -R www-data:www-data /var/www
 # Ensure /var/log directory and supervisord log file exist with the correct ownership
 RUN mkdir -p /var/log && \
     touch /var/log/supervisord.log && \
-    chown -R www-data:www-data /var/log \
+    chown -R www-data:www-data /var/log
 
 RUN mkdir -p /tmp && \
     chown -R www-data:www-data /tmp
