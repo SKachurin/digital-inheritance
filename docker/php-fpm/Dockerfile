@@ -95,6 +95,7 @@ RUN mkdir -p /tmp && \
 
 # Set permissions for Symfony console
 RUN chmod +x /var/www/bin/console
+RUN chown -R www-data:www-data /var/www
 
 CMD ["supervisord", "--nodaemon", "-c", "/etc/supervisord.conf"]
 
