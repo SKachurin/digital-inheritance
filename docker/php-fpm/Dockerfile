@@ -20,11 +20,11 @@ COPY ../../composer.lock* /app/composer.lock
 
 
 FROM vendor as vendor-prod
-RUN --mount=type=ssh composer install --no-interaction --no-scripts --no-dev --prefer-dist \
+RUN --mount=type=ssh composer install --no-interaction --no-dev --prefer-dist \
     && composer dump-autoload -o
 
 FROM vendor as vendor-test
-RUN --mount=type=ssh composer install --no-interaction --no-scripts --prefer-dist \
+RUN --mount=type=ssh composer install --no-interaction --prefer-dist \
     && composer dump-autoload -o
 
 
@@ -88,6 +88,10 @@ RUN chown -R www-data:www-data /var/www
 RUN mkdir -p /var/log && \
     touch /var/log/supervisord.log && \
     chmod -R 775 /var/log
+
+RUN mkdir -p /var/www/var/cache/prod && \
+    chown -R www-data:www-data /var/www/var/cache && \
+    chmod -R 775 /var/www/var/cache
 
 RUN mkdir -p /var/www/var/log && \
     chown -R www-data:www-data /var/www/var/log && \
