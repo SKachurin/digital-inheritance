@@ -20,6 +20,11 @@ COPY ../../composer.lock* /app/composer.lock
 
 
 FROM vendor as vendor-prod
+
+WORKDIR /app
+
+COPY . /app
+
 RUN --mount=type=ssh composer install --no-interaction --no-dev --prefer-dist \
     && composer dump-autoload -o
 
@@ -36,6 +41,12 @@ FROM php:8.3.3-fpm-alpine3.19 AS prod
 
 # Set working directory
 WORKDIR /var/www
+
+# copy the app code again (or do partial copy if you prefer)
+COPY . /var/www
+
+# copy the vendor folder from the vendor stage
+COPY --from=vendor /app/vendor/ /var/www/vendor/
 
 # ARG to pass PGID
 ARG PGID
