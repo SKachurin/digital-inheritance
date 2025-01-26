@@ -13,7 +13,7 @@ RUN apk update && apk upgrade
 ADD https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions /usr/local/bin/
 # Install php extensions
 RUN chmod +x /usr/local/bin/install-php-extensions && sync \
-    && install-php-extensions apcu
+    && install-php-extensions apcu pdo pdo_mysql
 
 COPY ../../composer.json /app/composer.json
 COPY ../../composer.lock* /app/composer.lock
