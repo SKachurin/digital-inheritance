@@ -28,7 +28,7 @@ services:
     container_name: digital-backend
     volumes:
       - ~/.ssh:/root/.ssh
-      - ./docker/php-fpm/supervisor.d/local.ini:/etc/supervisor.d/default.ini
+#      - ./docker/php-fpm/supervisor.d/local.ini:/etc/supervisor.d/default.ini
       - .:/var/www
     environment:
       PHP_MEMORY_LIMIT: 512M
