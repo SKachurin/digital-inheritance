@@ -93,7 +93,7 @@ RUN mkdir -p /tmp && \
     chown -R www-data:www-data /tmp
 
 # Set permissions for Symfony console
-chmod +x /var/www/bin/console
+RUN chmod +x /var/www/bin/console
 RUN chown -R www-data:www-data /var/www
 
 CMD ["supervisord", "--nodaemon", "-c", "/etc/supervisord.conf"]
