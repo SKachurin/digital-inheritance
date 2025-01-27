@@ -23,6 +23,9 @@ FROM vendor as vendor-prod
 
 WORKDIR /app
 
+# Temporarily disable DB for build
+ENV APP_ENV=build
+
 COPY . /app
 
 RUN --mount=type=ssh composer install --no-interaction --no-dev --prefer-dist \
