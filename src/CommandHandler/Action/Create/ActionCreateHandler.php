@@ -27,6 +27,13 @@ class ActionCreateHandler
         $contactType = $contact->getContactTypeEnum();
         $customer = $contact->getCustomer();
 
+        //delete previous Action for Contact
+        $oldAction = $this->actionRepository->findOneBy(['customerId' => $customer, 'contactId' => $contact]);
+
+        if ($oldAction) {
+            $this->entityManager->remove($oldAction);
+        }
+
         switch ($contactType) {
             case ContactTypeEnum::EMAIL:
                 if ($this->actionRepository->customerVerifiedSecondEmail($customer)){
