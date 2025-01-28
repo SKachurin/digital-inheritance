@@ -47,6 +47,8 @@ class CronBatchConsumer
     {
         $customerIds = $message->getCustomerIds();
 
+        $this->logger->error('3 CronBatchConsumer == $customerIds');
+
         //Load customers
         $customers = $this->customerRepository->findBy([
             'id' => $customerIds,
@@ -344,6 +346,8 @@ class CronBatchConsumer
     private function sendMessenger(Action $action, Contact $contact, string $message): ActionStatusEnum
     {
         $response = $this->whatsAppService->sendMessageWhatsApp($contact, $message);
+
+        $this->logger->error('4 CronBatchConsumer == $response' . $response);
 
         $data = $this->decodeJsonResponse($response);
 

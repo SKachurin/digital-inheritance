@@ -69,7 +69,7 @@ when@prod:
                 excluded_http_codes: [ 404, 405 ]
             nested:
                 type: stream
-                path: "%kernel.logs_dir%/prod.error.log" # Logs errors in var/log/prod.error.log
+                path: "%kernel.logs_dir%/prod.log"
                 level: debug
 
             console:

@@ -19,6 +19,8 @@ class CronController extends AbstractController
 
     public function fiveMinutesCheck(Request $request, CronService $cronService): Response
     {
+        $this->logger->error('1 CronController == Started cron tasks');
+
         // Validate the token
         $secretToken = $this->getParameter('cron_secret_token');
         $providedToken = str_replace('Bearer ', '', $request->headers->get('Authorization', ''));
