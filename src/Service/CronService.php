@@ -7,14 +7,16 @@ namespace App\Service;
 use App\Enum\CustomerPaymentStatusEnum;
 use App\Repository\CustomerRepository;
 use App\Queue\CronBatchProducer;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Notifier\Exception\TransportExceptionInterface;
 
 class CronService
 {
+    private LoggerInterface $logger;
+
     public function __construct(
         private CustomerRepository $customerRepository,
         private CronBatchProducer $batchProducer,
-        private LoggerInterface $logger
     ) {}
 
     /**
