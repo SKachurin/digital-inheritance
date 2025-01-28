@@ -51,14 +51,6 @@ class RegistrationType extends AbstractType
                     ]),
                 ],
             ])
-            ->add('full_name', HiddenType::class, [
-                'label' => 'form.label.customer_full_name',
-                'mapped' => false,
-                'required' => false,
-                'attr' => [
-                    'style' => 'display:none;',
-                ],
-            ])
             ->add('password', RepeatedType::class, [
                 'type' => PasswordType::class,
                 'invalid_message' => 'The password fields must match.',
@@ -67,10 +59,18 @@ class RegistrationType extends AbstractType
                 'first_options'  => ['label' => 'form.label.password'],
                 'second_options' => ['label' => 'form.label.password_repeat'],
             ])
+            ->add('g-recaptcha-response', HiddenType::class, [
+                'mapped' => false,
+                'required' => true,
+                'attr' => [
+                    'id' => 'g-recaptcha-response', // ID matches the JS
+                    'name' => 'g-recaptcha-response', // Correct name
+                    'style' => 'display: none;',
+                ],
+            ])
             ->add('submit', SubmitType::class, [
                 'attr' => ['class' => 'btn btn-primary'],
             ]);
-//        $builder->get('customerSocialApp')->addModelTransformer(new EnumToStringTransformer);
     }
 
     public function configureOptions(OptionsResolver $resolver): void

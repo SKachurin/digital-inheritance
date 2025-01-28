@@ -12,6 +12,14 @@
     <div class="container">
         <h1 style="padding-top: 3em;">{{ 'header.login'|trans }}</h1>
 
+        {% for label, messages in app.flashes %}
+            {% for message in messages %}
+                <div class="alert alert-{{ label }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endfor %}
+
         {% if error %}
             <div class="alert alert-warning" role="alert">
                 {{ error }}
@@ -41,23 +49,6 @@
                     form.addEventListener('submit', function (event) {
                         event.preventDefault();
 
-                        {#if (typeof grecaptcha === 'undefined') {#}
-                        {#    console.error('reCAPTCHA library not loaded!');#}
-                        {#    return;#}
-                        {#}#}
-
-                        {#grecaptcha.ready(function () {#}
-                        {#    grecaptcha.execute('{{ recaptcha_site_key }}', { action: 'submit' }).then(function (token) {#}
-                        {#        const recaptchaField = document.getElementById('login_g-recaptcha-response');#}
-
-                        {#        if (recaptchaField) {#}
-                        {#            recaptchaField.value = token;#}
-                        {#            form.submit();#}
-                        {#        } else {#}
-                        {#            console.error('Hidden input field for reCAPTCHA not found!');#}
-                        {#        }#}
-                        {#    });#}
-                        {#});#}
                         // reCAPTCHA v3 logic
                         if ('{{ error }}' !== 'Suspicious activity detected.') {
                             grecaptcha.ready(function () {

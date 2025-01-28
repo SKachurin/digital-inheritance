@@ -1,9 +1,83 @@
 {% extends 'base.html.twig' %}
+
+{% block custom_head %}
+    {% if error == 'Suspicious activity detected.' %}
+        <script src="https://www.google.com/recaptcha/api.js?hl={{ app.request.locale }}"></script>
+    {% else %}
+        <script src="https://www.google.com/recaptcha/api.js?render={{ recaptcha_site_key }}&hl={{ app.request.locale }}"></script>
+    {% endif %}
+{% endblock %}
+
     {% block content %}
         <div class="container">
             <h1 style="padding-top: 4em;">{{ 'header.registration'|trans }}</h1>
-            {{ form(form) }}
 
+            {% for label, messages in app.flashes %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ label }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endfor %}
+
+            {% if error %}
+                <div class="alert alert-warning" role="alert">
+                    {{ error }}
+                </div>
+            {% endif %}
+
+            {{ form_start(form, { 'id': 'registration', 'onsubmit': 'onFormSubmit(event)' }) }}
+
+            {{ form_row(form.customerName) }}
+            {{ form_row(form.customerEmail) }}
+            {{ form_row(form.password) }}
+
+            {# Add reCAPTCHA v2 above the Submit button when suspicious activity is detected #}
+            {% if error == 'Suspicious activity detected.' %}
+                <div id="recaptcha-container" style="margin-bottom: 1em;">
+                    <div class="g-recaptcha" data-sitekey="{{ recaptcha_site_key_v2 }}"></div>
+                </div>
+            {% endif %}
+            {{ form_end(form) }}
+
+            <script>
+                document.addEventListener('DOMContentLoaded', function () {
+                    const form = document.querySelector('form[name="registration"]');
+
+                    if (form) {
+                        form.addEventListener('submit', function (event) {
+                            event.preventDefault();
+
+                            // reCAPTCHA v3 logic
+                            if ('{{ error }}' !== 'Suspicious activity detected.') {
+                                grecaptcha.ready(function () {
+                                    grecaptcha.execute('{{ recaptcha_site_key }}', { action: 'submit' }).then(function (token) {
+                                        const recaptchaField = document.getElementById('registration_g-recaptcha-response');
+
+                                        if (recaptchaField) {
+                                            recaptchaField.value = token;
+                                            form.submit();
+                                        } else {
+                                            console.error('Hidden input field for reCAPTCHA not found!');
+                                        }
+                                    });
+                                });
+                            }
+                            // reCAPTCHA v2 logic
+                            else {
+                                const recaptchaResponse = document.querySelector('[name="g-recaptcha-response"]');
+                                if (!recaptchaResponse || !recaptchaResponse.value) {
+                                    console.error('reCAPTCHA v2 response missing!');
+                                    return;
+                                }
+                                form.submit();
+                            }
+                        });
+                    } else {
+                        console.error('Form with name "registration" not found!');
+                    }
+                });
+            </script>
         </div>
         {% for label, messages in app.flashes %}
             {% for message in messages %}

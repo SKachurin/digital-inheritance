@@ -17,9 +17,7 @@ class LoginType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        /**
-         * https://gemini.google.com/app/80f8d1ee517c2d5e
-         */
+
         $builder
             ->add('email', EmailType::class, [
                 'label' => 'form.label.your_login',
