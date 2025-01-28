@@ -28,7 +28,7 @@ class ActionCreateHandler
         $customer = $contact->getCustomer();
 
         //delete previous Action for Contact
-        $oldAction = $this->actionRepository->findOneBy(['customerId' => $customer, 'contactId' => $contact]);
+        $oldAction = $this->actionRepository->findOneBy(['customer' => $customer, 'contact' => $contact]);
 
         if ($oldAction) {
             $this->entityManager->remove($oldAction);

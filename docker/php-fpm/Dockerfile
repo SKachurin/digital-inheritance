@@ -15,8 +15,10 @@ ADD https://github.com/mlocati/docker-php-extension-installer/releases/latest/do
 RUN chmod +x /usr/local/bin/install-php-extensions && sync \
     && install-php-extensions apcu pdo pdo_mysql
 
-COPY ../../composer.json /app/composer.json
-COPY ../../composer.lock* /app/composer.lock
+#COPY ../../composer.json /app/composer.json
+#COPY ../../composer.lock* /app/composer.lock
+COPY ../../composer.json /app/
+COPY ../../composer.lock /app/
 
 
 FROM vendor as vendor-prod
@@ -26,10 +28,14 @@ WORKDIR /app
 # Temporarily disable DB for build
 ENV APP_ENV=build
 
-COPY . /app
+#COPY . /app
+COPY . /app/
 
-RUN --mount=type=ssh composer install --no-interaction --no-dev --prefer-dist \
-    && composer dump-autoload -o
+#RUN --mount=type=ssh composer install --no-interaction --no-dev --prefer-dist \
+#    && composer dump-autoload -o
+RUN --mount=type=ssh \
+    composer install --no-interaction --no-dev --prefer-dist \
+    && composer dump-autoload --optimize
 
 RUN chown -R 1000:1000 vendor
 
@@ -47,7 +53,8 @@ WORKDIR /var/www
 
 # copy the app code again (or do partial copy if you prefer)
 #COPY . /var/www
-COPY ../.. /var/www
+#COPY ../.. /var/www
+COPY ../.. /var/www/
 
 # copy the vendor folder from the vendor stage
 COPY --from=vendor-prod /app/vendor/ /var/www/vendor/
@@ -77,13 +84,18 @@ RUN apk add --no-cache libcap && \
     setcap 'cap_net_bind_service=+ep' /usr/local/sbin/php-fpm
 
 # Install dependencies
-RUN apk update && apk upgrade && apk add \
-    curl \
-    nano \
-    shadow \
-    supervisor && \
-    chmod +x /usr/local/bin/install-php-extensions && sync && \
-    install-php-extensions mbstring pdo pdo_mysql pcntl opcache intl apcu mcrypt
+#RUN apk update && apk upgrade && apk add \
+#    curl \
+#    nano \
+#    shadow \
+#    supervisor && \
+#    chmod +x /usr/local/bin/install-php-extensions && sync && \
+#    install-php-extensions mbstring pdo pdo_mysql pcntl opcache intl apcu mcrypt
+
+RUN apk update && apk upgrade \
+    && apk add --no-cache curl nano shadow supervisor \
+    && chmod +x /usr/local/bin/install-php-extensions && sync \
+    && install-php-extensions mbstring pdo pdo_mysql pcntl opcache intl apcu mcrypt
 
 # Install php extensions
 #RUN chmod +x /usr/local/bin/install-php-extensions && sync \
@@ -108,16 +120,21 @@ RUN mkdir -p /var/log && \
     touch /var/log/supervisord.log && \
     chmod -R 775 /var/log
 
-RUN mkdir -p /var/www/var/cache/prod && \
-    chown -R www-data:www-data /var/www/var/cache && \
-    chmod -R 775 /var/www/var/cache
+#RUN mkdir -p /var/www/var/cache/prod && \
+#    chown -R www-data:www-data /var/www/var/cache && \
+#    chmod -R 775 /var/www/var/cache
+#
+#RUN mkdir -p /var/www/var/log && \
+#    chown -R www-data:www-data /var/www/var/log && \
+#    chmod -R 775 /var/www/var/log
+#
+#RUN mkdir -p /tmp && \
+#    chown -R www-data:www-data /tmp
 
-RUN mkdir -p /var/www/var/log && \
-    chown -R www-data:www-data /var/www/var/log && \
-    chmod -R 775 /var/www/var/log
-
-RUN mkdir -p /tmp && \
-    chown -R www-data:www-data /tmp
+#Create the usual Symfony directories
+RUN mkdir -p /var/www/var/cache /var/www/var/log /tmp \
+    && chown -R www-data:www-data /var/www/var/cache /var/www/var/log /tmp \
+    && chmod -R 775 /var/www/var/cache /var/www/var/log
 
 # Set permissions for Symfony console
 RUN chmod +x /var/www/bin/console
