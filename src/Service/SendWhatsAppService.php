@@ -6,23 +6,27 @@ use App\Entity\Contact;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
+use Psr\Log\LoggerInterface;
 
 class SendWhatsAppService
 {
     private CryptoService $cryptoService;
     private HttpClientInterface $client;
+    private LoggerInterface $logger;
     private string $apiUrl;
     private string $apiToken;
 
     public function __construct(
         CryptoService           $cryptoService,
         HttpClientInterface     $client,
+        LoggerInterface         $logger,
         string                  $apiUrl,
         string                  $apiToken
     )
     {
         $this->cryptoService = $cryptoService;
         $this->client = $client;
+        $this->logger = $logger;
         $this->apiUrl = $apiUrl;
         $this->apiToken = $apiToken;
     }
@@ -40,8 +44,14 @@ class SendWhatsAppService
 
         $phoneNumber = $contact->getCountryCode() . $phone;
 
-
         $url = $this->apiUrl . '/v3/message';
+
+        $this->logger->info('Sending WA API request', [
+            'url' => $this->apiUrl,
+            'token' => $this->apiToken,
+            '$message' => $message,
+            'phone' => $phoneNumber,
+        ]);
 
         try {
             $response = $this->client->request('POST', $url, [
@@ -61,6 +71,11 @@ class SendWhatsAppService
 
             $responseContent = json_decode($response->getContent(false), true);
 
+            $this->logger->info('WA API Response', [
+                'status_code' => $response->getStatusCode(),
+                'response' => $responseContent
+            ]);
+
             if ($response->getStatusCode() === 201 && isset($responseContent['messageId'])) {
                 return new JsonResponse([
                     'success' => true,
@@ -76,6 +91,11 @@ class SendWhatsAppService
             ], $response->getStatusCode());
 
         } catch (\Exception $e) {
+
+            $this->logger->error('Error while sending WA API request', [
+                'exception' => $e->getMessage(),
+                'trace' => $e->getTraceAsString(),
+            ]);
 
             return new JsonResponse([
                 'error' => 'Failed to call WhatsApp service',
