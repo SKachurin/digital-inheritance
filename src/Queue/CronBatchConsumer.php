@@ -73,7 +73,7 @@ class CronBatchConsumer
             $this->logger->error('3-3 CronBatchConsumer', [
                 '$pipeline->getPipelineStatus()' => $pipeline->getPipelineStatus()
             ]);
-            if ($pipeline && $pipeline->getPipelineStatus() === ActionStatusEnum::ACTIVATED->value) {
+            if ($pipeline && $pipeline->getPipelineStatus() === ActionStatusEnum::ACTIVATED) {
                 $this->logger->error('3-3-1 CronBatchConsumer', [
                     '$pipeline->getPipelineStatus()' => $pipeline->getPipelineStatus()
                 ]);
