@@ -113,12 +113,16 @@ class CronBatchConsumer
         ]);
 
         if (empty($actionSequence)) {
-            $this->logger->info(sprintf('No action sequence for pipeline ID %d', $pipeline->getId()));
+            $this->logger->error(sprintf('No action sequence for pipeline ID %d', $pipeline->getId()));
             return;
         }
 
         // Sort actions by position (just to be safe)
         usort($actionSequence, fn($a, $b) => (int)$a['position'] <=> (int)$b['position']);
+
+        $this->logger->error('3.1-0 processPipeline', [
+            '$actionSequence' => $actionSequence
+        ]);
 
         // Find active action
         foreach ($actionSequence as $actionData) {
@@ -127,8 +131,13 @@ class CronBatchConsumer
 
                 //it has Interval
                 $intervalValue = $actionData['interval'] ?? null;
+
+                $this->logger->error('3.1-1 processPipeline', [
+                    '$intervalValue' => $intervalValue
+                ]);
+
                 if (!$intervalValue) {
-                    $this->logger->info(sprintf('No action sequence for pipeline ID %d', $pipeline->getId()));
+                    $this->logger->error(sprintf('No action sequence for pipeline ID %d', $pipeline->getId()));
                     break; // major error - we don't have interval for this Action          //TODO ADMIN_ALERT Service
                 }
 
@@ -136,7 +145,7 @@ class CronBatchConsumer
                 $nextActionTime = $this->calculateNextActionTime($lastUpdate, $intervalValue);
                 $now = new \DateTimeImmutable('now', new \DateTimeZone('UTC'));
 
-                $this->logger->error('3.1-1 processPipeline', [
+                $this->logger->error('3.1-2 processPipeline', [
                     '$now' => $now,
                     '$nextActionTime' => $nextActionTime,
                     '$activeAction' => $activeAction,
