@@ -47,7 +47,9 @@ class CronBatchConsumer
     {
         $customerIds = $message->getCustomerIds();
 
-        $this->logger->error('3 CronBatchConsumer == $customerIds');
+        $this->logger->error('3 CronBatchConsumer == $customerIds', [
+            'customerIds' => $customerIds
+        ]);
 
         //Load customers
         $customers = $this->customerRepository->findBy([
@@ -83,6 +85,13 @@ class CronBatchConsumer
         $activeActionStatus = $pipeline->getActionStatus();
         $actionSequence = $pipeline->getActionSequence();
         $lastUpdate = $pipeline->getUpdatedAt();
+
+
+        $this->logger->error('3.1 processPipeline == Checking Pipeline', [
+            'pipelineId' => $pipeline->getId(),
+            'actionType' => $activeAction,
+            'actionStatus' => $activeActionStatus
+        ]);
 
         if (empty($actionSequence)) {
             $this->logger->info(sprintf('No action sequence for pipeline ID %d', $pipeline->getId()));
@@ -175,6 +184,12 @@ class CronBatchConsumer
 
         // Action & Contact
         [$action, $contact] = $this->retrieveActionAndContact($pipeline, $actionType);
+
+        $this->logger->error('3.2 executeActiveAction == Checking Action Type', [
+            'pipelineId' => $pipeline->getId(),
+            'actionType' => $actionType->value,
+            'message' => 'About to send WhatsApp message'
+        ]);
 
         return match ($actionType) {
             ActionTypeEnum::SOCIAL_CHECK => $this->sendSocialCheck($actionData, $now, $contact),
@@ -345,6 +360,11 @@ class CronBatchConsumer
      */
     private function sendMessenger(Action $action, Contact $contact, string $message): ActionStatusEnum
     {
+        $this->logger->error('3.3 sendMessenger == Called', [
+            'contactId' => $contact->getId(),
+            'message' => $message
+        ]);
+
         $response = $this->whatsAppService->sendMessageWhatsApp($contact, $message);
 
         $this->logger->error('4 CronBatchConsumer == $response' . $response);

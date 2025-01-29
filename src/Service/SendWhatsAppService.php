@@ -38,6 +38,9 @@ class SendWhatsAppService
     public function sendMessageWhatsApp(Contact $contact, ?string $message = ''): JsonResponse
     {
         $phone = $this->cryptoService->decryptData($contact->getValue());
+
+        $this->logger->error('3.4 CronBatchConsumer == $phone' . $phone);
+
         if (!is_string($phone)) {
             throw new \Exception("Invalid phone number.");
         }
@@ -46,7 +49,9 @@ class SendWhatsAppService
 
         $url = $this->apiUrl . '/v3/message';
 
-        $this->logger->info('Sending WA API request', [
+        $this->logger->error('3.5 CronBatchConsumer == $url' . $url);
+
+        $this->logger->info('3.6 Sending WA API request', [
             'url' => $this->apiUrl,
             'token' => $this->apiToken,
             '$message' => $message,
@@ -92,7 +97,7 @@ class SendWhatsAppService
 
         } catch (\Exception $e) {
 
-            $this->logger->error('Error while sending WA API request', [
+            $this->logger->error(' 3.7 Error while sending WA API request', [
                 'exception' => $e->getMessage(),
                 'trace' => $e->getTraceAsString(),
             ]);
