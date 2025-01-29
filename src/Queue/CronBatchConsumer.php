@@ -136,6 +136,13 @@ class CronBatchConsumer
                 $nextActionTime = $this->calculateNextActionTime($lastUpdate, $intervalValue);
                 $now = new \DateTimeImmutable('now', new \DateTimeZone('UTC'));
 
+                $this->logger->error('3.1-1 processPipeline', [
+                    '$now' => $now,
+                    '$nextActionTime' => $nextActionTime,
+                    '$activeAction' => $activeAction,
+                    '$actionData[actionType] ' => $actionData['actionType']
+                ]);
+
                 //if time is up
                 if ($now >= $nextActionTime) {
 
