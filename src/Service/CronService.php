@@ -40,7 +40,7 @@ class CronService
                 $offset
             );
 
-            $this->logger->error('2 CronService == $batchSize');
+            $this->logger->error('2 CronService == $batchSize: '. $batchSize);
 
             if (count($customers) === 0) {
                 break; // No more customers

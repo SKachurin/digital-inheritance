@@ -52,10 +52,18 @@ class CronBatchConsumer
         ]);
 
         //Load customers
-        $customers = $this->customerRepository->findBy([
-            'id' => $customerIds,
-            'customerPaymentStatus' => CustomerPaymentStatusEnum::PAID->value
-        ]);
+//        $customers = $this->customerRepository->findBy([
+//            'id' => $customerIds,
+//            'customerPaymentStatus' => CustomerPaymentStatusEnum::PAID->value
+//        ]);
+        $customers = [];
+        foreach ($customerIds as $customerId) {
+            $customer = $this->customerRepository->findBy([
+                'id' => $customerId,
+                'customerPaymentStatus' => CustomerPaymentStatusEnum::PAID->value
+            ]);
+            $customers = array_merge($customers, $customer);
+        }
 
         $this->logger->error('3-1 CronBatchConsumer', [
             '$customers' => $customers
@@ -74,9 +82,6 @@ class CronBatchConsumer
                 '$pipeline->getPipelineStatus()' => $pipeline->getPipelineStatus()
             ]);
             if ($pipeline && $pipeline->getPipelineStatus() === ActionStatusEnum::ACTIVATED) {
-                $this->logger->error('3-3-1 CronBatchConsumer', [
-                    '$pipeline->getPipelineStatus()' => $pipeline->getPipelineStatus()
-                ]);
                 // Reuse your cronService logic
                 $this->processPipeline($pipeline);
             }
