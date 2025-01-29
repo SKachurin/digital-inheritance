@@ -127,7 +127,7 @@ class CronBatchConsumer
         // Find active action
         foreach ($actionSequence as $actionData) {
 
-            if ($actionData['actionType'] == $activeAction) {
+            if ($actionData['actionType'] ==+ $activeAction->value) {
 
                 //it has Interval
                 $intervalValue = $actionData['interval'] ?? null;
