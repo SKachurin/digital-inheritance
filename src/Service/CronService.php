@@ -17,7 +17,11 @@ class CronService
     public function __construct(
         private CustomerRepository $customerRepository,
         private CronBatchProducer $batchProducer,
-    ) {}
+        LoggerInterface $logger
+
+    ) {
+        $this->logger = $logger;
+    }
 
     /**
      * @throws \Exception|TransportExceptionInterface
