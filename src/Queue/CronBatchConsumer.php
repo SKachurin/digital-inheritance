@@ -280,7 +280,7 @@ class CronBatchConsumer
             $this->logger->info(sprintf('Setting next action: %s for pipeline ID %d', $nextAction['actionType'], $pipeline->getId()));
 
             // Update pipeline with next action
-            $pipeline->setActionType($nextAction['actionType']);
+            $pipeline->setActionType(ActionTypeEnum::from($nextAction['actionType']));
             $pipeline->setActionStatus(ActionStatusEnum::ACTIVATED);
 
         } else {
