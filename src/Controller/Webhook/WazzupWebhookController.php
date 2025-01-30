@@ -3,6 +3,7 @@
 namespace App\Controller\Webhook;
 
 use App\CommandHandler\Webhook\WazzupIncomingMessageHandler;
+use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -10,7 +11,8 @@ use Symfony\Component\HttpFoundation\Request;
 class WazzupWebhookController extends AbstractController
 {
     public function __construct(
-        private readonly WazzupIncomingMessageHandler $incomingMessageHandler
+        private readonly WazzupIncomingMessageHandler $incomingMessageHandler,
+        private readonly LoggerInterface $logger
     ) {
     }
 
@@ -18,11 +20,17 @@ class WazzupWebhookController extends AbstractController
     {
         $payload = json_decode($request->getContent(), true);
 
+        $this->logger->error('4 wazzup_webhook', [
+            '$payload' => $payload,
+        ]);
+
         if (!\is_array($payload)) {
             return new JsonResponse(['error' => 'Invalid JSON'], 400);
         }
 
-        // $this->logger->info('Incoming Wazzup message: ' . $request->getContent());
+        $this->logger->error('4.1 wazzup_webhook', [
+            'message' => $request->getContent(),
+        ]);
 
         try {
             $result = $this->incomingMessageHandler->handle($payload);

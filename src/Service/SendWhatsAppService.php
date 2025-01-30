@@ -51,7 +51,7 @@ class SendWhatsAppService
 
         $this->logger->error('3.5 CronBatchConsumer == $url' . $url);
 
-        $this->logger->info('3.6 Sending WA API request', [
+        $this->logger->error('3.6 Sending WA API request', [
             'url' => $this->apiUrl,
             'token' => $this->apiToken,
             '$message' => $message,
@@ -76,7 +76,7 @@ class SendWhatsAppService
 
             $responseContent = json_decode($response->getContent(false), true);
 
-            $this->logger->info('WA API Response', [
+            $this->logger->error('3.6-0 WA API Response', [
                 'status_code' => $response->getStatusCode(),
                 'response' => $responseContent
             ]);
