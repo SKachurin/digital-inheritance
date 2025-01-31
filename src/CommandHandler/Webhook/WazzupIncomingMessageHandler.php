@@ -8,7 +8,6 @@ use App\Repository\PipelineRepository;
 use App\Service\SendWhatsAppService;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 
 class WazzupIncomingMessageHandler
@@ -17,7 +16,6 @@ class WazzupIncomingMessageHandler
         private readonly EntityManagerInterface $entityManager,
         private readonly ActionRepository $actionRepository,
         private readonly PipelineRepository $pipelineRepository,
-        private readonly UserPasswordHasherInterface $passwordHasher,
         private readonly SendWhatsAppService $sendWhatsAppService,
         private readonly LoggerInterface $logger
     )
@@ -42,7 +40,9 @@ class WazzupIncomingMessageHandler
             // If there's no 'messages' array, respond with 200 to avoid errors
             return [
                 'status_code' => 200,
-                'payload'     => ['success' => 'No messages to process'],
+                'payload' => [
+                    'success' => true,
+                ],
             ];
         }
 
@@ -75,17 +75,13 @@ class WazzupIncomingMessageHandler
 
         if (!$chatId || !$text || $inbound !== 'inbound') {
 
-            $this->logger->error('6 processSingleMessage ', [
-                '$inbound' => $inbound ?? 'undefined',
-                '$chatId' => $chatId,
-                '$text' => $text,
-            ]);
+            $this->logger->error('6 !=inbound ');
 
             return; // Nothing to process
         }
 
         // 1) Find matching Action by chatId
-        $action = $this->actionRepository->findOneBy(['chat_id' => $chatId]);
+        $action = $this->actionRepository->findOneBy(['chatId' => $chatId]);
         if (!$action) {
 
             $this->logger->error('6.1 processSingleMessage ', [
@@ -107,13 +103,7 @@ class WazzupIncomingMessageHandler
         // 3) Compare text to "OkayPassword"
         $okayPassword = $customer->getCustomerOkayPassword();
 
-//        $hashedText = $this->passwordHasher->hashPassword(
-//            $customer,
-//            $text
-//        );
-
         $contact = $action->getContact();
-
 
         if (password_verify($text, $okayPassword)) {
 
@@ -140,6 +130,10 @@ class WazzupIncomingMessageHandler
             //TODO as user logs in -- Lang choice loads from DB. So Lang from cookie should go to
             // DB after registration and after changing Lang in interface. And Lang from DB used to trans messages.
 
+            $this->logger->error('6.4 Resetting ', [
+                'error' => 'Resetting',
+            ]);
+
             $message = "It's nice to hear it. Resetting :-)";
 
             $this->sendWhatsAppService->sendMessageWhatsApp($contact, $message);
@@ -154,7 +148,7 @@ class WazzupIncomingMessageHandler
 
             $this->sendWhatsAppService->sendMessageWhatsApp($contact, $message);
 
-            $this->logger->error('6.3 processSingleMessage ', [
+            $this->logger->error('6.5 processSingleMessage ', [
                 'chatId' => $chatId,
                 'status' => 'Message received, no password match',
             ]);
