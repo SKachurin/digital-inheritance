@@ -11,15 +11,11 @@ use App\Enum\IntervalEnum;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
-//use App\Entity\Pipeline;
-//use App\Enum\ActionStatusEnum;
 use App\Form\Type\PipelineCreateType;
 use App\Repository\ActionRepository;
 use App\Repository\PipelineRepository;
 use Doctrine\ORM\EntityManagerInterface;
-//use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
-//use Symfony\Component\Messenger\MessageBusInterface;
-//use Symfony\Component\Messenger\Stamp\HandledStamp;
+
 
 class PipelineEditController extends AbstractController
 {
@@ -157,38 +153,5 @@ class PipelineEditController extends AbstractController
             'pipeline' => $pipeline,
         ]);
     }
-
-//    public function addAction(int $pipelineId): Response
-//    {
-//        $pipeline = $this->pipelineRepository->find($pipelineId);
-//
-//        if (!$pipeline) {
-//            throw $this->createNotFoundException('Pipeline not found.');
-//        }
-//
-//        $customer = $this->getUser();
-//
-//        if (!$customer instanceof Customer || $pipeline->getCustomer() !== $customer) {
-//            throw $this->createAccessDeniedException('You do not have access to this pipeline.');
-//        }
-//
-//        // Get the existing action sequence
-//        $actionSequence = $pipeline->getActionSequence();
-//
-//        // Add a new empty action
-//        $actionSequence[] = [
-//            'position' => count($actionSequence) + 1,
-//            'actionType' => null,
-//            'interval' => null,
-//        ];
-//
-//        // Update the pipeline
-//        $pipeline->setActionSequence($actionSequence);
-//
-//        $this->entityManager->flush();
-//
-//        // Redirect back to the edit route
-//        return $this->redirectToRoute('pipeline_edit', ['pipelineId' => $pipeline->getId()]);
-//    }
 }
 

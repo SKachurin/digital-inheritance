@@ -47,7 +47,7 @@ class ActionType extends AbstractType
                 'label' => 'form.label.action_interval',
                 'help' => 'form.help.action_interval',
                 'required' => false,
-                'data' => IntervalEnum::NOT_SET,
+//                'data' => $actionDto->getInterval() ?: IntervalEnum::NOT_SET,
             ]);
 
     }

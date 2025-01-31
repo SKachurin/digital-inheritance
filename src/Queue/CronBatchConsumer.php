@@ -74,13 +74,21 @@ class CronBatchConsumer
 
             $pipeline = $this->pipelineRepository->findOneBy(['customer' => $customer]);
 
-            $this->logger->error('3-2 CronBatchConsumer ', [
-                '$pipeline' => $pipeline
-            ]);
+            if ($pipeline) {
+                $this->logger->error('3-2 CronBatchConsumer ', [
+                    '$pipeline' => $pipeline->getId()
+                ]);
 
-            $this->logger->error('3-3 CronBatchConsumer', [
-                '$pipeline->getPipelineStatus()' => $pipeline->getPipelineStatus()
-            ]);
+                $this->logger->error('3-3 CronBatchConsumer', [
+                    '$pipeline->getPipelineStatus()' => $pipeline->getPipelineStatus()
+                ]);
+            } else {
+                $this->logger->error('Pipeline is NULL for customer', [
+                    'customerId' => $customer->getId()
+                ]);
+                continue;
+            }
+
             if ($pipeline && $pipeline->getPipelineStatus() === ActionStatusEnum::ACTIVATED) {
                 // Reuse your cronService logic
                 $this->processPipeline($pipeline);
