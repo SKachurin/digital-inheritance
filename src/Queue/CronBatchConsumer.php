@@ -221,12 +221,14 @@ class CronBatchConsumer
                     if ($now >= $nextActionTime) {
 
                         $result = $this->executeActiveAction($pipeline, $actionData, $now);
+                        $pipeline->setActionStatus($result);
                     }
                 } else {
                     // Messenger/Email: Execute immediately if activated
                     if ($activeActionStatus === ActionStatusEnum::ACTIVATED) {
 
                         $result = $this->executeActiveAction($pipeline, $actionData, $now);
+                        $pipeline->setActionStatus($result);
                     }
                 }
 
