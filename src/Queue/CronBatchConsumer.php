@@ -257,10 +257,11 @@ class CronBatchConsumer
                                 break;
                             case ActionStatusEnum::SUCCESS:
                                 // Restore the pipeline to the initial state (or move to the next step)
-                                $firstAction = array_filter($actionSequence, fn($a) => $a['position'] === 1);
-                                $pipeline->setActionType($firstAction['actionType']);
-                                $pipeline->setActionStatus(ActionStatusEnum::ACTIVATED);
-                                break;
+                                //it's not working cos we don't set ActionStatusEnum::SUCCESS anywhere
+//                                $firstAction = array_filter($actionSequence, fn($a) => $a['position'] === 1);
+//                                $pipeline->setActionType($firstAction['actionType']);
+//                                $pipeline->setActionStatus(ActionStatusEnum::ACTIVATED);
+//                                break;
                         }
                     }
                 }

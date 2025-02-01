@@ -286,6 +286,11 @@ class WazzupIncomingMessageHandler
             $actionSequence = $pipeline->getActionSequence();
             $firstAction = array_filter($actionSequence, fn($a) => $a['position'] === 1);
 
+
+            $this->logger->error('6.1-0 processSingleMessage', [
+                '$firstAction' => $firstAction
+            ]);
+
             if (!empty($firstAction)) {
                 $firstAction = reset($firstAction);
                 $pipeline->setActionType($firstAction['actionType']);
