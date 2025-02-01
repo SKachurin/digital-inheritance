@@ -160,49 +160,108 @@ class CronBatchConsumer
                     '$actionData[actionType] ' => $actionData['actionType']
                 ]);
 
-                //if time is up
-                if ($now >= $nextActionTime) {
+//                if ($activeAction->value === ActionTypeEnum::SOCIAL_CHECK->value) {
+//                    // SOCIAL CHECK: WAIT FIRST, THEN EXECUTE
+//                    //if time is up
+//                    if ($now >= $nextActionTime) {
+//                        $result = $this->executeActiveAction($pipeline, $actionData, $now);
+//
+//                    }
+//                } else {
+//                    // MESSENGER/EMAIL: EXECUTE FIRST, THEN WAIT
+//                    if ($activeActionStatus === ActionStatusEnum::ACTIVATED) {
+//                        $result = $this->executeActiveAction($pipeline, $actionData, $now);
+//                    }
+//                }
+////                break;
+//
+//                //if time is up
+//                if ($now >= $nextActionTime) {
+//
+//                    //it's only ActionStatusEnum::PENDING: - other statuses handled in executeActiveAction()
+//                    if ($activeActionStatus !== ActionStatusEnum::ACTIVATED) {
+//
+//                        $this->processPendingAction($pipeline, $actionData, $now);
+//
+//                        return;
+//                    }
+//
+//                    //process Active status
+//                    $result = $this->executeActiveAction($pipeline, $actionData, $now);
+//
+//                    switch ($result) {
+//                        case ActionStatusEnum::ACTIVATED:
+//                            // basically 'Okay for now' -- do nothing
+//                            break;
+//
+//                        case ActionStatusEnum::FAIL:     // already 'not Okay'
+//                            $this->processFailedAction($pipeline, $actionData, $now);
+//                            break;
+//
+//                        case ActionStatusEnum::PENDING:
+//                            // Message was sent to Contact and system waiting for response
+//                            $pipeline->setActionStatus(ActionStatusEnum::PENDING);
+//                            break;
+//
+//                        case ActionStatusEnum::SUCCESS:
+//                            // restoring initial state of the Pipeline
+//                            $firstAction = array_filter($actionSequence, fn($a) => $a['position'] === 1);
+//
+//                            $pipeline->setActionType($firstAction['actionType']);
+//                            $pipeline->setActionStatus(ActionStatusEnum::ACTIVATED);
+//                    }
+//                }
+//                // we are processing only One Action per client! Yes?
+//                break;
 
-                    //process all other statuses of ActionStatusEnum - it's only ActionStatusEnum::PENDING:
-                    // other statuses handled in executeActiveAction()
-                    if ($activeActionStatus !== ActionStatusEnum::ACTIVATED) {
 
-                        $this->processPendingAction($pipeline, $actionData, $now);
+                // Branch based on action type:
+                if ($activeAction->value === ActionTypeEnum::SOCIAL_CHECK->value) {
+                    // SOCIAL_CHECK: Wait until the interval is reached
+                    if ($now >= $nextActionTime) {
 
-                        return;
+                        $this->executeActiveAction($pipeline, $actionData, $now);
                     }
+                } else {
+                    // Messenger/Email: Execute immediately if activated
+                    if ($activeActionStatus === ActionStatusEnum::ACTIVATED) {
 
-                    //process Active status
-                    $result = $this->executeActiveAction($pipeline, $actionData, $now);
-
-                    switch ($result) {
-                        case ActionStatusEnum::ACTIVATED:
-                            // basically 'Okay for now' -- do nothing
-
-                            break;
-
-                        case ActionStatusEnum::FAIL:     // already 'not Okay'
-
-                            $this->processFailedAction($pipeline, $actionData, $now);
-                            break;
-
-                        case ActionStatusEnum::PENDING:
-                            // Message was sent to Contact and system waiting for response
-                            $pipeline->setActionStatus(ActionStatusEnum::PENDING);
-
-                            break;
-
-                        case ActionStatusEnum::SUCCESS:
-                            // restoring initial state of the Pipeline
-
-                            $firstAction = array_filter($actionSequence, fn($a) => $a['position'] === 1);
-
-                            $pipeline->setActionType($firstAction['actionType']);
-                            $pipeline->setActionStatus(ActionStatusEnum::ACTIVATED);
+                        $this->executeActiveAction($pipeline, $actionData, $now);
                     }
                 }
-                // we are processing only One Action per client! Yes?
-                break;
+
+                // After that, regardless of type, if the interval is reached...
+                if ($now >= $nextActionTime) {
+                    // If the pipeline is no longer in ACTIVATED status (for example, it’s PENDING),
+                    // process the pending action.
+                    if ($activeActionStatus !== ActionStatusEnum::ACTIVATED) {
+                        $this->processPendingAction($pipeline, $actionData, $now);
+//                        return;
+                    }
+
+                    // Otherwise, re-run executeActiveAction (or continue with further processing)
+//                    $result = $this->executeActiveAction($pipeline, $actionData, $now);
+                    if (isset($result)) {
+                        switch ($result) {
+                            case ActionStatusEnum::ACTIVATED:
+                                // Nothing to change
+                                break;
+                            case ActionStatusEnum::FAIL:
+                                $this->processFailedAction($pipeline, $actionData, $now);
+                                break;
+                            case ActionStatusEnum::PENDING:
+                                // Set state to pending
+                                $pipeline->setActionStatus(ActionStatusEnum::PENDING);
+                                break;
+                            case ActionStatusEnum::SUCCESS:
+                                // Restore the pipeline to the initial state (or move to the next step)
+                                $firstAction = array_filter($actionSequence, fn($a) => $a['position'] === 1);
+                                $pipeline->setActionType($firstAction['actionType']);
+                                $pipeline->setActionStatus(ActionStatusEnum::ACTIVATED);
+                                break;
+                        }
+                    }
+                }
             }
 
         }
@@ -273,6 +332,8 @@ class CronBatchConsumer
                 throw new \Exception("Unsupported action type: $actionType->value");
 
         }
+
+        $this->logger->error('9 processPendingAction');
     }
 
     private function processFailedAction(Pipeline $pipeline, array $actionData, \DateTimeImmutable $now) : void
@@ -311,6 +372,8 @@ class CronBatchConsumer
     private function processFailedPipeline(Pipeline $pipeline, mixed $actionData, \DateTimeImmutable $now) : bool
     {
         // logic to send Envelope to the Heir
+
+        $this->logger->error('10 processFailedPipeline');
 
         return true;
     }
