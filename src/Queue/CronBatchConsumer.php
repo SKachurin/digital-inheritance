@@ -290,7 +290,6 @@ class CronBatchConsumer
         $this->logger->error('3.2 executeActiveAction == Checking Action Type', [
             'pipelineId' => $pipeline->getId(),
             'actionType' => $actionType->value,
-            'message' => 'About to send WhatsApp message'
         ]);
 
         return match ($actionType) {
@@ -451,6 +450,11 @@ class CronBatchConsumer
                 ));
             }
         }
+
+        $this->logger->error('3.2-2 sendSocialCheck()', [
+            '$lastOnlineTime' => $lastOnlineTime,
+            'now' => $now,
+        ]);
 
         //next try
         return ActionStatusEnum::ACTIVATED;
