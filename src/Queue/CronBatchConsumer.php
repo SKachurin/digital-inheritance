@@ -220,13 +220,13 @@ class CronBatchConsumer
                     // SOCIAL_CHECK: Wait until the interval is reached
                     if ($now >= $nextActionTime) {
 
-                        $this->executeActiveAction($pipeline, $actionData, $now);
+                        $result = $this->executeActiveAction($pipeline, $actionData, $now);
                     }
                 } else {
                     // Messenger/Email: Execute immediately if activated
                     if ($activeActionStatus === ActionStatusEnum::ACTIVATED) {
 
-                        $this->executeActiveAction($pipeline, $actionData, $now);
+                        $result = $this->executeActiveAction($pipeline, $actionData, $now);
                     }
                 }
 
