@@ -296,15 +296,23 @@ class WazzupIncomingMessageHandler
                 $pipeline->setActionType($firstAction['actionType']);
                 $pipeline->setActionStatus(ActionStatusEnum::ACTIVATED);
 
-                $this->entityManager->persist($pipeline);
-                $this->entityManager->flush();
+                try {
 
-                $this->logger->error('6.5 processSingleMessage PIPELINE RESET', [
-                    'pipelineId' => $pipeline->getId()
-                ]);
+                    $this->entityManager->persist($pipeline);
+                    $this->entityManager->flush();
 
-                $message = "It's nice to hear it. Resetting :-)";
-                $this->sendWhatsAppService->sendMessageWhatsApp($contact, $message);
+                    $this->logger->error('6.5 processSingleMessage PIPELINE RESET', [
+                        'pipelineId' => $pipeline->getId()
+                    ]);
+
+                    $message = "It's nice to hear it. Resetting :-)";
+                    $this->sendWhatsAppService->sendMessageWhatsApp($contact, $message);
+                } catch (TransportExceptionInterface $e) {
+                    $this->logger->error('6.1-1 processSingleMessage PIPELINE ERROR', [
+                        '$e' => $e
+                    ]);
+                }
+
             } else {
                 $this->logger->error('6.6 processSingleMessage NO FIRST ACTION FOUND IN PIPELINE', [
                     'pipelineId' => $pipeline->getId()
