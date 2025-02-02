@@ -158,6 +158,7 @@
 namespace App\CommandHandler\Webhook;
 
 use App\Enum\ActionStatusEnum;
+use App\Enum\ActionTypeEnum;
 use App\Repository\ActionRepository;
 use App\Repository\PipelineRepository;
 use App\Service\SendWhatsAppService;
@@ -301,11 +302,11 @@ class WazzupIncomingMessageHandler
                 }
 
                 // Use $fa['actionType'] safely
-                $pipeline->setActionType($fa['actionType']);
+                $pipeline->setActionType(ActionTypeEnum::from($fa['actionType']));
                 $pipeline->setActionStatus(ActionStatusEnum::ACTIVATED);
 
-//                $this->entityManager->persist($pipeline);
-//                $this->entityManager->flush();
+                $this->entityManager->persist($pipeline);
+                $this->entityManager->flush();
 
                 $this->logger->error('6.5 processSingleMessage PIPELINE RESET', [
                     'pipelineId' => $pipeline->getId()
