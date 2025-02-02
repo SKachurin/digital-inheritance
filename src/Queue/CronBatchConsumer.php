@@ -36,7 +36,7 @@ class CronBatchConsumer
         private ContactRepository $contactRepository,
         private SendSocialService  $socialService,
         private SendWhatsAppService $whatsAppService,
-        private LoggerInterface $logger
+//        private LoggerInterface $logger
     ) {}
 
     /**
@@ -47,9 +47,9 @@ class CronBatchConsumer
     {
         $customerIds = $message->getCustomerIds();
 
-        $this->logger->error('3 CronBatchConsumer == $customerIds', [
-            'customerIds' => $customerIds
-        ]);
+//        $this->logger->error('3 CronBatchConsumer == $customerIds', [
+//            'customerIds' => $customerIds
+//        ]);
 
         //Load customers
 //        $customers = $this->customerRepository->findBy([
@@ -65,29 +65,27 @@ class CronBatchConsumer
             $customers = array_merge($customers, $customer);
         }
 
-        $this->logger->error('3-1 CronBatchConsumer', [
-            '$customers' => $customers
-        ]);
+//        $this->logger->error('3-1 CronBatchConsumer', [
+//            '$customers' => $customers
+//        ]);
 
         //Process each customer's pipeline
         foreach ($customers as $customer) {
 
             $pipeline = $this->pipelineRepository->findOneBy(['customer' => $customer]);
 
-            if ($pipeline) {
-                $this->logger->error('3-2 CronBatchConsumer ', [
-                    '$pipeline' => $pipeline->getId()
-                ]);
-
-                $this->logger->error('3-3 CronBatchConsumer', [
-                    '$pipeline->getPipelineStatus()' => $pipeline->getPipelineStatus()
-                ]);
-            } else {
-                $this->logger->error('Pipeline is NULL for customer', [
-                    'customerId' => $customer->getId()
-                ]);
-                continue;
-            }
+//            if ($pipeline) {
+//
+//                $this->logger->error('3-3 CronBatchConsumer', [
+//                    '$pipeline->getPipelineStatus()' => $pipeline->getPipelineStatus()
+//                ]);
+//            }
+//            else {
+//                $this->logger->error('Pipeline is NULL for customer', [
+//                    'customerId' => $customer->getId()
+//                ]);
+//                continue;
+//            }
 
             if ($pipeline && $pipeline->getPipelineStatus() === ActionStatusEnum::ACTIVATED) {
                 // Reuse your cronService logic
@@ -114,23 +112,23 @@ class CronBatchConsumer
         $lastUpdate = $pipeline->getUpdatedAt();
 
 
-        $this->logger->error('3.1 processPipeline == Checking Pipeline', [
-            'pipelineId' => $pipeline->getId(),
-            'actionType' => $activeAction,
-            'actionStatus' => $activeActionStatus
-        ]);
+//        $this->logger->error('3.1 processPipeline == Checking Pipeline', [
+//            'pipelineId' => $pipeline->getId(),
+//            'actionType' => $activeAction,
+//            'actionStatus' => $activeActionStatus
+//        ]);
 
         if (empty($actionSequence)) {
-            $this->logger->error(sprintf('No action sequence for pipeline ID %d', $pipeline->getId()));
+//            $this->logger->error(sprintf('No action sequence for pipeline ID %d', $pipeline->getId()));
             return;
         }
 
         // Sort actions by position (just to be safe)
         usort($actionSequence, fn($a, $b) => (int)$a['position'] <=> (int)$b['position']);
 
-        $this->logger->error('3.1-0 processPipeline', [
-            '$actionSequence' => $actionSequence
-        ]);
+//        $this->logger->error('3.1-0 processPipeline', [
+//            '$actionSequence' => $actionSequence
+//        ]);
 
         // Find active action
         foreach ($actionSequence as $actionData) {
@@ -140,12 +138,12 @@ class CronBatchConsumer
                 //it has Interval
                 $intervalValue = $actionData['interval'] ?? null;
 
-                $this->logger->error('3.1-1 processPipeline', [
-                    '$intervalValue' => $intervalValue
-                ]);
+//                $this->logger->error('3.1-1 processPipeline', [
+//                    '$intervalValue' => $intervalValue
+//                ]);
 
                 if (!$intervalValue) {
-                    $this->logger->error(sprintf('No action sequence for pipeline ID %d', $pipeline->getId()));
+//                    $this->logger->error(sprintf('No action sequence for pipeline ID %d', $pipeline->getId()));
                     break; // major error - we don't have interval for this Action          //TODO ADMIN_ALERT Service
                 }
 
@@ -153,67 +151,12 @@ class CronBatchConsumer
                 $nextActionTime = $this->calculateNextActionTime($lastUpdate, $intervalValue);
                 $now = new \DateTimeImmutable('now', new \DateTimeZone('UTC'));
 
-                $this->logger->error('3.1-2 processPipeline', [
-                    '$now' => $now,
-                    '$nextActionTime' => $nextActionTime,
-                    '$activeAction' => $activeAction,
-                    '$actionData[actionType] ' => $actionData['actionType']
-                ]);
-
-//                if ($activeAction->value === ActionTypeEnum::SOCIAL_CHECK->value) {
-//                    // SOCIAL CHECK: WAIT FIRST, THEN EXECUTE
-//                    //if time is up
-//                    if ($now >= $nextActionTime) {
-//                        $result = $this->executeActiveAction($pipeline, $actionData, $now);
-//
-//                    }
-//                } else {
-//                    // MESSENGER/EMAIL: EXECUTE FIRST, THEN WAIT
-//                    if ($activeActionStatus === ActionStatusEnum::ACTIVATED) {
-//                        $result = $this->executeActiveAction($pipeline, $actionData, $now);
-//                    }
-//                }
-////                break;
-//
-//                //if time is up
-//                if ($now >= $nextActionTime) {
-//
-//                    //it's only ActionStatusEnum::PENDING: - other statuses handled in executeActiveAction()
-//                    if ($activeActionStatus !== ActionStatusEnum::ACTIVATED) {
-//
-//                        $this->processPendingAction($pipeline, $actionData, $now);
-//
-//                        return;
-//                    }
-//
-//                    //process Active status
-//                    $result = $this->executeActiveAction($pipeline, $actionData, $now);
-//
-//                    switch ($result) {
-//                        case ActionStatusEnum::ACTIVATED:
-//                            // basically 'Okay for now' -- do nothing
-//                            break;
-//
-//                        case ActionStatusEnum::FAIL:     // already 'not Okay'
-//                            $this->processFailedAction($pipeline, $actionData, $now);
-//                            break;
-//
-//                        case ActionStatusEnum::PENDING:
-//                            // Message was sent to Contact and system waiting for response
-//                            $pipeline->setActionStatus(ActionStatusEnum::PENDING);
-//                            break;
-//
-//                        case ActionStatusEnum::SUCCESS:
-//                            // restoring initial state of the Pipeline
-//                            $firstAction = array_filter($actionSequence, fn($a) => $a['position'] === 1);
-//
-//                            $pipeline->setActionType($firstAction['actionType']);
-//                            $pipeline->setActionStatus(ActionStatusEnum::ACTIVATED);
-//                    }
-//                }
-//                // we are processing only One Action per client! Yes?
-//                break;
-
+//                $this->logger->error('3.1-2 processPipeline', [
+//                    '$now' => $now,
+//                    '$nextActionTime' => $nextActionTime,
+//                    '$activeAction' => $activeAction,
+//                    '$actionData[actionType] ' => $actionData['actionType']
+//                ]);
 
                 // Branch based on action type:
                 if ($activeAction->value === ActionTypeEnum::SOCIAL_CHECK->value) {
@@ -258,9 +201,7 @@ class CronBatchConsumer
                             case ActionStatusEnum::SUCCESS:
                                 // Restore the pipeline to the initial state (or move to the next step)
                                 //it's not working cos we don't set ActionStatusEnum::SUCCESS anywhere
-//                                $firstAction = array_filter($actionSequence, fn($a) => $a['position'] === 1);
-//                                $pipeline->setActionType($firstAction['actionType']);
-//                                $pipeline->setActionStatus(ActionStatusEnum::ACTIVATED);
+
 //                                break;
                         }
                     }
@@ -290,10 +231,10 @@ class CronBatchConsumer
         // Action & Contact
         [$action, $contact] = $this->retrieveActionAndContact($pipeline, $actionType);
 
-        $this->logger->error('3.2 executeActiveAction == Checking Action Type', [
-            'pipelineId' => $pipeline->getId(),
-            'actionType' => $actionType->value,
-        ]);
+//        $this->logger->error('3.2 executeActiveAction == Checking Action Type', [
+//            'pipelineId' => $pipeline->getId(),
+//            'actionType' => $actionType->value,
+//        ]);
 
         return match ($actionType) {
             ActionTypeEnum::SOCIAL_CHECK => $this->sendSocialCheck($actionData, $now, $contact),
@@ -335,7 +276,7 @@ class CronBatchConsumer
 
         }
 
-        $this->logger->error('9 processPendingAction');
+//        $this->logger->error('9 processPendingAction');
     }
 
     private function processFailedAction(Pipeline $pipeline, array $actionData, \DateTimeImmutable $now) : void
@@ -348,7 +289,7 @@ class CronBatchConsumer
 
         if (!empty($nextAction)) {
             $nextAction = reset($nextAction); // Get the first matching action
-            $this->logger->info(sprintf('Setting next action: %s for pipeline ID %d', $nextAction['actionType'], $pipeline->getId()));
+//            $this->logger->info(sprintf('Setting next action: %s for pipeline ID %d', $nextAction['actionType'], $pipeline->getId()));
 
             // Update pipeline with next action
             $pipeline->setActionType(ActionTypeEnum::from($nextAction['actionType']));
@@ -358,16 +299,16 @@ class CronBatchConsumer
 
             //pipeline ended - release Envelope to Heir
             $pipeline->setActionStatus(ActionStatusEnum::FAIL);
-            $this->logger->info(sprintf('No next action found for pipeline ID %d', $pipeline->getId()));
+//            $this->logger->info(sprintf('No next action found for pipeline ID %d', $pipeline->getId()));
             $pipeline->setPipelineStatus(ActionStatusEnum::FAIL);
 
             // process Failed Pipeline Function?
             $result = $this->processFailedPipeline($pipeline, $actionData, $now);
 
-            if (!empty($result)) {
-                //done
-                $this->logger->info(sprintf('Pipeline ID %d ended at %s',$pipeline->getId(), $now->format('c')));
-            }
+//            if (!empty($result)) {
+//                //done
+//                $this->logger->info(sprintf('Pipeline ID %d ended at %s',$pipeline->getId(), $now->format('c')));
+//            }
         }
     }
 
@@ -375,7 +316,7 @@ class CronBatchConsumer
     {
         // logic to send Envelope to the Heir
 
-        $this->logger->error('10 processFailedPipeline');
+//        $this->logger->error('10 processFailedPipeline');
 
         return true;
     }
@@ -446,18 +387,18 @@ class CronBatchConsumer
                 return ActionStatusEnum::ACTIVATED;
 
             } catch (\Exception $e) {
-                $this->logger->info(sprintf(
-                    'Invalid timestamp for user %s: %s',
-                    $user,
-                    $timestamp
-                ));
+//                $this->logger->info(sprintf(
+//                    'Invalid timestamp for user %s: %s',
+//                    $user,
+//                    $timestamp
+//                ));
             }
         }
 
-        $this->logger->error('3.2-2 sendSocialCheck()', [
-            '$lastOnlineTime' => $lastOnlineTime,
-            'now' => $now,
-        ]);
+//        $this->logger->error('3.2-2 sendSocialCheck()', [
+//            '$lastOnlineTime' => $lastOnlineTime,
+//            'now' => $now,
+//        ]);
 
         //next try
         return ActionStatusEnum::ACTIVATED;
@@ -473,14 +414,14 @@ class CronBatchConsumer
      */
     private function sendMessenger(Action $action, Contact $contact, string $message): ActionStatusEnum
     {
-        $this->logger->error('3.3 sendMessenger == Called', [
-            'contactId' => $contact->getId(),
-            'message' => $message
-        ]);
+//        $this->logger->error('3.3 sendMessenger == Called', [
+//            'contactId' => $contact->getId(),
+//            'message' => $message
+//        ]);
 
         $response = $this->whatsAppService->sendMessageWhatsApp($contact, $message);
 
-        $this->logger->error('4 CronBatchConsumer == $response' . $response);
+//        $this->logger->error('4 CronBatchConsumer == $response' . $response);
 
         $data = $this->decodeJsonResponse($response);
 

@@ -12,7 +12,7 @@ class SendWhatsAppService
 {
     private CryptoService $cryptoService;
     private HttpClientInterface $client;
-    private LoggerInterface $logger;
+//    private LoggerInterface $logger;
     private string $apiUrl;
     private string $apiToken;
 
@@ -26,7 +26,7 @@ class SendWhatsAppService
     {
         $this->cryptoService = $cryptoService;
         $this->client = $client;
-        $this->logger = $logger;
+//        $this->logger = $logger;
         $this->apiUrl = $apiUrl;
         $this->apiToken = $apiToken;
     }
@@ -39,7 +39,7 @@ class SendWhatsAppService
     {
         $phone = $this->cryptoService->decryptData($contact->getValue());
 
-        $this->logger->error('3.4 CronBatchConsumer == $phone' . $phone);
+//        $this->logger->error('3.4 CronBatchConsumer == $phone' . $phone);
 
         if (!is_string($phone)) {
             throw new \Exception("Invalid phone number.");
@@ -49,14 +49,14 @@ class SendWhatsAppService
 
         $url = $this->apiUrl . '/v3/message';
 
-        $this->logger->error('3.5 CronBatchConsumer == $url' . $url);
+//        $this->logger->error('3.5 CronBatchConsumer == $url' . $url);
 
-        $this->logger->error('3.6 Sending WA API request', [
-            'url' => $this->apiUrl,
-            'token' => $this->apiToken,
-            '$message' => $message,
-            'phone' => $phoneNumber,
-        ]);
+//        $this->logger->error('3.6 Sending WA API request', [
+//            'url' => $this->apiUrl,
+//            'token' => $this->apiToken,
+//            '$message' => $message,
+//            'phone' => $phoneNumber,
+//        ]);
 
         try {
             $response = $this->client->request('POST', $url, [
@@ -76,10 +76,10 @@ class SendWhatsAppService
 
             $responseContent = json_decode($response->getContent(false), true);
 
-            $this->logger->error('3.6-0 WA API Response', [
-                'status_code' => $response->getStatusCode(),
-                'response' => $responseContent
-            ]);
+//            $this->logger->error('3.6-0 WA API Response', [
+//                'status_code' => $response->getStatusCode(),
+//                'response' => $responseContent
+//            ]);
 
             if ($response->getStatusCode() === 201 && isset($responseContent['messageId'])) {
                 return new JsonResponse([
@@ -97,10 +97,10 @@ class SendWhatsAppService
 
         } catch (\Exception $e) {
 
-            $this->logger->error(' 3.7 Error while sending WA API request', [
-                'exception' => $e->getMessage(),
-                'trace' => $e->getTraceAsString(),
-            ]);
+//            $this->logger->error(' 3.7 Error while sending WA API request', [
+//                'exception' => $e->getMessage(),
+//                'trace' => $e->getTraceAsString(),
+//            ]);
 
             return new JsonResponse([
                 'error' => 'Failed to call WhatsApp service',

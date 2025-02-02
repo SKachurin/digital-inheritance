@@ -12,7 +12,7 @@ class WazzupWebhookController extends AbstractController
 {
     public function __construct(
         private readonly WazzupIncomingMessageHandler $incomingMessageHandler,
-        private readonly LoggerInterface $logger
+//        private readonly LoggerInterface $logger
     ) {
     }
 
@@ -20,17 +20,17 @@ class WazzupWebhookController extends AbstractController
     {
         $payload = json_decode($request->getContent(), true);
 
-        $this->logger->error('4 wazzup_webhook', [
-            '$payload' => $payload,
-        ]);
+//        $this->logger->error('4 wazzup_webhook', [
+//            '$payload' => $payload,
+//        ]);
 
         if (!\is_array($payload)) {
             return new JsonResponse(['error' => 'Invalid JSON'], 400);
         }
 
-        $this->logger->error('4.1 wazzup_webhook', [
-            'message' => $request->getContent(),
-        ]);
+//        $this->logger->error('4.1 wazzup_webhook', [
+//            'message' => $request->getContent(),
+//        ]);
 
         try {
             $result = $this->incomingMessageHandler->handle($payload);

@@ -10,16 +10,16 @@ use Psr\Log\LoggerInterface;
 
 class CronController extends AbstractController
 {
-    private LoggerInterface $logger;
+//    private LoggerInterface $logger;
 
     public function __construct(LoggerInterface $logger)
     {
-        $this->logger = $logger;
+//        $this->logger = $logger;
     }
 
     public function fiveMinutesCheck(Request $request, CronService $cronService): Response
     {
-        $this->logger->error('1 CronController == Started cron tasks');
+//        $this->logger->error('1 CronController == Started cron tasks');
 
         // Validate the token
         $secretToken = $this->getParameter('cron_secret_token');
@@ -27,8 +27,8 @@ class CronController extends AbstractController
 
         if ($secretToken !== $providedToken) {
             //TODO CLEAN logs
-            $this->logger->error('Error executing cron tasks: ' . $secretToken);
-            $this->logger->error('Error executing cron tasks: ' . $providedToken);
+//            $this->logger->error('Error executing cron tasks: ' . $secretToken);
+//            $this->logger->error('Error executing cron tasks: ' . $providedToken);
             return new Response('Unauthorized', Response::HTTP_UNAUTHORIZED);
         }
 
@@ -39,7 +39,7 @@ class CronController extends AbstractController
 
         } catch (\Exception $e) {
 
-            $this->logger->error('Error executing cron tasks: ' . $e->getMessage());
+//            $this->logger->error('Error executing cron tasks: ' . $e->getMessage());
 
             return new Response('Internal Server Error', Response::HTTP_INTERNAL_SERVER_ERROR);
         }
