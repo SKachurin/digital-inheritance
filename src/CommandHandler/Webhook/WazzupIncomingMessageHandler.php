@@ -292,11 +292,12 @@ class WazzupIncomingMessageHandler
             ]);
 
             if (!empty($firstAction)) {
-                $firstAction = reset($firstAction);
-                $pipeline->setActionType($firstAction['actionType']);
-                $pipeline->setActionStatus(ActionStatusEnum::ACTIVATED);
-
+//                $firstAction = reset($firstAction);
                 try {
+
+                    $pipeline->setActionType($firstAction['actionType']);
+                    $pipeline->setActionStatus(ActionStatusEnum::ACTIVATED);
+
 
                     $this->entityManager->persist($pipeline);
                     $this->entityManager->flush();
@@ -307,6 +308,7 @@ class WazzupIncomingMessageHandler
 
                     $message = "It's nice to hear it. Resetting :-)";
                     $this->sendWhatsAppService->sendMessageWhatsApp($contact, $message);
+
                 } catch (TransportExceptionInterface $e) {
                     $this->logger->error('6.1-1 processSingleMessage PIPELINE ERROR', [
                         '$e' => $e
