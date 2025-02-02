@@ -293,7 +293,7 @@ class WazzupIncomingMessageHandler
 
             if (!empty($firstAction)) {
                 $fa = reset($firstAction); // or $fa = current($firstAction);
-                // Now we do $fa['actionType'] safely
+
                 $pipeline->setActionType($fa['actionType']);
 
                 if (!isset($fa['actionType'])) {
@@ -301,10 +301,7 @@ class WazzupIncomingMessageHandler
                     return;
                 }
                 $pipeline->setActionType($fa['actionType']);
-
-                $pipeline->setActionType($firstAction['actionType']);
                 $pipeline->setActionStatus(ActionStatusEnum::ACTIVATED);
-
 
                 $this->entityManager->persist($pipeline);
                 $this->entityManager->flush();
