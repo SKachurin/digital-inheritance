@@ -292,14 +292,15 @@ class WazzupIncomingMessageHandler
             ]);
 
             if (!empty($firstAction)) {
-                $fa = reset($firstAction); // or $fa = current($firstAction);
+                $fa = reset($firstAction);
 
-                $pipeline->setActionType($fa['actionType']);
-
+                // Check if actionType is set
                 if (!isset($fa['actionType'])) {
                     $this->logger->error('6.1-1  No "actionType" found in $fa');
                     return;
                 }
+
+                // Use $fa['actionType'] safely
                 $pipeline->setActionType($fa['actionType']);
                 $pipeline->setActionStatus(ActionStatusEnum::ACTIVATED);
 
@@ -312,7 +313,6 @@ class WazzupIncomingMessageHandler
 
                 $message = "It's nice to hear it. Resetting :-)";
                 $this->sendWhatsAppService->sendMessageWhatsApp($contact, $message);
-
 
             } else {
                 $this->logger->error('6.1-0 processSingleMessage no item in $firstAction');
