@@ -160,18 +160,22 @@ class CronBatchConsumer
 
                 // Branch based on action type:
                 if ($activeAction->value === ActionTypeEnum::SOCIAL_CHECK->value) {
-                    // SOCIAL_CHECK: Wait until the interval is reached
-                    if ($now >= $nextActionTime) {
+                    // SOCIAL_CHECK: Wait until the interval is reached && Execute if active
+                    if ($now >= $nextActionTime && $activeActionStatus === ActionStatusEnum::ACTIVATED) {
 
                         $result = $this->executeActiveAction($pipeline, $actionData, $now);
                         $pipeline->setActionStatus($result);
+
+                        return; // next move  - with next run
                     }
                 } else {
-                    // Messenger/Email: Execute immediately if activated
+                    // Messenger/Email: Execute immediately if active
                     if ($activeActionStatus === ActionStatusEnum::ACTIVATED) {
 
                         $result = $this->executeActiveAction($pipeline, $actionData, $now);
                         $pipeline->setActionStatus($result);
+
+                        return; // next move  - with next run
                     }
                 }
 
@@ -181,12 +185,17 @@ class CronBatchConsumer
                     // process the pending action.
                     if ($activeActionStatus !== ActionStatusEnum::ACTIVATED) {
                         $this->processPendingAction($pipeline, $actionData, $now);
-//                        return;
+                        return;
                     }
 
                     // Otherwise, re-run executeActiveAction (or continue with further processing)
 //                    $result = $this->executeActiveAction($pipeline, $actionData, $now);
-                    if (isset($result)) {
+                    if (!isset($result)) {
+
+                        $result = $activeActionStatus;
+
+                    } else {
+
                         switch ($result) {
                             case ActionStatusEnum::ACTIVATED:
                                 // Nothing to change

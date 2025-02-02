@@ -17,10 +17,10 @@ class CronService
     public function __construct(
         private CustomerRepository $customerRepository,
         private CronBatchProducer $batchProducer,
-        LoggerInterface $logger
+//        LoggerInterface $logger
 
     ) {
-        $this->logger = $logger;
+//        $this->logger = $logger;
     }
 
     /**
@@ -40,7 +40,7 @@ class CronService
                 $offset
             );
 
-            $this->logger->error('2 CronService == $batchSize: '. $batchSize);
+//            $this->logger->error('2 CronService == $batchSize: '. $batchSize);
 
             if (count($customers) === 0) {
                 break; // No more customers
