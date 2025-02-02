@@ -18,7 +18,7 @@ class WazzupIncomingMessageHandler
         private readonly ActionRepository $actionRepository,
         private readonly PipelineRepository $pipelineRepository,
         private readonly SendWhatsAppService $sendWhatsAppService,
-//        private readonly LoggerInterface $logger
+        private readonly LoggerInterface $logger
     ) {}
 
     /**
@@ -27,9 +27,9 @@ class WazzupIncomingMessageHandler
      */
     public function handle(array $payload): array
     {
-//        $this->logger->error('5.0 WazzupIncomingMessageHandler STARTED', [
-//            'payload' => $payload,
-//        ]);
+        $this->logger->error('5.0 WazzupIncomingMessageHandler STARTED', [
+            'payload' => $payload,
+        ]);
 
         // If test message, return early
         if (isset($payload['test']) && $payload['test'] === true) {
@@ -99,6 +99,11 @@ class WazzupIncomingMessageHandler
         // 1) Find matching Action by chatId
         $action = $this->actionRepository->findOneBy(['chatId' => $chatId]);
 
+        $this->logger->error('6.1-1 $action', [
+            '$action' => $action->getId(),
+            'ActionStatusEnum' => ActionStatusEnum::from($action->getStatus())
+        ]);
+
         if (!$action) {
 //            $this->logger->error('6.2 processSingleMessage NO ACTION FOUND', [
 //                'chatId' => $chatId
@@ -108,6 +113,8 @@ class WazzupIncomingMessageHandler
 
         //if action not in PENDING state
         if (ActionStatusEnum::from($action->getStatus()) !== ActionStatusEnum::PENDING) {
+
+            $this->logger->error('PROBLEM');
 
             return;
         }
