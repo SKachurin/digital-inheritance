@@ -292,33 +292,33 @@ class WazzupIncomingMessageHandler
             ]);
 
             if (!empty($firstAction)) {
-//                $firstAction = reset($firstAction);
-                try {
+                $fa = reset($firstAction); // or $fa = current($firstAction);
+                // Now we do $fa['actionType'] safely
+                $pipeline->setActionType($fa['actionType']);
 
-                    $pipeline->setActionType($firstAction['actionType']);
-                    $pipeline->setActionStatus(ActionStatusEnum::ACTIVATED);
-
-
-                    $this->entityManager->persist($pipeline);
-                    $this->entityManager->flush();
-
-                    $this->logger->error('6.5 processSingleMessage PIPELINE RESET', [
-                        'pipelineId' => $pipeline->getId()
-                    ]);
-
-                    $message = "It's nice to hear it. Resetting :-)";
-                    $this->sendWhatsAppService->sendMessageWhatsApp($contact, $message);
-
-                } catch (TransportExceptionInterface $e) {
-                    $this->logger->error('6.1-1 processSingleMessage PIPELINE ERROR', [
-                        '$e' => $e
-                    ]);
+                if (!isset($fa['actionType'])) {
+                    $this->logger->error('6.1-1  No "actionType" found in $fa');
+                    return;
                 }
+                $pipeline->setActionType($fa['actionType']);
 
-            } else {
-                $this->logger->error('6.6 processSingleMessage NO FIRST ACTION FOUND IN PIPELINE', [
+                $pipeline->setActionType($firstAction['actionType']);
+                $pipeline->setActionStatus(ActionStatusEnum::ACTIVATED);
+
+
+                $this->entityManager->persist($pipeline);
+                $this->entityManager->flush();
+
+                $this->logger->error('6.5 processSingleMessage PIPELINE RESET', [
                     'pipelineId' => $pipeline->getId()
                 ]);
+
+                $message = "It's nice to hear it. Resetting :-)";
+                $this->sendWhatsAppService->sendMessageWhatsApp($contact, $message);
+
+
+            } else {
+                $this->logger->error('6.1-0 processSingleMessage no item in $firstAction');
             }
 
         } else {
