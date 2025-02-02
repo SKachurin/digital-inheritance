@@ -304,8 +304,8 @@ class WazzupIncomingMessageHandler
                 $pipeline->setActionType($fa['actionType']);
                 $pipeline->setActionStatus(ActionStatusEnum::ACTIVATED);
 
-                $this->entityManager->persist($pipeline);
-                $this->entityManager->flush();
+//                $this->entityManager->persist($pipeline);
+//                $this->entityManager->flush();
 
                 $this->logger->error('6.5 processSingleMessage PIPELINE RESET', [
                     'pipelineId' => $pipeline->getId()
