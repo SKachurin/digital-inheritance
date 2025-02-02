@@ -99,23 +99,10 @@ class WazzupIncomingMessageHandler
         // 1) Find matching Action by chatId
         $action = $this->actionRepository->findOneBy(['chatId' => $chatId]);
 
-        $this->logger->error('6.1-1 $action', [
-            '$action' => $action->getId(),
-            'ActionStatusEnum' => ActionStatusEnum::from($action->getStatus())
-        ]);
-
         if (!$action) {
 //            $this->logger->error('6.2 processSingleMessage NO ACTION FOUND', [
 //                'chatId' => $chatId
 //            ]);
-            return;
-        }
-
-        //if action not in PENDING state
-        if (ActionStatusEnum::from($action->getStatus()) !== ActionStatusEnum::PENDING) {
-
-            $this->logger->error('PROBLEM');
-
             return;
         }
 
@@ -132,9 +119,18 @@ class WazzupIncomingMessageHandler
         $okayPassword = $customer->getCustomerOkayPassword();
         $contact = $action->getContact();
 
+        $pipeline = $this->pipelineRepository->findOneBy(['customer' => $customer]);
+
+        //if action not in PENDING state
+        if ($pipeline->getActionStatus() !== ActionStatusEnum::PENDING) {
+
+            $this->logger->error('PROBLEM');
+
+            return;
+        }
+
         if (password_verify($text, $okayPassword)) {
             // Find & reset Pipeline
-            $pipeline = $this->pipelineRepository->findOneBy(['customer' => $customer]);
 
             if (!$pipeline) {
 //                $this->logger->error('6.4 processSingleMessage NO PIPELINE FOUND', [
