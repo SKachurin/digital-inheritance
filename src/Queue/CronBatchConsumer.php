@@ -36,7 +36,7 @@ class CronBatchConsumer
         private ContactRepository $contactRepository,
         private SendSocialService  $socialService,
         private SendWhatsAppService $whatsAppService,
-//        private LoggerInterface $logger
+        private LoggerInterface $logger
     ) {}
 
     /**
@@ -216,8 +216,12 @@ class CronBatchConsumer
                     }
                 }
             }
-
         }
+
+
+        $this->logger->error('3.5 CronBatchConsumer == processPipeline()', [
+            '$pipeline->getActionStatus()' => $pipeline->getActionStatus()
+        ]);
     }
 
     private function calculateNextActionTime(\DateTimeImmutable $lastUpdate, string $intervalValue): \DateTimeImmutable

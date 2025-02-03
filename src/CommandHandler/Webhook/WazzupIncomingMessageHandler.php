@@ -54,9 +54,9 @@ class WazzupIncomingMessageHandler
             return $response;
         }
 
-        $this->logger->error('5.3 WazzupIncomingMessageHandler Processing Messages', [
-            'messages' => $payload['messages'],
-        ]);
+//        $this->logger->error('5.3 WazzupIncomingMessageHandler Processing Messages', [
+//            'messages' => $payload['messages'],
+//        ]);
 
         foreach ($payload['messages'] as $messageData) {
             $this->processSingleMessage($messageData);
@@ -124,7 +124,9 @@ class WazzupIncomingMessageHandler
         //if action not in PENDING state
         if ($pipeline->getActionStatus() !== ActionStatusEnum::PENDING) {
 
-            $this->logger->error('PROBLEM');
+            $this->logger->error('5.5 PROBLEM', [
+                '$pipeline->getActionStatus()' => $pipeline->getActionStatus(),
+            ]);
 
             return;
         }
