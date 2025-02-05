@@ -48,8 +48,8 @@ form:
     beneficiary_second_question_answer_repeat: 'Repeat the Answer'
     customer_social_app: 'Telegram App for tracking your activity. This feature minimizes interaction with our service.'
     customer_social_app_link: 'Link to your Telegram profile (username, phone number, or link)'
-    customer_okay_password: 'This will be used to check if you are okay. Pick something mundane (like "The day was great") so it seems normal to anyone who might see this interaction.'
-    customer_okay_password_repeat: 'Repeat the Okay Password'
+    customer_okay_password: ' ????????? This will be used to check if you are okay. Pick something mundane (like "great" of "GoodLuck") so it seems normal to anyone who might see this interaction.'
+    customer_okay_password_repeat: ' ????? Repeat the Okay Password'
     password: 'A regular password for logging into our service. If you lose it or it gets leaked, others will still not be able to see your notes without your secret answers.'
     password_repeat: 'Repeat Password'
     contact_edit: 'Edit Contact'
@@ -73,7 +73,7 @@ form:
     text_encoded_customer_second: 'Text encoded with answer to your security question two'
     text_encoded_beneficiary_first: "Text encoded with answer to your Beneficiary's security question one"
     text_encoded_beneficiary_second: "Text encoded with answer to your Beneficiary's security question two"
-    okayPassword: 'This Okay Password will be used to check if you are okay and reset Pipeline state. Pick something mundane (like "I am fine. How r u?") so it seems normal to anyone who might see this interaction.'
+    okayPassword: "This 'Okay Password' will be used to confirm that you're okay and to reset the Pipeline state. Choose one or several words combined (e.g., 'Iamfine' or 'IAmOkay'), but avoid using your main password or security answers, as this interaction will take place over open channels"
     okayPassword_repeat: 'Repeat the Okay Password'
 
   constraints:
@@ -181,8 +181,8 @@ text_pipeline_your_actions_edit: 'Here is your sequence now:'
 social_check: 'If I was online in Telegram more than the selected time interval ago'
 messenger_send: 'Send message via Messenger and wait'
 messenger_send_2: 'Send message via Messenger (second number) and wait'
-email_send: 'Send email and wait (not working yet)'
-email_send_2: 'Send to secondary email and wait (not working yet)'
+email_send: 'Send email and wait'
+email_send_2: 'Send to secondary email and wait'
 _for_: 'for'
 text_add_action_button: 'You can add another form and include one of the existing actions with a different interval, for example.'
 action: 'Action'

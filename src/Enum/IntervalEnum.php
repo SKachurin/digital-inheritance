@@ -8,6 +8,7 @@ enum IntervalEnum: string
 {
     case NOT_SET = 'not_set';
     case TEST_1_MIN = 'TEST_1_min';
+    case TEST_10_MIN = 'TEST_10_min';
     case HOUR_1 = '1_hour';
     case HOURS_5 = '5_hours';
     case HOURS_12 = '12_hours';
@@ -15,24 +16,6 @@ enum IntervalEnum: string
     case DAY_3 = '3_days';
     case DAY_7 = '7_days';
     case MONTH = '1_month';
-
-//    /**
-//     * @return array<int, string>
-//     */
-//    public static function getValues(): array
-//    {
-//        return [
-//            self::NOT_SET,
-//            self::TEST_1_MIN->value,
-//            self::HOUR_1->value,
-//            self::HOURS_5->value,
-//            self::HOURS_12->value,
-//            self::DAY_1->value,
-//            self::DAY_3->value,
-//            self::DAY_7->value,
-//            self::MONTH->value,
-//        ];
-//    }
 
     /**
      * @return array<string>
@@ -47,6 +30,7 @@ enum IntervalEnum: string
         return match ($status) {
             self::NOT_SET->value => self::NOT_SET,
             self::TEST_1_MIN->value => self::TEST_1_MIN,
+            self::TEST_10_MIN->value => self::TEST_10_MIN,
             self::HOUR_1->value => self::HOUR_1,
             self::HOURS_5->value => self::HOURS_5,
             self::HOURS_12->value => self::HOURS_12,
@@ -63,6 +47,7 @@ enum IntervalEnum: string
         return match ($this) {
             self::NOT_SET => new \DateInterval('PT0S'),
             self::TEST_1_MIN => new \DateInterval('PT1M'),
+            self::TEST_10_MIN => new \DateInterval('PT10M'),
             self::HOUR_1 => new \DateInterval('PT1H'),
             self::HOURS_5 => new \DateInterval('PT5H'),
             self::HOURS_12 => new \DateInterval('PT12H'),

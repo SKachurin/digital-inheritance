@@ -14,6 +14,7 @@ use App\Repository\ActionRepository;
 use App\Repository\ContactRepository;
 use App\Repository\CustomerRepository;
 use App\Repository\PipelineRepository;
+use App\Service\SendEmailService;
 use App\Service\SendSocialService;
 use App\Service\SendWhatsAppService;
 use Doctrine\ORM\EntityManagerInterface;
@@ -36,6 +37,7 @@ class CronBatchConsumer
         private ContactRepository $contactRepository,
         private SendSocialService  $socialService,
         private SendWhatsAppService $whatsAppService,
+        private SendEmailService  $emailService,
         private LoggerInterface $logger
     ) {}
 
@@ -254,7 +256,7 @@ class CronBatchConsumer
             ActionTypeEnum::MESSENGER_SEND,
             ActionTypeEnum::MESSENGER_SEND_2 => $this->sendMessenger($action, $contact, $message),
             ActionTypeEnum::EMAIL_SEND,
-            ActionTypeEnum::EMAIL_SEND_2 => ActionStatusEnum::PENDING, //TODO send message with token - token lasts for Interval - if token correct - redirect to password enter page
+            ActionTypeEnum::EMAIL_SEND_2 => $this->sendEmail($action, $contact, $message),
             default => throw new \Exception("Unsupported action type: $actionType->value"),
         };
     }
@@ -439,6 +441,34 @@ class CronBatchConsumer
         $data = $this->decodeJsonResponse($response);
 
         if (isset($data['messageId'])) {
+            //success. message sent.
+            $action->setChatId($data['chatId']);
+
+            return ActionStatusEnum::PENDING;
+        }
+
+        //fail to check  - next try
+        return ActionStatusEnum::ACTIVATED;
+    }
+
+
+    /**
+     * @param Action $action
+     * @param Contact $contact
+     * @param string $message
+     * @return ActionStatusEnum
+     * @throws \SodiumException
+     */
+    private function sendEmail(Action $action, Contact $contact, string $message): ActionStatusEnum
+    {
+
+        $response = $this->emailService->sendMessageEmail($contact, $message);
+
+//        $this->logger->error('4 CronBatchConsumer sendEmail == $response' . $response);
+
+        $data = $this->decodeJsonResponse($response);
+
+        if (isset($data['chatId'])) {
             //success. message sent.
             $action->setChatId($data['chatId']);
 

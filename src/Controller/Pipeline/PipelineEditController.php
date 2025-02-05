@@ -127,7 +127,8 @@ class PipelineEditController extends AbstractController
                     //on edit set Pipeline fields from First Action(DTO) in sequence
                     if($actionDto->getPosition() == '1'){
                         $pipeline->setActionType($action->getActionType());
-                        $pipeline->setActionStatus(ActionStatusEnum::fromString($action->getStatus()));
+                        $pipeline->setActionStatus(ActionStatusEnum::ACTIVATED);
+                        $pipeline->setPipelineStatus(ActionStatusEnum::ACTIVATED);
                     }
                     $action->setTimeInterval($actionDto->getInterval());
                     $this->entityManager->persist($action);
