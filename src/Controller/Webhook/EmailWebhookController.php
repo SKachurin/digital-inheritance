@@ -12,7 +12,7 @@ class EmailWebhookController extends AbstractController
 {
     public function __construct(
         private readonly EmailIncomingMessageHandler $incomingMessageHandler,
-//        private readonly LoggerInterface $logger
+        private readonly LoggerInterface $logger
     ) {
     }
 
@@ -20,9 +20,9 @@ class EmailWebhookController extends AbstractController
     {
         $payload = json_decode($request->getContent(), true);
 
-//        $this->logger->error('4 email_webhook', [
-//            '$payload' => $payload,
-//        ]);
+        $this->logger->error('4 email_webhook', [
+            '$payload' => $payload,
+        ]);
 
         if (!\is_array($payload)) {
             return new JsonResponse(['error' => 'Invalid JSON'], 400);
