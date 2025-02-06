@@ -22,6 +22,7 @@ class EmailWebhookController extends AbstractController
 
         $this->logger->error('4 email_webhook', [
             '$payload' => $payload,
+            '$request' => $request
         ]);
 
         if (!\is_array($payload)) {
