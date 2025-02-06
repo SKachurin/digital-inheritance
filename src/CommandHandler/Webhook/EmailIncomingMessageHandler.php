@@ -18,18 +18,14 @@ class EmailIncomingMessageHandler
     public function handle(array $payload): array
     {
         $this->logger->error('5.0 EmailIncomingMessageHandler STARTED', [
-            'payload' => $payload,
+//            'payload' => $payload,
+            'stripped-text' => $payload['stripped-text'],
+            'body-plain' => $payload['body-plain'],
+
         ]);
 
-        //NO messages found, Returning 200
-        if (!isset($payload['Body-plain']) || !isset($payload['sender'])) {
-
-            return ['status_code' => 200, 'payload' => ['success' => true]];
-
-        }
-
         /**
-         * Body-plain string
+         * body-plain string
          * The text version of the email.
          * This field is always present.
          * If the incoming message only has HTML body,
@@ -39,7 +35,7 @@ class EmailIncomingMessageHandler
          * The text version of the message
          * without quoted parts and signature block (if found)
          */
-        $text = $payload['stripped-text'] ?? $payload['Body-plain'];
+        $text = $payload['stripped-text'] ?? $payload['body-plain'];
 
         $this->messageProcessorService->processMessage(
             sender: $payload['sender'],

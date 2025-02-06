@@ -18,16 +18,13 @@ class EmailWebhookController extends AbstractController
 
     public function __invoke(Request $request): JsonResponse
     {
-        $payload = json_decode($request->getContent(), true);
+        $payload = $request->request->all();
 
-        $this->logger->error('4 email_webhook', [
-            '$payload' => $payload,
-            '$request' => $request
-        ]);
-
-        if (!\is_array($payload)) {
-            return new JsonResponse(['error' => 'Invalid JSON'], 400);
+        //NO messages found, Returning 200
+        if (!isset($payload['body-plain']) || !isset($payload['sender'])) {
+            return ['status_code' => 200, 'payload' => ['success' => true]];
         }
+
 
 //        $this->logger->error('4.1 email_webhook', [
 //            'message' => $request->getContent(),
