@@ -36,7 +36,7 @@ class MessageProcessorService
             return;
         }
 
-        if ( $pipeline->getActionStatus() !== ActionStatusEnum::PENDING) {
+        if ($pipeline->getActionStatus() !== ActionStatusEnum::PENDING || $action !== $pipeline->getActionType()) {
 
             $sendMessage($contact, "Now's not the time \u{1F632}"); // 😲
             return;
