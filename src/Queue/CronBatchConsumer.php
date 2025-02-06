@@ -168,7 +168,7 @@ class CronBatchConsumer
                         $result = $this->executeActiveAction($pipeline, $actionData, $now);
                         $pipeline->setActionStatus($result);
 
-                        return; // next move  - with next run
+                        //return; // next move  - NOW
                     }
                 } else {
                     // Messenger/Email: Execute immediately if active
@@ -185,7 +185,7 @@ class CronBatchConsumer
                 if ($now >= $nextActionTime) {
                     // If the pipeline is no longer in ACTIVATED status (for example, it’s PENDING),
                     // process the pending action.
-                    if ($activeActionStatus !== ActionStatusEnum::ACTIVATED) {
+                    if ($activeActionStatus !== ActionStatusEnum::ACTIVATED && $activeActionStatus !== ActionStatusEnum::FAIL) {
                         $this->processPendingAction($pipeline, $actionData, $now);
                         return;
                     }
