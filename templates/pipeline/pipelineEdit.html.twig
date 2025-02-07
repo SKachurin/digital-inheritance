@@ -41,6 +41,15 @@
             <div class="col-md-12">
                 <h1 class="form-header" style="padding-top: 2em;">{{ 'pipeline'|trans }}</h1>
                 <h4 style="padding-bottom: 3em;">{{ 'create_edit_your_pipeline'|trans }}</h4>
+
+                {% for label, messages in app.flashes %}
+                    {% for message in messages %}
+                        <div class="alert alert-{{ label }}">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endfor %}
+
                 <p>{{ 'text_pipeline'|trans }}</p>
                 {{ 'text_pipeline_your_actions'|trans }}
                 {% for action in actions %}

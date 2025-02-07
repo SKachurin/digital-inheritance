@@ -23,6 +23,7 @@ class SendEmailService
     public function sendMessageEmail(Contact $contact, string $message): JsonResponse
     {
         $emailAddress = $this->cryptoService->decryptData($contact->getValue());
+        $name = $contact->getCustomer()->getCustomerName();
 
         if (is_string($emailAddress)) {
 
@@ -30,7 +31,7 @@ class SendEmailService
             $email = (new TemplatedEmail())
                 ->from('info@thedigitalheir.com')
                 ->to($emailAddress)
-                ->subject('Message from TheDigitalHeir')
+                ->subject($message . ' - Message from TheDigitalHeir')
                 ->htmlTemplate('emails/alert_pipeline_email.html.twig')
                 ->context([
                     'emailAddress' => $emailAddress,

@@ -144,6 +144,8 @@ class PipelineEditController extends AbstractController
 
                 $this->entityManager->flush();
 
+                $this->addFlash('success', 'Your Pipeline has been saved.');
+
                 return $this->redirectToRoute('pipeline_edit', ['pipelineId' => $pipeline->getId()]);
             }
         }

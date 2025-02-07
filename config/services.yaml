@@ -7,6 +7,9 @@ parameters:
     encryption_key: '%env(ENCRYPTION_KEY)%'
     personal_string: '%env(PERSONAL_STRING)%'
     cron_secret_token: '%env(CRON_SECRET_TOKEN)%'
+    telegram_url: '%env(TELEGRAM_URL)%'
+    admin_tg: '%env(ADMIN_TG)%'
+    admin_wa: '%env(ADMIN_WA)%'
 
 services:
     # default configuration for services in *this* file

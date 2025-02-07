@@ -4,15 +4,22 @@ namespace App\Controller;
 use Symfony\Component\HttpClient\HttpClient;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 
 class PythonServiceController extends AbstractController
 {
+    private ParameterBagInterface $params;
+
+    public function __construct(ParameterBagInterface $params)
+    {
+        $this->params = $params;
+    }
     public function callPythonService(?array $users, ?string $message = null): JsonResponse
     {
-        $url = 'http://python-service:5000/process_telegram_data';
+        $url = $this->params->get('telegram_url');
 
         if(!$users) {
-            $users = ['@preved', '+79109019184'];
+            $users = ['@sergei_rz'];
         }
 
         $data = [

@@ -395,6 +395,12 @@ class CronBatchConsumer
                 $maxAllowedTime = $now->sub($interval);
 
                 if ($lastOnlineTime < $maxAllowedTime) {
+
+                    $this->logger->error('3.2-2 sendSocialCheck()', [
+                        '$lastOnlineTime' => $lastOnlineTime,
+                        'now' => $now,
+                    ]);
+
                     return ActionStatusEnum::FAIL; // user is offline too long
                 }
 
@@ -409,11 +415,6 @@ class CronBatchConsumer
 //                ));
             }
         }
-
-//        $this->logger->error('3.2-2 sendSocialCheck()', [
-//            '$lastOnlineTime' => $lastOnlineTime,
-//            'now' => $now,
-//        ]);
 
         //next try
         return ActionStatusEnum::ACTIVATED;
