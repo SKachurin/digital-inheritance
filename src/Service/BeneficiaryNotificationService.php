@@ -20,17 +20,21 @@ use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 class BeneficiaryNotificationService
 {
     public function __construct(
-        private MailerInterface $mailer,
-        private UrlGeneratorInterface $urlGenerator,
-        private EntityManagerInterface $entityManager,
+        private MailerInterface             $mailer,
+        private UrlGeneratorInterface       $urlGenerator,
+        private EntityManagerInterface      $entityManager,
         private VerificationTokenRepository $tokenRepository,
-        private CryptoService $cryptoService,
-        private LoggerInterface $logger,
-    ) {}
-
+        private CryptoService               $cryptoService,
+        private SendSocialService           $sendSocialService,
+        private SendWhatsAppService         $sendWhatsAppService,
+        private LoggerInterface             $logger,
+    )
+    {
+    }
 
     /**
      * @throws Exception|TransportExceptionInterface
+     * @throws \Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface
      */
     public function notifyBeneficiary(Beneficiary $beneficiary, array $contacts, \DateTimeImmutable $now): bool
     {
@@ -71,10 +75,10 @@ class BeneficiaryNotificationService
 
             match (ContactTypeEnum::tryFrom($contact->getContactTypeEnum()) ) {
 
-                ContactTypeEnum::EMAIL => $this->sendEmailNotification($contact, $message, $token, $accessUrl),
+                ContactTypeEnum::EMAIL => $this->sendEmailNotification($contact, $message, $accessUrl),
                 ContactTypeEnum::PHONE,
-                ContactTypeEnum::MESSENGER => $this->logger->error('ContactTypeEnum::MESSENGER'),
-                ContactTypeEnum::SOCIAL => $this->logger->error('ContactTypeEnum::SOCIAL'),
+                ContactTypeEnum::MESSENGER => $this->sendWhatsAppNotification($contact, $message, $accessUrl),
+                ContactTypeEnum::SOCIAL => $this->sendSocialServiceNotification($contact, $message, $accessUrl),  // TODO add Telegram to Beneficiary fields
 
 //                default => throw new Exception("Unsupported action type:" . $contact->getContactTypeEnum() ),
             };
@@ -87,7 +91,7 @@ class BeneficiaryNotificationService
     /**
      * @throws Exception|TransportExceptionInterface
      */
-    private function sendEmailNotification(Contact $contact, string $message, VerificationToken $token, string $accessUrl): void
+    private function sendEmailNotification(Contact $contact, string $message, string $accessUrl): void
     {
         $emailAddress = $this->cryptoService->decryptData($contact->getValue());
 
@@ -112,5 +116,60 @@ class BeneficiaryNotificationService
         } else {
             throw new Exception("Invalid email address.");
         }
+    }
+
+    /**
+     * @throws \SodiumException
+     * @throws \Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface
+     */
+    private function sendWhatsAppNotification(Contact $contact, string $message, string $accessUrl): void
+    {
+        $message = $message . ' '. $accessUrl;
+
+        $this->sendWhatsAppService->sendMessageWhatsApp($contact, $message);
+
+//        $phone = $this->cryptoService->decryptData($contact->getValue());
+//
+////        $this->logger->error('3.4 CronBatchConsumer == $phone' . $phone);
+//
+//        if (!is_string($phone)) {
+//            throw new \Exception("Invalid phone number.");
+//        }
+//
+//        $phoneNumber = $contact->getCountryCode() . $phone;
+//
+//        $url = $this->apiUrl . '/v3/message';
+//
+//
+//        try {
+//            $this->client->request('POST', $url, [
+//                'headers' => [
+//                    'Authorization' => 'Bearer ' . $this->apiToken,
+//                    'Content-Type' => 'application/json',
+//                ],
+//                'body' => json_encode([
+//                    "channelId" => "058a7934-be60-4fa0-b943-61aab4818f23",
+//                    "chatType" => "whatsapp",
+//                    "text" => $message,
+//                    "chatId" => $phoneNumber,
+//                    "contentUri" => "",
+//                    "templateId" => ""
+//                ]),
+//            ]);
+//
+//        } catch (\Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface $e) {
+//
+//        }
+    }
+
+    /**
+     * @throws \SodiumException
+     */
+    private function sendSocialServiceNotification(Contact $contact, string $message, string $accessUrl): void
+    {
+        $message = $message . ' ' . $accessUrl;
+
+        $this->sendSocialService->sendMessageSocial($contact, $message);
+
     }
 }

@@ -23,11 +23,10 @@ class SendEmailService
     public function sendMessageEmail(Contact $contact, string $message): JsonResponse
     {
         $emailAddress = $this->cryptoService->decryptData($contact->getValue());
-        $name = $contact->getCustomer()->getCustomerName();
+//        $name = $this->cryptoService->decryptData($contact->getCustomer()->getCustomerName());
 
         if (is_string($emailAddress)) {
 
-            //TemplatedEmail with the Twig template
             $email = (new TemplatedEmail())
                 ->from('info@thedigitalheir.com')
                 ->to($emailAddress)

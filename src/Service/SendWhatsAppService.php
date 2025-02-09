@@ -10,26 +10,14 @@ use Psr\Log\LoggerInterface;
 
 class SendWhatsAppService
 {
-    private CryptoService $cryptoService;
-    private HttpClientInterface $client;
-//    private LoggerInterface $logger;
-    private string $apiUrl;
-    private string $apiToken;
-
     public function __construct(
-        CryptoService           $cryptoService,
-        HttpClientInterface     $client,
-        LoggerInterface         $logger,
-        string                  $apiUrl,
-        string                  $apiToken
+        private CryptoService           $cryptoService,
+        private HttpClientInterface     $client,
+//        private LoggerInterface         $logger,
+        private string                  $apiUrl,
+        private string                  $apiToken
     )
-    {
-        $this->cryptoService = $cryptoService;
-        $this->client = $client;
-//        $this->logger = $logger;
-        $this->apiUrl = $apiUrl;
-        $this->apiToken = $apiToken;
-    }
+    {}
 
     /**
      * @throws \SodiumException

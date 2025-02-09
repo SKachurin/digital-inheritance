@@ -8,16 +8,11 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 
 class SendSocialService
 {
-    private CryptoService $cryptoService;
-    private PythonServiceController $pythonServiceController;
-
     public function __construct(
-        CryptoService               $cryptoService,
-        PythonServiceController $pythonServiceController
+        private CryptoService           $cryptoService,
+        private PythonServiceController $pythonServiceController
     )
     {
-        $this->cryptoService = $cryptoService;
-        $this->pythonServiceController = $pythonServiceController;
     }
 
     /**

@@ -30,7 +30,7 @@
         }
     </style>
     <div class="container">
-        <h1 style="padding-top: 3em; font-size: 2rem;">
+        <h1 style="padding-top: 4em; font-size: 2rem;">
             {{ 'header.envelope_from'|trans }} {{ customerFullName }} {{ 'header.for'|trans }} {{ beneficiaryFullName }}
         </h1>
 
@@ -56,7 +56,7 @@
 
                     {{ form_start(form) }}
                     {{ form_row(form.customerText) }}
-                    <p class="alert alert-success" style="padding: 2em;">  {{ 'link_will_expire'|trans|nl2br }}</p>
+                    <p class="alert alert-success" style="padding: 2em;">  {{ 'header.link_will_expire'|trans|nl2br }}</p>
                     {{ form_end(form) }}
 
                 {% endif %}
