@@ -11,6 +11,14 @@ header:
   new_heir_explain: 'Por favor, facilite la mayor cantidad de información posible sobre su heredero: esto nos ayudará a contactarlo en caso de que ocurran los eventos que describa en la sección del Pipeline.'
   new_heir_explain_1: "Sea especialmente preciso con los datos de contacto (como teléfono o correo electrónico), ya que no se verificarán en este momento."
   test_mode: 'Atención: Este servicio se encuentra actualmente en modo de prueba. Por favor, no introduzca ningún dato sensible.'
+  access_denied: 'Acceso denegado'
+  access_denied_text: 'No tienes acceso a este sobre seguro o el enlace ha expirado.'
+  envelope_from: 'Este sobre fue creado por '
+  for: ' para '
+  decrypt_to_read: 'Para leer tu sobre seguro, primero debes descifrarlo.'
+  here_is_your_data: 'Aquí están tus datos'
+  save_it: 'Guárdalos ahora o podrás intentar descifrarlos más tarde.'
+  link_will_expire: 'El enlace a esta página expirará en una semana.'
 
 form:
   attr:

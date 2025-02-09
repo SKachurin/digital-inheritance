@@ -13,21 +13,14 @@ use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 #[AsMessageHandler]
 class NoteEditCounterHandler
 {
-//    private ParameterBagInterface $params;
-    private LoggerInterface $logger;
-    private EntityManagerInterface $entityManager;
     private int $MAX_ATTEMPTS = 5;
     private int $FIRST_LOCK_TIME = 60;
 
     public function __construct(
-//        ParameterBagInterface $params,
-        LoggerInterface $logger,
-        EntityManagerInterface $entityManager
-    ) {
-//        $this->params = $params;
-        $this->logger = $logger;
-        $this->entityManager = $entityManager;
-    }
+//      private ParameterBagInterface $params,
+        private LoggerInterface $logger,
+        private EntityManagerInterface $entityManager
+    ) {}
 
     /**
      * @throws Exception

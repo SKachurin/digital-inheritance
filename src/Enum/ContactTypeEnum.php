@@ -4,23 +4,18 @@ declare(strict_types=1);
 
 namespace App\Enum;
 
-enum  ContactTypeEnum //: string implements TransformableEnumInterface
+enum  ContactTypeEnum: string
 {
-    public const EMAIL = 'email';
-    public const PHONE = 'phone';
-    public const MESSENGER = 'messenger';
-    public const SOCIAL = 'social';
+    case EMAIL = 'email';
+    case PHONE = 'phone';
+    case MESSENGER = 'messenger';
+    case SOCIAL = 'social';
 
     /**
-     * @return array<int, string>
+     * @return array<string>
      */
     public static function getValues(): array
     {
-        return [
-            self::EMAIL,
-            self::PHONE,
-            self::MESSENGER,
-            self::SOCIAL,
-        ];
+        return array_map(fn(self $case) => $case->value, self::cases());
     }
 }

@@ -22,7 +22,7 @@ class EmailWebhookController extends AbstractController
 
         //NO messages found, Returning 200
         if (!isset($payload['body-plain']) || !isset($payload['sender'])) {
-            return ['status_code' => 200, 'payload' => ['success' => true]];
+            return new JsonResponse(['status_code' => 200, 'payload' => ['success' => true]]);
         }
 
 

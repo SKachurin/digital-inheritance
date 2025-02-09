@@ -13,7 +13,7 @@ use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
 #[AsMessageHandler]
-class NoteDecryptHandler
+class NoteDecryptHandler  // TODO Looks like legacy to me
 {
     private ParameterBagInterface $params;
     private LoggerInterface $logger;

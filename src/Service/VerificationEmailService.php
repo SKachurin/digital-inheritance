@@ -33,7 +33,7 @@ class VerificationEmailService
      */
     public function sendVerificationEmail(Contact $contact): void
     {
-        $verificationToken = $this->tokenRepository->findOneBy(['contact' => $contact->getId()]);
+        $verificationToken = $this->tokenRepository->findOneBy(['contact' => $contact]);
         if ($verificationToken) {
             $this->tokenRepository->delete($verificationToken);
         }

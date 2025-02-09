@@ -5,7 +5,7 @@ namespace App\CommandHandler\Note\Decrypt;
 use App\Entity\Customer;
 use Symfony\Component\Validator\Constraints as Assert;
 
-class NoteDecryptInputDto
+class NoteDecryptInputDto // TODO Looks like legacy to me
 {
     #[Assert\NotBlank]
     private Customer $customer;

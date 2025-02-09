@@ -11,6 +11,14 @@ header:
   new_heir_explain: 'Please provide as much information about your Heir as possible — this will help us reach this person in case of the events you describe in the Pipeline section.'
   new_heir_explain_1: "Please be especially precise with contact details (like phone and email) as they are not going to be verified now."
   test_mode: 'Attention: This service is currently in Test Mode. Please do not enter any sensitive data.'
+  access_denied: 'Access Denied'
+  access_denied_text: 'You do not have access to this secure envelope or the link has expired.'
+  envelope_from: 'This envelope was created by '
+  for: ' for '
+  decrypt_to_read: 'To read your secure envelope, please decrypt it first.'
+  here_is_your_data: 'Here is your Data'
+  save_it: 'Please save it now or you can attempt to decrypt it later again'
+  link_will_expire: 'Link to this page will expire in one week.'
 
 form:
   attr:

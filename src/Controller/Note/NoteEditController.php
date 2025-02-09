@@ -24,28 +24,15 @@ use Doctrine\ORM\EntityManagerInterface;
 
 class NoteEditController extends AbstractController
 {
-    private MessageBusInterface $commandBus;
-    private NoteRepository $repository;
-    private CryptoService $cryptoService;
-    private NoteEditTextHandler $noteEditTextHandler;
-    private NoteEditCounterHandler $noteEditCounterHandler;
-    private EntityManagerInterface $entityManager;
     public function __construct(
-        NoteRepository $repository,
-        MessageBusInterface $commandBus,
-        CryptoService $cryptoService,
-        NoteEditTextHandler $noteEditTextHandler,
-        NoteEditCounterHandler $noteEditCounterHandler,
-        EntityManagerInterface $entityManager
+        private readonly NoteRepository         $repository,
+        private readonly MessageBusInterface    $commandBus,
+        private readonly CryptoService          $cryptoService,
+        private readonly NoteEditTextHandler    $noteEditTextHandler,
+        private readonly NoteEditCounterHandler $noteEditCounterHandler,
+        private readonly EntityManagerInterface $entityManager
     )
-    {
-        $this->repository = $repository;
-        $this->commandBus = $commandBus;
-        $this->cryptoService = $cryptoService;
-        $this->noteEditTextHandler = $noteEditTextHandler;
-        $this->noteEditCounterHandler = $noteEditCounterHandler;
-        $this->entityManager = $entityManager;
-    }
+    {}
 
     /**
      * @throws SodiumException|RandomException

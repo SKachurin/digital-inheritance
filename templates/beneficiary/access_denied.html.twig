@@ -1,0 +1,51 @@
+{% extends 'base.html.twig' %}
+
+{% block content %}
+    <style>
+        .form-container {
+            padding-top: 4em;
+        }
+        .form-header {
+            margin-bottom: 1em; /* Add some space between the header and the form */
+        }
+        .button-group {
+            display: flex;
+            align-items: center;
+            margin-top: 0.5em; /* Adjust margin to align buttons properly */
+        }
+        .button-group a {
+            margin-left: 1em; /* Space between the buttons and the text area */
+        }
+        .divider {
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+        }
+
+        .divider::before, .divider::after {
+            flex: 1;
+            content: '';
+            padding: 1px;
+            background-color: #bbbb;
+            margin: 2em !important;
+        }
+    </style>
+    <div class="container">
+        <h1 style="padding-top: 8em; font-size: 2rem;">{{ 'header.access_denied'|trans }}</h1>
+
+        <div class="row">
+            <div class="col-md-12">
+                <h4 style="padding-bottom: 3em;">{{ 'header.access_denied_text'|trans }}</h4>
+
+            </div>
+        </div>
+
+        {% for label, messages in app.flashes %}
+            {% for message in messages %}
+                <div class="alert alert-{{ label }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endfor %}
+    </div>
+{% endblock %}

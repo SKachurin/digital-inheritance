@@ -7,6 +7,7 @@ use App\Entity\Contact;
 use App\Entity\Pipeline;
 use App\Enum\ActionStatusEnum;
 use App\Enum\ActionTypeEnum;
+use App\Enum\ContactTypeEnum;
 use App\Enum\CustomerPaymentStatusEnum;
 use App\Enum\IntervalEnum;
 use App\Message\CronBatchMessage;
@@ -14,6 +15,7 @@ use App\Repository\ActionRepository;
 use App\Repository\ContactRepository;
 use App\Repository\CustomerRepository;
 use App\Repository\PipelineRepository;
+use App\Service\BeneficiaryNotificationService;
 use App\Service\SendEmailService;
 use App\Service\SendSocialService;
 use App\Service\SendWhatsAppService;
@@ -38,6 +40,7 @@ class CronBatchConsumer
         private SendSocialService  $socialService,
         private SendWhatsAppService $whatsAppService,
         private SendEmailService  $emailService,
+        private BeneficiaryNotificationService $beneficiaryNotificationService,
         private LoggerInterface $logger
     ) {}
 
@@ -317,23 +320,24 @@ class CronBatchConsumer
 //            $this->logger->info(sprintf('No next action found for pipeline ID %d', $pipeline->getId()));
             $pipeline->setPipelineStatus(ActionStatusEnum::FAIL);
 
-            // process Failed Pipeline Function?
-            $result = $this->processFailedPipeline($pipeline, $actionData, $now);
+            // process Failed Pipeline Function
+            $result = $this->processFailedPipeline($pipeline, $now);
 
-//            if (!empty($result)) {
-//                //done
-//                $this->logger->info(sprintf('Pipeline ID %d ended at %s',$pipeline->getId(), $now->format('c')));
-//            }
+            //done
+            $result = $result ? 'true' : 'false';
+            $this->logger->info(sprintf('Pipeline ID %d ended at %s with result %s', $pipeline->getId(), $now->format('c'), $result));
+
         }
     }
 
-    private function processFailedPipeline(Pipeline $pipeline, mixed $actionData, \DateTimeImmutable $now) : bool
+    private function processFailedPipeline(Pipeline $pipeline, \DateTimeImmutable $now) : bool
     {
+        $beneficiaries = $pipeline->getCustomer()->getBeneficiary();
+        $beneficiary = $beneficiaries[0];
+        $contacts = $this->contactRepository->findBy(['beneficiary' => $beneficiary]);
+
         // logic to send Envelope to the Heir
-
-//        $this->logger->error('10 processFailedPipeline');
-
-        return true;
+        return $this->beneficiaryNotificationService->notifyBeneficiary($beneficiary, $contacts, $now);
     }
 
     /**
