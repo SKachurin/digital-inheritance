@@ -10,6 +10,7 @@ use App\Repository\VerificationTokenRepository;
 use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
 use Exception;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -23,7 +24,8 @@ class BeneficiaryNotificationService
         private UrlGeneratorInterface $urlGenerator,
         private EntityManagerInterface $entityManager,
         private VerificationTokenRepository $tokenRepository,
-        private CryptoService $cryptoService
+        private CryptoService $cryptoService,
+        private LoggerInterface $logger,
     ) {}
 
 
@@ -34,8 +36,12 @@ class BeneficiaryNotificationService
     {
         $message = sprintf(
             "Hey %s,\n\nPerson named %s has listed this contact as an emergency contact on The Digital Heir. Click the link to access the secure envelope:",
-            $beneficiary->getBeneficiaryFullName(),
+            $beneficiary->getBeneficiaryFullName()
+                ? $this->cryptoService->decryptData($beneficiary->getBeneficiaryFullName())
+                : '_unknown_',
             $beneficiary->getCustomer()->getCustomerFullName()
+                ? $this->cryptoService->decryptData($beneficiary->getCustomer()->getCustomerFullName())
+                : '_unknown_'
         );
 
         foreach ($contacts as $contact) {
@@ -44,6 +50,8 @@ class BeneficiaryNotificationService
             if ($verificationToken) {
                 $this->tokenRepository->delete($verificationToken);
             }
+
+            $this->logger->error('$contact: '. $contact->getId());
 
             $token = new VerificationToken(
                 $contact,
@@ -55,6 +63,8 @@ class BeneficiaryNotificationService
             $this->entityManager->persist($token);
             $this->entityManager->flush();
 
+            $this->logger->error('$token: '. $token->getId());
+
             $accessUrl = $this->urlGenerator->generate('beneficiary_access_note', [
                 'token' => $token->getToken()
             ], UrlGeneratorInterface::ABSOLUTE_URL);
@@ -62,9 +72,9 @@ class BeneficiaryNotificationService
             match (ContactTypeEnum::tryFrom($contact->getContactTypeEnum()) ) {
 
                 ContactTypeEnum::EMAIL => $this->sendEmailNotification($contact, $message, $token, $accessUrl),
-//                ContactTypeEnum::PHONE,
-//                ContactTypeEnum::MESSENGER => $this->sendMessenger($contact, $message),
-//                ContactTypeEnum::SOCIAL => $this->sendSocial($action, $contact, $message),
+                ContactTypeEnum::PHONE,
+                ContactTypeEnum::MESSENGER => $this->logger->error('ContactTypeEnum::MESSENGER'),
+                ContactTypeEnum::SOCIAL => $this->logger->error('ContactTypeEnum::SOCIAL'),
 
 //                default => throw new Exception("Unsupported action type:" . $contact->getContactTypeEnum() ),
             };
@@ -80,6 +90,8 @@ class BeneficiaryNotificationService
     private function sendEmailNotification(Contact $contact, string $message, VerificationToken $token, string $accessUrl): void
     {
         $emailAddress = $this->cryptoService->decryptData($contact->getValue());
+
+        $this->logger->error('sendEmailNotification $emailAddress: ' .$emailAddress);
 
         if (is_string($emailAddress)) {
             $email = (new TemplatedEmail())

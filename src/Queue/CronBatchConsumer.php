@@ -297,6 +297,9 @@ class CronBatchConsumer
 //        $this->logger->error('9 processPendingAction');
     }
 
+    /**
+     * @throws \Symfony\Component\Mailer\Exception\TransportExceptionInterface
+     */
     private function processFailedAction(Pipeline $pipeline, array $actionData, \DateTimeImmutable $now) : void
     {
         $nextActionPosition = $actionData['position'] + 1;
@@ -317,8 +320,12 @@ class CronBatchConsumer
 
             //pipeline ended - release Envelope to Heir
             $pipeline->setActionStatus(ActionStatusEnum::FAIL);
-//            $this->logger->info(sprintf('No next action found for pipeline ID %d', $pipeline->getId()));
             $pipeline->setPipelineStatus(ActionStatusEnum::FAIL);
+
+            $this->entityManager->persist($pipeline);
+            $this->entityManager->flush();
+
+//            $this->logger->info(sprintf('No next action found for pipeline ID %d', $pipeline->getId()));
 
             // process Failed Pipeline Function
             $result = $this->processFailedPipeline($pipeline, $now);
@@ -330,6 +337,9 @@ class CronBatchConsumer
         }
     }
 
+    /**
+     * @throws \Symfony\Component\Mailer\Exception\TransportExceptionInterface
+     */
     private function processFailedPipeline(Pipeline $pipeline, \DateTimeImmutable $now) : bool
     {
         $beneficiaries = $pipeline->getCustomer()->getBeneficiary();
