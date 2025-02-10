@@ -2,13 +2,11 @@
 
 namespace App\Form\Type;
 
-use App\CommandHandler\Beneficiary\Edit\BeneficiaryEditOutputDto;
+use App\CommandHandler\Beneficiary\Edit\BeneficiaryEditInputDto;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
-use Symfony\Component\Form\Extension\Core\Type\PasswordType;
-use Symfony\Component\Form\Extension\Core\Type\RepeatedType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Validator\Constraints\Email;
@@ -79,34 +77,14 @@ class BeneficiaryEditType extends AbstractType
                 'required' => false,
             ])
 
+//      TODO   HERE WE NEED TO ADD A CUSTOMER FULL_NAME -- IT'S FOR THE beneficiary letters
+
 //            ->add('beneficiaryFirstQuestion', TextType::class, [
 //                'label' => 'form.label.beneficiary_first_question',
 //                'help' => 'form.help.beneficiary_first_question',
 //                'required' => true,
 //            ])
-//            ->add('beneficiaryFirstQuestionAnswer', RepeatedType::class, [
-//                'type' => PasswordType::class,
-//                'help' => '',
-//                'invalid_message' => 'The password fields must match.',
-//                'options' => ['attr' => ['class' => 'password-field']],
-//                'required' => true,
-//                'first_options'  => ['label' => 'form.label.beneficiary_first_question_answer'],
-//                'second_options' => ['label' => 'form.label.beneficiary_first_question_answer_repeat'],
-//            ])
-//            ->add('beneficiarySecondQuestion', TextType::class, [
-//                'label' => 'form.label.beneficiary_second_question',
-//                'help' => 'form.help.beneficiary_second_question',
-//                'required' => false,
-//            ])
-//            ->add('beneficiarySecondQuestionAnswer', RepeatedType::class, [
-//                'type' => PasswordType::class,
-//                'help' => 'form.help.beneficiary_second_question_answer',
-//                'invalid_message' => 'The password fields must match.',
-//                'options' => ['attr' => ['class' => 'password-field']],
-//                'required' => false,
-//                'first_options'  => ['label' => 'form.label.beneficiary_second_question_answer'],
-//                'second_options' => ['label' => 'form.label.beneficiary_second_question_answer_repeat'],
-//            ])
+//
             ->add('submit', SubmitType::class, [
                 'label' => 'form.label.edit',
                 'attr' => ['class' => 'btn btn-primary'],
@@ -117,7 +95,7 @@ class BeneficiaryEditType extends AbstractType
     public function configureOptions(OptionsResolver $resolver): void
     {
         $resolver->setDefaults([
-            'data_class' => BeneficiaryEditOutputDto::class
+            'data_class' => BeneficiaryEditInputDto::class,
         ]);
     }
 }

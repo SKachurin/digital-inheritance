@@ -4,41 +4,24 @@ declare(strict_types=1);
 
 namespace App\CommandHandler\Beneficiary\Edit;
 
-use App\CommandHandler\Beneficiary\Create\BeneficiaryCreateInputDto;
-use App\CommandHandler\Customer\Create\CustomerCreateInputDto;
 use App\Entity\Contact;
-use App\Queue\Doctrine\Customer\CustomerCreatedProducer;
 use App\Repository\BeneficiaryRepository;
-use App\Repository\CustomerRepository;
 use App\Entity\Beneficiary;
-use App\Queue\Doctrine\Customer\CustomerCreatedMessage;
 use App\Service\CryptoService;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\Query\QueryException;
-use phpDocumentor\Reflection\Types\Void_;
-use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
+use Random\RandomException;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
-use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
-use Symfony\Component\Routing\Annotation\Route;
 
 #[AsMessageHandler]
 class BeneficiaryEditHandler
 {
-    private CryptoService $cryptoService;
-    private EntityManagerInterface $entityManager;
-    private BeneficiaryRepository $beneficiaryRepository;
-    protected UserPasswordHasherInterface $passwordHasher;
-
     public function __construct(
-         EntityManagerInterface $entityManager,
-         CryptoService $cryptoService,
-         BeneficiaryRepository $beneficiaryRepository,
-         UserPasswordHasherInterface $passwordHasher,
-    ) {
-        $this->entityManager = $entityManager;
-        $this->cryptoService = $cryptoService;
-        $this->beneficiaryRepository = $beneficiaryRepository;
-        $this->passwordHasher = $passwordHasher;
+        private EntityManagerInterface      $entityManager,
+        private CryptoService               $cryptoService,
+        private BeneficiaryRepository       $beneficiaryRepository,
+    )
+    {
     }
 
     /**
@@ -59,6 +42,25 @@ class BeneficiaryEditHandler
 
         $this->entityManager->persist($beneficiary);
 
+        $this->updateContacts($beneficiary, $input);
+
+        $this->entityManager->flush();
+
+        return $beneficiary;
+    }
+
+    /**
+     * @throws RandomException
+     * @throws \SodiumException
+     */
+    private function updateContacts(Beneficiary $beneficiary, BeneficiaryEditInputDto $input): void
+    {
+        // Remove existing contacts
+        foreach ($beneficiary->getContacts() as $contact) {
+            $this->entityManager->remove($contact);
+        }
+
+        // Add updated contacts
         if ($input->getBeneficiaryEmail()){
             $this->persistContact($beneficiary, 'email',
                 $this->cryptoService->encryptData(
@@ -88,10 +90,6 @@ class BeneficiaryEditHandler
                     $input->getBeneficiarySecondPhone()
                 ), $input->getBeneficiaryCountryCode());
         }
-
-        $this->entityManager->flush();
-
-        return $beneficiary;
     }
 
     private function persistContact(Beneficiary $beneficiary, string $type, ?string $value, ?string $countryCode = null): void
@@ -102,7 +100,7 @@ class BeneficiaryEditHandler
                 ->setContactTypeEnum($type)
                 ->setValue($value);
 
-            if ($countryCode && $type === 'phone' ) {
+            if ($countryCode && $type === 'phone') {
                 $contact->setCountryCode($countryCode);
             }
 
