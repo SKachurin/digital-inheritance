@@ -80,13 +80,6 @@ class PipelineEditController extends AbstractController
                 // Handle "Add Action" button click
                 $data = $form->getData();
 
-                //Set Customer Okay Password Hash
-                $customer->setCustomerOkayPassword(
-                    $this->passwordHasher->hashPassword(
-                        $customer,
-                        $pipelineDto->getCustomerOkayPassword()
-                    )
-                );
                 $this->entityManager->persist($customer);
 
                 $newAction = new ActionDto();
@@ -112,6 +105,14 @@ class PipelineEditController extends AbstractController
 
                 /** @var PipelineCreateInputDto $pipelineDto */
                 $pipelineDto = $form->getData();
+
+                //Set Customer Okay Password Hash
+                $customer->setCustomerOkayPassword(
+                    $this->passwordHasher->hashPassword(
+                        $customer,
+                        $pipelineDto->getCustomerOkayPassword()
+                    )
+                );
 
                 $actions = $pipelineDto->getActions();
                 usort($actions, function (ActionDto $a, ActionDto $b) {
