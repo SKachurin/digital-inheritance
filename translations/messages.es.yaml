@@ -34,7 +34,7 @@ form:
     beneficiary_email: 'El correo electrónico de su heredero'
     customer_second_email: 'Su segundo correo electrónico (opcional)'
     beneficiary_second_email: 'Segundo correo electrónico del heredero (opcional)'
-    customer_full_name: 'Nombre completo (opcional)'
+    customer_full_name: 'Tu nombre para que el heredero pueda reconocerte (opcional)'
     beneficiary_full_name: 'Nombre completo del heredero (opcional)'
     customer_country_code: 'Su código de país (opcional)'
     beneficiary_country_code: 'Código de país del heredero (opcional)'

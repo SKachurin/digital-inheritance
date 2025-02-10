@@ -37,15 +37,16 @@ class BeneficiaryCreateHandler
                 $this->cryptoService->encryptData(
                     $input->getBeneficiaryFullName()
                 )
-            )
+            );
 
-            //      TODO   HERE WE NEED TO ADD A CUSTOMER FULL_NAME -- IT'S FOR THE beneficiary letters
-//            ->setBeneficiaryFirstQuestion(
-//                $this->cryptoService->encryptData(
-//                    $input->getBeneficiaryFirstQuestion()
-//                )
-//            )
-        ;
+        if ($input->getCustomerFullName() !== null) {
+            $customer->setCustomerFullName(
+                $this->cryptoService->encryptData(
+                    $input->getCustomerFullName()
+                )
+            );
+            // NB: $customer is already managed, so I can persist the change on flush
+        }
 
         $this->entityManager->persist($beneficiary);
 

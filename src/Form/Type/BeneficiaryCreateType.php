@@ -42,7 +42,11 @@ class BeneficiaryCreateType extends AbstractType
                 'help' => 'form.help.beneficiary_full_name',
                 'required' => false,
             ])
-
+            ->add('customerFullName', TextType::class, [
+                'label' => 'form.label.customer_full_name',
+                'help' => 'form.help.customer_full_name',
+                'required' => false,
+            ])
             ->add('beneficiaryEmail', EmailType::class, [
                 'label' => 'form.label.beneficiary_email',
                 'help' => 'form.help.beneficiary_email',

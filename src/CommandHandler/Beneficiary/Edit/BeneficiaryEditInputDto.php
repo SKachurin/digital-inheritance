@@ -9,6 +9,8 @@ class BeneficiaryEditInputDto
 {
     #[Assert\NotBlank]
     private ?int $id = null;
+    #[Assert\Length(max: 512)]
+    private ?string $customerFullName = null;
     #[Assert\NotBlank]
     #[Assert\Length(min: 2, max: 64)]
     private string $beneficiaryName;
@@ -35,6 +37,17 @@ class BeneficiaryEditInputDto
     public function setId(int $id): self
     {
         $this->id = $id;
+        return $this;
+    }
+
+    public function getCustomerFullName(): ?string
+    {
+        return $this->customerFullName;
+    }
+
+    public function setCustomerFullName(string $customerFullName): self
+    {
+        $this->customerFullName = $customerFullName;
         return $this;
     }
 

@@ -10,6 +10,8 @@ class BeneficiaryCreateInputDto
 {
     #[Assert\NotBlank]
     private Customer $customer;
+    #[Assert\Length(max: 512)]
+    private ?string $customerFullName = null;
     #[Assert\NotBlank]
     #[Assert\Length(min: 2, max: 64)]
     private string $beneficiaryName;
@@ -41,6 +43,17 @@ class BeneficiaryCreateInputDto
     public function setCustomer(Customer $customer): self
     {
         $this->customer = $customer;
+        return $this;
+    }
+
+    public function getCustomerFullName(): ?string
+    {
+        return $this->customerFullName;
+    }
+
+    public function setCustomerFullName(string $customerFullName): self
+    {
+        $this->customerFullName = $customerFullName;
         return $this;
     }
 

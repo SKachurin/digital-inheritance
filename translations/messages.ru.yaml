@@ -34,7 +34,7 @@ form:
     beneficiary_email: 'Электронная почта наследника'
     customer_second_email: 'Ваша вторая электронная почта (необязательно)'
     beneficiary_second_email: 'Вторая электронная почта наследника (необязательно)'
-    customer_full_name: 'Полное имя (необязательно)'
+    customer_full_name: '"Ваше имя, чтобы наследник мог вас узнать (необязательно)'
     beneficiary_full_name: 'Полное имя наследника (необязательно)'
     customer_country_code: 'Ваш код страны (необязательно)'
     beneficiary_country_code: 'Код страны наследника (необязательно)'

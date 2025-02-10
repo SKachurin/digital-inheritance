@@ -34,7 +34,7 @@ form:
     beneficiary_email: "Your Heir's Email"
     customer_second_email: 'Your Second Email (optional)'
     beneficiary_second_email: "Heir's Second Email (optional)"
-    customer_full_name: 'Full Name (optional)'
+    customer_full_name: 'Your name so the Heir can recognize you (optional)'
     beneficiary_full_name: "Heir's Full Name (optional)"
     customer_country_code: 'Your Country Code (optional)'
     beneficiary_country_code: "Heir's Country Code (optional)"

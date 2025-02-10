@@ -75,6 +75,12 @@ class BeneficiaryEditController extends AbstractController
             $cryptoService->decryptData($beneficiary->getBeneficiaryFullName())
         );
 
+        $beneficiaryData->setCustomerFullName(
+            $cryptoService->decryptData(
+                $beneficiary->getCustomer()->getCustomerFullName()
+            )
+        );
+
         if (isset($beneficiaryEmails[0])) {
             $beneficiaryData->setBeneficiaryEmail(
                 $cryptoService->decryptData(

@@ -40,6 +40,17 @@ class BeneficiaryEditHandler
             )
         ;
 
+        $customer = $beneficiary->getCustomer();
+        if ($input->getCustomerFullName() !== null) {
+
+            $customer->setCustomerFullName(
+                $this->cryptoService->encryptData(
+                    $input->getCustomerFullName()
+                )
+            );
+            $this->entityManager->persist($customer);
+        }
+
         $this->entityManager->persist($beneficiary);
 
         $this->updateContacts($beneficiary, $input);
