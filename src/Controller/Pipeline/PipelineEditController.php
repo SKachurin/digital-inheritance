@@ -15,23 +15,18 @@ use App\Form\Type\PipelineCreateType;
 use App\Repository\ActionRepository;
 use App\Repository\PipelineRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 
 class PipelineEditController extends AbstractController
-{
-    private PipelineRepository $pipelineRepository;
-    private ActionRepository $actionRepository;
-    private EntityManagerInterface $entityManager;
-
+{   //TODO Move everything to Handler with messageBus
     public function __construct(
-        PipelineRepository $pipelineRepository,
-        ActionRepository $actionRepository,
-        EntityManagerInterface $entityManager
+        private PipelineRepository $pipelineRepository,
+        private ActionRepository $actionRepository,
+        private EntityManagerInterface $entityManager,
+        protected UserPasswordHasherInterface $passwordHasher
     )
     {
-        $this->pipelineRepository = $pipelineRepository;
-        $this->actionRepository = $actionRepository;
-        $this->entityManager = $entityManager;
     }
 
     public function edit(Request $request, int $pipelineId): Response
@@ -84,6 +79,15 @@ class PipelineEditController extends AbstractController
             if ($form->get('submit_add')->isClicked()) {
                 // Handle "Add Action" button click
                 $data = $form->getData();
+
+                //Set Customer Okay Password Hash
+                $customer->setCustomerOkayPassword(
+                    $this->passwordHasher->hashPassword(
+                        $customer,
+                        $pipelineDto->getCustomerOkayPassword()
+                    )
+                );
+                $this->entityManager->persist($customer);
 
                 $newAction = new ActionDto();
                 $newAction->setPosition(count($data->getActions()) + 1);

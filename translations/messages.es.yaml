@@ -81,7 +81,12 @@ form:
     text_encoded_customer_second: 'Texto cifrado con la respuesta a su segunda pregunta de seguridad'
     text_encoded_beneficiary_first: 'Texto cifrado con la respuesta a la primera pregunta de seguridad del heredero'
     text_encoded_beneficiary_second: 'Texto cifrado con la respuesta a la segunda pregunta de seguridad del heredero'
-    okayPassword: "Esta 'Contraseña de Confirmación' se utilizará para verificar que estás bien y para restablecer el estado del Pipeline. Elige una o varias palabras combinadas (por ejemplo, 'EstoyBien' o 'EstoyOK'), pero evita usar tu contraseña principal o respuestas de seguridad, ya que esta interacción se llevará a cabo a través de canales abiertos."
+    okayPassword: |
+      Esta 'Contraseña de Confirmación' se utilizará para verificar que estás bien y para restablecer el estado del Pipeline. 
+      Elige una o varias palabras combinadas (por ejemplo, 'EstoyBien' o 'EstoyOK'), pero evita usar tu contraseña principal o respuestas de seguridad, ya que esta interacción se llevará a cabo a través de canales abiertos.
+      Por razones de seguridad, puedes agregar hasta 20 palabras en tus respuestas; verificaremos si alguna de ellas coincide con tu 'Contraseña de Confirmación'.
+      Puedes cambiar tu 'Contraseña de Confirmación' en la sección Editar Pipeline
+
     okayPassword_repeat: 'Repita la Contraseña de Verificación'
 
   constraints:

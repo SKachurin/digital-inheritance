@@ -7,7 +7,6 @@ use App\CommandHandler\Pipeline\Create\ActionDto;
 use App\Entity\Pipeline;
 use App\Entity\Customer;
 use App\Enum\ActionStatusEnum;
-use App\Enum\PipelineStatusEnum;
 use App\Form\Type\PipelineCreateType;
 use App\Repository\ActionRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -18,18 +17,12 @@ use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
 class PipelineCreateController extends AbstractController
 {
-    private EntityManagerInterface $entityManager;
-    private ActionRepository $actionRepository;
-    protected UserPasswordHasherInterface $passwordHasher;
     public function __construct(
-        EntityManagerInterface $entityManager,
-        ActionRepository $actionRepository,
-        UserPasswordHasherInterface $passwordHasher
+        private EntityManagerInterface $entityManager,
+        private ActionRepository $actionRepository,
+        protected UserPasswordHasherInterface $passwordHasher
     )
     {
-        $this->entityManager = $entityManager;
-        $this->actionRepository = $actionRepository;
-        $this->passwordHasher = $passwordHasher;
     }
 
     public function create(Request $request): Response
