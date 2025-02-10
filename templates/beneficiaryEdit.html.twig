@@ -37,6 +37,7 @@
             <h1 style="padding-top: 4em;">{{ 'edit_your_heir'|trans }}</h1>
 
             <p>{{ 'header.new_heir_explain'|trans }}</p>
+            <p>{{ form_errors(form) }} </p>
             <p class="alert alert-success">{{ 'header.new_heir_explain_1'|trans }}</p>
             {{ form_start(form) }}
             {{ form_row(form.beneficiaryName) }}

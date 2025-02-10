@@ -42,19 +42,25 @@ RUN chown -R 1000:1000 vendor
 RUN chmod -R 775 vendor
 
 FROM vendor as vendor-test
+
+# Set working directory
+WORKDIR /app
+
+# copy the app code again (or do partial copy if you prefer)
+COPY . /app/
+
 RUN --mount=type=ssh composer install --no-interaction --prefer-dist \
     && composer dump-autoload -o
 
 
 FROM php:8.3.3-fpm-alpine3.19 AS prod
 
-# Set working directory
-WORKDIR /var/www
-
-# copy the app code again (or do partial copy if you prefer)
 #COPY . /var/www
 #COPY ../.. /var/www
-COPY ../.. /var/www/
+#COPY ../.. /var/www/
+
+# Copy your full app code so bin/console is actually present
+COPY . /var/www/
 
 # copy the vendor folder from the vendor stage
 COPY --from=vendor-prod /app/vendor/ /var/www/vendor/

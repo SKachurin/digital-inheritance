@@ -23,6 +23,9 @@ services:
       dockerfile: docker/php-fpm/Dockerfile
       context: ./
       target: local
+      args:
+        PGID: "${PGID}"
+        PUID: "${PUID}"
     container_name: digital-backend
     volumes:
       - ~/.ssh:/root/.ssh
@@ -30,7 +33,24 @@ services:
       - .:/var/www
     environment:
       PHP_MEMORY_LIMIT: 256M
-      DATABASE_URL: "mysql://root:root@digital-mysql:3306/local?charset=utf8"
+      PGID: "${PGID}"
+      PUID: "${PUID}"
+#      DATABASE_URL: "mysql://root:root@digital-mysql:3306/local?charset=utf8"
+      DATABASE_URL: "${DATABASE_URL}"  # Use env variable instead of hardcoding
+      APP_SECRET: "${APP_SECRET}"
+      MAILER_DSN: "${MAILER_DSN}"
+      ENCRYPTION_KEY: "${ENCRYPTION_KEY}"
+      PERSONAL_STRING: "${PERSONAL_STRING}"
+      WAZZUP_API_URL: "${WAZZUP_API_URL}"
+      WAZZUP_API_TOKEN: "${WAZZUP_API_TOKEN}"
+      TELEGRAM_URL: "${TELEGRAM_URL}"
+      CRON_SECRET_TOKEN: "${CRON_SECRET_TOKEN}"
+      RECAPTCHA_SITE_KEY: "${RECAPTCHA_SITE_KEY}"
+      RECAPTCHA_SECRET_KEY: "${RECAPTCHA_SECRET_KEY}"
+      RECAPTCHA_SITE_KEY_V2: "${RECAPTCHA_SITE_KEY_V2}"
+      RECAPTCHA_SECRET_KEY_V2: "${RECAPTCHA_SECRET_KEY_V2}"
+      ADMIN_TG: "${ADMIN_TG}"
+      ADMIN_WA: "${ADMIN_WA}"
     extra_hosts:
       - "host.docker.internal:host-gateway"
     networks:

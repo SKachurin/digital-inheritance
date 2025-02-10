@@ -24,30 +24,16 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class BeneficiaryEditController extends AbstractController
 {
-    private MessageBusInterface $commandBus;
-    private NoteRepository $noteRepository;
-    private BeneficiaryRepository $beneficiaryRepository;
-    private ContactRepository $contactRepository;
-    private LoggerInterface $logger;
-    private ParameterBagInterface $params;
-    private EntityManagerInterface $entityManager;
-
     public function __construct(
-        MessageBusInterface $commandBus,
-        NoteRepository $noteRepository,
-        BeneficiaryRepository $beneficiaryRepository,
-        ContactRepository $contactRepository,
-        LoggerInterface $logger,
-        ParameterBagInterface $params,
-        EntityManagerInterface $entityManager
-    ) {
-        $this->commandBus = $commandBus;
-        $this->noteRepository = $noteRepository;
-        $this->beneficiaryRepository = $beneficiaryRepository;
-        $this->contactRepository = $contactRepository;
-        $this->logger = $logger;
-        $this->params = $params;
-        $this->entityManager = $entityManager;
+//        private MessageBusInterface $commandBus,
+        private NoteRepository $noteRepository,
+        private BeneficiaryRepository $beneficiaryRepository,
+        private ContactRepository $contactRepository,
+        private LoggerInterface $logger,
+        private ParameterBagInterface $params,
+        private EntityManagerInterface $entityManager
+    )
+    {
     }
 
     /**
@@ -77,8 +63,6 @@ class BeneficiaryEditController extends AbstractController
             throw new AccessDeniedException('You do not have permission to edit this Heir.');
         }
 
-        // Prepare the DTO with decrypted data
-        $beneficiaryData = new BeneficiaryEditOutputDto();
         $cryptoService = new CryptoService($this->params, $this->logger);
         $beneficiaryEmails = $this->contactRepository->findBy([
             'beneficiary' => $beneficiary,
@@ -89,20 +73,23 @@ class BeneficiaryEditController extends AbstractController
             'contactTypeEnum' => 'phone'
         ]);
 
+        // Prepare the DTO with decrypted data
+        $beneficiaryData = new BeneficiaryEditOutputDto();
+        $beneficiaryData->setId($beneficiary->getId());
         $beneficiaryData->setBeneficiaryName($beneficiary->getBeneficiaryName());
 
         $beneficiaryData->setBeneficiaryFullName(
             $cryptoService->decryptData($beneficiary->getBeneficiaryFullName())
         );
 
-        if ($beneficiaryEmails[0]) {
+        if (isset($beneficiaryEmails[0])) {
             $beneficiaryData->setBeneficiaryEmail(
                 $cryptoService->decryptData(
                     $beneficiaryEmails[0]->getValue()
                 )
             );
         }
-        if ($beneficiaryEmails[1]) {
+        if (isset($beneficiaryEmails[1])) {
             $beneficiaryData->setBeneficiarySecondEmail(
                 $cryptoService->decryptData(
                     $beneficiaryEmails[1]->getValue()
@@ -110,7 +97,7 @@ class BeneficiaryEditController extends AbstractController
             );
         }
 
-        if ($beneficiaryPhones[0]) {
+        if (isset($beneficiaryPhones[0])) {
             $beneficiaryData->setBeneficiaryCountryCode(
                 $beneficiaryPhones[0]->getCountryCode()
             );
@@ -121,7 +108,7 @@ class BeneficiaryEditController extends AbstractController
             );
         }
 
-        if ($beneficiaryPhones[1]) {
+        if (isset($beneficiaryPhones[1])) {
             $beneficiaryData->setBeneficiarySecondPhone(
                 $cryptoService->decryptData(
                     $beneficiaryPhones[1]->getValue()
@@ -134,7 +121,7 @@ class BeneficiaryEditController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            /** @var BeneficiaryEditInputDto $updatedData */
+            /** @var BeneficiaryEditOutputDto $updatedData */
             $updatedData = $form->getData();
 
             // Update beneficiary fields
@@ -149,6 +136,7 @@ class BeneficiaryEditController extends AbstractController
             $this->entityManager->flush();
 
             $this->addFlash('success', 'Your Heir has been updated.');
+
             return $this->redirectToRoute('user_home');
         }
 
@@ -157,11 +145,103 @@ class BeneficiaryEditController extends AbstractController
         ]);
     }
 
+//    /**
+//     * @throws RandomException
+//     * @throws \SodiumException
+//     * @throws \Exception
+//     */
+//    public function edit(Request $request, int $beneficiaryId): Response
+//    {
+//        $customer = $this->getUser();
+//
+//        if (!$customer instanceof Customer) {
+//            return $this->redirectToRoute('user_login');
+//        }
+//
+//        $beneficiary = $this->beneficiaryRepository->find($beneficiaryId);
+//
+//        if (!$beneficiary) {
+//            throw $this->createNotFoundException('Heir not found.');
+//        }
+//
+//        $note = $this->noteRepository->findOneBy(['beneficiary' => $beneficiary, 'customer' => $customer]);
+//
+//        if (!$note) {
+//            throw new AccessDeniedException('You do not have permission to edit this Heir.');
+//        }
+//
+//        $beneficiaryData = new BeneficiaryEditOutputDto();
+//        $cryptoService = new CryptoService($this->params, $this->logger);
+//
+//        // Populate the DTO with data
+//        $beneficiaryEmails = $this->contactRepository->findBy([
+//            'beneficiary' => $beneficiary,
+//            'contactTypeEnum' => 'email'
+//        ]);
+//        $beneficiaryPhones = $this->contactRepository->findBy([
+//            'beneficiary' => $beneficiary,
+//            'contactTypeEnum' => 'phone'
+//        ]);
+//
+//        $beneficiaryData->setBeneficiaryName($beneficiary->getBeneficiaryName());
+//        $beneficiaryData->setBeneficiaryFullName(
+//            $cryptoService->decryptData($beneficiary->getBeneficiaryFullName())
+//        );
+//
+//        if (isset($beneficiaryEmails[0])) {
+//            $beneficiaryData->setBeneficiaryEmail(
+//                $cryptoService->decryptData($beneficiaryEmails[0]->getValue())
+//            );
+//        }
+//        if (isset($beneficiaryEmails[1])) {
+//            $beneficiaryData->setBeneficiarySecondEmail(
+//                $cryptoService->decryptData($beneficiaryEmails[1]->getValue())
+//            );
+//        }
+//
+//        if (isset($beneficiaryPhones[0])) {
+//            $beneficiaryData->setBeneficiaryCountryCode($beneficiaryPhones[0]->getCountryCode());
+//            $beneficiaryData->setBeneficiaryFirstPhone(
+//                $cryptoService->decryptData($beneficiaryPhones[0]->getValue())
+//            );
+//        }
+//        if (isset($beneficiaryPhones[1])) {
+//            $beneficiaryData->setBeneficiarySecondPhone(
+//                $cryptoService->decryptData($beneficiaryPhones[1]->getValue())
+//            );
+//        }
+//
+//        $form = $this->createForm(BeneficiaryEditType::class, $beneficiaryData);
+//        $form->handleRequest($request);
+//
+//        if ($form->isSubmitted() && $form->isValid()) {
+//            /** @var BeneficiaryEditInputDto $updatedData */
+//            $updatedData = $form->getData();
+//
+//            $beneficiary->setBeneficiaryName($updatedData->getBeneficiaryName());
+//            $beneficiary->setBeneficiaryFullName(
+//                $cryptoService->encryptData($updatedData->getBeneficiaryFullName())
+//            );
+//
+//            $this->updateContacts($beneficiary, $updatedData, $cryptoService);
+//            $this->entityManager->flush();
+//
+//            $this->addFlash('success', 'Your Heir has been updated.');
+//
+//            // Redirect to avoid form resubmission
+//            return $this->redirectToRoute('beneficiary_edit', ['beneficiaryId' => $beneficiaryId]);
+//        }
+//
+//        return $this->render('beneficiaryEdit.html.twig', [
+//            'form' => $form->createView(),
+//        ]);
+//    }
+
     /**
      * @throws RandomException
      * @throws \SodiumException
      */
-    private function updateContacts(Beneficiary $beneficiary, BeneficiaryEditInputDto $updatedData, CryptoService $cryptoService): void
+    private function updateContacts(Beneficiary $beneficiary, BeneficiaryEditOutputDto $updatedData, CryptoService $cryptoService): void
     {
         // Remove existing contacts
         foreach ($beneficiary->getContacts() as $contact) {
