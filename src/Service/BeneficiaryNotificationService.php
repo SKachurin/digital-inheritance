@@ -38,14 +38,16 @@ class BeneficiaryNotificationService
      */
     public function notifyBeneficiary(Beneficiary $beneficiary, array $contacts, \DateTimeImmutable $now): bool
     {
+        $beneficiaryFullName = $beneficiary->getBeneficiaryFullName()
+            ? $this->cryptoService->decryptData($beneficiary->getBeneficiaryFullName())
+            : '_unknown_';
+        $customerFullName = $beneficiary->getCustomer()->getCustomerFullName()
+                ? $this->cryptoService->decryptData($beneficiary->getCustomer()->getCustomerFullName())
+                : '_unknown_';
+
         $message = sprintf(
             "Hey %s,\n\nPerson named %s has listed this contact as an emergency contact on The Digital Heir. Click the link to access the secure envelope:",
-            $beneficiary->getBeneficiaryFullName()
-                ? $this->cryptoService->decryptData($beneficiary->getBeneficiaryFullName())
-                : '_unknown_',
-            $beneficiary->getCustomer()->getCustomerFullName()
-                ? $this->cryptoService->decryptData($beneficiary->getCustomer()->getCustomerFullName())
-                : '_unknown_'
+            $beneficiaryFullName, $customerFullName
         );
 
         foreach ($contacts as $contact) {
@@ -75,9 +77,9 @@ class BeneficiaryNotificationService
 
             match (ContactTypeEnum::tryFrom($contact->getContactTypeEnum()) ) {
 
-                ContactTypeEnum::EMAIL => $this->sendEmailNotification($contact, $message, $accessUrl),
-                ContactTypeEnum::PHONE,
-                ContactTypeEnum::MESSENGER => $this->sendWhatsAppNotification($contact, $message, $accessUrl),
+                ContactTypeEnum::EMAIL => $this->sendEmailNotification($contact, $message, $accessUrl, $beneficiaryFullName, $customerFullName),
+                ContactTypeEnum::PHONE => $this->sendWhatsAppNotification($contact, $message, $accessUrl),
+//                ContactTypeEnum::MESSENGER
                 ContactTypeEnum::SOCIAL => $this->sendSocialServiceNotification($contact, $message, $accessUrl),  // TODO add Telegram to Beneficiary fields
 
 //                default => throw new Exception("Unsupported action type:" . $contact->getContactTypeEnum() ),
@@ -91,7 +93,13 @@ class BeneficiaryNotificationService
     /**
      * @throws Exception|TransportExceptionInterface
      */
-    private function sendEmailNotification(Contact $contact, string $message, string $accessUrl): void
+    private function sendEmailNotification(
+        Contact $contact,
+         string $message,
+         string $accessUrl,
+         string $beneficiaryFullName,
+         string $customerFullName
+    ): void
     {
         $emailAddress = $this->cryptoService->decryptData($contact->getValue());
 
@@ -104,8 +112,8 @@ class BeneficiaryNotificationService
                 ->subject('Access to Secure Envelope - TheDigitalHeir')
                 ->htmlTemplate('emails/beneficiary_email.html.twig')
                 ->context([
-                    'beneficiaryFullName' => $contact->getValue(),
-                    'customerFullName' => $contact->getValue(),
+                    'beneficiaryFullName' => $beneficiaryFullName,
+                    'customerFullName' => $customerFullName,
                     'accessUrl' => $accessUrl,
                     'emailAddress' => $emailAddress,
                     'year' => \Date('Y'),
@@ -125,6 +133,8 @@ class BeneficiaryNotificationService
     private function sendWhatsAppNotification(Contact $contact, string $message, string $accessUrl): void
     {
         $message = $message . ' '. $accessUrl;
+
+        $this->logger->error('sendWhatsAppNotification Contact' . $contact->getId());
 
         $this->sendWhatsAppService->sendMessageWhatsApp($contact, $message);
 
@@ -168,6 +178,8 @@ class BeneficiaryNotificationService
     private function sendSocialServiceNotification(Contact $contact, string $message, string $accessUrl): void
     {
         $message = $message . ' ' . $accessUrl;
+
+        $this->logger->error('sendSocialServiceNotification Contact' . $contact->getId());
 
         $this->sendSocialService->sendMessageSocial($contact, $message);
 
