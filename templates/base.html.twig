@@ -47,8 +47,11 @@
                 </div>
 
                 <!-- NAV TOGGLER (MOBILE) -->
+{#                <button class="navbar-toggler" id="menuToggle">#}
+{#                    <span class="navbar-toggler-icon"></span>#}
+{#                </button>#}
                 <button class="navbar-toggler" id="menuToggle">
-                    <span class="navbar-toggler-icon"></span>
+                    <div class="hamburger-icon"></div>
                 </button>
 
                 <!-- NAV MENU (Manually controlled, no Bootstrap collapse) -->
@@ -333,28 +336,70 @@
     /* Mobile & Tablet: Adjust header */
     @media (max-width: 991px) { /* Apply only to devices smaller than 992px */
 
-        h1 {
+        body {
+            font-size: 2rem !important;
+        }
+
+        .container-fluid {
+            margin-top: 1em;
+        }
+
+        img[alt="Logo"] {
+            width: 120px !important; /* Previously 60px */
+            height: 120px !important; /* Previously 60px */
+            margin-right: 15px !important;
+        }
+
+        /*.d-flex.flex-column {*/
+        /*    font-size: 2rem !important;  !* Twice as big *!*/
+        /*    line-height: 1.2; !* Ensure good spacing *!*/
+        /*}*/
+        .fs-6{
+            font-size: 2rem !important;
+            line-height: 1.5;
+        }
+        .fs-4{
+            font-size: 3rem !important;
+            line-height: 1.5;
+        }
+
+        h1, h2{
             margin-top: 5rem !important;  /* Reduce top margin */
             padding-top: 5rem !important; /* Ensure consistent spacing */
+            font-size: 3.5rem !important;
         }
 
         .container {
             padding-left: 2rem;
             padding-right: 2rem;
+            padding-top: 12rem;
         }
 
         .alert {
             width: 100%;
-            margin-top: 10px;
+            margin-top: 20px;
             text-align: center;
             margin-left: auto !important;
             margin-right: auto !important;
+            font-size: 1.5rem;
         }
+
+        /* Show hamburger menu */
         .navbar-toggler {
             position: absolute;
-            top: 10px;
-            right: 15px;
             z-index: 1050;
+            display: block;
+            top: 2em;
+            right: 1.5em;
+
+            width: 80px !important; /* Twice the default size (default ~40px) */
+            height: 80px !important; /* Increase height to match */
+            padding: 1.5rem !important; /* Increase padding for better clickability */
+
+        }
+
+        .navbar-toggler-icon {
+            transform: scale(2);  /* Scales the icon 2x */
         }
 
         .navbar-menu {
@@ -362,7 +407,7 @@
             top: 0;
             right: -100%; /* Start hidden */
             height: 100vh;
-            width: 250px;
+            width: 300px;
             background: white;
             box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
             padding-top: 60px;
@@ -377,30 +422,98 @@
         .navbar-nav {
             flex-direction: column;
             text-align: left;
-            padding-left: 20px;
+            padding-left: 30px;
         }
 
         .navbar-nav .nav-item {
             padding: 10px 0;
         }
 
-        /* Show hamburger menu */
-        .navbar-toggler {
-            display: block;
-            position: absolute;
-            top: 2em;
-            right: 1.5em;
+        ul.navbar-nav {
+            margin-top: 8rem !important;
         }
+
+        /* Default button styling */
+        .navbar-toggler {
+            position: absolute;
+            top: 2.5em;
+            right: 2.5em;
+            width: 70px;
+            height: 70px;
+            padding: 1rem;
+            border: none;
+            background: transparent;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+        }
+
+        /* The hamburger lines */
+        .hamburger-icon {
+            position: relative;
+            width: 40px;
+            height: 4px;
+            background-color: black;
+            display: block;
+            border-radius: 3px; /* Rounded edges for better aesthetics */
+            transition: all 0.4s ease-in-out;
+        }
+
+        /* Top and Bottom bars */
+        .hamburger-icon::before,
+        .hamburger-icon::after {
+            content: "";
+            position: absolute;
+            width: 40px;
+            height: 4px;
+            background-color: black;
+            border-radius: 3px;
+            transition: all 0.4s ease-in-out;
+        }
+
+        /* Fix Alignment */
+        .hamburger-icon::before {
+            top: -10px; /* Adjust spacing */
+            left: 0;
+        }
+        .hamburger-icon::after {
+            bottom: -10px; /* Adjust spacing */
+            left: 0;
+        }
+        /* When menu is open, transform into an "X" */
+        .navbar-toggler.open .hamburger-icon {
+            background-color: transparent;
+        }
+
+        .navbar-toggler.open .hamburger-icon::before {
+            transform: rotate(45deg) translate(5px, 10px); /* Rotate and position */
+        }
+
+        .navbar-toggler.open .hamburger-icon::after {
+            transform: rotate(-45deg) translate(5px, -10px); /* Rotate and position */
+        }
+
+        input, textarea, select {
+            font-size: 1.6rem !important; /* Even larger text on mobile */
+            padding: 16px 18px !important;
+            min-height: 60px; /* Bigger tap target */
+        }
+        .form-text{
+            margin-bottom: 20px !important;
+        }
+
     }
 
 </style>
 <script>
-    document.addEventListener("DOMContentLoaded", function() {
+    document.addEventListener("DOMContentLoaded", function () {
         const menuToggle = document.getElementById("menuToggle");
         const mobileMenu = document.getElementById("mobileMenu");
 
-        menuToggle.addEventListener("click", function() {
+        menuToggle.addEventListener("click", function () {
             mobileMenu.classList.toggle("show");
+            menuToggle.classList.toggle("open"); // Toggle the cross animation
         });
     });
 </script>
