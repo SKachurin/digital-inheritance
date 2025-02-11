@@ -12,7 +12,7 @@
             }
         </style>
         <div class="container">
-            <h1 style="padding-top: 3em;font-size: 2rem;">{{ 'header.dashboard'|trans }}</h1>
+            <h1>{{ 'header.dashboard'|trans }}</h1>
 
             {#    Vue render    #}
 {#            <div id="app"></div>#}
@@ -156,7 +156,7 @@
                     <a class="btn btn-outline-dark btn-floating m-1 mt-4" href="/beneficiary/{{ customerHasBeneficiary }}/edit" role="button">
                         <i class="">{{ 'edit_your_heir'|trans }}</i>
                     </a>
-                    <form action="{{ path('beneficiary_delete', {'beneficiaryId': customerHasBeneficiary}) }}" method="post" style="display:inline-block;" onsubmit="return confirm('{{ 'confirm_delete_beneficiary'|trans }}');">
+                    <form action="{{ path('beneficiary_delete', {'beneficiaryId': customerHasBeneficiary}) }}" method="post" style="display:inline-block; margin: 0; padding: 0; background: transparent;" onsubmit="return confirm('{{ 'confirm_delete_beneficiary'|trans }}');">
                         <input type="hidden" name="_token" value="{{ csrf_token('delete_beneficiary') }}">
                         <button type="submit" class="btn btn-outline-danger btn-floating m-1 mt-4">
                             <i class="">{{ 'delete_your_beneficiary'|trans }}</i>
@@ -178,7 +178,7 @@
                     <a class="btn btn-outline-dark btn-floating m-1 mt-4" href="/note/{{ customerHasNote }}/edit" role="button">
                         <i class="">{{ 'edit_your_secure_envelope'|trans }}</i>
                     </a>
-                    <form action="{{ path('note_delete', {'noteId': customerHasNote}) }}" method="post" style="display:inline-block;" onsubmit="return confirm('{{ 'confirm_delete_note'|trans }}');">
+                    <form action="{{ path('note_delete', {'noteId': customerHasNote}) }}" method="post" style="display:inline-block; margin: 0; padding: 0; background: transparent" onsubmit="return confirm('{{ 'confirm_delete_note'|trans }}');">
                         <input type="hidden" name="_token" value="{{ csrf_token('delete_note') }}">
                         <button type="submit" class="btn btn-outline-danger btn-floating m-1 mt-4">
                             <i class="">{{ 'delete_your_secure_envelope'|trans }}</i>

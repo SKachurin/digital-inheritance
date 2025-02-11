@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html>
+<html lang="{{ app.request.locale }}">
 <head>
     <meta charset="UTF-8">
     <title>{% block title %}{{ 'title'|trans }}{% endblock %}</title>
-{#    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>">#}
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>⚫️</text><text y=%221.3em%22 x=%220.2em%22 font-size=%2276%22 fill=%22%23fff%22>sf</text></svg>">
     <link rel="manifest" href="/build/site.webmanifest">
     <link rel="icon" type="image/png" sizes="16x16" href="/build/favicon-16x16.png">
     <link rel="icon" type="image/png" sizes="32x32" href="/build/favicon-32x32.png">
@@ -28,43 +28,64 @@
 <body>
 {% block body %}
     <div class="d-flex bg-gray flex-column min-vh-100">
-        <header class="d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom navbar-light bg-light fixed-top">
-            <a href="{{ path('home') }}" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto text-dark text-decoration-none">
-                <svg class="bi me-2" width="40" height="32"><use xlink:href="#bootstrap"></use></svg>
-                <img src="/build/android-chrome-192x192.png" alt="Logo" width="80" height="80" class="me-2">
-                <div class="d-flex flex-column">
-                    <span class="fs-6 font-monospace"><b>The Eternity</b></span>
-                    <span class="fs-4 font-monospace"><b>The Digital Heir</b></span>
+        <header class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+            <div class="container-fluid d-flex justify-content-center align-items-center">
+
+                <!-- LOGO & TITLE -->
+                <a href="{{ path('home') }}" class="d-flex align-items-center text-dark text-decoration-none">
+
+                <img src="/build/android-chrome-192x192.png" alt="Logo" width="60" height="60" class="me-2">
+                    <div class="d-flex flex-column">
+                        <span class="fs-6 font-monospace"><b>The Eternity</b></span>
+                        <span class="fs-4 font-monospace"><b>The Digital Heir</b></span>
+                    </div>
+                </a>
+
+                <!-- ALERT MESSAGE -->
+                <div class="alert alert-danger p-2 px-3 m-0 d-lg-block d-none">
+                    <b>{{ 'header.test_mode'|trans }}</b>
                 </div>
-            </a>
 
-            <ul class="nav nav-pills ">
-                <li class="nav-item alert alert-error" style="margin-bottom: 1rem; color: #dc3545; background-color: #f0d0cf">
-                    <b class="alert alert-error" aria-current="page"> {{ 'header.test_mode'|trans }}</b>
-                </li>
-                {% if is_granted('ROLE_USER') %}
-                    <li class="nav-item"><a href="{{ path('user_home') }}" class="nav-link" aria-current="page"><b>{{ 'header.dashboard'|trans }}</b></a></li>
-                    <li class="nav-item"><a href="{{ path('_logout_main') }}" class="nav-link" aria-current="page"><b>{{ 'header.logout'|trans }}</b></a></li>
-                {% else %}
-                    <li class="nav-item"><a href="{{ path('user_login') }}" class="nav-link" aria-current="page"><b>{{ 'header.login'|trans }}</b></a></li>
-                    <li class="nav-item"><a href="{{ path('user_registration') }}" class="nav-link"><b>{{ 'header.registration'|trans }}</b></a></li>
-                {% endif %}
-                <li class="nav-item"><a href="#" class="nav-link disabled">{{ 'header.pricing'|trans }}</a></li>
-                <li class="nav-item"><a href="#" class="nav-link disabled">{{ 'header.faqs'|trans }}</a></li>
-                <li class="nav-item"><a href="{{ path('about') }}" class="nav-link">{{ 'header.about'|trans }}</a></li>
+                <!-- NAV TOGGLER (MOBILE) -->
+                <button class="navbar-toggler" id="menuToggle">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
 
-                <!-- Language Selector -->
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="languageDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        {{ 'header.language'|trans }}
-                    </a>
-                    <ul class="dropdown-menu" aria-labelledby="languageDropdown">
-                        <li><a class="dropdown-item" href="{{ path('change_language', {'lang': 'en'}) }}">English</a></li>
-                        <li><a class="dropdown-item" href="{{ path('change_language', {'lang': 'ru'}) }}">Русский</a></li>
-                        <li><a class="dropdown-item" href="{{ path('change_language', {'lang': 'es'}) }}">Español</a></li>
+                <!-- NAV MENU (Manually controlled, no Bootstrap collapse) -->
+                <nav class="navbar-menu" id="mobileMenu">
+                    <ul class="navbar-nav">
+                        {% if is_granted('ROLE_USER') %}
+                            <li class="nav-item"><a href="{{ path('user_home') }}" class="nav-link"><b>{{ 'header.dashboard'|trans }}</b></a></li>
+                            <li class="nav-item"><a href="{{ path('_logout_main') }}" class="nav-link"><b>{{ 'header.logout'|trans }}</b></a></li>
+                        {% else %}
+                            <li class="nav-item"><a href="{{ path('user_login') }}" class="nav-link"><b>{{ 'header.login'|trans }}</b></a></li>
+                            <li class="nav-item"><a href="{{ path('user_registration') }}" class="nav-link"><b>{{ 'header.registration'|trans }}</b></a></li>
+                        {% endif %}
+                        <li class="nav-item"><a href="{{ path('about') }}" class="nav-link">{{ 'header.about'|trans }}</a></li>
+
+                        <!-- LANGUAGE SELECTOR -->
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="languageDropdown"
+                               data-bs-toggle="dropdown">
+                                {{ 'header.language'|trans }}
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" href="{{ path('change_language', {'lang': 'en'}) }}">English</a>
+                                </li>
+                                <li><a class="dropdown-item" href="{{ path('change_language', {'lang': 'ru'}) }}">Русский</a>
+                                </li>
+                                <li><a class="dropdown-item" href="{{ path('change_language', {'lang': 'es'}) }}">Español</a>
+                                </li>
+                            </ul>
+                        </li>
                     </ul>
-                </li>
-            </ul>
+                </nav>
+            </div>
+
+            <!-- ALERT (Mobile Only) -->
+            <div class="alert alert-danger text-center d-lg-none">
+                <b>{{ 'header.test_mode'|trans }}</b>
+            </div>
         </header>
 
         <main class="flex-fill">
@@ -78,23 +99,20 @@
                 <!-- Section: Social media -->
                 <section class="mb-4">
                     <!-- Facebook -->
-                    <a class="btn btn-outline-light btn-floating m-1" href="#!" role="button" target="_blank">
-                        <i class="fab fa-facebook-f"></i>
-                    </a>
-
-{#                    <!-- Twitter -->#}
+{#                    <a class="btn btn-outline-light btn-floating m-1" href="#!" role="button" target="_blank">#}
+{#                        <i class="fab fa-facebook-f"></i>#}
+{#                    </a>#}
+                    <!-- Twitter -->
 {#                    <a class="btn btn-outline-light btn-floating m-1" href="#!" role="button" target="_blank"><i class="fab fa-twitter"></i></a>#}
-
-{#                    <!-- Google -->#}
+                    <!-- Google -->
 {#                    <a class="btn btn-outline-light btn-floating m-1" href="#!" role="button" target="_blank"><i class="fab fa-google"></i></a>#}
-
-{#                    <!-- Instagram -->#}
-{#                    <a class="btn btn-outline-light btn-floating m-1" href="#!" role="button" target="_blank"><i class="fab fa-instagram"></i></a>#}
-
                     <!-- Linkedin -->
-                    <a class="btn btn-outline-light btn-floating m-1" href="https://www.linkedin.com/in/sergei-kachurin-04789a76/" role="button" target="_blank">
-                        <i class="fab fa-linkedin-in"></i>
-                    </a>
+{#                    <a class="btn btn-outline-light btn-floating m-1" href="https://www.linkedin.com/in/sergei-kachurin-04789a76/" role="button" target="_blank">#}
+{#                        <i class="fab fa-linkedin-in"></i>#}
+ {#                    </a>#}
+
+                    <!-- Instagram -->
+                    <a class="btn btn-outline-light btn-floating m-1" href="#!" role="button" target="_blank"><i class="fab fa-instagram"></i></a>
 
                     <!-- Github -->
                     <a class="btn btn-outline-light btn-floating m-1" href="https://github.com/SKachurin/digital-inheritance" role="button" target="_blank">
@@ -117,6 +135,104 @@
 
 
 <style>
+    html {
+        font-size: 14px; /* Default is 16px; lowering helps reduce scaling issues */
+    }
+
+    html[lang="es"] .navbar {
+        font-size: 10px !important;  /* ✅ Slightly reduce text size for Spanish */
+    }
+    html[lang="ru"] .navbar {
+        font-size: 12px !important;  /* ✅ Slightly reduce text size for Spanish */
+    }
+
+    @media (min-width: 2560px) { /* Large screens like yours */
+        html {
+            font-size: 12px;
+        }
+    }
+
+    .container,
+    header,
+    footer {
+        max-width: 1600px;
+        margin: 0 auto;
+    }
+
+    .nav {
+        font-size: 0.9rem; /* Reduce size */
+        padding: 0.5rem 0;
+    }
+
+    .nav-item {
+        margin: 0 0.5rem;
+    }
+
+    img[alt="Logo"] {
+        width: clamp(50px, 6vw, 70px);
+        height: auto;
+    }
+
+    .alert {
+        font-size: 0.85rem;
+        padding: 0.3rem 0.8rem;
+        max-width: 80%;
+        margin-left: 5em !important;
+    }
+
+    footer {
+        width: 100%;
+        padding: 1rem 0;
+        text-align: center;
+    }
+
+    footer .btn-outline-light {
+        font-size: 1rem;
+        padding: 0.6rem;
+    }
+
+    body {
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh; /* Ensures full height */
+
+        /*background: linear-gradient(to bottom, #1a1a2e, #16213e) !important;*/
+        /*color: #e0e0e0 !important;*/
+    }
+
+    main {
+        flex-grow: 1; /* Pushes the footer down */
+    }
+
+    body, main {
+        /*background: linear-gradient(to bottom, #f8f9fa, #e9ecef) !important;*/
+        /*color: #212529 !important;*/
+    }
+
+    .btn-outline-light {
+        font-size: 0.8rem;
+        padding: 0.5rem;
+    }
+
+    footer .btn-outline-light i {
+        font-size: 1.2rem; /* Adjust icon size */
+        line-height: 1;
+    }
+
+    footer .btn-floating {
+        min-width: 40px;
+        min-height: 40px;
+    }
+
+    footer .btn-outline-light {
+        width: 40px;
+        height: 40px;
+        align-items: center;
+        justify-content: center;
+        border-radius: 8px; /* Adjust this if you want slightly rounded corners */
+        box-sizing: border-box; /* Ensures padding doesn’t change button size */
+    }
+
     .min-vh-100 {
         min-height: 100vh;
     }
@@ -128,9 +244,167 @@
     .mt-auto {
         margin-top: auto;
     }
-    .bg-gray{
+
+    .bg-gray {
         background-color: #eaedf0 !important;
     }
+
+    /* Default (Desktop) - Keeps original layout */
+    .navbar {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.5rem 1rem;
+    }
+
+    .navbar-toggler {
+        display: none; /* Hide hamburger menu on desktop */
+    }
+
+    h1, h2 {
+        margin-top: 4rem;
+        margin-bottom: 2rem;
+        padding-top: 4rem;
+        font-size: 2rem;
+
+        /*font-family: 'Poppins', sans-serif;*/
+        font-weight: bold;
+        /*color: #00aaff;*/
+        text-shadow: 2px 2px 10px rgba(46, 48, 49, 0.4);
+        font-family: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace !important;
+    }
+
+
+    .container {
+        max-width: 1200px; /* Keep content centered */
+        margin: 0 auto;
+        padding-left: 1rem; /* Adds space from the left */
+        padding-right: 1rem; /* Ensures balance on both sides */
+    }
+
+    form {
+        background: #f8f9fa; /* Light background */
+        padding: 4rem;
+        border-radius: 8px; /* Rounded corners */
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05); /* Subtle shadow */
+    }
+
+    input, textarea {
+        border-radius: 8px;
+        padding: 12px;
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        background: rgba(255, 255, 255, 0.1);
+        color: white;
+    }
+    input:focus {
+        border-color: #00aaff;
+        box-shadow: 0 0 8px #00aaff;
+    }
+
+    .form-group {
+        margin-bottom: 1.5rem; /* More spacing between fields */
+    }
+
+    label {
+        font-weight: bold;
+        margin-bottom: 5px;
+    }
+
+    input,
+    textarea {
+        border: 1px solid #ced4da;
+        padding: 10px;
+        width: 100%;
+        border-radius: 5px;
+        transition: all 0.3s ease-in-out;
+    }
+
+    input:focus,
+    textarea:focus {
+        border-color: #007bff;
+        box-shadow: 0 0 8px rgba(0, 123, 255, 0.2);
+    }
+
+
+    @media (max-width: 768px) { /* For mobile */
+    /**/
+    }
+
+    /* Mobile & Tablet: Adjust header */
+    @media (max-width: 991px) { /* Apply only to devices smaller than 992px */
+
+        h1 {
+            margin-top: 5rem !important;  /* Reduce top margin */
+            padding-top: 5rem !important; /* Ensure consistent spacing */
+        }
+
+        .container {
+            padding-left: 2rem;
+            padding-right: 2rem;
+        }
+
+        .alert {
+            width: 100%;
+            margin-top: 10px;
+            text-align: center;
+            margin-left: auto !important;
+            margin-right: auto !important;
+        }
+        .navbar-toggler {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            z-index: 1050;
+        }
+
+        .navbar-menu {
+            position: fixed;
+            top: 0;
+            right: -100%; /* Start hidden */
+            height: 100vh;
+            width: 250px;
+            background: white;
+            box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
+            padding-top: 60px;
+            transition: right 0.3s ease-in-out;
+            z-index: 1000;
+        }
+
+        .navbar-menu.show {
+            right: 0; /* Slide in when opened */
+        }
+
+        .navbar-nav {
+            flex-direction: column;
+            text-align: left;
+            padding-left: 20px;
+        }
+
+        .navbar-nav .nav-item {
+            padding: 10px 0;
+        }
+
+        /* Show hamburger menu */
+        .navbar-toggler {
+            display: block;
+            position: absolute;
+            top: 2em;
+            right: 1.5em;
+        }
+    }
+
 </style>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const menuToggle = document.getElementById("menuToggle");
+        const mobileMenu = document.getElementById("mobileMenu");
+
+        menuToggle.addEventListener("click", function() {
+            mobileMenu.classList.toggle("show");
+        });
+    });
+</script>
 </body>
 </html>
+
+
