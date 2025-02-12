@@ -218,23 +218,120 @@ TEST_1_min: 'PRUEBA 1 min'
 1_month: '1 mes'
 
 about_page:
-  title: 'Acerca de "El Heredero Digital"'
+  title: "Presentamos el servicio de 'Herencia Digital'"
+
   introduction:
-    our_service: 'Nuestro servicio ofrece una solución segura y confiable para legar sus activos digitales.'
-    no_watching: 'No le vigilamos. No vendemos sus datos de ninguna forma.'
-    privacy_priority: 'Damos prioridad a su privacidad y seguridad en cada paso.'
-    encrypted_details: 'Sus datos de contacto se cifran antes de almacenarse, garantizando que permanezcan confidenciales.'
-    encrypted_envelopes: 'También ciframos sus sobres secretos con las respuestas a sus preguntas de seguridad.'
-    no_decoding: 'Una vez cifradas, sus respuestas se eliminan de nuestra base de datos, dejando únicamente a usted y a Dios con el conocimiento.'
-    no_way_decode: '¡No existe forma de descifrar sus sobres secretos sin las respuestas que usted proporciona!'
-  how_it_works: 'Así es como funciona:'
-  section_titles:
-    registration: 'Registro'
-    secret_questions: 'Preguntas Secretas'
-    create_envelope: 'Crear Sobre'
-    add_beneficiary: 'Agregar Heredero al Sobre'
-  beneficiary_info: 'Todas las notas cifradas se almacenan de forma segura en nuestros servidores. Si algo le sucede a usted o su dispositivo se ve comprometido, sus contactos de confianza aún podrán acceder a la información necesaria utilizando sus propias preguntas de seguridad personalizadas.'
-  assurance: 'Con nuestro servicio, puede estar seguro de que su información sensible está protegida y es accesible solo para quienes usted decida.'
+    text: >
+      Nuestro servicio ofrece una forma segura, discreta y sin complicaciones para asegurarte de que tus activos digitales más valiosos
+      y tu información confidencial sean transmitidos a la persona correcta en el momento adecuado, sin revelar ningún detalle antes de tiempo.
+
+  why_choose:
+    title: "¿Por qué elegir nuestro servicio?"
+
+    item1:
+      title: "1. Confidencialidad total"
+      bullet1: "Nadie sabrá que tienes una herencia ni su valor."
+      bullet2: "Nadie sabrá a quién has designado como heredero."
+      bullet3: "Tu heredero tampoco sabrá que has dejado algo para él, a menos que llegue el momento de acceder a ello."
+
+    item2:
+      title: "2. Independencia de las leyes locales"
+      bullet1: "Operamos de forma completamente digital, sin depender de procedimientos legales regionales o nacionales."
+      bullet2: "No se necesitan certificados de defunción ni trámites burocráticos."
+      bullet3: "El proceso ocurre únicamente entre tú y nuestro servicio."
+
+    item3:
+      title: "3. Pequeña tarifa mensual, tranquilidad total"
+      bullet1: "Tu pequeña suscripción mensual garantiza una cobertura y monitoreo constantes."
+      bullet2: "Si algo te sucede, el servicio gestionará automáticamente la entrega de la información a tus contactos designados."
+
+    item4:
+      title: "4. Notas cifradas y seguras"
+      bullet1: "Creas una nota cifrada (o 'sobre secreto') por cada cuenta."
+      bullet2: "Esta nota contiene los datos confidenciales que deseas transmitir (contraseñas, claves privadas, etc.)."
+      bullet3: "Se almacena de forma segura en nuestros servidores encriptados y solo se puede leer con las respuestas correctas."
+
+    item5:
+      title: "5. Desbloqueo mediante preguntas personalizadas"
+      bullet1: "Decides hasta cuatro preguntas secretas cuyas respuestas solo tú (y posiblemente tu heredero) conocéis."
+      bullet2: "Tu heredero tiene intentos limitados para responder correctamente (evitando ataques de fuerza bruta)."
+      bullet3: "Una respuesta correcta desbloquea la nota; una incorrecta la mantiene bloqueada."
+
+  how_it_works:
+    title: "¿Cómo funciona la 'Herencia Digital'?"
+
+    item1:
+      title: "1. Comprobaciones automáticas de actividad"
+      bullet1: "Realizamos comprobaciones periódicas de tu actividad (redes sociales, WhatsApp, correo electrónico) en los intervalos que elijas."
+      bullet2: "Estos intervalos personalizados nos permiten verificar que sigues activo."
+
+    item2:
+      title: "2. Proceso de escalado"
+      bullet1: "Si no respondes, el sistema pasa al siguiente método de contacto."
+      bullet2: "Defines la secuencia (por ejemplo: esperar 24 horas, enviar WhatsApp; si no hay respuesta, enviar email, etc.)."
+      bullet3: "Si todos los intentos fallan, el sistema envía un enlace seguro a tu heredero designado."
+
+    item3:
+      title: "3. Liberación del mensaje cifrado"
+      bullet1: "Una vez que el heredero recibe el enlace, debe responder a tu pregunta personalizada."
+      bullet2: "Las respuestas correctas descifran la nota."
+      bullet3: "Las respuestas incorrectas mantienen la información bloqueada."
+
+    item4:
+      title: "4. Sin necesidad de notificar al heredero"
+      bullet1: "No es necesario informar a nadie con antelación."
+      bullet2: "Tu heredero solo se enterará si recibe el enlace."
+
+  privacy_security:
+    title: "Privacidad y seguridad en cada paso"
+    bullet1: "Contactos cifrados: tus contactos y detalles de herederos se almacenan cifrados."
+    bullet2: "Respuestas secretas cifradas: una vez guardadas, las respuestas se eliminan de nuestra base de datos. Solo tú y tu heredero podréis desbloquearlas."
+    bullet3: "No vendemos tus datos: no te rastreamos ni compartimos información con terceros."
+    bullet4: "Independencia de las grandes corporaciones: sin certificados de defunción ni largos trámites legales. Tus datos te pertenecen."
+
+  pipeline:
+    title: "Configurando tu pipeline de herencia"
+
+    item1:
+      title: "1. Crea tu cuenta"
+      bullet1: "Regístrate con la mínima información personal."
+      bullet2: "Paga una pequeña tarifa mensual para cobertura continua."
+
+    item2:
+      title: "2. Ingresa tus contactos"
+      bullet1: "Proporciona tus propios datos de contacto para las verificaciones de actividad."
+      bullet2: "Agrega múltiples métodos para minimizar falsas alarmas."
+
+    item3:
+      title: "3. Redacta tu nota cifrada"
+      bullet1: "Escribe el mensaje o credenciales que deseas transmitir."
+      bullet2: "Establece una pregunta y respuesta de seguridad para cifrar la nota."
+
+    item4:
+      title: "4. Agrega tu(s) heredero(s)"
+      bullet1: "Introduce los datos de contacto de tu heredero."
+      bullet2: "Crea hasta cuatro preguntas únicas con respuestas correspondientes."
+
+    item5:
+      title: "5. Diseña tu pipeline de notificación"
+      bullet1: "Especifica el orden y el tiempo de las verificaciones y recordatorios (por ejemplo, sin actividad en redes sociales durante 7 días, luego enviar email...)."
+      bullet2: "Si todos los intentos fallan, el sistema enviará un enlace seguro a tu heredero."
+
+  who_can_benefit:
+    title: "¿Quién puede beneficiarse?"
+    bullet1: "Cualquiera que tenga activos digitales (criptomonedas, cuentas bancarias en línea, archivos confidenciales)."
+    bullet2: "Personas que desean controlar quién y cuándo conoce su herencia."
+    bullet3: "Quienes buscan una alternativa privada y sencilla a la planificación patrimonial tradicional."
+    footer: >
+      Ya sea que tengas criptomonedas o simplemente desees asegurar contraseñas importantes para las próximas generaciones, 
+      nuestro servicio garantiza que tu información más valiosa permanezca segura y se entregue solo cuando realmente se necesite.
+
+  take_control:
+    title: "Toma el control de tu legado digital"
+    text: >
+      Únete a nuestro proyecto de 'Herencia Digital' hoy y obtén la tranquilidad de saber que tus activos digitales 
+      e información vital están almacenados de manera segura, protegidos con total confidencialidad y listos para ser transmitidos 
+      a las personas en quienes confías, solo cuando realmente lo necesiten.
 
 note_creation:
   default_text: |

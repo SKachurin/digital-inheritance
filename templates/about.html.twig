@@ -1,30 +1,143 @@
 {% extends 'base.html.twig' %}
 {% block content %}
     <div class="container">
-        <h2 class="mt-7 pt5" style="padding-top: 4em;">{{ 'about_page.title'|trans }}</h2>
 
-        <p>{{ 'about_page.introduction.our_service'|trans }}</p>
-        <p>{{ 'about_page.introduction.no_watching'|trans }}</p>
-        <p>{{ 'about_page.introduction.privacy_priority'|trans }}</p>
-        <p>{{ 'about_page.introduction.encrypted_details'|trans }}</p>
-        <p>{{ 'about_page.introduction.encrypted_envelopes'|trans }}</p>
-        <p>{{ 'about_page.introduction.no_decoding'|trans }}</p>
-        <p>{{ 'about_page.introduction.no_way_decode'|trans }}</p>
+        <!-- Page Title -->
+        <h2 class="mt-7 pt5" style="padding-top: 4em;">
+            {{ 'about_page.title'|trans }}
+        </h2>
 
-        <p>{{ 'about_page.how_it_works'|trans }}</p>
+        <!-- Introduction -->
+{#        <h3>{{ 'about_page.introduction.title'|trans }}</h3>#}
+        <p>{{ 'about_page.introduction.text'|trans|raw }}</p>
 
-        <h5>{{ 'about_page.section_titles.registration'|trans }}</h5>
-        <p></p>
+        <!-- Why Choose Our Service -->
+        <h3>{{ 'about_page.why_choose.title'|trans }}</h3>
+        <h4>{{ 'about_page.why_choose.item1.title'|trans }}</h4>
+        <ul>
+            <li>{{ 'about_page.why_choose.item1.bullet1'|trans }}</li>
+            <li>{{ 'about_page.why_choose.item1.bullet2'|trans }}</li>
+            <li>{{ 'about_page.why_choose.item1.bullet3'|trans }}</li>
+        </ul>
 
-        <h5>{{ 'about_page.section_titles.secret_questions'|trans }}</h5>
-        <p></p>
+        <h4>{{ 'about_page.why_choose.item2.title'|trans }}</h4>
+        <ul>
+            <li>{{ 'about_page.why_choose.item2.bullet1'|trans }}</li>
+            <li>{{ 'about_page.why_choose.item2.bullet2'|trans }}</li>
+            <li>{{ 'about_page.why_choose.item2.bullet3'|trans }}</li>
+        </ul>
 
-        <h5>{{ 'about_page.section_titles.create_envelope'|trans }}</h5>
-        <p></p>
+        <h4>{{ 'about_page.why_choose.item3.title'|trans }}</h4>
+        <ul>
+            <li>{{ 'about_page.why_choose.item3.bullet1'|trans }}</li>
+            <li>{{ 'about_page.why_choose.item3.bullet2'|trans }}</li>
+        </ul>
 
-        <h5>{{ 'about_page.section_titles.add_beneficiary'|trans }}</h5>
-        <p>{{ 'about_page.beneficiary_info'|trans }}</p>
+        <h4>{{ 'about_page.why_choose.item4.title'|trans }}</h4>
+        <ul>
+            <li>{{ 'about_page.why_choose.item4.bullet1'|trans }}</li>
+            <li>{{ 'about_page.why_choose.item4.bullet2'|trans }}</li>
+            <li>{{ 'about_page.why_choose.item4.bullet3'|trans }}</li>
+        </ul>
 
-        <p>{{ 'about_page.assurance'|trans }}</p>
+        <h4>{{ 'about_page.why_choose.item5.title'|trans }}</h4>
+        <ul>
+            <li>{{ 'about_page.why_choose.item5.bullet1'|trans }}</li>
+            <li>{{ 'about_page.why_choose.item5.bullet2'|trans }}</li>
+            <li>{{ 'about_page.why_choose.item5.bullet3'|trans }}</li>
+        </ul>
+
+        <!-- How It Works -->
+        <h3>{{ 'about_page.how_it_works.title'|trans }}</h3>
+
+        <h4>{{ 'about_page.how_it_works.item1.title'|trans }}</h4>
+        <ul>
+            <li>{{ 'about_page.how_it_works.item1.bullet1'|trans }}</li>
+            <li>{{ 'about_page.how_it_works.item1.bullet2'|trans }}</li>
+        </ul>
+
+        <h4>{{ 'about_page.how_it_works.item2.title'|trans }}</h4>
+        <ul>
+            <li>{{ 'about_page.how_it_works.item2.bullet1'|trans }}</li>
+            <li>{{ 'about_page.how_it_works.item2.bullet2'|trans }}</li>
+            <li>{{ 'about_page.how_it_works.item2.bullet3'|trans }}</li>
+        </ul>
+
+        <h4>{{ 'about_page.how_it_works.item3.title'|trans }}</h4>
+        <ul>
+            <li>{{ 'about_page.how_it_works.item3.bullet1'|trans }}</li>
+            <li>{{ 'about_page.how_it_works.item3.bullet2'|trans }}</li>
+            <li>{{ 'about_page.how_it_works.item3.bullet3'|trans }}</li>
+        </ul>
+
+        <h4>{{ 'about_page.how_it_works.item4.title'|trans }}</h4>
+        <ul>
+            <li>{{ 'about_page.how_it_works.item4.bullet1'|trans }}</li>
+            <li>{{ 'about_page.how_it_works.item4.bullet2'|trans }}</li>
+        </ul>
+
+        <!-- Privacy & Security -->
+        <h3>{{ 'about_page.privacy_security.title'|trans }}</h3>
+        <ul>
+            <li>{{ 'about_page.privacy_security.bullet1'|trans }}</li>
+            <li>{{ 'about_page.privacy_security.bullet2'|trans }}</li>
+            <li>{{ 'about_page.privacy_security.bullet3'|trans }}</li>
+            <li>{{ 'about_page.privacy_security.bullet4'|trans }}</li>
+        </ul>
+
+        <!-- Setting Up Your Inheritance Pipeline -->
+        <h3>{{ 'about_page.pipeline.title'|trans }}</h3>
+        <ol>
+            <li>
+                <strong>{{ 'about_page.pipeline.item1.title'|trans }}</strong>
+                <ul>
+                    <li>{{ 'about_page.pipeline.item1.bullet1'|trans }}</li>
+                    <li>{{ 'about_page.pipeline.item1.bullet2'|trans }}</li>
+                </ul>
+            </li>
+            <li>
+                <strong>{{ 'about_page.pipeline.item2.title'|trans }}</strong>
+                <ul>
+                    <li>{{ 'about_page.pipeline.item2.bullet1'|trans }}</li>
+                    <li>{{ 'about_page.pipeline.item2.bullet2'|trans }}</li>
+                </ul>
+            </li>
+            <li>
+                <strong>{{ 'about_page.pipeline.item3.title'|trans }}</strong>
+                <ul>
+                    <li>{{ 'about_page.pipeline.item3.bullet1'|trans }}</li>
+                    <li>{{ 'about_page.pipeline.item3.bullet2'|trans }}</li>
+                </ul>
+            </li>
+            <li>
+                <strong>{{ 'about_page.pipeline.item4.title'|trans }}</strong>
+                <ul>
+                    <li>{{ 'about_page.pipeline.item4.bullet1'|trans }}</li>
+                    <li>{{ 'about_page.pipeline.item4.bullet2'|trans }}</li>
+                </ul>
+            </li>
+            <li>
+                <strong>{{ 'about_page.pipeline.item5.title'|trans }}</strong>
+                <ul>
+                    <li>{{ 'about_page.pipeline.item5.bullet1'|trans }}</li>
+                    <li>{{ 'about_page.pipeline.item5.bullet2'|trans }}</li>
+                </ul>
+            </li>
+        </ol>
+
+        <!-- Who Can Benefit -->
+        <h3>{{ 'about_page.who_can_benefit.title'|trans }}</h3>
+        <ul>
+            <li>{{ 'about_page.who_can_benefit.bullet1'|trans }}</li>
+            <li>{{ 'about_page.who_can_benefit.bullet2'|trans }}</li>
+            <li>{{ 'about_page.who_can_benefit.bullet3'|trans }}</li>
+        </ul>
+        <p>{{ 'about_page.who_can_benefit.footer'|trans }}</p>
+
+        <!-- Take Control -->
+        <h3>{{ 'about_page.take_control.title'|trans }}</h3>
+        <p>{{ 'about_page.take_control.text'|trans }}</p>
+
     </div>
 {% endblock %}
+

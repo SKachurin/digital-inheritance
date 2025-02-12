@@ -218,23 +218,121 @@ TEST_1_min: 'TEST 1 min'
 1_month: '1 month'
 
 about_page:
-  title: 'About "The Digital Heir"'
+  title: "Introducing “Digital Inheritance” Service"
+
   introduction:
-    our_service: 'Our service offers a secure and reliable solution for leaving your digital assets as an inheritance.'
-    no_watching: 'We do not watch you. We do not sell your data in any way.'
-    privacy_priority: 'We prioritize your privacy and security at every step.'
-    encrypted_details: 'Your contact details are encrypted before they are stored, ensuring they remain confidential.'
-    encrypted_envelopes: 'We also encrypt your secret envelopes with answers to your security questions.'
-    no_decoding: 'Once encrypted, your answers are deleted from our database, leaving only you and God with the knowledge.'
-    no_way_decode: 'There is no way to decode your secret envelopes without the answers provided by you!'
-  how_it_works: 'Here is how it works:'
-  section_titles:
-    registration: 'Registration'
-    secret_questions: 'Secret Questions'
-    create_envelope: 'Create Envelope'
-    add_beneficiary: 'Add Beneficiary to Envelope'
-  beneficiary_info: 'All encrypted notes are stored securely on our servers. If something happens to you or your device is compromised, your trusted contacts will still be able to access the necessary information using their personalized security questions.'
-  assurance: 'With our service, you can rest assured that your sensitive information is safe and accessible only to those you trust.'
+    text: >
+      Our service provides a seamless, secure, and discreet way to ensure your most valuable digital assets and 
+      sensitive information are passed on to the right person, exactly when they need it—without ever revealing 
+      any details until the time is right.
+
+  why_choose:
+    title: "Why Choose Our Service?"
+
+    item1:
+      title: "1. Complete Confidentiality"
+      bullet1: "No one will know you even have an inheritance or its amount."
+      bullet2: "No one will know who you have designated as your heir."
+      bullet3: "Your chosen heir themselves won’t know you’ve left anything for them, unless the time comes for them to access it."
+
+    item2:
+      title: "2. Independent of Local Laws"
+      bullet1: "We operate purely on a digital basis, independent of any regional or national legal procedures."
+      bullet2: "No need for official death certificates or complicated paperwork."
+      bullet3: "The process is solely between you and our service."
+
+    item3:
+      title: "3. Small Monthly Fee, Total Peace of Mind"
+      bullet1: "Your small monthly subscription guarantees constant coverage and monitoring."
+      bullet2: "If something happens to you, the service automatically handles the delivery process to your designated contact(s)."
+
+    item4:
+      title: "4. Secure Encrypted Notes"
+      bullet1: "You create one encrypted note (or “secret envelope”) per account."
+      bullet2: "This note contains the sensitive data you want to pass on (passwords, private keys, etc.)."
+      bullet3: "Stored securely on our servers in encrypted form, unreadable without the correct answers."
+
+    item5:
+      title: "5. Unlock via Personalized Questions"
+      bullet1: "You decide on up to four secret questions whose answers only you (and potentially your heir) know."
+      bullet2: "Your heir gets limited attempts to answer any one of these questions correctly (preventing brute force)."
+      bullet3: "A correct answer decrypts the note; a wrong answer keeps it locked."
+
+  how_it_works:
+    title: "How “Digital Inheritance” Works"
+
+    item1:
+      title: "1. Automated Life Status Checks"
+      bullet1: "We periodically check your activity (e.g., social media, WhatsApp, email) at intervals you choose."
+      bullet2: "These custom intervals let us confirm you’re still active."
+
+    item2:
+      title: "2. Escalation Pipeline"
+      bullet1: "If you fail to respond, the system escalates to the next contact method."
+      bullet2: "You define the sequence (e.g., wait 24 hours, send WhatsApp; if no response, send email, etc.)."
+      bullet3: "If all attempts fail, the system sends a secure link to your chosen heir(s)."
+
+    item3:
+      title: "3. Release of the Encrypted Message"
+      bullet1: "Once the heir receives the link, they must answer your personalized question(s)."
+      bullet2: "Correct answers decrypt the note for them."
+      bullet3: "Incorrect answers keep the information securely locked."
+
+    item4:
+      title: "4. No Heir Notification Needed"
+      bullet1: "No need to inform anyone in advance."
+      bullet2: "Your heir remains unaware unless they actually receive the link."
+
+  privacy_security:
+    title: "Privacy & Security at Every Step"
+    bullet1: "Encrypted Contacts: Your contact and heir details are encrypted before storage."
+    bullet2: "Encrypted Secret Answers: Once saved, the answers are removed from our database. Only you and your heir can unlock."
+    bullet3: "No Selling of Data: We do not watch you, track you, or sell your data to any third party."
+    bullet4: "Independence from Big Tech: No death certificate or lengthy procedures required. Your data remains yours."
+
+  pipeline:
+    title: "Setting Up Your Inheritance Pipeline"
+
+    item1:
+      title: " Create Your Account"
+      bullet1: "Register with minimal personal information."
+      bullet2: "Pay the small monthly fee for continuous coverage."
+
+    item2:
+      title: " Enter Your Contacts"
+      bullet1: "Provide your own contact details for life-status checks."
+      bullet2: "Add multiple methods to minimize false triggers."
+
+    item3:
+      title: " Draft Your Encrypted Note"
+      bullet1: "Write the message or credentials you want to pass on."
+      bullet2: "Set a personal security question and answer to encrypt the note."
+
+    item4:
+      title: " Add Your Heir(s)"
+      bullet1: "Input your heir’s contact details."
+      bullet2: "Create up to four unique questions with corresponding answers."
+
+    item5:
+      title: " Design Your Notification Pipeline"
+      bullet1: "Specify the order and timing of checks/reminders (e.g., no social media login in 7 days, then email...)."
+      bullet2: "If all attempts fail, the system delivers a secure link to your heir(s)."
+
+  who_can_benefit:
+    title: "Who Can Benefit?"
+    bullet1: "Anyone holding digital assets (e.g., cryptocurrency, online banking, confidential files)."
+    bullet2: "Those who want full control of who knows about their inheritance plans and when."
+    bullet3: "People seeking an easy, private alternative to traditional estate planning."
+    footer: >
+      Whether you hold digital currencies or simply wish to secure passwords for future generations, our service ensures
+      that your most precious information remains safe and is delivered only when truly needed—without disclosing anything prematurely.
+
+  take_control:
+    title: "Take Control of Your Digital Legacy"
+    text: >
+      Join our “Digital Inheritance” project today and gain peace of mind knowing your digital assets
+      and vital information are securely stored, confidentially protected, and ready to be passed on to
+      the people you trust—only if and when they truly need it.
 
 note_creation:
   default_text: |
