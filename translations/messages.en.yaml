@@ -133,31 +133,60 @@ forgot_pass: 'Forgot password?'
 click_here: 'Click here'
 restore_pass: 'Password Recovery'
 enter_email: "Please enter your first email(It's your login). Email have to be previously verified"
-create_your_heir: 'Create Your Digital Heir'
-edit_your_heir: 'Edit Your Digital Heir'
-edit_your_secure_envelope: 'Edit Your Secure Envelope'
-create_your_secure_envelope: 'Create Your Secure Envelope'
 create_your_secure_envelope_text: |
   There are no limits to what you can enter here (though the field limit is 5000 characters). This could include crypto wallet credentials, online bank credentials, etc.
   This envelope will be encrypted with half of our security key and half of the hash from your answer to the security questions.
   As we never save your answers, once encrypted, only you and God will have the knowledge required to decrypt this note.
   We will never save your answers again—all decryption will be done on the fly from the answers you provide when accessing the note.
-create_your_pipeline: 'Create Your Pipeline'
-make_a_payment: 'Make a Payment'
+
+
+dashboard:
+  make_a_payment: 'Make a Payment'
+  make_a_payment_tip: "This feature isn't ready yet. For now, all new customers are treated as Paid."
+  create_your_pipeline: 'Create Your Pipeline'
+  create_your_pipeline_tip: 'A sequence of Actions the system will take to check on you. Saving the Pipeline resets it.'
+  edit_your_pipeline: 'Edit Your Pipeline'
+  edit_your_pipeline_tip: 'Saving the Pipeline resets it. If you need more Actions, verify additional Contacts.'
+  create_your_secure_envelope: 'Create Your Secure Envelope'
+  create_your_secure_envelope_tip: 'A text field that will be encrypted using answers to your security questions.'
+  edit_your_secure_envelope: 'Edit Your Secure Envelope'
+  edit_your_secure_envelope_tip: 'To edit, you must first decrypt it using answers to your security questions.'
+  delete_your_secure_envelope: 'Delete Your Secure Envelope'
+  create_your_heir: 'Create Your Digital Heir'
+  create_your_heir_tip: "Your Digital Heir will receive an invitation to decrypt the Envelope when the Pipeline reaches its end."
+  delete_your_beneficiary: 'Delete Your Heir'
+  edit_your_heir: 'Edit Your Digital Heir'
+  edit_your_heir_tip: 'Edit your Digital Heir details.'
+  edit_your_social: 'Edit Your Social Media'
+  edit_your_social_tip: "Don't forget to verify it so it appears in Pipeline actions."
+  verify_edit_your_social: 'Verify/Edit Your Social Media'
+  verify_edit_your_social_tip: 'Verifying your contact creates an Action, allowing you to use it in your Pipeline.'
+  add_your_social: 'Add Your Social Media'
+  add_your_social_tip: "We check your 'last online' status to avoid sending unnecessary messages."
+  verify_edit_your_phone: 'Verify/Edit Phone Number'
+  verify_edit_your_phone_tip: 'We can verify your phone number via WhatsApp only. Verifying your contact creates an Action for use in your Pipeline.'
+  add_your_second_phone: 'Add a Second Phone Number'
+  add_your_second_phone_tip: "The more contacts you add, the more Actions you'll have to build your Pipeline."
+  add_your_phone: 'Add a Phone Number'
+  add_your_phone_tip: "The more contacts you add, the more Actions you'll have to build your Pipeline."
+  edit_your_phone: 'Edit Phone Number'
+  edit_your_phone_tip: "After editing this contact, don't forget to verify the new one!"
+  verify_edit_your_email: 'Verify/Edit Email Address'
+  verify_edit_your_email_tip: 'Verifying your contact creates an Action, allowing you to use it in your Pipeline.'
+  add_your_second_email: 'Add Another Email Address'
+  add_your_second_email_tip: "The more contacts you add, the more Actions you'll have to build your Pipeline."
+  edit_your_email: 'Edit Email Address'
+  edit_your_email_tip: "After editing this contact, don't forget to verify the new one!"
+
+
 decrypt_your_secure_envelope: 'Decrypt Your Secure Envelope'
 decrypt_first: 'To edit your secure envelope, please decrypt it first.'
 enter_answer: 'Enter your answer to one of the questions below and click the button.'
 do_some_staff: 'Now you can proceed.'
-edit_your_email: 'Edit Email Address'
-edit_your_phone: 'Edit Phone Number'
-verify_edit_your_email: 'Verify/Edit Email Address'
-add_your_second_email: 'Add Another Email Address'
-add_your_phone: 'Add Phone Number'
-verify_edit_your_phone: 'Verify/Edit Phone Number'
-add_your_second_phone: 'Add Second Phone Number'
-verify_edit_your_social: 'Verify/Edit Your Social Media'
-add_your_social: 'Add Your Social Media'
-edit_your_social: 'Edit Your Social Media'
+
+
+
+
 contact_can_edit: 'You can edit the contact'
 contact_edit: 'Edit Contact'
 updateContact: 'Update Contact'
@@ -171,12 +200,8 @@ pipeline: 'Pipeline'
 create_edit_your_pipeline: 'Here you can create or edit your Pipeline.'
 text_pipeline: 'If you have verified any of your contacts, you have action types to choose from (we created an action for each verified contact). Now you can choose what the system will do and how often (interval) to check if you are okay.'
 text_pipeline_2: ''
-delete_your_secure_envelope: 'Delete Your Secure Envelope'
 confirm_delete_note: 'Are you sure you want to delete your secure envelope?'
-delete_your_beneficiary: 'Delete Your Heir'
 confirm_delete_beneficiary: 'Are you sure you want to delete your Heir?'
-
-edit_your_pipeline: 'Edit Your Pipeline'
 
 your_questions: 'Security Questions to encrypt your Envelope'
 your_questions_explain: |

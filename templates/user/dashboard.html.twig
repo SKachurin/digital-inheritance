@@ -10,7 +10,115 @@
             #demonstration_type2{
                 padding-top: 6em;
             }
+
+            /* Container ensures tooltip moves with the SVG */
+            /* Ensures tooltip moves with SVG */
+            .tooltip-container {
+                display: inline-block;
+                position: relative;
+            }
+
+            /* Button styling */
+            .tooltip-btn {
+                background: transparent;
+                border: none;
+                cursor: pointer;
+                color: #333;
+                transition: color 0.3s ease;
+                position: relative;
+                padding: 0;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+            }
+
+            /* Tooltip styling */
+            .tooltip-box {
+                position: absolute;
+                background: rgba(127, 126, 126, 0.8);
+                color: white;
+                padding: 10px 15px;
+                border-radius: 6px;
+                font-size: 1rem;
+                display: none;
+                z-index: 999;
+                text-align: center;
+                white-space: nowrap;
+                top: -40px;
+                left: 50%;
+                transform: translateX(-50%);
+            }
+
+            /* Show tooltip on hover (for desktop) */
+            .tooltip-container:hover .tooltip-box {
+                display: block;
+            }
+
+            /* Tooltip arrow */
+            .tooltip-box::after {
+                content: "";
+                position: absolute;
+                bottom: -10px;
+                left: 50%;
+                transform: translateX(-50%);
+                border-width: 5px;
+                border-style: solid;
+                border-color: rgba(127, 126, 126, 0.8) transparent transparent;
+            }
+
+            /* Mobile & Tablet: Adjust header */
+            @media (max-width: 991px) { /* Apply only to devices smaller than 992px */
+
+                #question{
+                    vertical-align: super;
+                    width: 60px;
+                    height: 60px;
+                    margin-left: -8rem;
+                    margin-top: 0.5rem;
+                }
+
+                .tooltip-btn {
+                    font-size: 1rem;
+                }
+
+                .tooltip-box {
+                    font-size: 1.5rem;
+                    top: -30px;
+                    transform: translateX(-73%);
+                }
+            }
+
         </style>
+        <script>
+            document.addEventListener("DOMContentLoaded", function () {
+                const tooltipButtons = document.querySelectorAll(".tooltip-btn");
+
+                tooltipButtons.forEach(button => {
+                    button.addEventListener("click", function (event) {
+                        event.stopPropagation();
+
+                        // Close other tooltips first
+                        document.querySelectorAll(".tooltip-box").forEach(tooltip => {
+                            tooltip.classList.remove("show");
+                        });
+
+                        // Find the tooltip inside the clicked container
+                        let tooltip = this.nextElementSibling;
+                        if (tooltip) {
+                            tooltip.classList.add("show");
+                        }
+                    });
+                });
+
+                // Close tooltip when clicking outside
+                document.addEventListener("click", function () {
+                    document.querySelectorAll(".tooltip-box").forEach(tooltip => {
+                        tooltip.classList.remove("show");
+                    });
+                });
+            });
+        </script>
+
         <div class="container">
             <h1>{{ 'header.dashboard'|trans }}</h1>
 
@@ -27,191 +135,489 @@
             {% if customerFirstEmailVerified %}
                 <section class="mb-4">
                     <a class="btn btn-outline-dark btn-floating m-1 mt-4" href="/contact/{{ customerFirstEmail }}/edit" role="button">
-                        <i class="">{{ 'edit_your_email'|trans }}</i>
+                        <i class="">{{ 'dashboard.edit_your_email'|trans }}</i>
                     </a>
+
+                    <!-- Tooltip Trigger (Question Mark) -->
+                    <div class="tooltip-container">
+                        <button class="tooltip-btn">
+                            <svg id="question" xmlns="http://www.w3.org/2000/svg" version="1.0" width="30pt" height="30pt" viewBox="0 0 300.000000 164.000000" preserveAspectRatio="xMidYMid meet">
+                                <g transform="translate(0.000000,164.000000) scale(0.050000,-0.050000)" fill="#000000" stroke="none">
+                                    <path d="M2284 3001 c-1071 -290 -1298 -1701 -372 -2320 789 -527 1868 -30 1986 915 114 904 -735 1642 -1614 1405z m580 -143 c395 -82 772 -450 853 -834 243 -1140 -1126 -1871 -1922 -1027 -748 793 -7 2084 1069 1861z"/>
+                                    <path d="M2414 2449 c-154 -49 -314 -214 -263 -270 76 -84 105 -87 184 -18 179 158 458 158 551 0 68 -115 25 -205 -152 -316 -228 -143 -300 -425 -102 -401 56 6 68 21 109 131 17 45 64 91 161 155 482 318 85 902 -488 719z"/>
+                                    <path d="M2533 1279 c-109 -86 -51 -239 90 -239 86 0 137 50 137 135 0 67 -76 145 -140 145 -19 0 -58 -19 -87 -41z"/>
+                                </g>
+                            </svg>
+                        </button>
+                        <div class="tooltip-box">{{ 'dashboard.edit_your_email_tip'|trans }}</div>
+                    </div>
+
                 </section>
-                <p>explanation</p>
+{#                <p>explanation</p>#}
             {% endif %}
 
             {% if customerSecondEmailVerified %}
                 <section class="mb-4">
                     <a class="btn btn-outline-dark btn-floating m-1 mt-4" href="/contact/{{ customerSecondEmail }}/edit" role="button">
-                        <i class="">{{ 'edit_your_email'|trans }}</i>
+                        <i class="">{{ 'dashboard.edit_your_email'|trans }}</i>
                     </a>
+
+                    <!-- Tooltip Trigger (Question Mark) -->
+                    <div class="tooltip-container">
+                        <button class="tooltip-btn">
+                            <svg id="question" xmlns="http://www.w3.org/2000/svg" version="1.0" width="30pt" height="30pt" viewBox="0 0 300.000000 164.000000" preserveAspectRatio="xMidYMid meet">
+                                <g transform="translate(0.000000,164.000000) scale(0.050000,-0.050000)" fill="#000000" stroke="none">
+                                    <path d="M2284 3001 c-1071 -290 -1298 -1701 -372 -2320 789 -527 1868 -30 1986 915 114 904 -735 1642 -1614 1405z m580 -143 c395 -82 772 -450 853 -834 243 -1140 -1126 -1871 -1922 -1027 -748 793 -7 2084 1069 1861z"/>
+                                    <path d="M2414 2449 c-154 -49 -314 -214 -263 -270 76 -84 105 -87 184 -18 179 158 458 158 551 0 68 -115 25 -205 -152 -316 -228 -143 -300 -425 -102 -401 56 6 68 21 109 131 17 45 64 91 161 155 482 318 85 902 -488 719z"/>
+                                    <path d="M2533 1279 c-109 -86 -51 -239 90 -239 86 0 137 50 137 135 0 67 -76 145 -140 145 -19 0 -58 -19 -87 -41z"/>
+                                </g>
+                            </svg>
+                        </button>
+                        <div class="tooltip-box">{{ 'dashboard.edit_your_email_tip'|trans }}</div>
+                    </div>
                 </section>
-                <p>explanation</p>
+{#                <p>explanation</p>#}
             {% endif %}
 
             {% if not customerFirstEmailVerified %}
                 <section class="mb-4">
                     <a class="btn btn-outline-dark btn-floating m-1 mt-4" href="/contact/{{ customerFirstEmail }}/edit" role="button">
-                        <i class="">{{ 'verify_edit_your_email'|trans }}</i>
+                        <i class="">{{ 'dashboard.verify_edit_your_email'|trans }}</i>
                     </a>
+
+                    <!-- Tooltip Trigger (Question Mark) -->
+                    <div class="tooltip-container">
+                        <button class="tooltip-btn">
+                            <svg id="question" xmlns="http://www.w3.org/2000/svg" version="1.0" width="30pt" height="30pt" viewBox="0 0 300.000000 164.000000" preserveAspectRatio="xMidYMid meet">
+                                <g transform="translate(0.000000,164.000000) scale(0.050000,-0.050000)" fill="#000000" stroke="none">
+                                    <path d="M2284 3001 c-1071 -290 -1298 -1701 -372 -2320 789 -527 1868 -30 1986 915 114 904 -735 1642 -1614 1405z m580 -143 c395 -82 772 -450 853 -834 243 -1140 -1126 -1871 -1922 -1027 -748 793 -7 2084 1069 1861z"/>
+                                    <path d="M2414 2449 c-154 -49 -314 -214 -263 -270 76 -84 105 -87 184 -18 179 158 458 158 551 0 68 -115 25 -205 -152 -316 -228 -143 -300 -425 -102 -401 56 6 68 21 109 131 17 45 64 91 161 155 482 318 85 902 -488 719z"/>
+                                    <path d="M2533 1279 c-109 -86 -51 -239 90 -239 86 0 137 50 137 135 0 67 -76 145 -140 145 -19 0 -58 -19 -87 -41z"/>
+                                </g>
+                            </svg>
+                        </button>
+                        <div class="tooltip-box">{{ 'dashboard.verify_edit_your_email_tip'|trans }}</div>
+                    </div>
                 </section>
-                <p>explanation</p>
+{#                <p>explanation</p>#}
             {% endif %}
 
             {% if customerSecondEmail is not defined or not customerSecondEmail %}
                 <section class="mb-4">
                     <a class="btn btn-outline-dark btn-floating m-1 mt-4" href="/contact/email/create" role="button">
-                        <i class="">{{ 'add_your_second_email'|trans }}</i>
+                        <i class="">{{ 'dashboard.add_your_second_email'|trans }}</i>
                     </a>
+
+                    <!-- Tooltip Trigger (Question Mark) -->
+                    <div class="tooltip-container">
+                        <button class="tooltip-btn">
+                            <svg id="question" xmlns="http://www.w3.org/2000/svg" version="1.0" width="30pt" height="30pt" viewBox="0 0 300.000000 164.000000" preserveAspectRatio="xMidYMid meet">
+                                <g transform="translate(0.000000,164.000000) scale(0.050000,-0.050000)" fill="#000000" stroke="none">
+                                    <path d="M2284 3001 c-1071 -290 -1298 -1701 -372 -2320 789 -527 1868 -30 1986 915 114 904 -735 1642 -1614 1405z m580 -143 c395 -82 772 -450 853 -834 243 -1140 -1126 -1871 -1922 -1027 -748 793 -7 2084 1069 1861z"/>
+                                    <path d="M2414 2449 c-154 -49 -314 -214 -263 -270 76 -84 105 -87 184 -18 179 158 458 158 551 0 68 -115 25 -205 -152 -316 -228 -143 -300 -425 -102 -401 56 6 68 21 109 131 17 45 64 91 161 155 482 318 85 902 -488 719z"/>
+                                    <path d="M2533 1279 c-109 -86 -51 -239 90 -239 86 0 137 50 137 135 0 67 -76 145 -140 145 -19 0 -58 -19 -87 -41z"/>
+                                </g>
+                            </svg>
+                        </button>
+                        <div class="tooltip-box">{{ 'dashboard.add_your_second_email_tip'|trans }}</div>
+                    </div>
                 </section>
-                <p>explanation</p>
+{#                <p>explanation</p>#}
             {% endif %}
 
             {% if customerSecondEmail is defined and customerSecondEmail and not customerSecondEmailVerified %}
                 <section class="mb-4">
                     <a class="btn btn-outline-dark btn-floating m-1 mt-4" href="/contact/{{ customerSecondEmail }}/edit" role="button">
-                        <i class="">{{ 'verify_edit_your_email'|trans }}</i>
+                        <i class="">{{ 'dashboard.verify_edit_your_email'|trans }}</i>
                     </a>
+
+                    <!-- Tooltip Trigger (Question Mark) -->
+                    <div class="tooltip-container">
+                        <button class="tooltip-btn">
+                            <svg id="question" xmlns="http://www.w3.org/2000/svg" version="1.0" width="30pt" height="30pt" viewBox="0 0 300.000000 164.000000" preserveAspectRatio="xMidYMid meet">
+                                <g transform="translate(0.000000,164.000000) scale(0.050000,-0.050000)" fill="#000000" stroke="none">
+                                    <path d="M2284 3001 c-1071 -290 -1298 -1701 -372 -2320 789 -527 1868 -30 1986 915 114 904 -735 1642 -1614 1405z m580 -143 c395 -82 772 -450 853 -834 243 -1140 -1126 -1871 -1922 -1027 -748 793 -7 2084 1069 1861z"/>
+                                    <path d="M2414 2449 c-154 -49 -314 -214 -263 -270 76 -84 105 -87 184 -18 179 158 458 158 551 0 68 -115 25 -205 -152 -316 -228 -143 -300 -425 -102 -401 56 6 68 21 109 131 17 45 64 91 161 155 482 318 85 902 -488 719z"/>
+                                    <path d="M2533 1279 c-109 -86 -51 -239 90 -239 86 0 137 50 137 135 0 67 -76 145 -140 145 -19 0 -58 -19 -87 -41z"/>
+                                </g>
+                            </svg>
+                        </button>
+                        <div class="tooltip-box">{{ 'dashboard.verify_edit_your_email_tip'|trans }}</div>
+                    </div>
                 </section>
-                <p>explanation</p>
+{#                <p>explanation</p>#}
             {% endif %}
 
             {% if customerPhoneVerified %}
                 <section class="mb-4">
                     <a class="btn btn-outline-dark btn-floating m-1 mt-4" href="/contact/{{ customerFirstPhone }}/edit" role="button">
-                        <i class="">{{ 'edit_your_phone'|trans }}</i>
+                        <i class="">{{ 'dashboard.edit_your_phone'|trans }}</i>
                     </a>
+
+                    <!-- Tooltip Trigger (Question Mark) -->
+                    <div class="tooltip-container">
+                        <button class="tooltip-btn">
+                            <svg id="question" xmlns="http://www.w3.org/2000/svg" version="1.0" width="30pt" height="30pt" viewBox="0 0 300.000000 164.000000" preserveAspectRatio="xMidYMid meet">
+                                <g transform="translate(0.000000,164.000000) scale(0.050000,-0.050000)" fill="#000000" stroke="none">
+                                    <path d="M2284 3001 c-1071 -290 -1298 -1701 -372 -2320 789 -527 1868 -30 1986 915 114 904 -735 1642 -1614 1405z m580 -143 c395 -82 772 -450 853 -834 243 -1140 -1126 -1871 -1922 -1027 -748 793 -7 2084 1069 1861z"/>
+                                    <path d="M2414 2449 c-154 -49 -314 -214 -263 -270 76 -84 105 -87 184 -18 179 158 458 158 551 0 68 -115 25 -205 -152 -316 -228 -143 -300 -425 -102 -401 56 6 68 21 109 131 17 45 64 91 161 155 482 318 85 902 -488 719z"/>
+                                    <path d="M2533 1279 c-109 -86 -51 -239 90 -239 86 0 137 50 137 135 0 67 -76 145 -140 145 -19 0 -58 -19 -87 -41z"/>
+                                </g>
+                            </svg>
+                        </button>
+                        <div class="tooltip-box">{{ 'dashboard.edit_your_phone_tip'|trans }}</div>
+                    </div>
                 </section>
-                <p>explanation</p>
+{#                <p>explanation</p>#}
             {% endif %}
 
             {% if customerSecondPhoneVerified %}
                 <section class="mb-4">
                     <a class="btn btn-outline-dark btn-floating m-1 mt-4" href="/contact/{{ customerSecondPhone }}/edit" role="button">
-                        <i class="">{{ 'edit_your_phone'|trans }}</i>
+                        <i class="">{{ 'dashboard.edit_your_phone'|trans }}</i>
                     </a>
+
+                    <!-- Tooltip Trigger (Question Mark) -->
+                    <div class="tooltip-container">
+                        <button class="tooltip-btn">
+                            <svg id="question" xmlns="http://www.w3.org/2000/svg" version="1.0" width="30pt" height="30pt" viewBox="0 0 300.000000 164.000000" preserveAspectRatio="xMidYMid meet">
+                                <g transform="translate(0.000000,164.000000) scale(0.050000,-0.050000)" fill="#000000" stroke="none">
+                                    <path d="M2284 3001 c-1071 -290 -1298 -1701 -372 -2320 789 -527 1868 -30 1986 915 114 904 -735 1642 -1614 1405z m580 -143 c395 -82 772 -450 853 -834 243 -1140 -1126 -1871 -1922 -1027 -748 793 -7 2084 1069 1861z"/>
+                                    <path d="M2414 2449 c-154 -49 -314 -214 -263 -270 76 -84 105 -87 184 -18 179 158 458 158 551 0 68 -115 25 -205 -152 -316 -228 -143 -300 -425 -102 -401 56 6 68 21 109 131 17 45 64 91 161 155 482 318 85 902 -488 719z"/>
+                                    <path d="M2533 1279 c-109 -86 -51 -239 90 -239 86 0 137 50 137 135 0 67 -76 145 -140 145 -19 0 -58 -19 -87 -41z"/>
+                                </g>
+                            </svg>
+                        </button>
+                        <div class="tooltip-box">{{ 'dashboard.edit_your_phone_tip'|trans }}</div>
+                    </div>
                 </section>
-                <p>explanation</p>
+{#                <p>explanation</p>#}
             {% endif %}
 
 
             {% if customerFirstPhone is not defined or not customerFirstPhone %}
                 <section class="mb-4">
                     <a class="btn btn-outline-dark btn-floating m-1 mt-4" href="/contact/phone/create" role="button">
-                        <i class="">{{ 'add_your_phone'|trans }}</i>
+                        <i class="">{{ 'dashboard.add_your_phone'|trans }}</i>
                     </a>
+
+                    <!-- Tooltip Trigger (Question Mark) -->
+                    <div class="tooltip-container">
+                        <button class="tooltip-btn">
+                            <svg id="question" xmlns="http://www.w3.org/2000/svg" version="1.0" width="30pt" height="30pt" viewBox="0 0 300.000000 164.000000" preserveAspectRatio="xMidYMid meet">
+                                <g transform="translate(0.000000,164.000000) scale(0.050000,-0.050000)" fill="#000000" stroke="none">
+                                    <path d="M2284 3001 c-1071 -290 -1298 -1701 -372 -2320 789 -527 1868 -30 1986 915 114 904 -735 1642 -1614 1405z m580 -143 c395 -82 772 -450 853 -834 243 -1140 -1126 -1871 -1922 -1027 -748 793 -7 2084 1069 1861z"/>
+                                    <path d="M2414 2449 c-154 -49 -314 -214 -263 -270 76 -84 105 -87 184 -18 179 158 458 158 551 0 68 -115 25 -205 -152 -316 -228 -143 -300 -425 -102 -401 56 6 68 21 109 131 17 45 64 91 161 155 482 318 85 902 -488 719z"/>
+                                    <path d="M2533 1279 c-109 -86 -51 -239 90 -239 86 0 137 50 137 135 0 67 -76 145 -140 145 -19 0 -58 -19 -87 -41z"/>
+                                </g>
+                            </svg>
+                        </button>
+                        <div class="tooltip-box">{{ 'dashboard.add_your_phone_tip'|trans }}</div>
+                    </div>
                 </section>
-                <p>explanation</p>
+{#                <p>explanation</p>#}
             {% endif %}
 
             {% if customerFirstPhone is defined and customerFirstPhone and not customerPhoneVerified %}
                 <section class="mb-4">
                     <a class="btn btn-outline-dark btn-floating m-1 mt-4" href="/contact/{{ customerFirstPhone }}/edit" role="button">
-                        <i class="">{{ 'verify_edit_your_phone'|trans }}</i>
+                        <i class="">{{ 'dashboard.verify_edit_your_phone'|trans }}</i>
                     </a>
+
+                    <!-- Tooltip Trigger (Question Mark) -->
+                    <div class="tooltip-container">
+                        <button class="tooltip-btn">
+                            <svg id="question" xmlns="http://www.w3.org/2000/svg" version="1.0" width="30pt" height="30pt" viewBox="0 0 300.000000 164.000000" preserveAspectRatio="xMidYMid meet">
+                                <g transform="translate(0.000000,164.000000) scale(0.050000,-0.050000)" fill="#000000" stroke="none">
+                                    <path d="M2284 3001 c-1071 -290 -1298 -1701 -372 -2320 789 -527 1868 -30 1986 915 114 904 -735 1642 -1614 1405z m580 -143 c395 -82 772 -450 853 -834 243 -1140 -1126 -1871 -1922 -1027 -748 793 -7 2084 1069 1861z"/>
+                                    <path d="M2414 2449 c-154 -49 -314 -214 -263 -270 76 -84 105 -87 184 -18 179 158 458 158 551 0 68 -115 25 -205 -152 -316 -228 -143 -300 -425 -102 -401 56 6 68 21 109 131 17 45 64 91 161 155 482 318 85 902 -488 719z"/>
+                                    <path d="M2533 1279 c-109 -86 -51 -239 90 -239 86 0 137 50 137 135 0 67 -76 145 -140 145 -19 0 -58 -19 -87 -41z"/>
+                                </g>
+                            </svg>
+                        </button>
+                        <div class="tooltip-box">{{ 'dashboard.verify_edit_your_phone_tip'|trans }}</div>
+                    </div>
                 </section>
-                <p>explanation</p>
+{#                <p>explanation</p>#}
             {% endif %}
 
             {% if customerSecondPhone is not defined or not customerSecondPhone %}
                 <section class="mb-4">
                     <a class="btn btn-outline-dark btn-floating m-1 mt-4" href="/contact/phone/create" role="button">
-                        <i class="">{{ 'add_your_second_phone'|trans }}</i>
+                        <i class="">{{ 'dashboard.add_your_second_phone'|trans }}</i>
                     </a>
+
+                    <!-- Tooltip Trigger (Question Mark) -->
+                    <div class="tooltip-container">
+                        <button class="tooltip-btn">
+                            <svg id="question" xmlns="http://www.w3.org/2000/svg" version="1.0" width="30pt" height="30pt" viewBox="0 0 300.000000 164.000000" preserveAspectRatio="xMidYMid meet">
+                                <g transform="translate(0.000000,164.000000) scale(0.050000,-0.050000)" fill="#000000" stroke="none">
+                                    <path d="M2284 3001 c-1071 -290 -1298 -1701 -372 -2320 789 -527 1868 -30 1986 915 114 904 -735 1642 -1614 1405z m580 -143 c395 -82 772 -450 853 -834 243 -1140 -1126 -1871 -1922 -1027 -748 793 -7 2084 1069 1861z"/>
+                                    <path d="M2414 2449 c-154 -49 -314 -214 -263 -270 76 -84 105 -87 184 -18 179 158 458 158 551 0 68 -115 25 -205 -152 -316 -228 -143 -300 -425 -102 -401 56 6 68 21 109 131 17 45 64 91 161 155 482 318 85 902 -488 719z"/>
+                                    <path d="M2533 1279 c-109 -86 -51 -239 90 -239 86 0 137 50 137 135 0 67 -76 145 -140 145 -19 0 -58 -19 -87 -41z"/>
+                                </g>
+                            </svg>
+                        </button>
+                        <div class="tooltip-box">{{ 'dashboard.add_your_second_phone_tip'|trans }}</div>
+                    </div>
                 </section>
-                <p>explanation</p>
+{#                <p>explanation</p>#}
             {% endif %}
 
             {% if customerSecondPhone is defined and customerSecondPhone and not customerSecondPhoneVerified %}
                 <section class="mb-4">
                     <a class="btn btn-outline-dark btn-floating m-1 mt-4" href="/contact/{{ customerSecondPhone }}/edit" role="button">
-                        <i class="">{{ 'verify_edit_your_phone'|trans }}</i>
+                        <i class="">{{ 'dashboard.verify_edit_your_phone'|trans }}</i>
                     </a>
+
+                    <!-- Tooltip Trigger (Question Mark) -->
+                    <div class="tooltip-container">
+                        <button class="tooltip-btn">
+                            <svg id="question" xmlns="http://www.w3.org/2000/svg" version="1.0" width="30pt" height="30pt" viewBox="0 0 300.000000 164.000000" preserveAspectRatio="xMidYMid meet">
+                                <g transform="translate(0.000000,164.000000) scale(0.050000,-0.050000)" fill="#000000" stroke="none">
+                                    <path d="M2284 3001 c-1071 -290 -1298 -1701 -372 -2320 789 -527 1868 -30 1986 915 114 904 -735 1642 -1614 1405z m580 -143 c395 -82 772 -450 853 -834 243 -1140 -1126 -1871 -1922 -1027 -748 793 -7 2084 1069 1861z"/>
+                                    <path d="M2414 2449 c-154 -49 -314 -214 -263 -270 76 -84 105 -87 184 -18 179 158 458 158 551 0 68 -115 25 -205 -152 -316 -228 -143 -300 -425 -102 -401 56 6 68 21 109 131 17 45 64 91 161 155 482 318 85 902 -488 719z"/>
+                                    <path d="M2533 1279 c-109 -86 -51 -239 90 -239 86 0 137 50 137 135 0 67 -76 145 -140 145 -19 0 -58 -19 -87 -41z"/>
+                                </g>
+                            </svg>
+                        </button>
+                        <div class="tooltip-box">{{ 'dashboard.verify_edit_your_phone_tip'|trans }}</div>
+                    </div>
                 </section>
-                <p>explanation</p>
+{#                <p>explanation</p>#}
             {% endif %}
 
             {% if customerSocial is not defined or not customerSocial %}
                 <section class="mb-4">
                     <a class="btn btn-outline-dark btn-floating m-1 mt-4" href="/contact/social/create" role="button">
-                        <i class="">{{ 'add_your_social'|trans }}</i>
+                        <i class="">{{ 'dashboard.add_your_social'|trans }}</i>
                     </a>
+
+                    <!-- Tooltip Trigger (Question Mark) -->
+                    <div class="tooltip-container">
+                        <button class="tooltip-btn">
+                            <svg id="question" xmlns="http://www.w3.org/2000/svg" version="1.0" width="30pt" height="30pt" viewBox="0 0 300.000000 164.000000" preserveAspectRatio="xMidYMid meet">
+                                <g transform="translate(0.000000,164.000000) scale(0.050000,-0.050000)" fill="#000000" stroke="none">
+                                    <path d="M2284 3001 c-1071 -290 -1298 -1701 -372 -2320 789 -527 1868 -30 1986 915 114 904 -735 1642 -1614 1405z m580 -143 c395 -82 772 -450 853 -834 243 -1140 -1126 -1871 -1922 -1027 -748 793 -7 2084 1069 1861z"/>
+                                    <path d="M2414 2449 c-154 -49 -314 -214 -263 -270 76 -84 105 -87 184 -18 179 158 458 158 551 0 68 -115 25 -205 -152 -316 -228 -143 -300 -425 -102 -401 56 6 68 21 109 131 17 45 64 91 161 155 482 318 85 902 -488 719z"/>
+                                    <path d="M2533 1279 c-109 -86 -51 -239 90 -239 86 0 137 50 137 135 0 67 -76 145 -140 145 -19 0 -58 -19 -87 -41z"/>
+                                </g>
+                            </svg>
+                        </button>
+                        <div class="tooltip-box">Y{{ 'dashboard.add_your_social_tip'|trans }}</div>
+                    </div>
                 </section>
-                <p>explanation</p>
+{#                <p>explanation</p>#}
             {% endif %}
 
             {% if customerSocial is defined and customerSocial and not customerSocialVerified %}
                 <section class="mb-4">
                     <a class="btn btn-outline-dark btn-floating m-1 mt-4" href="/contact/{{ customerSocial }}/edit" role="button">
-                        <i class="">{{ 'verify_edit_your_social'|trans }}</i>
+                        <i class="">{{ 'dashboard.verify_edit_your_social'|trans }}</i>
                     </a>
+
+                    <!-- Tooltip Trigger (Question Mark) -->
+                    <div class="tooltip-container">
+                        <button class="tooltip-btn">
+                            <svg id="question" xmlns="http://www.w3.org/2000/svg" version="1.0" width="30pt" height="30pt" viewBox="0 0 300.000000 164.000000" preserveAspectRatio="xMidYMid meet">
+                                <g transform="translate(0.000000,164.000000) scale(0.050000,-0.050000)" fill="#000000" stroke="none">
+                                    <path d="M2284 3001 c-1071 -290 -1298 -1701 -372 -2320 789 -527 1868 -30 1986 915 114 904 -735 1642 -1614 1405z m580 -143 c395 -82 772 -450 853 -834 243 -1140 -1126 -1871 -1922 -1027 -748 793 -7 2084 1069 1861z"/>
+                                    <path d="M2414 2449 c-154 -49 -314 -214 -263 -270 76 -84 105 -87 184 -18 179 158 458 158 551 0 68 -115 25 -205 -152 -316 -228 -143 -300 -425 -102 -401 56 6 68 21 109 131 17 45 64 91 161 155 482 318 85 902 -488 719z"/>
+                                    <path d="M2533 1279 c-109 -86 -51 -239 90 -239 86 0 137 50 137 135 0 67 -76 145 -140 145 -19 0 -58 -19 -87 -41z"/>
+                                </g>
+                            </svg>
+                        </button>
+                        <div class="tooltip-box">{{ 'dashboard.verify_edit_your_social_tip'|trans }}</div>
+                    </div>
                 </section>
-                <p>explanation</p>
+{#                <p>explanation</p>#}
             {% endif %}
 
             {% if customerSocialVerified %}
                 <section class="mb-4">
                     <a class="btn btn-outline-dark btn-floating m-1 mt-4" href="/contact/{{ customerSocial }}/edit" role="button">
-                        <i class="">{{ 'edit_your_social'|trans }}</i>
+                        <i class="">{{ 'dashboard.edit_your_social'|trans }}</i>
                     </a>
+
+                    <!-- Tooltip Trigger (Question Mark) -->
+                    <div class="tooltip-container">
+                        <button class="tooltip-btn">
+                            <svg id="question" xmlns="http://www.w3.org/2000/svg" version="1.0" width="30pt" height="30pt" viewBox="0 0 300.000000 164.000000" preserveAspectRatio="xMidYMid meet">
+                                <g transform="translate(0.000000,164.000000) scale(0.050000,-0.050000)" fill="#000000" stroke="none">
+                                    <path d="M2284 3001 c-1071 -290 -1298 -1701 -372 -2320 789 -527 1868 -30 1986 915 114 904 -735 1642 -1614 1405z m580 -143 c395 -82 772 -450 853 -834 243 -1140 -1126 -1871 -1922 -1027 -748 793 -7 2084 1069 1861z"/>
+                                    <path d="M2414 2449 c-154 -49 -314 -214 -263 -270 76 -84 105 -87 184 -18 179 158 458 158 551 0 68 -115 25 -205 -152 -316 -228 -143 -300 -425 -102 -401 56 6 68 21 109 131 17 45 64 91 161 155 482 318 85 902 -488 719z"/>
+                                    <path d="M2533 1279 c-109 -86 -51 -239 90 -239 86 0 137 50 137 135 0 67 -76 145 -140 145 -19 0 -58 -19 -87 -41z"/>
+                                </g>
+                            </svg>
+                        </button>
+                        <div class="tooltip-box">{{ 'dashboard.edit_your_social_tip'|trans }}</div>
+                    </div>
                 </section>
-                <p>explanation</p>
+{#                <p>explanation</p>#}
             {% endif %}
 
             {% if customerHasBeneficiary is defined and customerHasBeneficiary %}
                 <section class="mb-4">
                     <a class="btn btn-outline-dark btn-floating m-1 mt-4" href="/beneficiary/{{ customerHasBeneficiary }}/edit" role="button">
-                        <i class="">{{ 'edit_your_heir'|trans }}</i>
+                        <i class="">{{ 'dashboard.edit_your_heir'|trans }}</i>
                     </a>
+
+                    <!-- Tooltip Trigger (Question Mark) -->
+                    <div class="tooltip-container">
+                        <button class="tooltip-btn">
+                            <svg id="question" xmlns="http://www.w3.org/2000/svg" version="1.0" width="30pt" height="30pt" viewBox="0 0 300.000000 164.000000" preserveAspectRatio="xMidYMid meet">
+                                <g transform="translate(0.000000,164.000000) scale(0.050000,-0.050000)" fill="#000000" stroke="none">
+                                    <path d="M2284 3001 c-1071 -290 -1298 -1701 -372 -2320 789 -527 1868 -30 1986 915 114 904 -735 1642 -1614 1405z m580 -143 c395 -82 772 -450 853 -834 243 -1140 -1126 -1871 -1922 -1027 -748 793 -7 2084 1069 1861z"/>
+                                    <path d="M2414 2449 c-154 -49 -314 -214 -263 -270 76 -84 105 -87 184 -18 179 158 458 158 551 0 68 -115 25 -205 -152 -316 -228 -143 -300 -425 -102 -401 56 6 68 21 109 131 17 45 64 91 161 155 482 318 85 902 -488 719z"/>
+                                    <path d="M2533 1279 c-109 -86 -51 -239 90 -239 86 0 137 50 137 135 0 67 -76 145 -140 145 -19 0 -58 -19 -87 -41z"/>
+                                </g>
+                            </svg>
+                        </button>
+                        <div class="tooltip-box">{{ 'dashboard.edit_your_heir_tip'|trans }}</div>
+                    </div>
+
                     <form action="{{ path('beneficiary_delete', {'beneficiaryId': customerHasBeneficiary}) }}" method="post" style="display:inline-block; margin: 0; padding: 0; background: transparent;" onsubmit="return confirm('{{ 'confirm_delete_beneficiary'|trans }}');">
                         <input type="hidden" name="_token" value="{{ csrf_token('delete_beneficiary') }}">
                         <button type="submit" class="btn btn-outline-danger btn-floating m-1 mt-4">
-                            <i class="">{{ 'delete_your_beneficiary'|trans }}</i>
+                            <i class="">{{ 'dashboard.delete_your_beneficiary'|trans }}</i>
                         </button>
                     </form>
                 </section>
-                <p>explanation</p>
+{#                <p>explanation</p>#}
             {% endif %}
 
             {% if customerHasBeneficiary is defined and not customerHasBeneficiary %}
                 <section class="mb-4">
-                    <a class="btn btn-outline-dark btn-floating m-1 mt-4" href="/beneficiary/create" role="button"><i class="">{{ 'create_your_heir'|trans }}</i></a>
+                    <a class="btn btn-outline-dark btn-floating m-1 mt-4" href="/beneficiary/create" role="button"><i class="">{{ 'dashboard.create_your_heir'|trans }}</i></a>
+
+                    <!-- Tooltip Trigger (Question Mark) -->
+                    <div class="tooltip-container">
+                        <button class="tooltip-btn">
+                            <svg id="question" xmlns="http://www.w3.org/2000/svg" version="1.0" width="30pt" height="30pt" viewBox="0 0 300.000000 164.000000" preserveAspectRatio="xMidYMid meet">
+                                <g transform="translate(0.000000,164.000000) scale(0.050000,-0.050000)" fill="#000000" stroke="none">
+                                    <path d="M2284 3001 c-1071 -290 -1298 -1701 -372 -2320 789 -527 1868 -30 1986 915 114 904 -735 1642 -1614 1405z m580 -143 c395 -82 772 -450 853 -834 243 -1140 -1126 -1871 -1922 -1027 -748 793 -7 2084 1069 1861z"/>
+                                    <path d="M2414 2449 c-154 -49 -314 -214 -263 -270 76 -84 105 -87 184 -18 179 158 458 158 551 0 68 -115 25 -205 -152 -316 -228 -143 -300 -425 -102 -401 56 6 68 21 109 131 17 45 64 91 161 155 482 318 85 902 -488 719z"/>
+                                    <path d="M2533 1279 c-109 -86 -51 -239 90 -239 86 0 137 50 137 135 0 67 -76 145 -140 145 -19 0 -58 -19 -87 -41z"/>
+                                </g>
+                            </svg>
+                        </button>
+                        <div class="tooltip-box">{{ 'dashboard.create_your_heir_tip'|trans }}</div>
+                    </div>
                 </section>
-                <p>explanation</p>
+{#                <p>explanation</p>#}
             {% endif %}
 
             {% if customerHasNote is defined and customerHasNote %}
                 <section class="mb-4">
                     <a class="btn btn-outline-dark btn-floating m-1 mt-4" href="/note/{{ customerHasNote }}/edit" role="button">
-                        <i class="">{{ 'edit_your_secure_envelope'|trans }}</i>
+                        <i class="">{{ 'dashboard.edit_your_secure_envelope'|trans }}</i>
                     </a>
+
+                    <!-- Tooltip Trigger (Question Mark) -->
+                    <div class="tooltip-container">
+                        <button class="tooltip-btn">
+                            <svg id="question" xmlns="http://www.w3.org/2000/svg" version="1.0" width="30pt" height="30pt" viewBox="0 0 300.000000 164.000000" preserveAspectRatio="xMidYMid meet">
+                                <g transform="translate(0.000000,164.000000) scale(0.050000,-0.050000)" fill="#000000" stroke="none">
+                                    <path d="M2284 3001 c-1071 -290 -1298 -1701 -372 -2320 789 -527 1868 -30 1986 915 114 904 -735 1642 -1614 1405z m580 -143 c395 -82 772 -450 853 -834 243 -1140 -1126 -1871 -1922 -1027 -748 793 -7 2084 1069 1861z"/>
+                                    <path d="M2414 2449 c-154 -49 -314 -214 -263 -270 76 -84 105 -87 184 -18 179 158 458 158 551 0 68 -115 25 -205 -152 -316 -228 -143 -300 -425 -102 -401 56 6 68 21 109 131 17 45 64 91 161 155 482 318 85 902 -488 719z"/>
+                                    <path d="M2533 1279 c-109 -86 -51 -239 90 -239 86 0 137 50 137 135 0 67 -76 145 -140 145 -19 0 -58 -19 -87 -41z"/>
+                                </g>
+                            </svg>
+                        </button>
+                        <div class="tooltip-box">{{ 'dashboard.edit_your_secure_envelope_tip'|trans }}</div>
+                    </div>
+
                     <form action="{{ path('note_delete', {'noteId': customerHasNote}) }}" method="post" style="display:inline-block; margin: 0; padding: 0; background: transparent" onsubmit="return confirm('{{ 'confirm_delete_note'|trans }}');">
                         <input type="hidden" name="_token" value="{{ csrf_token('delete_note') }}">
                         <button type="submit" class="btn btn-outline-danger btn-floating m-1 mt-4">
-                            <i class="">{{ 'delete_your_secure_envelope'|trans }}</i>
+                            <i class="">{{ 'dashboard.delete_your_secure_envelope'|trans }}</i>
                         </button>
                     </form>
                 </section>
-                <p>explanation</p>
+{#                <p>explanation</p>#}
             {% endif %}
             {% if customerHasNote is defined and not customerHasNote %}
                 <section class="mb-4">
-                    <a class="btn btn-outline-dark btn-floating m-1 mt-4" href="/note/create" role="button"><i class="">{{ 'create_your_secure_envelope'|trans }}</i></a>
+                    <a class="btn btn-outline-dark btn-floating m-1 mt-4" href="/note/create" role="button"><i class="">{{ 'dashboard.create_your_secure_envelope'|trans }}</i></a>
+
+                    <!-- Tooltip Trigger (Question Mark) -->
+                    <div class="tooltip-container">
+                        <button class="tooltip-btn">
+                            <svg id="question" xmlns="http://www.w3.org/2000/svg" version="1.0" width="30pt" height="30pt" viewBox="0 0 300.000000 164.000000" preserveAspectRatio="xMidYMid meet">
+                                <g transform="translate(0.000000,164.000000) scale(0.050000,-0.050000)" fill="#000000" stroke="none">
+                                    <path d="M2284 3001 c-1071 -290 -1298 -1701 -372 -2320 789 -527 1868 -30 1986 915 114 904 -735 1642 -1614 1405z m580 -143 c395 -82 772 -450 853 -834 243 -1140 -1126 -1871 -1922 -1027 -748 793 -7 2084 1069 1861z"/>
+                                    <path d="M2414 2449 c-154 -49 -314 -214 -263 -270 76 -84 105 -87 184 -18 179 158 458 158 551 0 68 -115 25 -205 -152 -316 -228 -143 -300 -425 -102 -401 56 6 68 21 109 131 17 45 64 91 161 155 482 318 85 902 -488 719z"/>
+                                    <path d="M2533 1279 c-109 -86 -51 -239 90 -239 86 0 137 50 137 135 0 67 -76 145 -140 145 -19 0 -58 -19 -87 -41z"/>
+                                </g>
+                            </svg>
+                        </button>
+                        <div class="tooltip-box">{{ 'dashboard.create_your_secure_envelope_tip'|trans }}</div>
+                    </div>
                 </section>
-                <p>explanation</p>
+{#                <p>explanation</p>#}
             {% endif %}
 
             {% if customerHasPipeline is defined and customerHasPipeline %}
                 <section class="mb-4">
-                    <a class="btn btn-outline-dark btn-floating m-1 mt-4" href="/pipeline/{{ customerHasPipeline }}/edit" role="button"><i class="">{{ 'edit_your_pipeline'|trans }}</i></a>
+                    <a class="btn btn-outline-dark btn-floating m-1 mt-4" href="/pipeline/{{ customerHasPipeline }}/edit" role="button"><i class="">{{ 'dashboard.edit_your_pipeline'|trans }}</i></a>
+
+                    <!-- Tooltip Trigger (Question Mark) -->
+                    <div class="tooltip-container">
+                        <button class="tooltip-btn">
+                            <svg id="question" xmlns="http://www.w3.org/2000/svg" version="1.0" width="30pt" height="30pt" viewBox="0 0 300.000000 164.000000" preserveAspectRatio="xMidYMid meet">
+                                <g transform="translate(0.000000,164.000000) scale(0.050000,-0.050000)" fill="#000000" stroke="none">
+                                    <path d="M2284 3001 c-1071 -290 -1298 -1701 -372 -2320 789 -527 1868 -30 1986 915 114 904 -735 1642 -1614 1405z m580 -143 c395 -82 772 -450 853 -834 243 -1140 -1126 -1871 -1922 -1027 -748 793 -7 2084 1069 1861z"/>
+                                    <path d="M2414 2449 c-154 -49 -314 -214 -263 -270 76 -84 105 -87 184 -18 179 158 458 158 551 0 68 -115 25 -205 -152 -316 -228 -143 -300 -425 -102 -401 56 6 68 21 109 131 17 45 64 91 161 155 482 318 85 902 -488 719z"/>
+                                    <path d="M2533 1279 c-109 -86 -51 -239 90 -239 86 0 137 50 137 135 0 67 -76 145 -140 145 -19 0 -58 -19 -87 -41z"/>
+                                </g>
+                            </svg>
+                        </button>
+                        <div class="tooltip-box">{{ 'dashboard.edit_your_pipeline_tip'|trans }}</div>
+                    </div>
+
                 </section>
-                <p>explanation</p>
+{#                <p>explanation</p>#}
             {% endif %}
 
             {% if customerHasPipeline is defined and not customerHasPipeline %}
                 <section class="mb-4">
-                    <a class="btn btn-outline-dark btn-floating m-1 mt-4" href="/pipeline/create" role="button"><i class="">{{ 'create_your_pipeline'|trans }}</i></a>
+                    <a class="btn btn-outline-dark btn-floating m-1 mt-4" href="/pipeline/create" role="button"><i class="">{{ 'dashboard.create_your_pipeline'|trans }}</i></a>
+
+                    <!-- Tooltip Trigger (Question Mark) -->
+                    <div class="tooltip-container">
+                        <button class="tooltip-btn">
+                            <svg id="question" xmlns="http://www.w3.org/2000/svg" version="1.0" width="30pt" height="30pt" viewBox="0 0 300.000000 164.000000" preserveAspectRatio="xMidYMid meet">
+                                <g transform="translate(0.000000,164.000000) scale(0.050000,-0.050000)" fill="#000000" stroke="none">
+                                    <path d="M2284 3001 c-1071 -290 -1298 -1701 -372 -2320 789 -527 1868 -30 1986 915 114 904 -735 1642 -1614 1405z m580 -143 c395 -82 772 -450 853 -834 243 -1140 -1126 -1871 -1922 -1027 -748 793 -7 2084 1069 1861z"/>
+                                    <path d="M2414 2449 c-154 -49 -314 -214 -263 -270 76 -84 105 -87 184 -18 179 158 458 158 551 0 68 -115 25 -205 -152 -316 -228 -143 -300 -425 -102 -401 56 6 68 21 109 131 17 45 64 91 161 155 482 318 85 902 -488 719z"/>
+                                    <path d="M2533 1279 c-109 -86 -51 -239 90 -239 86 0 137 50 137 135 0 67 -76 145 -140 145 -19 0 -58 -19 -87 -41z"/>
+                                </g>
+                            </svg>
+                        </button>
+                        <div class="tooltip-box">{{ 'dashboard.create_your_pipeline_tip'|trans }}</div>
+                    </div>
                 </section>
-                <p>explanation</p>
+{#                <p>explanation</p>#}
             {% endif %}
 
             <section class="mb-4">
-                <a class="btn btn-outline-dark btn-floating m-1 mt-4" href="/pipeline/create" role="button"><i class="">{{ 'make_a_payment'|trans }}</i></a>
+                <a class="btn btn-outline-dark btn-floating m-1 mt-4" href="#" role="button"><i class="">{{ 'dashboard.make_a_payment'|trans }}</i></a>
+
+                <!-- Tooltip Trigger (Question Mark) -->
+                <div class="tooltip-container">
+                    <button class="tooltip-btn">
+                        <svg id="question" xmlns="http://www.w3.org/2000/svg" version="1.0" width="30pt" height="30pt" viewBox="0 0 300.000000 164.000000" preserveAspectRatio="xMidYMid meet">
+                            <g transform="translate(0.000000,164.000000) scale(0.050000,-0.050000)" fill="#000000" stroke="none">
+                                <path d="M2284 3001 c-1071 -290 -1298 -1701 -372 -2320 789 -527 1868 -30 1986 915 114 904 -735 1642 -1614 1405z m580 -143 c395 -82 772 -450 853 -834 243 -1140 -1126 -1871 -1922 -1027 -748 793 -7 2084 1069 1861z"/>
+                                <path d="M2414 2449 c-154 -49 -314 -214 -263 -270 76 -84 105 -87 184 -18 179 158 458 158 551 0 68 -115 25 -205 -152 -316 -228 -143 -300 -425 -102 -401 56 6 68 21 109 131 17 45 64 91 161 155 482 318 85 902 -488 719z"/>
+                                <path d="M2533 1279 c-109 -86 -51 -239 90 -239 86 0 137 50 137 135 0 67 -76 145 -140 145 -19 0 -58 -19 -87 -41z"/>
+                            </g>
+                        </svg>
+                    </button>
+                    <div class="tooltip-box">{{ 'dashboard.make_a_payment_tip'|trans }}</div>
+                </div>
             </section>
-            <p>explanation</p>
+{#            <p>explanation</p>#}
 
         </div>
 

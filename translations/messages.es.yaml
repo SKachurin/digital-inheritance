@@ -133,31 +133,54 @@ forgot_pass: '¿Olvidó su contraseña?'
 click_here: 'Haga clic aquí'
 restore_pass: 'Recuperación de contraseña'
 enter_email: 'Por favor, introduzca su primer correo electrónico (es su usuario). El correo debe haber sido verificado previamente.'
-create_your_heir: 'Cree su Heredero Digital'
-edit_your_heir: 'Edite su Heredero Digital'
-edit_your_secure_envelope: 'Edite su Sobre Seguro'
-create_your_secure_envelope: 'Cree su Sobre Seguro'
 create_your_secure_envelope_text: |
   No hay límites en lo que puede introducir aquí (aunque el campo tiene un límite de 5000 caracteres). Podría incluir credenciales de monederos de criptomonedas, bancos en línea, etc.
   Este sobre se cifrará con la mitad de nuestra clave de seguridad y la mitad del hash derivado de sus respuestas a las preguntas de seguridad.
   Como nunca guardamos tus respuestas, una vez cifradas, solo tú y Dios tendrán el conocimiento necesario para descifrar esta nota.
   Nunca guardaremos sus respuestas: todo se descifrará al instante cada vez que proporcione las respuestas al acceder a la nota.
-create_your_pipeline: 'Cree su Pipeline'
-make_a_payment: 'Realice un Pago'
+
+dashboard:
+  make_a_payment: 'Realice un Pago'
+  make_a_payment_tip: "Esta función aún no está lista. Por ahora, todos los nuevos clientes se consideran Pagados."
+  create_your_pipeline: 'Cree su Pipeline'
+  create_your_pipeline_tip: 'Una secuencia de Acciones que el sistema tomará para verificar su estado. Guardar el Pipeline lo reinicia.'
+  edit_your_pipeline: 'Editar su Pipeline'
+  edit_your_pipeline_tip: 'Guardar el Pipeline lo reinicia. Si necesita más Acciones, verifique más Contactos.'
+  create_your_secure_envelope: 'Cree su Sobre Seguro'
+  create_your_secure_envelope_tip: 'Un campo de texto que será cifrado con las respuestas a sus preguntas de seguridad.'
+  edit_your_secure_envelope: 'Edite su Sobre Seguro'
+  edit_your_secure_envelope_tip: 'Para editarlo, primero debe descifrarlo con las respuestas a sus preguntas de seguridad.'
+  delete_your_secure_envelope: 'Eliminar su Sobre Seguro'
+  create_your_heir: 'Cree su Heredero Digital'
+  create_your_heir_tip: "Su Heredero Digital recibirá una invitación para descifrar el Sobre cuando el Pipeline llegue a su fin."
+  delete_your_beneficiary: 'Eliminar su Heredero'
+  edit_your_heir: 'Edite su Heredero Digital'
+  edit_your_heir_tip: 'Edite los detalles de su Heredero Digital.'
+  edit_your_social: 'Editar redes sociales'
+  edit_your_social_tip: "No olvide verificarlo para que aparezca en las acciones del Pipeline."
+  verify_edit_your_social: 'Verificar/Editar redes sociales'
+  verify_edit_your_social_tip: 'Cuando verifique su contacto, crearemos una Acción para que pueda utilizarla en su Pipeline.'
+  add_your_social: 'Agregar redes sociales'
+  add_your_social_tip: "Comprobamos su estado 'última vez en línea' para evitar enviar mensajes innecesarios."
+  verify_edit_your_phone: 'Verificar/Editar número de teléfono'
+  verify_edit_your_phone_tip: 'Podemos verificar su número de teléfono solo a través de WhatsApp. Al verificar su contacto, creamos una Acción que puede usar en su Pipeline.'
+  add_your_second_phone: 'Agregar un segundo número de teléfono'
+  add_your_second_phone_tip: "Cuantos más contactos agregue, más Acciones tendrá para construir su Pipeline."
+  add_your_phone: 'Agregar número de teléfono'
+  add_your_phone_tip: "Cuantos más contactos agregue, más Acciones tendrá para construir su Pipeline."
+  edit_your_phone: 'Editar número de teléfono'
+  edit_your_phone_tip: "Después de editar este contacto, no olvide verificar el nuevo."
+  verify_edit_your_email: 'Verificar/Editar correo electrónico'
+  verify_edit_your_email_tip: 'Cuando verifique su contacto, crearemos una Acción para que pueda usarla en su Pipeline.'
+  add_your_second_email: 'Agregar otra dirección de correo electrónico'
+  add_your_second_email_tip: "Cuantos más contactos agregue, más Acciones tendrá para construir su Pipeline."
+  edit_your_email: 'Editar dirección de correo electrónico'
+  edit_your_email_tip: "Después de editar este contacto, no olvide verificar el nuevo."
+
 decrypt_your_secure_envelope: 'Descifre su Sobre Seguro'
 decrypt_first: 'Para editar su sobre seguro, primero descífrelo.'
 enter_answer: 'Ingrese su respuesta a una de las preguntas siguientes y haga clic en el botón.'
 do_some_staff: 'Ahora puede continuar.'
-edit_your_email: 'Editar dirección de correo electrónico'
-edit_your_phone: 'Editar número de teléfono'
-verify_edit_your_email: 'Verificar/Editar correo electrónico'
-add_your_second_email: 'Agregar otra dirección de correo electrónico'
-add_your_phone: 'Agregar número de teléfono'
-verify_edit_your_phone: 'Verificar/Editar número de teléfono'
-add_your_second_phone: 'Agregar un segundo número de teléfono'
-verify_edit_your_social: 'Verificar/Editar redes sociales'
-add_your_social: 'Agregar redes sociales'
-edit_your_social: 'Editar redes sociales'
 contact_can_edit: 'Puede editar el contacto'
 contact_edit: 'Editar contacto'
 updateContact: 'Actualizar Contacto'
@@ -171,12 +194,8 @@ pipeline: 'Pipeline'
 create_edit_your_pipeline: 'Aquí puede crear o editar su Pipeline.'
 text_pipeline: 'Si tiene alguno de sus contactos verificados, podrá elegir entre varios tipos de acciones (creamos una acción para cada contacto verificado). Ahora puede configurar lo que el sistema hará y con qué frecuencia (intervalo) verificará si está bien.'
 text_pipeline_2: ''
-delete_your_secure_envelope: 'Eliminar su Sobre Seguro'
 confirm_delete_note: '¿Está seguro de que desea eliminar su sobre seguro?'
-delete_your_beneficiary: 'Eliminar su Heredero'
 confirm_delete_beneficiary: '¿Está seguro de que desea eliminar a su heredero?'
-
-edit_your_pipeline: 'Editar su Pipeline'
 
 your_questions: 'Preguntas de Seguridad para cifrar su Sobre'
 your_questions_explain: |
