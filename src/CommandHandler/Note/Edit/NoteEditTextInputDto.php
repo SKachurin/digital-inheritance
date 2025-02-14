@@ -40,7 +40,7 @@ class NoteEditTextInputDto
     public function validate(ExecutionContextInterface $context, $payload): void
     {
         if ($this->customerSecondQuestion && !$this->customerSecondQuestionAnswer) {
-            $context->buildViolation('Answer to the second question is required if you have text of the question.')  //TODO Translate
+            $context->buildViolation('errors.note.edit.second_question_answer_required')
                 ->atPath('customerSecondQuestionAnswer')
                 ->addViolation();
         }

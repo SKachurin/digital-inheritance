@@ -476,15 +476,19 @@
             position: absolute;
             top: 2.5em;
             right: 2.5em;
-            width: 70px;
-            height: 70px;
-            padding: 1rem;
+            /*width: 70px;*/
+            /*height: 70px;*/
+            /*padding: 1rem;*/
             border: none;
-            background: transparent;
+            /*background: transparent;*/
             display: flex;
             align-items: center;
             justify-content: center;
+            min-width: 70px;
             cursor: pointer;
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 8px; /* Make sure it's not too round */
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
         }
 
         /* The hamburger lines */
@@ -539,6 +543,10 @@
         }
         .form-text{
             margin-bottom: 20px !important;
+        }
+
+        a.dropdown-item{
+            font-size: 1.8em !important;
         }
 
     }

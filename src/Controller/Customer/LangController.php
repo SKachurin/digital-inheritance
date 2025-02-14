@@ -2,6 +2,8 @@
 
 namespace App\Controller\Customer;
 
+use App\Entity\Customer;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpFoundation\Response;
@@ -10,11 +12,12 @@ use Symfony\Component\HttpFoundation\RequestStack;
 class LangController extends AbstractController
 {
     private const LANGUAGE_COOKIE = 'preferred_language';
-    private RequestStack $requestStack;
 
-    public function __construct(RequestStack $requestStack)
+    public function __construct(
+        private RequestStack $requestStack,
+        private EntityManagerInterface $entityManager
+    )
     {
-        $this->requestStack = $requestStack;
     }
 
     public function changeLanguage(string $lang): Response
@@ -38,6 +41,13 @@ class LangController extends AbstractController
             ->withSameSite('lax');
 
         $response->headers->setCookie($cookie);
+
+        $customer = $this->getUser();
+        if ($customer instanceof Customer) {
+            $customer->setLang($lang);
+            $this->entityManager->persist($customer);
+            $this->entityManager->flush();
+        }
 
         return $response;
     }

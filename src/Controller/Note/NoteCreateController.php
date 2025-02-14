@@ -15,7 +15,6 @@ use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Messenger\Stamp\HandledStamp;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
-
 class NoteCreateController extends AbstractController
 {
     private MessageBusInterface $commandBus;
@@ -36,7 +35,7 @@ class NoteCreateController extends AbstractController
         $beneficiaries = $customer->getBeneficiary();
 
         if ($beneficiaries->isEmpty()) {
-            $this->addFlash('info', 'Create Heir first.'); //TODO transl
+            $this->addFlash('info', $this->translator->trans('errors.flash.add_heir'));
 
             return $this->redirectToRoute('user_home');
         }

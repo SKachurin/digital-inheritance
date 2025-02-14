@@ -26,6 +26,8 @@ class BeneficiaryEditInputDto
     private ?string $beneficiaryFirstPhone = null;
     #[Assert\Length(max: 64)]
     private ?string $beneficiarySecondPhone = null;
+    #[Assert\Length(max: 5)]
+    private ?string $beneficiaryLang = null;
 
     public function __construct()
     {}
@@ -125,6 +127,17 @@ class BeneficiaryEditInputDto
     public function setBeneficiarySecondPhone(?string $beneficiarySecondPhone): self
     {
         $this->beneficiarySecondPhone = $beneficiarySecondPhone;
+        return $this;
+    }
+
+    public function getBeneficiaryLang(): ?string
+    {
+        return $this->beneficiaryLang;
+    }
+
+    public function setBeneficiaryLang(?string $beneficiaryLang): self
+    {
+        $this->beneficiaryLang = $beneficiaryLang;
         return $this;
     }
 

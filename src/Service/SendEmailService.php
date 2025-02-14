@@ -20,7 +20,7 @@ class SendEmailService
      * @throws \SodiumException
      * @throws \Exception
      */
-    public function sendMessageEmail(Contact $contact, string $message): JsonResponse
+    public function sendMessageEmail(Contact $contact, string $message): JsonResponse //TODO translate twig for email
     {
         $emailAddress = $this->cryptoService->decryptData($contact->getValue());
 //        $name = $this->cryptoService->decryptData($contact->getCustomer()->getCustomerName());

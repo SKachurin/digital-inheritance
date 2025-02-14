@@ -21,6 +21,7 @@ use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Messenger\Stamp\HandledStamp;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class NoteEditController extends AbstractController
 {
@@ -30,7 +31,8 @@ class NoteEditController extends AbstractController
         private readonly CryptoService          $cryptoService,
         private readonly NoteEditTextHandler    $noteEditTextHandler,
         private readonly NoteEditCounterHandler $noteEditCounterHandler,
-        private readonly EntityManagerInterface $entityManager
+        private readonly EntityManagerInterface $entityManager,
+        private readonly TranslatorInterface    $translator
     )
     {}
 
@@ -45,13 +47,13 @@ class NoteEditController extends AbstractController
 
         $note = $this->repository->getOneBy(['id' => $noteId]);
         if (!$note instanceof Note) {
-            throw new \UnexpectedValueException('There is no note with id ' . $noteId); //TODO Translate
+            throw new \UnexpectedValueException('There is no note with id ' . $noteId);
         }
 
         $noteCustomer = $note->getCustomer();
 
         if ($noteCustomer !== $currentCustomer) {
-            throw new \UnexpectedValueException('It is not your Envelope'); //TODO Translate
+            throw new \UnexpectedValueException('It is not your Envelope');
         }
 
         $dto = new NoteEditInputDto($noteCustomer);
@@ -175,7 +177,7 @@ class NoteEditController extends AbstractController
 
                 $this->noteEditTextHandler->__invoke($inputDto); // handler
 
-                $this->addFlash('success', 'Your note has been updated.'); //TODO Translate
+                $this->addFlash('success', $this->translator->trans('success.flash.note_updated'));
 
                 return $this->redirectToRoute('user_home');
             }

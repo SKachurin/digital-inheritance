@@ -4,6 +4,7 @@ namespace App\Form\Type;
 
 use App\CommandHandler\Beneficiary\Edit\BeneficiaryEditInputDto;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
@@ -37,6 +38,14 @@ class BeneficiaryEditType extends AbstractType
                 'label' => 'form.label.beneficiary_full_name',
                 'help' => 'form.help.beneficiary_full_name',
                 'required' => false,
+            ])
+            ->add('beneficiaryLang', ChoiceType::class, [
+                'choices' => [
+                    'English' => 'en',
+                    'Русский' => 'ru',
+                    'Español' => 'es',
+                ],
+                'label' => 'form.label.beneficiary_lang',
             ])
             ->add('customerFullName', TextType::class, [
                 'label' => 'form.label.customer_full_name',
@@ -81,14 +90,6 @@ class BeneficiaryEditType extends AbstractType
                 'required' => false,
             ])
 
-//      TODO   HERE WE NEED TO ADD A CUSTOMER FULL_NAME -- IT'S FOR THE beneficiary letters
-
-//            ->add('beneficiaryFirstQuestion', TextType::class, [
-//                'label' => 'form.label.beneficiary_first_question',
-//                'help' => 'form.help.beneficiary_first_question',
-//                'required' => true,
-//            ])
-//
             ->add('submit', SubmitType::class, [
                 'label' => 'form.label.edit',
                 'attr' => ['class' => 'btn btn-primary'],

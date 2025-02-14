@@ -30,6 +30,9 @@ class BeneficiaryCreateInputDto
 
     private ?string $beneficiaryActionsOrder = null;
 
+    #[Assert\Length(max: 5)]
+    private ?string $beneficiaryLang = null;
+
     public function __construct(Customer $customer)
     {
         $this->customer = $customer;
@@ -142,6 +145,17 @@ class BeneficiaryCreateInputDto
     public function setBeneficiaryActionsOrder(?string $beneficiaryActionsOrder): self
     {
         $this->beneficiaryActionsOrder = $beneficiaryActionsOrder;
+        return $this;
+    }
+
+    public function getBeneficiaryLang(): ?string
+    {
+        return $this->beneficiaryLang;
+    }
+
+    public function setBeneficiaryLang(?string $beneficiaryLang): self
+    {
+        $this->beneficiaryLang = $beneficiaryLang;
         return $this;
     }
 

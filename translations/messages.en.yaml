@@ -88,6 +88,7 @@ form:
       You can change your 'Okay Password' in the Edit Pipeline section.
 
     okayPassword_repeat: 'Repeat the Okay Password'
+    beneficiary_lang:  'Choose language for your Heir'
 
   constraints:
     your_login: 'Please enter your login.'
@@ -127,6 +128,9 @@ form:
       instagram: 'Instagram'
       vkcom: 'VK.com'
       telegram: 'Telegram'
+      english: 'English'
+      russian: 'Russian'
+      spanish: 'Spanish'
 
 Submit: 'Submit'
 forgot_pass: 'Forgot password?'
@@ -178,14 +182,10 @@ dashboard:
   edit_your_email: 'Edit Email Address'
   edit_your_email_tip: "After editing this contact, don't forget to verify the new one!"
 
-
 decrypt_your_secure_envelope: 'Decrypt Your Secure Envelope'
 decrypt_first: 'To edit your secure envelope, please decrypt it first.'
 enter_answer: 'Enter your answer to one of the questions below and click the button.'
 do_some_staff: 'Now you can proceed.'
-
-
-
 
 contact_can_edit: 'You can edit the contact'
 contact_edit: 'Edit Contact'
@@ -241,6 +241,27 @@ TEST_1_min: 'TEST 1 min'
 3_days: '3 days'
 7_days: '7 days'
 1_month: '1 month'
+
+errors:
+  note:
+    edit:
+      second_question_answer_required: 'Answer to the second question is required if you have text of the question.'
+  flash:
+    captcha: 'Please complete the reCAPTCHA.'
+    captcha_fail: 'reCAPTCHA validation failed. Please try again.'
+    add_heir: 'Create Heir first.'
+
+success:
+  flash:
+    note_updated: 'Your note has been updated.'
+
+messages:
+  verification: 'Thank you for registering! Please verify your phone by clicking on the following link: '
+  not_time: "Now's not the time \u{1F632}"
+  not_right: "Not the answer I expected... \u{1F914}"
+  resetting: "It's nice to hear it \u{1F60A}!"
+  check_message: 'Hey! Are you okay?'
+  notification_message: "Hey %beneficiary_name%,\n\nPerson named %customer_name% has listed this contact as an emergency contact on The Digital Heir. Click the link to access the secure envelope:"
 
 about_page:
   title: "Introducing “Digital Inheritance” Service"

@@ -16,6 +16,7 @@ use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Component\Uid\Uuid;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class BeneficiaryNotificationService
 {
@@ -28,6 +29,7 @@ class BeneficiaryNotificationService
         private SendSocialService           $sendSocialService,
         private SendWhatsAppService         $sendWhatsAppService,
         private LoggerInterface             $logger,
+        private TranslatorInterface         $translator
     )
     {
     }
@@ -45,9 +47,16 @@ class BeneficiaryNotificationService
                 ? $this->cryptoService->decryptData($beneficiary->getCustomer()->getCustomerFullName())
                 : '_unknown_';
 
-        $message = sprintf(
-            "Hey %s,\n\nPerson named %s has listed this contact as an emergency contact on The Digital Heir. Click the link to access the secure envelope:",
-            $beneficiaryFullName, $customerFullName
+        $lang = $beneficiary->getBeneficiaryLang() ?? 'en';
+
+        $message = $this->translator->trans(
+            'messages.notification_message',
+            [
+                '%beneficiary_name%' => $beneficiaryFullName,
+                '%customer_name%' => $customerFullName
+            ],
+            'messages',
+            $lang
         );
 
         foreach ($contacts as $contact) {
@@ -93,6 +102,7 @@ class BeneficiaryNotificationService
     /**
      * @throws Exception|TransportExceptionInterface
      */
+    //TODO translate twig for email
     private function sendEmailNotification(
         Contact $contact,
          string $message,

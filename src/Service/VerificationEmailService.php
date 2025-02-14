@@ -31,7 +31,7 @@ class VerificationEmailService
      * @throws Exception
      * @throws \Exception
      */
-    public function sendVerificationEmail(Contact $contact): void
+    public function sendVerificationEmail(Contact $contact, string $message): void  //TODO translate twig for email
     {
         $verificationToken = $this->tokenRepository->findOneBy(['contact' => $contact]);
         if ($verificationToken) {
@@ -67,7 +67,7 @@ class VerificationEmailService
                     'year' => \Date('Y'),
                 ])
                 //a text template
-                ->text('Click the link to verify your email address: '.$verificationUrl);
+                ->text($message . $verificationUrl);
 
             $this->mailer->send($email);
 

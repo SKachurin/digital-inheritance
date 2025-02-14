@@ -38,6 +38,7 @@ class BeneficiaryEditHandler
                     $input->getBeneficiaryFullName()
                 )
             )
+            ->setBeneficiaryLang($input->getBeneficiaryLang())
         ;
 
         $customer = $beneficiary->getCustomer();

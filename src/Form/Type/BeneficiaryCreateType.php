@@ -47,6 +47,14 @@ class BeneficiaryCreateType extends AbstractType
                 'help' => 'form.help.customer_full_name',
                 'required' => false,
             ])
+            ->add('beneficiaryLang', ChoiceType::class, [
+                'choices' => [
+                    'English' => 'en',
+                    'Русский' => 'ru',
+                    'Español' => 'es',
+                ],
+                'label' => 'form.label.beneficiary_lang',
+            ])
             ->add('beneficiaryEmail', EmailType::class, [
                 'label' => 'form.label.beneficiary_email',
                 'help' => 'form.help.beneficiary_email',

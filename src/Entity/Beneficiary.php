@@ -46,6 +46,9 @@ class Beneficiary implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'string', length: 512, nullable: true)]
     private ?string $beneficiarySecondQuestionAnswer = null;
 
+    #[ORM\Column(type: "string", length: 5, nullable: true)]
+    private ?string $beneficiaryLang = null;
+
     #[ORM\Column(type: 'text', nullable: true)]
     private ?string $beneficiaryActionsOrder = null;
 
@@ -142,6 +145,17 @@ class Beneficiary implements UserInterface, PasswordAuthenticatedUserInterface
     public function getBeneficiaryActionsOrder(): ?string
     {
         return $this->beneficiaryActionsOrder;
+    }
+
+    public function getBeneficiaryLang(): ?string
+    {
+        return $this->beneficiaryLang;
+    }
+
+    public function setBeneficiaryLang(?string $beneficiaryLang): self
+    {
+        $this->beneficiaryLang = $beneficiaryLang;
+        return $this;
     }
 
     /**

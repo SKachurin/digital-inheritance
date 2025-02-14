@@ -24,6 +24,7 @@ use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 /**
  * Consumer processes the chunk of customers
@@ -32,16 +33,17 @@ use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 class CronBatchConsumer
 {
     public function __construct(
-        private CustomerRepository $customerRepository,
-        private PipelineRepository $pipelineRepository,
-        private EntityManagerInterface $entityManager,
-        private ActionRepository $actionRepository,
-        private ContactRepository $contactRepository,
-        private SendSocialService  $socialService,
-        private SendWhatsAppService $whatsAppService,
-        private SendEmailService  $emailService,
+        private CustomerRepository             $customerRepository,
+        private PipelineRepository             $pipelineRepository,
+        private EntityManagerInterface         $entityManager,
+        private ActionRepository               $actionRepository,
+        private ContactRepository              $contactRepository,
+        private SendSocialService              $socialService,
+        private SendWhatsAppService            $whatsAppService,
+        private SendEmailService               $emailService,
         private BeneficiaryNotificationService $beneficiaryNotificationService,
-        private LoggerInterface $logger
+        private LoggerInterface                $logger,
+        private TranslatorInterface            $translator
     ) {}
 
     /**
@@ -93,8 +95,9 @@ class CronBatchConsumer
 //            }
 
             if ($pipeline && $pipeline->getPipelineStatus() === ActionStatusEnum::ACTIVATED) {
-                // Reuse your cronService logic
-                $this->processPipeline($pipeline);
+
+                $lang = $customer?->getLang() ?? 'en';
+                $this->processPipeline($pipeline, $lang);
             }
         }
 
@@ -109,7 +112,7 @@ class CronBatchConsumer
      * @throws \Exception
      * @throws TransportExceptionInterface
      */
-    private function processPipeline(Pipeline $pipeline): void
+    private function processPipeline(Pipeline $pipeline, string $lang): void
     {
         $activeAction = $pipeline->getActionType();
         $activeActionStatus = $pipeline->getActionStatus();
@@ -168,7 +171,7 @@ class CronBatchConsumer
                     // SOCIAL_CHECK: Wait until the interval is reached && Execute if active
                     if ($now >= $nextActionTime && $activeActionStatus === ActionStatusEnum::ACTIVATED) {
 
-                        $result = $this->executeActiveAction($pipeline, $actionData, $now);
+                        $result = $this->executeActiveAction($pipeline, $actionData, $now, $lang);
                         $pipeline->setActionStatus($result);
 
                         //return; // next move  - NOW
@@ -177,7 +180,7 @@ class CronBatchConsumer
                     // Messenger/Email: Execute immediately if active
                     if ($activeActionStatus === ActionStatusEnum::ACTIVATED) {
 
-                        $result = $this->executeActiveAction($pipeline, $actionData, $now);
+                        $result = $this->executeActiveAction($pipeline, $actionData, $now, $lang);
                         $pipeline->setActionStatus($result);
 
                         return; // next move  - with next run
@@ -241,10 +244,11 @@ class CronBatchConsumer
      * @throws TransportExceptionInterface
      * @throws \SodiumException
      */
-    private function executeActiveAction(Pipeline $pipeline, array $actionData, \DateTimeImmutable $now): ActionStatusEnum
+    private function executeActiveAction(Pipeline $pipeline, array $actionData, \DateTimeImmutable $now, string $lang): ActionStatusEnum
     {
         $actionType = ActionTypeEnum::tryFrom($actionData['actionType']);
-        $message = 'Hey! Are you okay?';    //TODO Transl
+
+        $message = $this->translator->trans('messages.check_message', [], 'messages', $lang);
 
         // Action & Contact
         [$action, $contact] = $this->retrieveActionAndContact($pipeline, $actionType);

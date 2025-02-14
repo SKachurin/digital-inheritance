@@ -51,13 +51,14 @@ class Customer implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'string', enumType: CustomerSocialAppEnum::class)]
     private CustomerSocialAppEnum $customerSocialApp = CustomerSocialAppEnum::NONE;
 
-    //TODO field for link to Customer account
-
     #[ORM\Column(type: 'string', enumType: CustomerPaymentStatusEnum::class)]
     private CustomerPaymentStatusEnum $customerPaymentStatus;
 
     #[ORM\Column(type: 'string', length: 512, nullable: true)]
     private ?string $customerOkayPassword = null;
+
+    #[ORM\Column(type: "string", length: 5, nullable: true)]
+    private ?string $lang = null;
 
     /**
      * @var string The hashed password
@@ -217,6 +218,17 @@ class Customer implements UserInterface, PasswordAuthenticatedUserInterface
     public function setCustomerOkayPassword(?string $customerOkayPassword): self
     {
         $this->customerOkayPassword = $customerOkayPassword;
+        return $this;
+    }
+
+    public function getLang(): ?string
+    {
+        return $this->lang;
+    }
+
+    public function setLang(?string $lang): self
+    {
+        $this->lang = $lang;
         return $this;
     }
 

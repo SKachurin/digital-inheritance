@@ -46,7 +46,7 @@ class BeneficiaryEditController extends AbstractController
         $beneficiary = $this->beneficiaryRepository->find($beneficiaryId);
 
         if (!$beneficiary) {
-            throw $this->createNotFoundException('Heir not found.'); //TODO Transl
+            throw $this->createNotFoundException('Heir not found.');
         }
 
         // Verify that the beneficiary belongs to the customer
@@ -79,7 +79,7 @@ class BeneficiaryEditController extends AbstractController
             $cryptoService->decryptData(
                 $beneficiary->getCustomer()->getCustomerFullName()
             )
-        );
+        )->setBeneficiaryLang($beneficiary->getBeneficiaryLang());
 
         if (isset($beneficiaryEmails[0])) {
             $beneficiaryData->setBeneficiaryEmail(

@@ -8,6 +8,7 @@ use App\Repository\ActionRepository;
 use App\Repository\PipelineRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class MessageProcessorService
 {
@@ -15,6 +16,7 @@ class MessageProcessorService
         private readonly ActionRepository $actionRepository,
         private readonly PipelineRepository $pipelineRepository,
         private readonly EntityManagerInterface $entityManager,
+        private readonly TranslatorInterface $translator,
 //        private readonly LoggerInterface $logger
     ) {}
 
@@ -27,6 +29,7 @@ class MessageProcessorService
         }
 
         $customer = $action->getCustomer();
+        $lang = $customer?->getLang() ?? 'en';
 
         $okayPassword = $customer->getCustomerOkayPassword();
         $contact = $action->getContact();
@@ -38,7 +41,7 @@ class MessageProcessorService
 
         if ($pipeline->getActionStatus() !== ActionStatusEnum::PENDING || $action->getActionType() !== $pipeline->getActionType()) {
 
-            $sendMessage($contact, "Now's not the time \u{1F632}"); // 😲
+            $sendMessage($contact, $this->translator->trans('messages.not_time', [], 'messages', $lang)); // 😲
             return;
         }
 
@@ -46,15 +49,15 @@ class MessageProcessorService
 
         foreach ($words as $word) {
             if (password_verify($word, $okayPassword)) {
-                $this->resetPipeline($pipeline, $sendMessage, $contact);
+                $this->resetPipeline($pipeline, $sendMessage, $contact, $lang);
                 return;
             }
         }
 
-        $sendMessage($contact, "Not the answer I expected... \u{1F914}"); // 🤔
+        $sendMessage($contact, $this->translator->trans('messages.not_right', [], 'messages', $lang)); // 🤔
     }
 
-    private function resetPipeline($pipeline, callable $sendMessage, $contact): void
+    private function resetPipeline($pipeline, callable $sendMessage, $contact, string $lang): void
     {
         $actionSequence = $pipeline->getActionSequence();
         $firstAction = array_filter($actionSequence, fn($a) => $a['position'] === 1);
@@ -71,7 +74,7 @@ class MessageProcessorService
             $this->entityManager->persist($pipeline);
             $this->entityManager->flush();
 
-            $sendMessage($contact, "It's nice to hear it \u{1F60A}!"); // 😊
+            $sendMessage($contact, $this->translator->trans('messages.resetting', [], 'messages', $lang)); // 😊
         }
     }
 }

@@ -61,9 +61,8 @@ class ContactEditHandler
             $contact->setValue($encryptedValue);
             $contact->setIsVerified(false);
 
-//            TODO change email in Customer or Heir
-//            $customer = $input->getCustomer();
-//            if ($customer->getCustomerEmail())
+//            so Heir do not have email field
+//            and for Customer I gonna change this field on this Contact Verification
 
 
             $action = $this->actionRepository->findOneBy(['contact' => $contact]);

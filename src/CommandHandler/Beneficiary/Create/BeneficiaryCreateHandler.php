@@ -37,7 +37,9 @@ class BeneficiaryCreateHandler
                 $this->cryptoService->encryptData(
                     $input->getBeneficiaryFullName()
                 )
-            );
+            )
+            ->setBeneficiaryLang($input->getBeneficiaryLang())
+        ;
 
         if ($input->getCustomerFullName() !== null) {
             $customer->setCustomerFullName(

@@ -88,6 +88,7 @@ form:
       Puedes cambiar tu 'Contraseña de Confirmación' en la sección Editar Pipeline
 
     okayPassword_repeat: 'Repita la Contraseña de Verificación'
+    beneficiary_lang:  'Elige el idioma para tu heredero'
 
   constraints:
     your_login: 'Por favor, introduzca su usuario.'
@@ -127,6 +128,9 @@ form:
       instagram: 'Instagram'
       vkcom: 'VK.com'
       telegram: 'Telegram'
+      english: 'Inglés'
+      russian: 'Ruso'
+      spanish: 'Español'
 
 Submit: 'Enviar'
 forgot_pass: '¿Olvidó su contraseña?'
@@ -235,6 +239,28 @@ TEST_1_min: 'PRUEBA 1 min'
 3_days: '3 días'
 7_days: '7 días'
 1_month: '1 mes'
+
+errors:
+  note:
+    edit:
+      second_question_answer_required: 'Se requiere una respuesta a la segunda pregunta si el texto de la pregunta está presente.'
+
+  flash:
+    captcha: 'Por favor, completa el reCAPTCHA.'
+    captcha_fail: 'La validación de reCAPTCHA ha fallado. Inténtalo de nuevo.'
+    add_heir: 'Crea un heredero primero.'
+
+success:
+  flash:
+    note_updated: 'Tu nota ha sido actualizada.'
+
+messages:
+  verification: '¡Gracias por registrarte! Por favor, verifica tu teléfono haciendo clic en el siguiente enlace: '
+  not_time: "Ahora no es el momento \u{1F632}"
+  not_right: "No es la respuesta que esperaba... \u{1F914}"
+  resetting: "¡Me alegra oírlo! \u{1F60A}"
+  check_message: '¡Oye! ¿Estás bien?'
+  notification_message: "Hola %beneficiary_name%,\n\nLa persona llamada %customer_name% ha listado este contacto como un contacto de emergencia en The Digital Heir. Haz clic en el enlace para acceder al sobre seguro:"
 
 about_page:
   title: "Presentamos el servicio de 'Herencia Digital'"

@@ -16,26 +16,15 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class VerificationSocialService
 {
-    private UrlGeneratorInterface $urlGenerator;
-    private EntityManagerInterface $entityManager;
-    private CryptoService $cryptoService;
-    private VerificationTokenRepository $tokenRepository;
-    private PythonServiceController $pythonServiceController;
-
     public function __construct(
-        UrlGeneratorInterface       $urlGenerator,
-        EntityManagerInterface      $entityManager,
-        CryptoService               $cryptoService,
-        VerificationTokenRepository $tokenRepository,
-        HttpClientInterface         $client,
-        PythonServiceController $pythonServiceController
+        private UrlGeneratorInterface       $urlGenerator,
+        private EntityManagerInterface      $entityManager,
+        private CryptoService               $cryptoService,
+        private VerificationTokenRepository $tokenRepository,
+        private HttpClientInterface         $client,
+        private PythonServiceController     $pythonServiceController
     )
     {
-        $this->urlGenerator = $urlGenerator;
-        $this->entityManager = $entityManager;
-        $this->cryptoService = $cryptoService;
-        $this->tokenRepository = $tokenRepository;
-        $this->pythonServiceController = $pythonServiceController;
     }
 
     /**
@@ -43,7 +32,7 @@ class VerificationSocialService
      * @throws Exception
      * @throws \Exception
      */
-    public function sendVerificationSocial(Contact $contact): array
+    public function sendVerificationSocial(Contact $contact, string $message): array
     {
         $verificationToken = $this->tokenRepository->findOneBy(['contact' => $contact->getId()]);
         if ($verificationToken) {
@@ -68,9 +57,7 @@ class VerificationSocialService
             throw new \Exception("Invalid Telegram contact.");
         }
 
-        $message = 'Thank you for registering! Please verify your Telegram by clicking on the following link: ' . $verificationUrl . ' or copy/paste it in browser';
-
-        $response = $this->pythonServiceController->callPythonService([$user], $message);
+        $response = $this->pythonServiceController->callPythonService([$user], $message . $verificationUrl );
 
         if ($response->getStatusCode() !== 200) {
             throw new \Exception('Failed to send verification social. Python service error: ' . $response->getContent());

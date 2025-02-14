@@ -88,6 +88,7 @@ form:
       Вы можете изменить свой 'ОК-пароль' в разделе редактирования пайплайна.
 
     okayPassword_repeat: 'Повторите OK пароль'
+    beneficiary_lang:  'Выберите язык для вашего наследника'
 
   constraints:
     your_login: 'Пожалуйста, введите ваш логин.'
@@ -127,6 +128,9 @@ form:
       instagram: 'Instagram'
       vkcom: 'VK.com'
       telegram: 'Telegram'
+      english: 'Английский'
+      russian: 'Русский'
+      spanish: 'Испанский'
 
 Submit: 'Отправить'
 forgot_pass: 'Забыли пароль?'
@@ -235,6 +239,28 @@ TEST_1_min: 'ТЕСТ 1 минута'
 3_days: '3 дня'
 7_days: '7 дней'
 1_month: '1 месяц'
+
+errors:
+  note:
+    edit:
+      second_question_answer_required: 'Ответ на второй вопрос обязателен, если задан текст вопроса.'
+
+  flash:
+    captcha: 'Пожалуйста, пройдите reCAPTCHA.'
+    captcha_fail: 'Ошибка проверки reCAPTCHA. Пожалуйста, попробуйте снова.'
+    add_heir: 'Сначала создайте наследника.'
+
+success:
+  flash:
+    note_updated: 'Ваша запись была обновлена.'
+
+messages:
+  verification: 'Спасибо за регистрацию! Пожалуйста, подтвердите ваш телефон, перейдя по следующей ссылке: '
+  not_time: "Сейчас не время \u{1F632}"
+  not_right: "Это не тот ответ, который я ожидал... \u{1F914}"
+  resetting: "Рад это слышать! \u{1F60A}"
+  check_message: 'Эй! С тобой всё в порядке?'
+  notification_message: "Привет, %beneficiary_name%!\n\nЧеловек по имени %customer_name% указал этот контакт как экстренный в The Digital Heir. Нажмите на ссылку, чтобы получить доступ к защищенному конверту:"
 
 about_page:
   title: "Представляем сервис «Цифровое наследство»"

@@ -16,34 +16,17 @@ use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 class VerificationWhatsAppService
 {
-    private MailerInterface $mailer;
-    private UrlGeneratorInterface $urlGenerator;
-    private EntityManagerInterface $entityManager;
-    private CryptoService $cryptoService;
-    private VerificationTokenRepository $tokenRepository;
-    private HttpClientInterface $client;
-    private string $apiUrl;
-    private string $apiToken;
-
     public function __construct(
-        MailerInterface             $mailer,
-        UrlGeneratorInterface       $urlGenerator,
-        EntityManagerInterface      $entityManager,
-        CryptoService               $cryptoService,
-        VerificationTokenRepository $tokenRepository,
-        HttpClientInterface $client,
-        string $apiUrl,
-        string $apiToken,
+        private MailerInterface             $mailer,
+        private UrlGeneratorInterface       $urlGenerator,
+        private EntityManagerInterface      $entityManager,
+        private CryptoService               $cryptoService,
+        private VerificationTokenRepository $tokenRepository,
+        private HttpClientInterface         $client,
+        private string                      $apiUrl,
+        private string                      $apiToken,
     )
     {
-        $this->mailer = $mailer;
-        $this->urlGenerator = $urlGenerator;
-        $this->entityManager = $entityManager;
-        $this->cryptoService = $cryptoService;
-        $this->tokenRepository = $tokenRepository;
-        $this->client = $client;
-        $this->apiUrl = $apiUrl;
-        $this->apiToken = $apiToken;
     }
 
     /**
@@ -52,7 +35,7 @@ class VerificationWhatsAppService
      * @throws \Exception
      * @throws \Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface|DecodingExceptionInterface
      */
-    public function sendVerificationWhatsApp(Contact $contact): void //TODO return something
+    public function sendVerificationWhatsApp(Contact $contact, string $message): void //TODO return something
     {
         $verificationToken = $this->tokenRepository->findOneBy(['contact' => $contact->getId()]);
         if ($verificationToken) {
@@ -89,7 +72,7 @@ class VerificationWhatsAppService
                 'body' => [
                     "channelId" => "058a7934-be60-4fa0-b943-61aab4818f23",
                     "chatType"=> "whatsapp",
-                    "text" => 'Thank you for registering! Please verify your phone by clicking on the following link: ' . $verificationUrl, //TODO Transl
+                    "text" => $message . $verificationUrl,
                     "chatId"=> $phoneNumber,
                     "contentUri" => "",
                     "templateId" => ""

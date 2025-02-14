@@ -23,30 +23,20 @@ use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Messenger\Stamp\HandledStamp;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Contracts\HttpClient\Exception\DecodingExceptionInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class ContactEditController extends AbstractController
 {
-    private MessageBusInterface $commandBus;
-    private ContactRepository $repository;
-    private CryptoService $cryptoService;
-    private VerificationEmailService $verificationEmailService;
-    private VerificationWhatsAppService $verificationWhatsAppService;
-    private VerificationSocialService $verificationSocialService;
     public function __construct(
-        ContactRepository $repository,
-        MessageBusInterface $commandBus,
-        CryptoService $cryptoService,
-        VerificationEmailService $verificationEmailService,
-        VerificationWhatsAppService $verificationWhatsAppService,
-        VerificationSocialService $verificationSocialService
+        private ContactRepository            $repository,
+        private MessageBusInterface          $commandBus,
+        private CryptoService                $cryptoService,
+        private VerificationEmailService     $verificationEmailService,
+        private VerificationWhatsAppService  $verificationWhatsAppService,
+        private VerificationSocialService    $verificationSocialService,
+        private readonly TranslatorInterface $translator
     )
     {
-        $this->repository = $repository;
-        $this->commandBus = $commandBus;
-        $this->cryptoService = $cryptoService;
-        $this->verificationEmailService = $verificationEmailService;
-        $this->verificationWhatsAppService = $verificationWhatsAppService;
-        $this->verificationSocialService = $verificationSocialService;
     }
 
     /**
@@ -94,24 +84,28 @@ class ContactEditController extends AbstractController
 
         $form->handleRequest($request);
 
+        $lang = $currentCustomer ? $currentCustomer->getLang() : 'en';
+
+        $message = $this->translator->trans('messages.verification', [], 'messages', $lang);
+
         if ($form->isSubmitted() && $form->isValid()) {
 
             if ($form->get('resend_verification')->isClicked()) {
 
                 switch ($contact->getContactTypeEnum()) {
                     case 'email':
-                        $this->verificationEmailService->sendVerificationEmail($contact);
+                        $this->verificationEmailService->sendVerificationEmail($contact, $message);
                         $this->addFlash('info', 'Verification email resent successfully.');
                         break;
 
                     case 'phone':
-                        $this->verificationWhatsAppService->sendVerificationWhatsApp($contact);
+                        $this->verificationWhatsAppService->sendVerificationWhatsApp($contact, $message);
                         $this->addFlash('info', 'Verification phone resent successfully.');
                         break;
 
                     case 'social':
                         try {
-                            $this->verificationSocialService->sendVerificationSocial($contact);
+                            $this->verificationSocialService->sendVerificationSocial($contact, $message);
                             $this->addFlash('info', 'Verification social resent successfully.');
                         } catch (\Exception $e) {
                             //TODO monitoring
