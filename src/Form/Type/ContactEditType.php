@@ -28,8 +28,7 @@ class ContactEditType extends AbstractType
                 'attr' => [
                     'readonly' => true
                 ]
-            ])
-        ;
+            ]);
         if ($countryCode) {
             $builder
                 ->add('countryCode', TextareaType::class, [
@@ -38,8 +37,7 @@ class ContactEditType extends AbstractType
                     'attr' => [
                         'readonly' => true
                     ]
-                ])
-            ;
+                ]);
         }
         if ($type === 'social') {
             $builder
@@ -77,8 +75,7 @@ class ContactEditType extends AbstractType
                             'message' => 'You can enter a valid Telegram link (https://t.me/login), username (@login), or phone number (+995 555544433).'
                         ]),
                     ],
-                ])
-            ;
+                ]);
         } else {
             $builder
                 ->add('value', TextareaType::class, [
@@ -90,8 +87,7 @@ class ContactEditType extends AbstractType
                             'maxMessage' => 'cannot be longer than {{ limit }} characters.',
                         ]),
                     ],
-                ])
-            ;
+                ]);
         }
 
         $builder
@@ -107,12 +103,13 @@ class ContactEditType extends AbstractType
             ->add('submit', SubmitType::class, [
                 'label' => 'updateContact',
                 'attr' => ['class' => 'btn btn-primary'],
-            ])
-            ->add('resend_verification', SubmitType::class, [
+            ]);
+        if (!$isVerified) { // Show only if not verified
+            $builder->add('resend_verification', SubmitType::class, [
                 'label' => 'resendVerificationCode',
                 'attr' => ['class' => 'btn btn-secondary'],
-            ])
-        ;
+            ]);
+        };
 
     }
 

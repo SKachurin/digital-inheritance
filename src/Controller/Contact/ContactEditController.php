@@ -79,6 +79,7 @@ class ContactEditController extends AbstractController
                 'type' => $contact->getContactTypeEnum(),
                 'countryCode' => $contact->getCountryCode(),
                 'isVerified' => $contact->getIsVerified(),
+                'allow_extra_fields' => true,
             ]
         );
 
@@ -90,23 +91,23 @@ class ContactEditController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
 
-            if ($form->get('resend_verification')->isClicked()) {
+            if ($form->has('resend_verification') && $form->get('resend_verification')->isClicked()) {
 
                 switch ($contact->getContactTypeEnum()) {
                     case 'email':
                         $this->verificationEmailService->sendVerificationEmail($contact, $message);
-                        $this->addFlash('info', 'Verification email resent successfully.');
+                        $this->addFlash('info', 'Verification email resent successfully.'); // TODO Transl
                         break;
 
                     case 'phone':
                         $this->verificationWhatsAppService->sendVerificationWhatsApp($contact, $message);
-                        $this->addFlash('info', 'Verification phone resent successfully.');
+                        $this->addFlash('info', 'Verification phone resent successfully.'); // TODO Transl
                         break;
 
                     case 'social':
                         try {
                             $this->verificationSocialService->sendVerificationSocial($contact, $message);
-                            $this->addFlash('info', 'Verification social resent successfully.');
+                            $this->addFlash('info', 'Verification social resent successfully.'); // TODO Transl
                         } catch (\Exception $e) {
                             //TODO monitoring
                             //'Error: ' . $e->getMessage()';

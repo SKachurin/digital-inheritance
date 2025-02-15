@@ -12,13 +12,11 @@ use App\Repository\ActionRepository;
 
 class ActionCreateHandler
 {
-    private EntityManagerInterface $entityManager;
-    private ActionRepository $actionRepository;
-
-    public function __construct(EntityManagerInterface $entityManager, ActionRepository $actionRepository)
+    public function __construct(
+        private EntityManagerInterface $entityManager,
+        private ActionRepository $actionRepository
+    )
     {
-        $this->entityManager = $entityManager;
-        $this->actionRepository = $actionRepository;
     }
 
     public function __invoke(ActionCreateCommand $command): void
@@ -35,7 +33,7 @@ class ActionCreateHandler
         }
 
         switch ($contactType) {
-            case ContactTypeEnum::EMAIL:
+            case ContactTypeEnum::EMAIL->value:
                 if ($this->actionRepository->customerVerifiedSecondEmail($customer)){
                     $this->createSingleAction($contact, ActionTypeEnum::EMAIL_SEND_2);
                     break;
@@ -43,8 +41,8 @@ class ActionCreateHandler
                 $this->createSingleAction($contact, ActionTypeEnum::EMAIL_SEND);
                 break;
 
-            case ContactTypeEnum::MESSENGER:
-            case ContactTypeEnum::PHONE:
+            case ContactTypeEnum::MESSENGER->value:
+            case ContactTypeEnum::PHONE->value:
                 if ($this->actionRepository->customerVerifiedSecondPhone($customer)) {
                     $this->createSingleAction($contact, ActionTypeEnum::MESSENGER_SEND_2);
                     break;
@@ -52,7 +50,7 @@ class ActionCreateHandler
                 $this->createSingleAction($contact, ActionTypeEnum::MESSENGER_SEND);
                 break;
 
-            case ContactTypeEnum::SOCIAL:
+            case ContactTypeEnum::SOCIAL->value:
                 $this->createSingleAction($contact, ActionTypeEnum::SOCIAL_CHECK);
                 $this->createSingleAction($contact, ActionTypeEnum::SOCIAL_SEND);
                 break;
