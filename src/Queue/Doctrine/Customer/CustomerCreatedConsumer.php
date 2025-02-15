@@ -107,7 +107,7 @@ class CustomerCreatedConsumer
 
        //TODO we got only one email at this point
        foreach ($customerEmails as $contact) {
-           $this->verificationEmailService->sendVerificationEmail($contact);
+           $this->verificationEmailService->sendVerificationEmail($contact, 'en');
        }
     }
 }
