@@ -283,12 +283,12 @@ messages:
   notification_message: "Hey %beneficiary_name%,\n\nPerson named %customer_name% has listed this contact as an emergency contact on The Digital Heir. Click the link to access the secure envelope:"
 
 home_page:
-  title: "Introducing “The Digital Heir” Service"
-  description: 'Learn more about our secure digital inheritance service.'
+  title: 'Introducing “The Digital Heir"'
+  description: 'New and secure digital inheritance service.'
 
 about_page:
-  title: "Introducing “The Digital Heir” Service"
-  description: 'Learn more about our secure digital inheritance service.'
+  title: 'About “The Digital Heir”'
+  description: 'Learn more about secure way to transfer your digital assets.'
 
   introduction:
     text: >

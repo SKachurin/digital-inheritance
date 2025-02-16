@@ -246,13 +246,32 @@ errors:
       second_question_answer_required: 'Se requiere una respuesta a la segunda pregunta si el texto de la pregunta está presente.'
 
   flash:
-    captcha: 'Por favor, completa el reCAPTCHA.'
-    captcha_fail: 'La validación de reCAPTCHA ha fallado. Inténtalo de nuevo.'
-    add_heir: 'Crea un heredero primero.'
-
-success:
-  flash:
-    note_updated: 'Tu nota ha sido actualizada.'
+    captcha: 'Por favor, complete el reCAPTCHA.'
+    captcha_fail: 'Error en la validación de reCAPTCHA. Inténtelo de nuevo.'
+    add_heir: 'Cree un heredero primero.'
+    heir_created: 'Su heredero ha sido creado.'
+    heir_deleted: 'Su heredero ha sido eliminado con éxito.'
+    heir_updated: 'Su heredero ha sido actualizado.'
+    contact_created: '¡Contacto creado! ¿Le gustaría verificarlo ahora?'
+    contact_updated: '¡Contacto actualizado! ¿Le gustaría enviar un mensaje de verificación ahora?'
+    email_sent: 'Correo electrónico de verificación enviado con éxito.'
+    email_verified: 'Su dirección de correo electrónico ha sido verificada.'
+    phone_sent: 'Mensaje de verificación de WhatsApp reenviado con éxito.'
+    phone_verified: 'Su WhatsApp ha sido verificado.'
+    social_sent: 'Mensaje de verificación de redes sociales reenviado con éxito.'
+    social_verified: 'Su contacto social ha sido verificado.'
+    social_verified_already: 'Su contacto social ya ha sido verificado.'
+    fail_to_sent: 'No se pudo reenviar el enlace de verificación. Inténtelo de nuevo en unos minutos.'
+    pass_recovery_sent: "Si existe una cuenta con ese correo electrónico, se ha enviado un enlace de restablecimiento de contraseña a sus correos electrónicos verificados."
+    pass_bad_link: 'Este enlace de restablecimiento de contraseña no es válido o ha caducado.'
+    pass_reset: 'Su contraseña ha sido restablecida con éxito.'
+    registration_is_processed: 'Su registro está siendo procesado. Recibirá un correo electrónico de confirmación cuando se complete.'
+    envelope_is_processed: 'Su sobre (Envelope) está siendo procesado.'
+    envelope_deleted: 'Su sobre (Envelope) ha sido eliminado con éxito.'
+    verify_contact: "Verifique al menos un contacto (preferiblemente Telegram o una red social)."
+    note_updated: 'Su nota ha sido actualizada.'
+    pipeline_created: 'Su proceso (Pipeline) ha sido creado.'
+    pipeline_saved: 'Su proceso (Pipeline) ha sido guardado.'
 
 messages:
   verification: '¡Gracias por registrarte! 🔐 Por favor, verifica tu teléfono haciendo clic en el siguiente enlace: '
@@ -262,8 +281,13 @@ messages:
   check_message: '¡Oye! ¿Estás bien? 🤗'
   notification_message: "Hola %beneficiary_name%,\n\nLa persona llamada %customer_name% ha listado este contacto como un contacto de emergencia en The Digital Heir. Haz clic en el enlace para acceder al sobre seguro:"
 
+home_page:
+  title: 'Presentamos “El Heredero Digital”'
+  description: 'Nuevo y seguro servicio de herencia digital.'
+
 about_page:
-  title: "Presentamos el servicio de 'Herencia Digital'"
+  title: 'Acerca de “El Heredero Digital”'
+  description: 'Conozca más sobre una forma segura de transferir sus activos digitales.'
 
   introduction:
     text: >
