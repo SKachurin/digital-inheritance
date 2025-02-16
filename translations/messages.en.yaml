@@ -285,6 +285,10 @@ messages:
 home_page:
   title: 'Introducing “The Digital Heir"'
   description: 'New and secure digital inheritance service.'
+  first_text: |
+    Do you have any form of insurance? Think of this service as a way to ensure your digital assets end up in the right hands if something happens to you.
+    Yes, it takes a bit of effort to set up and costs only a few dollars per month, but once everything is in place, we’ll continuously monitor your “last login” on the platforms you choose. If your inactivity exceeds the threshold you set, we’ll send a confirmation message to check in on you.
+    If there’s still no response, your digital assets will be securely passed on to the contacts you designated.
 
 about_page:
   title: 'About “The Digital Heir”'

@@ -1,23 +1,103 @@
 {% extends 'base.html.twig' %}
 
 {% block og_title %}{{ 'home_page.title'|trans }}{% endblock %}
-
 {% block og_description %}{{ 'home_page.description'|trans }}{% endblock %}
-{% block og_image %}{{ absolute_url('/build/logo-TheDigitalHeir-192x192.png') }}{% endblock %}
+{% block og_image %}{{ absolute_url('/banners/The_Master_and_Margarita.png') }}{% endblock %}
 
 {% block content %}
     <style>
+        .citation {
+            font-family: Georgia, "Times New Roman", Times, serif;
+            font-size: 1.4rem;
+            font-style: italic;
+            line-height: 1.8;
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 20px;
+            text-align: center;
+            color: #333;
+            position: relative;
+        }
+
+        .divider {
+            display: block;
+            margin: 10px auto;
+            width: 25rem;
+        }
+
+        .banner-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .banner-container img {
+            margin-top: 7rem;
+            width: 100%;
+            max-height: 500px;
+            object-fit: cover;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        .content-box {
+            text-align: center;
+            font-size: 1.2rem;
+            line-height: 1.6;
+            max-width: 800px;
+            /*margin: 40px auto;*/
+            padding: 20px;
+        }
+
+
+        @media (max-width: 991px) {
+            .banner-container {
+                margin-top: 12rem;
+                padding: 0 15px; /* Add side padding to prevent overflow */
+            }
+
+            .banner-container img {
+                max-height: 400px;  /* Reduce height */
+                border-radius: 8px; /* Slightly less rounded */
+            }
+
+            .content-box {
+                padding: 15px;
+                font-size: 2rem;
+                line-height: 1.5;
+                margin: 20px auto;
+                max-width: 90%;  /* Allow better fit */
+            }
+
+            .content-box p {
+                margin-bottom: 15px;  /* Reduce space between paragraphs */
+            }
+        }
 
     </style>
-    <div class="container">
 
+    <div class="banner-container">
+        {% set lang = app.request.locale %}
+        {% set bannerPath = '/banners/The_Master_and_Margarita.png' %}
 
-        {% for label, messages in app.flashes %}
-            {% for message in messages %}
-                <div class="alert alert-{{ label }}">
-                    {{ message }}
-                </div>
-            {% endfor %}
-        {% endfor %}
+        {% if lang == 'ru' %}
+            {% set bannerPath = '/banners/The_Master_and_Margarita_ru.png' %}
+        {% elseif lang == 'es' %}
+            {% set bannerPath = '/banners/El_Maestro_y_Margarita.png' %}
+        {% endif %}
+
+        <img src="{{ asset(bannerPath) }}" alt="The Digital Heir Banner">
+    </div>
+
+{#    <div class="container text-center">#}
+{#        <div class="content-box"> {{ 'home_page.first_text'|trans }}</div>#}
+{#    </div>#}
+    <div class="citation">
+        <img src="/images/up.svg" alt="Decorative divider" class="divider">
+        <div class="content-box"> <p>{{ 'home_page.first_text'|trans }}</p></div>
+        <img src="/images/down.svg" alt="Decorative divider" class="divider">
     </div>
 {% endblock %}

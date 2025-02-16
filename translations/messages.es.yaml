@@ -284,6 +284,10 @@ messages:
 home_page:
   title: 'Presentamos “El Heredero Digital”'
   description: 'Nuevo y seguro servicio de herencia digital.'
+  first_text: |
+    ¿Tienes algún tipo de seguro? Piensa en este servicio como una forma de asegurarte de que tus activos digitales lleguen a las manos adecuadas si algo te sucede.
+    Sí, configurarlo requiere un poco de esfuerzo y cuesta solo unos pocos dólares al mes, pero una vez que todo esté en su lugar, monitorearemos continuamente tu "último inicio de sesión" en las plataformas que elijas. Si tu inactividad supera el umbral que has establecido, te enviaremos un mensaje de confirmación para verificar cómo estás.
+    Si aún no hay respuesta, tus activos digitales se transferirán de manera segura a los contactos que hayas designado.
 
 about_page:
   title: 'Acerca de “El Heredero Digital”'
