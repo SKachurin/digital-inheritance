@@ -255,11 +255,11 @@ success:
     note_updated: 'Tu nota ha sido actualizada.'
 
 messages:
-  verification: '¡Gracias por registrarte! Por favor, verifica tu teléfono haciendo clic en el siguiente enlace: '
-  not_time: "Ahora no es el momento \u{1F632}"
-  not_right: "No es la respuesta que esperaba... \u{1F914}"
-  resetting: "¡Me alegra oírlo! \u{1F60A}"
-  check_message: '¡Oye! ¿Estás bien?'
+  verification: '¡Gracias por registrarte! 🔐 Por favor, verifica tu teléfono haciendo clic en el siguiente enlace: '
+  not_time: "Ahora no es el momento 🤔 "
+  not_right: "No es la respuesta que esperaba... 🤔"
+  resetting: "¡Me alegra oírlo! 😊"
+  check_message: '¡Oye! ¿Estás bien? 🤗'
   notification_message: "Hola %beneficiary_name%,\n\nLa persona llamada %customer_name% ha listado este contacto como un contacto de emergencia en The Digital Heir. Haz clic en el enlace para acceder al sobre seguro:"
 
 about_page:

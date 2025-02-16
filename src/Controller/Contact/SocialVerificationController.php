@@ -12,9 +12,12 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class SocialVerificationController extends AbstractController
 {
+    private readonly TranslatorInterface $translator;
+
     /**
      * @throws Exception
      */
@@ -31,7 +34,7 @@ class SocialVerificationController extends AbstractController
             $contact = $verificationToken ? $verificationToken->getContact() : null;
 
             if ($contact && $contact->getIsVerified()) {
-                $this->addFlash('info', 'Your social contact has already been verified.');
+                $this->addFlash('info', $this->translator->trans('errors.flash.social_verified_already'));
                 return new RedirectResponse($this->generateUrl('user_home'));
             }
 
@@ -51,7 +54,7 @@ class SocialVerificationController extends AbstractController
         $eventDispatcher->dispatch(new ContactVerifiedEvent($contact));
 
 
-        $this->addFlash('success', 'Your Social has been verified.');
+        $this->addFlash('success', $this->translator->trans('errors.flash.social_verified')); //TODO Trans
         return new RedirectResponse($this->generateUrl('user_home'));
     }
 }

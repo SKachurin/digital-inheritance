@@ -16,15 +16,17 @@ use App\Repository\ActionRepository;
 use App\Repository\PipelineRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 
 class PipelineEditController extends AbstractController
 {   //TODO Move everything to Handler with messageBus
     public function __construct(
-        private PipelineRepository $pipelineRepository,
-        private ActionRepository $actionRepository,
-        private EntityManagerInterface $entityManager,
-        protected UserPasswordHasherInterface $passwordHasher
+        private PipelineRepository            $pipelineRepository,
+        private ActionRepository              $actionRepository,
+        private EntityManagerInterface        $entityManager,
+        protected UserPasswordHasherInterface $passwordHasher,
+        private TranslatorInterface           $translator
     )
     {
     }
@@ -149,7 +151,7 @@ class PipelineEditController extends AbstractController
 
                 $this->entityManager->flush();
 
-                $this->addFlash('success', 'Your Pipeline has been saved.');
+                $this->addFlash('success', $this->translator->trans('errors.flash.pipeline_saved'));
 
                 return $this->redirectToRoute('pipeline_edit', ['pipelineId' => $pipeline->getId()]);
             }

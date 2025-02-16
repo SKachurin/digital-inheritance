@@ -14,13 +14,15 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class PipelineCreateController extends AbstractController
 {
     public function __construct(
-        private EntityManagerInterface $entityManager,
-        private ActionRepository $actionRepository,
-        protected UserPasswordHasherInterface $passwordHasher
+        private EntityManagerInterface        $entityManager,
+        private ActionRepository              $actionRepository,
+        protected UserPasswordHasherInterface $passwordHasher,
+        private TranslatorInterface           $translator
     )
     {
     }
@@ -37,7 +39,7 @@ class PipelineCreateController extends AbstractController
         $customerActions = $this->actionRepository->customerHasActions($customer);
 
         if (empty($customerActions)) {
-            $this->addFlash('info', 'Verify at least one Contact (it\'s better be Telegram/Social).');
+            $this->addFlash('info', $this->translator->trans('errors.flash.verify_contact'));
             return $this->redirectToRoute('user_home');
         }
 
@@ -118,7 +120,7 @@ class PipelineCreateController extends AbstractController
             $this->entityManager->persist($pipeline);
             $this->entityManager->flush();
 
-            $this->addFlash('success', 'Your Pipeline is created.');
+            $this->addFlash('success', $this->translator->trans('errors.flash.pipeline_created'));
             return $this->redirectToRoute('user_home');
         }
 

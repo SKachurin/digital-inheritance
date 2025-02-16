@@ -17,16 +17,12 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 class NoteCreateController extends AbstractController
 {
-    private MessageBusInterface $commandBus;
-    private TranslatorInterface $translator;
-
-
-    public function __construct(MessageBusInterface $commandBus, TranslatorInterface $translator)
+    public function __construct(
+        private MessageBusInterface $commandBus,
+        private TranslatorInterface $translator
+    )
     {
-        $this->commandBus = $commandBus;
-        $this->translator = $translator;
     }
-
 
     public function create(Request $request): Response
     {
@@ -64,9 +60,7 @@ class NoteCreateController extends AbstractController
                     throw new UnprocessableEntityHttpException('500 internal error (CommandBus not responding).');
                 }
 
-                $this->addFlash('success', 'Your Envelope is being processed.');
-
-//                $note = $handledStamp->getResult();
+                $this->addFlash('success', $this->translator->trans('errors.flash.envelop_is_processed'));
 
                 return $this->redirectToRoute('user_home');
 

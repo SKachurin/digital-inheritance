@@ -177,7 +177,7 @@ class NoteEditController extends AbstractController
 
                 $this->noteEditTextHandler->__invoke($inputDto); // handler
 
-                $this->addFlash('success', $this->translator->trans('success.flash.note_updated'));
+                $this->addFlash('success', $this->translator->trans('errors.flash.note_updated'));
 
                 return $this->redirectToRoute('user_home');
             }

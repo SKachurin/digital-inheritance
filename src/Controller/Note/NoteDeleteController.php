@@ -10,15 +10,15 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class NoteDeleteController extends AbstractController
 {
-    private MessageBusInterface $commandBus;
-
-
-    public function __construct(MessageBusInterface $commandBus)
+    public function __construct(
+        private MessageBusInterface $commandBus,
+        private TranslatorInterface $translator
+    )
     {
-        $this->commandBus = $commandBus;
     }
 
     /**
@@ -48,7 +48,7 @@ class NoteDeleteController extends AbstractController
 
         $this->commandBus->dispatch($inputDto);
 
-        $this->addFlash('success', 'Your Envelope has been successfully deleted.');
+        $this->addFlash('success', $this->translator->trans('errors.flash.envelope_deleted'));
 
         return $this->redirectToRoute('user_home');
     }

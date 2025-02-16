@@ -1,8 +1,8 @@
-# Digital Inheritance
+# The Digital Heir
 
 [Link to prototype](https://thedigitalheir.com)
 
-## Introducing Our “Digital Inheritance” Service
+## Introducing “The Digital Heir” Service
 Our service provides a seamless, secure, and discreet way to ensure your most valuable digital assets and sensitive information are passed on to the right person, exactly when they need it—without ever revealing any details until the time is right.
 
 ---
@@ -35,7 +35,7 @@ Our service provides a seamless, secure, and discreet way to ensure your most va
 
 ---
 
-## How “Digital Inheritance” Works
+## How “The Digital Heir” Works
 
 1. **Automated Life Status Checks**
     - We periodically check your activity on selected social media platforms, send you WhatsApp messages, or email you to confirm you’re still active.
@@ -104,11 +104,11 @@ Our service provides a seamless, secure, and discreet way to ensure your most va
 - Individuals who want full control of who knows about their inheritance plans and when they learn about it.
 - People seeking an easy, private alternative to traditional estate planning.
 
-Whether you are deeply invested in digital currencies or simply want to secure passwords and sensitive notes for future generations, our “Digital Inheritance” service ensures that your most precious information remains safe and is delivered to the right person when the time comes—without disclosing anything prematurely.
+Whether you are deeply invested in digital currencies or simply want to secure passwords and sensitive notes for future generations, our “The Digital Heir” service ensures that your most precious information remains safe and is delivered to the right person when the time comes—without disclosing anything prematurely.
 
 ---
 
 ## Take Control of Your Digital Legacy
 
-Join our “Digital Inheritance” project today and gain peace of mind knowing your digital assets and vital information are securely stored, confidentially protected, and ready to be passed on to the people you trust—only if and when they truly need it.
+Join our “The Digital Heir” project today and gain peace of mind knowing your digital assets and vital information are securely stored, confidentially protected, and ready to be passed on to the people you trust—only if and when they truly need it.
 

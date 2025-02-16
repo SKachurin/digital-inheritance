@@ -12,9 +12,12 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\EventDispatcher\EventDispatcherInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class WhatsAppVerificationController extends AbstractController
 {
+    private readonly TranslatorInterface $translator;
+
     /**
      * @throws Exception
      */
@@ -43,7 +46,7 @@ class WhatsAppVerificationController extends AbstractController
         // Dispatch the event to create Actions
         $eventDispatcher->dispatch(new ContactVerifiedEvent($contact));
 
-        $this->addFlash('success', 'Your WhatsApp has been verified.');
+        $this->addFlash('success', $this->translator->trans('errors.flash.phone_verified'));
         return new RedirectResponse($this->generateUrl('user_home'));
     }
 }

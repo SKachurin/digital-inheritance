@@ -11,22 +11,17 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Messenger\Stamp\HandledStamp;
 use Symfony\Component\Security\Core\Exception\CustomUserMessageAuthenticationException;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class RegistrationController extends AbstractController
 {
-    private MessageBusInterface $commandBus;
-    private ReCaptcha $recaptchaV3;
-    private ReCaptcha $recaptchaV2;
-
     public function __construct(
-        MessageBusInterface $commandBus,
-        ReCaptcha           $recaptchaV3,
-        ReCaptcha           $recaptchaV2
+        private MessageBusInterface $commandBus,
+        private ReCaptcha           $recaptchaV3,
+        private ReCaptcha           $recaptchaV2,
+        private TranslatorInterface $translator
     )
     {
-        $this->commandBus = $commandBus;
-        $this->recaptchaV3 = $recaptchaV3;
-        $this->recaptchaV2 = $recaptchaV2;
     }
 
     /**
@@ -99,7 +94,7 @@ class RegistrationController extends AbstractController
                 throw new \RuntimeException('CommandBus failed to process the registration.');
             }
 
-            $this->addFlash('success', 'Your registration is being processed. You will receive a confirmation email once it is complete.');
+            $this->addFlash('success', $this->translator->trans('errors.flash.registration_is_processed'));
 
             return $this->redirectToRoute('user_login');
         }
@@ -148,7 +143,7 @@ class RegistrationController extends AbstractController
             throw new \RuntimeException('CommandBus failed to process the registration.');
         }
 
-        $this->addFlash('success', 'Your registration is being processed. You will receive a confirmation email once it is complete.');
+        $this->addFlash('success', $this->translator->trans('errors.flash.registration_is_processed'));
 
         $this->redirectToRoute('user_login');
     }

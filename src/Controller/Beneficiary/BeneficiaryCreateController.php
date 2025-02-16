@@ -13,29 +13,19 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Messenger\Stamp\HandledStamp;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class BeneficiaryCreateController extends AbstractController
 {
-    private MessageBusInterface $commandBus;
-    private NoteRepository $noteRepository;
-    private LoggerInterface $logger;
-    private ParameterBagInterface $params;
-    private EntityManagerInterface $entityManager;
-
-
     public function __construct(
-        MessageBusInterface $commandBus,
-        NoteRepository $noteRepository,
-        LoggerInterface $logger,
-        ParameterBagInterface $params,
-        EntityManagerInterface $entityManager
+        private MessageBusInterface    $commandBus,
+        private NoteRepository         $noteRepository,
+        private LoggerInterface        $logger,
+        private ParameterBagInterface  $params,
+        private EntityManagerInterface $entityManager,
+        private TranslatorInterface    $translator
     )
     {
-        $this->commandBus = $commandBus;
-        $this->noteRepository = $noteRepository;
-        $this->logger = $logger;
-        $this->params = $params;
-        $this->entityManager = $entityManager;
     }
 
     /**
@@ -68,7 +58,7 @@ class BeneficiaryCreateController extends AbstractController
                 throw new UnprocessableEntityHttpException('500 internal error (CommandBus not responding).');
             }
 
-            $this->addFlash('success', 'Your Heir is created.');
+            $this->addFlash('success', $this->translator->trans('errors.flash.heir_created'));
             return $this->redirectToRoute('user_home');
         }
 

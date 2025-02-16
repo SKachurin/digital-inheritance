@@ -10,17 +10,16 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class BeneficiaryDeleteController extends AbstractController
 {
-    private MessageBusInterface $commandBus;
-    private NoteRepository $noteRepository;
-
-
-    public function __construct(MessageBusInterface $commandBus, NoteRepository $noteRepository)
+    public function __construct(
+        private MessageBusInterface $commandBus,
+        private NoteRepository      $noteRepository,
+        private TranslatorInterface $translator
+    )
     {
-        $this->commandBus = $commandBus;
-        $this->noteRepository = $noteRepository;
     }
 
     /**
@@ -56,7 +55,7 @@ class BeneficiaryDeleteController extends AbstractController
 
         $this->commandBus->dispatch($inputDto);
 
-        $this->addFlash('success', 'Your Heir has been successfully deleted.');
+        $this->addFlash('success', $this->translator->trans('errors.flash.heir_deleted'));
 
         return $this->redirectToRoute('user_home');
     }

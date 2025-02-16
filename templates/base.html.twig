@@ -7,10 +7,18 @@
     <link rel="manifest" href="/build/site.webmanifest">
     <link rel="icon" type="image/png" sizes="16x16" href="/build/favicon-16x16.png">
     <link rel="icon" type="image/png" sizes="32x32" href="/build/favicon-32x32.png">
-    <link rel="icon" type="image/png" sizes="192x192" href="/build/android-chrome-192x192.png">
-    <link rel="icon" type="image/png" sizes="512x512" href="/build/android-chrome-512x512.png">
+    <link rel="icon" type="image/png" sizes="192x192" href="/build/logo-TheDigitalHeir-192x192.png">
+    <link rel="icon" type="image/png" sizes="512x512" href="/build/logo-TheDigitalHeir-512x512.png">
     <link rel="apple-touch-icon" href="/build/apple-touch-icon.png">
     <link rel="shortcut icon" href="/build/favicon.ico">
+
+{#    TRANSLATE default_title AND default_description #}
+    <meta property="og:title" content="{% block og_title %}{{ 'default_title'|trans }}{% endblock %}">
+    <meta property="og:description" content="{% block og_description %}{{ 'default_description'|trans }}{% endblock %}">
+    <meta property="og:image" content="{% block og_image %}{{ absolute_url('/build/logo-TheDigitalHeir-192x192.png') }}{% endblock %}">
+    <meta property="og:url" content="{{ app.request.uri }}">
+
+
     {% block stylesheets %}
 {#        {{ encore_entry_link_tags('app') }}#}
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
@@ -34,7 +42,7 @@
                 <!-- LOGO & TITLE -->
                 <a href="{{ path('home') }}" class="d-flex align-items-center text-dark text-decoration-none">
 
-                <img src="/build/android-chrome-192x192.png" alt="Logo" width="60" height="60" class="me-2">
+                <img src="{{ absolute_url('/build/logo-TheDigitalHeir-192x192.png') }}" alt="Logo" width="60" height="60" class="me-2">
                     <div class="d-flex flex-column">
                         <span class="fs-6 font-monospace"><b>The Eternity</b></span>
                         <span class="fs-4 font-monospace"><b>The Digital Heir</b></span>

@@ -16,16 +16,18 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class BeneficiaryEditController extends AbstractController
 {
     public function __construct(
-        private MessageBusInterface $commandBus,
-        private NoteRepository $noteRepository,
+        private MessageBusInterface   $commandBus,
+        private NoteRepository        $noteRepository,
         private BeneficiaryRepository $beneficiaryRepository,
-        private ContactRepository $contactRepository,
-        private LoggerInterface $logger,
-        private ParameterBagInterface $params
+        private ContactRepository     $contactRepository,
+        private LoggerInterface       $logger,
+        private ParameterBagInterface $params,
+        private TranslatorInterface   $translator
     )
     {
     }
@@ -125,7 +127,7 @@ class BeneficiaryEditController extends AbstractController
 
             $this->commandBus->dispatch($updatedData);
 
-            $this->addFlash('success', 'Your Heir has been updated.');
+            $this->addFlash('success', $this->translator->trans('errors.flash.heir_updated'));
             return $this->redirectToRoute('user_home');
         }
 

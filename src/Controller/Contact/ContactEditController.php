@@ -96,22 +96,22 @@ class ContactEditController extends AbstractController
                 switch ($contact->getContactTypeEnum()) {
                     case 'email':
                         $this->verificationEmailService->sendVerificationEmail($contact, $message);
-                        $this->addFlash('info', 'Verification email resent successfully.'); // TODO Transl
+                        $this->addFlash('info', $this->translator->trans('errors.flash.email_sent'));
                         break;
 
                     case 'phone':
                         $this->verificationWhatsAppService->sendVerificationWhatsApp($contact, $message);
-                        $this->addFlash('info', 'Verification phone resent successfully.'); // TODO Transl
+                        $this->addFlash('info', $this->translator->trans('errors.flash.phone_sent'));
                         break;
 
                     case 'social':
                         try {
                             $this->verificationSocialService->sendVerificationSocial($contact, $message);
-                            $this->addFlash('info', 'Verification social resent successfully.'); // TODO Transl
+                            $this->addFlash('info', $this->translator->trans('errors.flash.social_sent'));
                         } catch (\Exception $e) {
                             //TODO monitoring
                             //'Error: ' . $e->getMessage()';
-                            $this->addFlash('danger', 'Failed to resend the verification link. Please try again in a few minutes.');
+                            $this->addFlash('danger', $this->translator->trans('errors.flash.fail_to_sent') );
                         }
                         break;
                 }
@@ -134,7 +134,7 @@ class ContactEditController extends AbstractController
 
             $form1 = $this->createForm(ContactEditType::class, $handledResult);
 
-            $this->addFlash('info', 'Contact updated! Would you like to send Verification message now?');
+            $this->addFlash('info', $this->translator->trans('errors.flash.contact_updated'));
 
             return $this->render('contactEdit.html.twig', [
                 'form' => $form1->createView(),

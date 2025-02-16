@@ -250,21 +250,45 @@ errors:
     captcha: 'Please complete the reCAPTCHA.'
     captcha_fail: 'reCAPTCHA validation failed. Please try again.'
     add_heir: 'Create Heir first.'
-
-success:
-  flash:
+    heir_created: 'Your Heir is created.'
+    heir_deleted: 'Your Heir has been successfully deleted.'
+    heir_updated: 'Your Heir has been updated.'
+    contact_created: 'Contact created! Would you like to verify it now?'
+    contact_updated: 'Contact updated! Would you like to send Verification message now?'
+    email_sent: 'Verification email sent successfully.'
+    email_verified: 'Your email address has been verified.'
+    phone_sent: 'Verification phone resent successfully.'
+    phone_verified: 'Your WhatsApp has been verified.'
+    social_sent: 'Verification social resent successfully.'
+    social_verified: 'Your Social has been verified.'
+    social_verified_already: 'Your social contact has already been verified.'
+    fail_to_sent: 'Failed to resend the verification link. Please try again in a few minutes.'
+    pass_recovery_sent: "If an account with that email exists, a password reset link has been sent to it's verified emails."
+    pass_bad_link: 'This password reset link is invalid or has expired.'
+    pass_reset: 'Your password has been reset successfully.'
+    registration_is_processed: 'Your registration is being processed. You will receive a confirmation email once it is complete.'
+    envelope_is_processed: 'Your Envelope is being processed.'
+    envelope_deleted: 'Your Envelope has been successfully deleted.'
+    verify_contact: "Verify at least one Contact (it's better be Telegram/Social)."
     note_updated: 'Your note has been updated.'
+    pipeline_created: 'Your Pipeline is created.'
+    pipeline_saved: 'Your Pipeline has been saved.'
 
 messages:
-  verification: 'Thank you for registering! Please verify your phone by clicking on the following link: '
-  not_time: "Now's not the time \u{1F632}"
-  not_right: "Not the answer I expected... \u{1F914}"
-  resetting: "It's nice to hear it \u{1F60A}!"
-  check_message: 'Hey! Are you okay?'
+  verification: 'Thank you for registering! 🔐 Please verify your phone by clicking on the following link: '
+  not_time: "Now's not the time 🤔"
+  not_right: "Not the answer I expected... 🤔"
+  resetting: "It's nice to hear it 😊!"
+  check_message: 'Hey! Are you okay? 🤗'
   notification_message: "Hey %beneficiary_name%,\n\nPerson named %customer_name% has listed this contact as an emergency contact on The Digital Heir. Click the link to access the secure envelope:"
 
+home_page:
+  title: "Introducing “The Digital Heir” Service"
+  description: 'Learn more about our secure digital inheritance service.'
+
 about_page:
-  title: "Introducing “Digital Inheritance” Service"
+  title: "Introducing “The Digital Heir” Service"
+  description: 'Learn more about our secure digital inheritance service.'
 
   introduction:
     text: >
@@ -376,7 +400,7 @@ about_page:
   take_control:
     title: "Take Control of Your Digital Legacy"
     text: >
-      Join our “Digital Inheritance” project today and gain peace of mind knowing your digital assets
+      Join our “The Digital Heir” project today and gain peace of mind knowing your digital assets
       and vital information are securely stored, confidentially protected, and ready to be passed on to
       the people you trust—only if and when they truly need it.
 

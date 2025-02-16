@@ -107,6 +107,9 @@ class CustomerCreatedConsumer
 
        //TODO we got only one email at this point
        foreach ($customerEmails as $contact) {
+           // before reg - email in English
+           // or we can carry Cookie lang from $message = new CustomerCreatedMessage($input, $sessionIdOrCookieValue);
+           // -> $this->commandBus->dispatch($message);
            $this->verificationEmailService->sendVerificationEmail($contact, 'en');
        }
     }

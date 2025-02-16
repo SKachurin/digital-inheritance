@@ -13,15 +13,15 @@ use Symfony\Component\HttpFoundation\Response;
 // Include necessary classes
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class PasswordResetController extends AbstractController
 {
-    private PasswordResetService $passwordResetService;
-
     public function __construct(
-        PasswordResetService $passwordResetService
-    ) {
-        $this->passwordResetService = $passwordResetService;
+        private PasswordResetService $passwordResetService,
+        private TranslatorInterface  $translator
+    )
+    {
     }
 
     /**
@@ -40,7 +40,7 @@ class PasswordResetController extends AbstractController
             $this->passwordResetService->sendPasswordResetEmail($email);
 
             // Always show success message
-            $this->addFlash('success', "If an account with that email exists, a password reset link has been sent to it's verified emails.");
+            $this->addFlash('success', $this->translator->trans('errors.flash.pass_recovery_sent'));
 
             return $this->redirectToRoute('user_login');
         }
@@ -64,7 +64,7 @@ class PasswordResetController extends AbstractController
         ]);
 
         if (!$verificationToken || $verificationToken->isExpired()) {
-            $this->addFlash('danger', 'This password reset link is invalid or has expired.');
+            $this->addFlash('danger', $this->translator->trans('errors.flash.pass_bad_link'));
 
             return $this->redirectToRoute('user_login');
         }
@@ -85,7 +85,7 @@ class PasswordResetController extends AbstractController
             $entityManager->remove($verificationToken);
             $entityManager->flush();
 
-            $this->addFlash('success', 'Your password has been reset successfully.');
+            $this->addFlash('success', $this->translator->trans('errors.flash.pass_reset'));
 
             return $this->redirectToRoute('user_login');
         }

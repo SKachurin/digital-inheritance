@@ -23,24 +23,18 @@ use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Messenger\Stamp\HandledStamp;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class ContactCreateController extends AbstractController
 {
-    private MessageBusInterface $commandBus;
-    private ContactRepository $repository;
-    private CryptoService $cryptoService;
-    private VerificationEmailService $verificationEmailService;
     public function __construct(
-        ContactRepository $repository,
-        MessageBusInterface $commandBus,
-        CryptoService $cryptoService,
-        VerificationEmailService $verificationEmailService
+        private ContactRepository        $repository,
+        private MessageBusInterface      $commandBus,
+        private CryptoService            $cryptoService,
+        private VerificationEmailService $verificationEmailService,
+        private TranslatorInterface      $translator
     )
     {
-        $this->repository = $repository;
-        $this->commandBus = $commandBus;
-        $this->cryptoService = $cryptoService;
-        $this->verificationEmailService = $verificationEmailService;
     }
 
     /**
@@ -82,7 +76,7 @@ class ContactCreateController extends AbstractController
                 throw new UnprocessableEntityHttpException('500 internal error (CommandBus not responding).');
             }
 
-            $this->addFlash('info', 'Contact created! Would you like to verify it now?');
+            $this->addFlash('info', $this->translator->trans('errors.flash.contact_created'));
 
             return $this->redirectToRoute('user_home');
         }
