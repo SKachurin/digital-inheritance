@@ -14,13 +14,11 @@ use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 #[AsMessageHandler]
 class BeneficiaryDeleteHandler
 {
-    private BeneficiaryRepository $beneficiaryRepository;
-    private LoggerInterface $logger;
-
-    public function __construct(BeneficiaryRepository $beneficiaryRepository, LoggerInterface $logger)
+    public function __construct(
+        private BeneficiaryRepository $beneficiaryRepository,
+//        private LoggerInterface       $logger
+    )
     {
-        $this->beneficiaryRepository = $beneficiaryRepository;
-        $this->logger = $logger;
     }
 
     /**
@@ -39,14 +37,14 @@ class BeneficiaryDeleteHandler
         ]);
 
         if (!$beneficiary instanceof Beneficiary) {
-            $this->logger->warning('Beneficiary not found or does not belong to the customer.', ['beneficiaryId' => $beneficiaryId, 'customerId' => $customer->getId()]);
+//            $this->logger->warning('Beneficiary not found or does not belong to the customer.', ['beneficiaryId' => $beneficiaryId, 'customerId' => $customer->getId()]);
             throw new AccessDeniedException('You do not have permission to delete this note.');
         }
 
         try {
             $this->beneficiaryRepository->delete($beneficiary);
         } catch (Exception $e) {
-            $this->logger->error('Failed to delete note.', ['beneficiaryId' => $beneficiaryId, 'error' => $e->getMessage()]);
+//            $this->logger->error('Failed to delete note.', ['beneficiaryId' => $beneficiaryId, 'error' => $e->getMessage()]);
             throw new Exception('Failed to delete the beneficiary. Please try again later.');
         }
     }

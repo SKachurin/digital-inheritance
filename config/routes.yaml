@@ -52,8 +52,8 @@ beneficiary_edit:
     controller: App\Controller\Beneficiary\BeneficiaryEditController::edit
 
 beneficiary_delete:
-    path: /note/{beneficiaryId}/delete
-    controller: App\Controller\Note\BeneficiaryDeleteController::delete
+    path: /beneficiary/{beneficiaryId}/delete
+    controller: App\Controller\Beneficiary\BeneficiaryDeleteController::delete
 
 
 home:
