@@ -5,6 +5,7 @@ namespace App\Controller\Contact;
 use App\CommandHandler\Contact\Edit\ContactEditInputDto;
 use App\Entity\Contact;
 //use App\Form\Type\ContactDecryptType;
+use App\Entity\Customer;
 use App\Form\Type\ContactEditType;
 use App\Repository\ContactRepository;
 use App\Service\CryptoService;
@@ -46,6 +47,10 @@ class ContactEditController extends AbstractController
     public function edit(int $contactId, Request $request): Response
     {
         $currentCustomer = $this->getUser();
+
+        if (!$currentCustomer instanceof Customer) {
+            return $this->redirectToRoute('user_login');
+        }
 
         $contact = $this->repository->getOneBy(['id' => $contactId]);
         if (!$contact instanceof Contact) {

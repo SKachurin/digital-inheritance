@@ -130,6 +130,20 @@
                         <i class="fab fa-github"></i>
                     </a>
                 </section>
+
+                <div class="dropdown dropup language-widget">
+                    <button class="btn btn-outline-light dropdown-toggle" type="button" id="langDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                        <img src="{{ asset('images/' ~ app.request.locale ~ '.png') }}" alt="{{ app.request.locale }}" width="30" height="20">
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="langDropdown">
+                        <li><a class="dropdown-item" href="{{ path('change_language', {'lang': 'en'}) }}">
+                                <img src="{{ asset('images/en.png') }}" width="30" alt="en"></a></li>
+                        <li><a class="dropdown-item" href="{{ path('change_language', {'lang': 'ru'}) }}">
+                                <img src="{{ asset('images/ru.png') }}" width="30" alt="ru"> </a></li>
+                        <li><a class="dropdown-item" href="{{ path('change_language', {'lang': 'es'}) }}">
+                                <img src="{{ asset('images/es.png') }}" width="30" alt="es"> </a></li>
+                    </ul>
+                </div>
                 <!-- Section: Social media -->
             </div>
             <!-- Grid container -->
@@ -351,8 +365,28 @@
         box-shadow: 0 0 8px rgba(0, 123, 255, 0.2);
     }
 
+    /* Style for the floating language selector */
+    .language-widget {
+        float: right;
+        z-index: 1050; /* Ensures it appears above other elements */
+        padding: 0.5rem;
+        right: 10px; /* Keeps the language button fixed at the bottom-right */
+        bottom: 5rem;
 
-    @media (max-width: 768px) { /* For mobile */
+    }
+    /* Ensure dropdown aligns correctly */
+    .language-widget .dropdown-menu {
+        min-width: 1rem;
+        right: 0; /* Align dropdown to the right */
+        left: auto;
+        bottom: 100%; /* Ensure it opens upward */
+        background-color: transparent;
+    }
+    .dropdown-menu img {
+        margin-bottom: 1rem;
+    }
+
+@media (max-width: 768px) { /* For mobile */
     /**/
     }
 
@@ -377,10 +411,6 @@
             margin-right: 15px !important;
         }
 
-        /*.d-flex.flex-column {*/
-        /*    font-size: 2rem !important;  !* Twice as big *!*/
-        /*    line-height: 1.2; !* Ensure good spacing *!*/
-        /*}*/
         .fs-6{
             font-size: 2rem !important;
             line-height: 1.5;
@@ -557,14 +587,35 @@
             font-size: 1.8em !important;
         }
 
-        /*footer .btn-outline-light {*/
-        /*    !*width: 40px;*!*/
-        /*    !*height: 40px;*!*/
-        /*    align-items: center;*/
-        /*    justify-content: center;*/
-        /*    border-radius: 8px; !* Adjust this if you want slightly rounded corners *!*/
-        /*    box-sizing: border-box; !* Ensures padding doesn’t change button size *!*/
-        /*}*/
+        #langDropdown{
+            min-width: 1rem;
+            margin-right: 100px;
+        }
+
+        /* Style for the floating language selector */
+        .language-widget {
+            float: right;
+            z-index: 1050; /* Ensures it appears above other elements */
+            padding: 0.5rem;
+            bottom: 7rem;
+
+        }
+        /* Ensure dropdown aligns correctly */
+        .language-widget .dropdown-menu {
+            min-width: 1rem;
+            right: 0; /* Align dropdown to the right */
+            left: auto;
+            bottom: 100%; /* Ensure it opens upward */
+            background-color: transparent;
+        }
+        .dropdown-menu img {
+            margin-bottom: 2rem;
+        }
+
+        .language-widget .dropdown-menu img {
+            width: 60px;
+            height: 40px;
+        }
 
     }
 
