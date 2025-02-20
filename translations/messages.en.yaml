@@ -10,7 +10,7 @@ header:
   language: 'EN | ESP | RU'
   new_heir_explain: 'Please provide as much information about your Heir as possible — this will help us reach this person in case of the events you describe in the Pipeline section.'
   new_heir_explain_1: "Please be especially precise with contact details (like phone and email) as they are not going to be verified now."
-  test_mode: 'Attention: This service is currently in Test Mode. Please do not enter any sensitive data.'
+  test_mode: "To test the service, use your own contact details as your Heir's."
   access_denied: 'Access Denied'
   access_denied_text: 'You do not have access to this secure envelope or the link has expired.'
   envelope_from: 'This envelope was created by '
@@ -145,6 +145,27 @@ create_your_secure_envelope_text: |
 
 
 dashboard:
+  text: "Hey there! 🤗"
+  introduction_text_spoiler: "First things first"
+  introduction_text_1: |
+    First things first — let's make it clear one more time: Everything you enter in this app is encrypted the moment you submit it, using a pretty strong protocol.
+    This page will guide you through the entire setup process—just work your way down step by step.<br>
+    We'll set up and verify your contacts so we can check your 'last online' status and send you messages if a check fails.
+    Add and verify as many contacts as you need for your Pipeline constructor. But pay special attention to Social contacts, as they’re used to check your ‘last online’ status (which saves you from direct interactions through messengers). Whatever.<br>
+    Also, pay attention to the text above and below form fields—we’ve tried to clearly state each field’s purpose. The base logic of this system is pretty simple:<br>
+     - Verify your contacts. <br>
+     - Add contacts for your Heir (no verification needed for them).<br>
+     - Encrypt the Text.<br>
+     - Choose how we check in on you (Pipeline).<br>
+
+  more_security_spoiler: "More About Security"
+  more_security_text: |
+    Except for your first email address. So, if our data were ever to ‘leak’ (which is highly unlikely), all they’d get is your first email address.
+    "The current implementation uses Sodium’s Secretbox with XSalsa20 for encryption and Poly1305 for authentication. This is a strong, secure, and widely trusted encryption method.
+    It follows best practices by using XSalsa20-Poly1305, a robust nonce-based authenticated encryption scheme."
+    For encrypting your 'Envelope,' we combine a string from your answers with our secret. 
+    Since your answers are never stored anywhere, each time you edit the ‘Envelope,’ you’ll need to decrypt it first.
+
   make_a_payment: 'Make a Payment'
   make_a_payment_tip: "This feature isn't ready yet. For now, all new customers are treated as Paid."
   create_your_pipeline: 'Create Your Pipeline'
@@ -161,9 +182,9 @@ dashboard:
   delete_your_beneficiary: 'Delete Your Heir'
   edit_your_heir: 'Edit Your Digital Heir'
   edit_your_heir_tip: 'Edit your Digital Heir details.'
-  edit_your_social: 'Edit Your Social Media'
+  edit_your_social: 'Edit Your Social'
   edit_your_social_tip: "Don't forget to verify it so it appears in Pipeline actions."
-  verify_edit_your_social: 'Verify/Edit Your Social Media'
+  verify_edit_your_social: 'Verify/Edit Your Social'
   verify_edit_your_social_tip: 'Verifying your contact creates an Action, allowing you to use it in your Pipeline.'
   add_your_social: 'Add Your Social Media'
   add_your_social_tip: "We check your 'last online' status to avoid sending unnecessary messages."
@@ -266,7 +287,7 @@ errors:
     pass_recovery_sent: "If an account with that email exists, a password reset link has been sent to it's verified emails."
     pass_bad_link: 'This password reset link is invalid or has expired.'
     pass_reset: 'Your password has been reset successfully.'
-    registration_is_processed: 'Your registration is being processed. You will receive a confirmation email once it is complete.'
+    registration_is_processed: "Your registration is in progress. You’ll receive a confirmation email once it’s complete. After verifying your email, you can log in."
     envelope_is_processed: 'Your Envelope is being processed.'
     envelope_deleted: 'Your Envelope has been successfully deleted.'
     verify_contact: "Verify at least one Contact (it's better be Telegram/Social)."

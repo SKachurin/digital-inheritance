@@ -10,7 +10,7 @@ header:
   language: 'EN | ESP | RU'
   new_heir_explain: 'Por favor, facilite la mayor cantidad de información posible sobre su heredero: esto nos ayudará a contactarlo en caso de que ocurran los eventos que describa en la sección del Pipeline.'
   new_heir_explain_1: "Sea especialmente preciso con los datos de contacto (como teléfono o correo electrónico), ya que no se verificarán en este momento."
-  test_mode: 'Atención: Este servicio se encuentra actualmente en modo de prueba. Por favor, no introduzca ningún dato sensible.'
+  test_mode: 'Para probar el servicio, usa tu contacto como Heredero.'
   access_denied: 'Acceso denegado'
   access_denied_text: 'No tienes acceso a este sobre seguro o el enlace ha expirado.'
   envelope_from: 'Este sobre fue creado por '
@@ -144,6 +144,28 @@ create_your_secure_envelope_text: |
   Nunca guardaremos sus respuestas: todo se descifrará al instante cada vez que proporcione las respuestas al acceder a la nota.
 
 dashboard:
+  text: "¡Hola! 🤗"
+  introduction_text_spoiler: "Primero lo primero"
+  introduction_text_1: |
+    Primero lo primero: aclaremos una vez más que todo lo que ingresas en esta aplicación se encripta en el momento en que lo envías, utilizando un protocolo bastante seguro.
+    Esta página te guiará a través de todo el proceso de configuración: simplemente sigue los pasos uno a uno.
+    Configuraremos y verificaremos tus contactos para que podamos comprobar tu estado de 'última conexión' y enviarte mensajes si no pasas la verificación.
+    Añade y verifica tantos contactos como necesites para tu constructor de Pipeline. Presta especial atención a los contactos de redes sociales, ya que se utilizan para verificar tu estado de 'última conexión' (lo que te ahorra la interacción directa a través de mensajeros). Lo que sea.
+    También presta atención al texto sobre y debajo de los campos del formulario: hemos tratado de explicar claramente el propósito de cada campo.
+    La lógica básica de este sistema es bastante simple:
+     - Verifica tus contactos.
+     - Añade contactos para tu Heredero (no se requiere verificación para ellos).
+     - Encripta el mensaje.
+     - Elige cómo verificamos tu estado (Pipeline).
+
+  more_security_spoiler: "Más Sobre Seguridad"
+  more_security_text: |
+    Excepto tu primera dirección de correo electrónico. Entonces, si nuestros datos se ‘filtraran’ (lo cual es muy poco probable), lo único que obtendrían sería tu primera dirección de correo electrónico.
+    "La implementación actual utiliza Secretbox de Sodium con XSalsa20 para encriptación y Poly1305 para autenticación. Es un método de encriptación fuerte, seguro y ampliamente confiable.
+    Sigue las mejores prácticas utilizando XSalsa20-Poly1305, un esquema de encriptación autenticado basado en nonce."
+    Para encriptar tu 'Sobre', combinamos una cadena de tus respuestas con nuestro secreto.
+    Como tus respuestas nunca se almacenan en ningún lugar, cada vez que edites el 'Sobre', primero tendrás que descifrarlo.
+
   make_a_payment: 'Realice un Pago'
   make_a_payment_tip: "Esta función aún no está lista. Por ahora, todos los nuevos clientes se consideran Pagados."
   create_your_pipeline: 'Cree su Pipeline'
@@ -265,7 +287,7 @@ errors:
     pass_recovery_sent: "Si existe una cuenta con ese correo electrónico, se ha enviado un enlace de restablecimiento de contraseña a sus correos electrónicos verificados."
     pass_bad_link: 'Este enlace de restablecimiento de contraseña no es válido o ha caducado.'
     pass_reset: 'Su contraseña ha sido restablecida con éxito.'
-    registration_is_processed: 'Su registro está siendo procesado. Recibirá un correo electrónico de confirmación cuando se complete.'
+    registration_is_processed: "Tu registro está en proceso. Recibirás un correo de confirmación cuando esté completo. Después de verificar tu correo, podrás iniciar sesión."
     envelope_is_processed: 'Su sobre (Envelope) está siendo procesado.'
     envelope_deleted: 'Su sobre (Envelope) ha sido eliminado con éxito.'
     verify_contact: "Verifique al menos un contacto (preferiblemente Telegram o una red social)."

@@ -50,7 +50,7 @@
                 </a>
 
                 <!-- ALERT MESSAGE -->
-                <div class="alert alert-danger p-2 px-3 m-0 d-lg-block d-none">
+                <div class="alert alert-info p-2 px-3 m-0 d-lg-block d-none">
                     <b>{{ 'header.test_mode'|trans }}</b>
                 </div>
 
@@ -72,13 +72,13 @@
                             <li class="nav-item"><a href="{{ path('user_login') }}" class="nav-link"><b>{{ 'header.login'|trans }}</b></a></li>
                             <li class="nav-item"><a href="{{ path('user_registration') }}" class="nav-link"><b>{{ 'header.registration'|trans }}</b></a></li>
                         {% endif %}
-                        <li class="nav-item"><a href="{{ path('about') }}" class="nav-link">{{ 'header.about'|trans }}</a></li>
+                        <li class="nav-item"><a href="{{ path('about') }}" class="nav-link"><b>{{ 'header.about'|trans }}</b></a></li>
 
                         <!-- LANGUAGE SELECTOR -->
                         <li class="nav-item dropdown">
                             <a class="nav-link dropdown-toggle" href="#" id="languageDropdown"
                                data-bs-toggle="dropdown">
-                                {{ 'header.language'|trans }}
+                                <b> {{ 'header.language'|trans }}</b>
                             </a>
                             <ul class="dropdown-menu">
                                 <li><a class="dropdown-item" href="{{ path('change_language', {'lang': 'en'}) }}">English</a>
@@ -94,7 +94,7 @@
             </div>
 
             <!-- ALERT (Mobile Only) -->
-            <div class="alert alert-danger text-center d-lg-none">
+            <div class="alert alert-info text-center d-lg-none">
                 <b>{{ 'header.test_mode'|trans }}</b>
             </div>
         </header>

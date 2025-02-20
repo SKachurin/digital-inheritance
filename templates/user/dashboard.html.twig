@@ -66,6 +66,63 @@
                 border-color: rgba(127, 126, 126, 0.8) transparent transparent;
             }
 
+            details {
+                margin-bottom: 1.5rem;
+                padding: 0.5rem;
+                border: 1px solid #ced4da;
+                border-radius: 6px;
+                background-color: #f1f3f5;
+                box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+                transition: background-color 0.3s ease;
+            }
+
+            details:hover {
+                background-color: #e9ecef;
+            }
+
+            summary {
+                font-weight: bold;
+                cursor: pointer;
+                list-style: none;
+                outline: none !important;
+                padding: 0.5rem;
+                font-size: 1.1em;
+                color: #6c757d;
+                transition: color 0.3s ease;
+            }
+
+            summary:hover {
+                color: #495057;
+            }
+
+            summary::-webkit-details-marker {
+                display: none; /* Hides the default triangle marker #212529 */
+            }
+
+            details[open] summary::before {
+                content: "▼ ";
+                color: #6c757d;
+                font-size: 1.2em;
+                vertical-align: middle;
+                margin-right: 0.2em;
+            }
+
+            details:not([open]) summary::before {
+                content: "■";
+                color: #6c757d;
+                font-size: 1em;
+                /*vertical-align: middle;*/
+                margin-right: 0.2em;
+            }
+
+            details p {
+                padding: 0.5rem 1.2rem;
+                color: #343a40;
+                line-height: 1.6;
+            }
+
+
+
             /* Mobile & Tablet: Adjust header */
             @media (max-width: 991px) { /* Apply only to devices smaller than 992px */
 
@@ -85,6 +142,10 @@
                     font-size: 1.5rem;
                     top: -30px;
                     transform: translateX(-73%);
+                }
+
+                summary {
+                    font-weight: normal;
                 }
             }
 
@@ -121,6 +182,20 @@
 
         <div class="container">
             <h1>{{ 'header.dashboard'|trans }}</h1>
+            <p>{{ 'dashboard.text'|trans|raw }}</p>
+
+            <!-- Introduction Text Spoiler (Default Open) -->
+            <details open>
+                <summary>{{ 'dashboard.introduction_text_spoiler'|trans|raw }}</summary>
+                <p>{{ 'dashboard.introduction_text_1'|trans|raw }}</p>
+            </details>
+
+            <!-- More Security Spoiler (Default Closed) -->
+            <details>
+                <summary>{{ 'dashboard.more_security_spoiler'|trans|raw }}</summary>
+                <p>{{ 'dashboard.more_security_text'|trans|raw }}</p>
+            </details>
+
 
             {#    Vue render    #}
 {#            <div id="app"></div>#}
