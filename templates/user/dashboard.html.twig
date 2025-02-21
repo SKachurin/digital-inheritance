@@ -112,13 +112,17 @@
                 color: #6c757d;
                 font-size: 1em;
                 /*vertical-align: middle;*/
-                margin-right: 0.2em;
+                margin-right: 0.7em;
             }
 
             details p {
                 padding: 0.5rem 1.2rem;
                 color: #343a40;
                 line-height: 1.6;
+            }
+
+            #hey{
+                margin-bottom: 3rem;
             }
 
 
@@ -146,6 +150,9 @@
 
                 summary {
                     font-weight: normal;
+                }
+                #hey{
+                    margin-bottom: 4rem;
                 }
             }
 
@@ -182,7 +189,7 @@
 
         <div class="container">
             <h1>{{ 'header.dashboard'|trans }}</h1>
-            <p>{{ 'dashboard.text'|trans|raw }}</p>
+            <p id="hey">{{ 'dashboard.text'|trans|raw }}</p>
 
             <!-- Introduction Text Spoiler (Default Open) -->
             <details open>

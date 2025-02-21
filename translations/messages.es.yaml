@@ -148,21 +148,21 @@ dashboard:
   introduction_text_spoiler: "Primero lo primero"
   introduction_text_1: |
     Primero lo primero: aclaremos una vez más que todo lo que ingresas en esta aplicación se encripta en el momento en que lo envías, utilizando un protocolo bastante seguro.
-    Esta página te guiará a través de todo el proceso de configuración: simplemente sigue los pasos uno a uno.
+    Esta página te guiará a través de todo el proceso de configuración: simplemente sigue los pasos uno a uno.<br><br>
     Configuraremos y verificaremos tus contactos para que podamos comprobar tu estado de 'última conexión' y enviarte mensajes si no pasas la verificación.
-    Añade y verifica tantos contactos como necesites para tu constructor de Pipeline. Presta especial atención a los contactos de redes sociales, ya que se utilizan para verificar tu estado de 'última conexión' (lo que te ahorra la interacción directa a través de mensajeros). Lo que sea.
+    Añade y verifica tantos contactos como necesites para tu constructor de Pipeline. Presta especial atención a los contactos de redes sociales, ya que se utilizan para verificar tu estado de 'última conexión' (lo que te ahorra la interacción directa a través de mensajeros). Lo que sea.<br>
     También presta atención al texto sobre y debajo de los campos del formulario: hemos tratado de explicar claramente el propósito de cada campo.
-    La lógica básica de este sistema es bastante simple:
-     - Verifica tus contactos.
-     - Añade contactos para tu Heredero (no se requiere verificación para ellos).
-     - Encripta el mensaje.
+    La lógica básica de este sistema es bastante simple:<br>
+     - Verifica tus contactos.<br>
+     - Añade contactos para tu Heredero (no se requiere verificación para ellos).<br>
+     - Encripta el mensaje.<br>
      - Elige cómo verificamos tu estado (Pipeline).
 
   more_security_spoiler: "Más Sobre Seguridad"
   more_security_text: |
-    Excepto tu primera dirección de correo electrónico. Entonces, si nuestros datos se ‘filtraran’ (lo cual es muy poco probable), lo único que obtendrían sería tu primera dirección de correo electrónico.
+    Excepto tu primera dirección de correo electrónico. Entonces, si nuestros datos se ‘filtraran’ (lo cual es muy poco probable), lo único que obtendrían sería tu primera dirección de correo electrónico.<br>
     "La implementación actual utiliza Secretbox de Sodium con XSalsa20 para encriptación y Poly1305 para autenticación. Es un método de encriptación fuerte, seguro y ampliamente confiable.
-    Sigue las mejores prácticas utilizando XSalsa20-Poly1305, un esquema de encriptación autenticado basado en nonce."
+    Sigue las mejores prácticas utilizando XSalsa20-Poly1305, un esquema de encriptación autenticado basado en nonce."<br><br>
     Para encriptar tu 'Sobre', combinamos una cadena de tus respuestas con nuestro secreto.
     Como tus respuestas nunca se almacenan en ningún lugar, cada vez que edites el 'Sobre', primero tendrás que descifrarlo.
 
