@@ -112,3 +112,8 @@ Whether you are deeply invested in digital currencies or simply want to secure p
 
 Join our “The Digital Heir” project today and gain peace of mind knowing your digital assets and vital information are securely stored, confidentially protected, and ready to be passed on to the people you trust—only if and when they truly need it.
 
+## License
+This project is licensed under the Creative Commons Attribution-NonCommercial 4.0 International License (CC BY-NC 4.0).  
+You are free to view, copy, and adapt the code for non-commercial purposes, but you **may not use it commercially**.
+
+For more details, please see the [LICENSE](./LICENSE) file.
