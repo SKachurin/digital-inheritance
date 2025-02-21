@@ -381,7 +381,7 @@
     /* Style for the floating language selector */
     .language-widget {
         float: right;
-        z-index: 1050; /* Ensures it appears above other elements */
+        z-index: 105; /* Ensures it appears above other elements */
         padding: 0.5rem;
         right: 7rem;
         bottom: 4rem;
@@ -397,6 +397,16 @@
     }
     .dropdown-menu img {
         margin-bottom: 1rem;
+    }
+
+    #login_remember_me{
+        width: 3em;
+    }
+    .checkbox-inline.checkbox-switch.form-check-label{
+        margin-left: 1rem;
+    }
+    #login_Submit{
+        margin-top: 2rem;
     }
 
 @media (max-width: 768px) { /* For mobile */
@@ -453,7 +463,7 @@
         }
 
         button, .btn {
-            font-size: 1.6rem !important; /* Larger text */
+            font-size: 1.9rem !important; /* Larger text */
             padding: 18px 24px !important; /* More padding */
             min-width: 180px; /* Bigger tap area */
             min-height: 64px; /* Better accessibility */
@@ -471,7 +481,7 @@
             text-align: center;
             margin-left: auto !important;
             margin-right: auto !important;
-            font-size: 1.5rem;
+            font-size: 1.7rem;
         }
 
         /* Show hamburger menu */
@@ -503,6 +513,7 @@
             padding-top: 60px;
             transition: right 0.3s ease-in-out;
             z-index: 1000;
+            font-size: 1.8rem;
         }
 
         .navbar-menu.show {
@@ -516,11 +527,11 @@
         }
 
         .navbar-nav .nav-item {
-            padding: 10px 0;
+            padding: 20px 0;
         }
 
         ul.navbar-nav {
-            margin-top: 8rem !important;
+            margin-top: 12rem !important;
         }
 
         /* Default button styling */
@@ -599,6 +610,8 @@
 
         a.dropdown-item{
             font-size: 1.8em !important;
+            padding: 20px 0;
+
         }
 
         #langDropdown{
@@ -609,9 +622,9 @@
         /* Style for the floating language selector */
         .language-widget {
             float: right;
-            z-index: 1050; /* Ensures it appears above other elements */
+            z-index: 105; /* Ensures it appears above other elements */
             padding: 0.5rem;
-            bottom: 7.5rem;
+            bottom: 8rem;
             right: 5.5rem;
 
         }
@@ -649,6 +662,33 @@
              word-break: break-word;
              text-align: center;
          }
+
+        .form-check.form-check-inline.form-switch {
+            margin-top: 3rem;
+        }
+
+        #login_remember_me{
+            width: 5em;
+        }
+        .checkbox-inline.checkbox-switch.form-check-label{
+            margin-left: 3rem;
+        }
+        #login_Submit{
+            margin-top: 4rem;
+        }
+        .mb-3 {
+            margin-bottom: 3rem !important;
+        }
+
+        input[type="text"],
+        input[type="email"],
+        input[type="password"],
+        input[type="number"],
+        textarea,
+        select {
+            font-size: 2rem !important;  /* Adjust the size as needed */
+            padding: 10px;
+        }
 
     }
 
