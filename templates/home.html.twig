@@ -52,6 +52,23 @@
             padding: 20px;
         }
 
+        .button-container {
+            text-align: center;
+            margin-top: 2rem;
+        }
+
+        .button-container .btn {
+            font-size: 1.2rem;
+            padding: 10px 20px;
+            border-radius: 8px;
+            transition: background-color 0.3s ease, color 0.3s ease;
+        }
+
+        .button-container .btn:hover {
+            background-color: #343a40;
+            color: #fff;
+        }
+
 
         @media (max-width: 991px) {
             .banner-container {
@@ -99,6 +116,19 @@
         <img src="/images/up.svg" alt="Decorative divider" class="divider">
         <div class="content-box"> <p>{{ 'home_page.first_text'|trans }}</p></div>
         <img src="/images/down.svg" alt="Decorative divider" class="divider">
+
+
+        <div class="button-container">
+            {% if app.user %}
+                <a href="{{ path('about') }}" class="btn btn-outline-dark btn-floating m-4 mt-4">
+                    <i class="">{{ 'home_page.learn_more'|trans }}</i>
+                </a>
+            {% else %}
+                <a href="{{ path('user_registration') }}" class="btn btn-outline-dark btn-floating m-4 mt-4">
+                    <i class="">{{ 'home_page.register'|trans }}</i>
+                </a>
+            {% endif %}
+        </div>
 
     </div>
 
