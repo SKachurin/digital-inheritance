@@ -104,6 +104,12 @@ class Customer implements UserInterface, PasswordAuthenticatedUserInterface
      */
     #[ORM\OneToMany(targetEntity: Contact::class, mappedBy: 'customer', cascade: ['remove'])]
     private Collection $contacts;
+//
+//    #[ORM\Column(type: 'string', length: 32, nullable: true)]
+//    private ?string $referralId = null;
+//
+//    #[ORM\Column(type: 'string', length: 32, nullable: true)]
+//    private ?string $invitedBy = null;
 
     public function __construct()
     {
@@ -435,6 +441,28 @@ class Customer implements UserInterface, PasswordAuthenticatedUserInterface
     {
         return $this->contacts;
     }
+//
+//    public function getReferralId(): ?string
+//    {
+//        return $this->referralId;
+//    }
+//
+//    public function setReferralId(?string $referralId): self
+//    {
+//        $this->referralId = $referralId;
+//        return $this;
+//    }
+//
+//    public function getInvitedBy(): ?string
+//    {
+//        return $this->invitedBy;
+//    }
+//
+//    public function setInvitedBy(?string $invitedBy): self
+//    {
+//        $this->invitedBy = $invitedBy;
+//        return $this;
+//    }
 
 
 

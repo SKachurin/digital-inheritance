@@ -19,6 +19,7 @@ header:
   here_is_your_data: 'Aquí están tus datos'
   save_it: 'Guárdalos ahora o podrás intentar descifrarlos más tarde.'
   link_will_expire: 'El enlace a esta página expirará en una semana.'
+  contact_us: 'Contáctanos'
 
 form:
   attr:
@@ -313,6 +314,23 @@ home_page:
 
   learn_more: 'Más información'
   register: 'Empieza ahora'
+
+contact_page:
+  title: 'Contáctanos'
+  info_1_title: "¿Tienes una idea?"
+  info_1_text: |
+    Estamos buscando constantemente maneras de mejorar "The Digital Heir" para servirte mejor. 
+    Si tienes una idea brillante para hacer que nuestro servicio sea aún más útil o fácil de usar, ¡queremos escucharla! 
+    No dudes en compartirla — tus comentarios pueden dar forma al futuro de la herencia digital.
+  info_2_title: "¿Encontraste un error o fallo?"
+  info_2_text: |
+    ¡Ups! Si encontraste algún error o fallo al usar la plataforma, ¡estamos en ello! 
+    Ayúdanos a hacer que "The Digital Heir" sea más fluido y confiable informándonos sobre lo que salió mal. 
+    Tu opinión es invaluable para garantizar un funcionamiento sin problemas.
+  info_3_title: "¿Comentarios sobre la redacción o traducciones?"
+  info_3_text: |
+    ¡Tus palabras importan! Especialmente si estás navegando en español y algo te parece confuso o incorrecto, nos encantaría tu ayuda. 
+    Nuestro objetivo es comunicar con claridad en todos los idiomas. Si notas frases incómodas o formas mejores de expresarse, ¡no te lo guardes, compártelo con nosotros!
 
 about_page:
   title: 'Acerca de “El Heredero Digital”'

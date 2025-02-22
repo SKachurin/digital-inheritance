@@ -37,7 +37,7 @@
 {% block body %}
     <div class="d-flex bg-gray flex-column min-vh-100">
         <header class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
-            <div class="container-fluid d-flex justify-content-center align-items-center">
+            <div class="container-fluid d-flex align-items-center justify-content-center justify-content-md-between">
 
                 <!-- LOGO & TITLE -->
                 <a href="{{ path('home') }}" class="d-flex align-items-center text-dark text-decoration-none">
@@ -49,15 +49,8 @@
                     </div>
                 </a>
 
-                <!-- ALERT MESSAGE -->
-                <div class="alert alert-info p-2 px-3 m-0 d-lg-block d-none">
-                    <b>{{ 'header.test_mode'|trans }}</b>
-                </div>
 
                 <!-- NAV TOGGLER (MOBILE) -->
-{#                <button class="navbar-toggler" id="menuToggle">#}
-{#                    <span class="navbar-toggler-icon"></span>#}
-{#                </button>#}
                 <button class="navbar-toggler" id="menuToggle">
                     <div class="hamburger-icon"></div>
                 </button>
@@ -73,6 +66,7 @@
                             <li class="nav-item"><a href="{{ path('user_registration') }}" class="nav-link"><b>{{ 'header.registration'|trans }}</b></a></li>
                         {% endif %}
                         <li class="nav-item"><a href="{{ path('about') }}" class="nav-link"><b>{{ 'header.about'|trans }}</b></a></li>
+                        <li class="nav-item"><a href="{{ path('contact_us') }}" class="nav-link"><b>{{ 'header.contact_us'|trans }}</b></a></li>
 
                         <!-- LANGUAGE SELECTOR -->
                         <li class="nav-item dropdown">
@@ -92,15 +86,25 @@
                     </ul>
                 </nav>
             </div>
-
-            <!-- ALERT (Mobile Only) -->
-            <div class="alert alert-info text-center d-lg-none">
-                <b>{{ 'header.test_mode'|trans }}</b>
-            </div>
         </header>
 
+        {% if app.request.attributes.get('_route') != 'home' %}
+            <!-- ALERT (Mobile Only) -->
+            <div class="alert-container header-mobile text-center">
+                <div class="alert alert-info text-center d-lg-none">
+                    <b>{{ 'header.test_mode'|trans }}</b>
+                </div>
+            </div>
+
+            <!-- ALERT MESSAGE BELOW HEADER -->
+            <div class="alert-container header text-center">
+                <div class="alert alert-info p-2 px-3 m-0 d-lg-block d-none">
+                    <b>{{ 'header.test_mode'|trans }}</b>
+                </div>
+            </div>
+        {% endif %}
+
         <main class="flex-fill">
-            lang="{{ app.request.locale }}"
             {% block content %}{% endblock %}
         </main>
 
@@ -109,21 +113,17 @@
             <div class="container p-4 pb-0">
                 <!-- Section: Social media -->
                 <section class="mb-4">
-                    <!-- Facebook -->
-{#                    <a class="btn btn-outline-light btn-floating m-1" href="#!" role="button" target="_blank">#}
-{#                        <i class="fab fa-facebook-f"></i>#}
-{#                    </a>#}
                     <!-- Twitter -->
 {#                    <a class="btn btn-outline-light btn-floating m-1" href="#!" role="button" target="_blank"><i class="fab fa-twitter"></i></a>#}
                     <!-- Google -->
-{#                    <a class="btn btn-outline-light btn-floating m-1" href="#!" role="button" target="_blank"><i class="fab fa-google"></i></a>#}
+                    <a class="btn btn-outline-light btn-floating m-1" href="https://t.me/TheDigitalHeir_com" role="button" target="_blank">
+                        <i class="fab fa-telegram"></i>
+                    </a>
                     <!-- Linkedin -->
-{#                    <a class="btn btn-outline-light btn-floating m-1" href="https://www.linkedin.com/in/sergei-kachurin-04789a76/" role="button" target="_blank">#}
-{#                        <i class="fab fa-linkedin-in"></i>#}
- {#                    </a>#}
+{#                    <a class="btn btn-outline-light btn-floating m-1" href="https://www.linkedin.com/in/sergei-kachurin-04789a76/" role="button" target="_blank"><i class="fab fa-linkedin-in"></i></a>#}
 
                     <!-- Instagram -->
-                    <a class="btn btn-outline-light btn-floating m-1" href="#!" role="button" target="_blank"><i class="fab fa-instagram"></i></a>
+{#                    <a class="btn btn-outline-light btn-floating m-1" href="#!" role="button" target="_blank"><i class="fab fa-instagram"></i></a>#}
 
                     <!-- Github -->
                     <a class="btn btn-outline-light btn-floating m-1" href="https://github.com/SKachurin/digital-inheritance" role="button" target="_blank">
@@ -185,6 +185,16 @@
         margin: 0 auto;
     }
 
+    header .container-fluid {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        max-width: 1200px;  /* Same width as your main container */
+        margin: 0 auto;
+        padding: 0 1rem;   /* Adjust padding for spacing */
+        width: 100%;
+    }
+
     .nav {
         font-size: 0.9rem; /* Reduce size */
         padding: 0.5rem 0;
@@ -203,7 +213,7 @@
         font-size: 0.85rem;
         padding: 0.3rem 0.8rem;
         max-width: 80%;
-        margin-left: 5em !important;
+        margin-left: 10em !important;
     }
 
     footer {
@@ -320,6 +330,8 @@
         margin-top: 1.8rem !important;  /* Reduce top margin */
         padding-top: 1.8rem !important; /* Ensure consistent spacing */
         font-size: 1.7rem !important;
+        font-family: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace !important;
+
     }
 
     h4{
@@ -409,12 +421,43 @@
         margin-top: 2rem;
     }
 
-@media (max-width: 768px) { /* For mobile */
+    .alert-container.header {
+        position: absolute;
+        top: 6.5rem;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 80%;
+        z-index: 999; /* Ensures it's above other elements */
+    }
+
+    @media (max-width: 768px) { /* For mobile */
     /**/
+    }
+
+    @media (min-width: 992px) {
+        .navbar .container-fluid {
+            justify-content: space-between !important;
+        }
     }
 
     /* Mobile & Tablet: Adjust header */
     @media (max-width: 991px) { /* Apply only to devices smaller than 992px */
+
+        header {
+            height: 15rem !important;
+        }
+
+        .alert-container.header-mobile {
+            position: absolute !important;
+            top: 15rem !important;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+        }
+
+        .navbar .container-fluid {
+            justify-content: center !important;
+        }
 
         body {
             font-size: 2.5rem !important;
@@ -445,7 +488,7 @@
         }
 
         h1, h2{
-            margin-top: 5rem !important;  /* Reduce top margin */
+            margin-top: 6rem !important;  /* Reduce top margin */
             padding-top: 5rem !important; /* Ensure consistent spacing */
             font-size: 3.5rem !important;
         }

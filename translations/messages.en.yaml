@@ -19,6 +19,7 @@ header:
   here_is_your_data: 'Here is your Data'
   save_it: 'Please save it now or you can attempt to decrypt it later again'
   link_will_expire: 'Link to this page will expire in one week.'
+  contact_us: 'Contact Us'
 
 form:
   attr:
@@ -313,6 +314,22 @@ home_page:
     
   learn_more: "Learn more"
   register: 'Start now'
+
+contact_page:
+  title: 'Contact Us'
+  info_1_title: "Got an Idea?"
+  info_1_text: |
+    We’re constantly looking to improve "The Digital Heir" to better serve you. If you’ve got a brilliant idea to make our service even more useful or user-friendly, we want to hear it!
+    Don’t hesitate—your feedback can shape the future of digital inheritance.
+  info_2_title: "Spotted a Bug or Error?"
+  info_2_text: |
+    Oops! If you’ve encountered any bugs or errors while using the platform, we’re on it!
+    Help us make "The Digital Heir" smoother and more reliable by letting us know what went wrong. 
+    Your input is invaluable in making sure everything runs seamlessly.
+  info_3_title: "Feedback on Wording or Translations?"
+  info_3_text: |
+    Your words matter! Especially if you’re browsing in Spanish, and something feels off or unclear, we’d love your help.
+    Our goal is to communicate clearly in every language. If you notice awkward phrases or better ways to say things, don’t keep it to yourself—share it with us!
 
 about_page:
   title: 'About “The Digital Heir”'
