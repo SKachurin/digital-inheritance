@@ -306,7 +306,7 @@ messages:
 
 home_page:
   title: 'Introducing “The Digital Heir"'
-  description: 'New and secure digital inheritance service.'
+  description: 'A new and secure way to leave digital assets as an inheritance.'
   first_text: |
     Do you have any form of insurance? Think of this service as a way to ensure your digital assets end up in the right hands if something happens to you.
     Yes, it takes a bit of effort to set up and costs only a few dollars per month, but once everything is in place, we’ll continuously monitor your “last login” on the platforms you choose. If your inactivity exceeds the threshold you set, we’ll send a confirmation message to check in on you.
@@ -321,9 +321,9 @@ contact_page:
   info_1_text: |
     We’re constantly looking to improve "The Digital Heir" to better serve you. If you’ve got a brilliant idea to make our service even more useful or user-friendly, we want to hear it!
     Don’t hesitate—your feedback can shape the future of digital inheritance.
-  info_2_title: "Spotted a Bug or Error?"
+  info_2_title: "Spotted a Bug or an Error?"
   info_2_text: |
-    Oops! If you’ve encountered any bugs or errors while using the platform, we’re on it!
+    Oops! If you’ve encountered any bugs or an errors while using the platform, we’re on it!
     Help us make "The Digital Heir" smoother and more reliable by letting us know what went wrong. 
     Your input is invaluable in making sure everything runs seamlessly.
   info_3_title: "Feedback on Wording or Translations?"

@@ -10,7 +10,7 @@ header:
   language: 'EN | ESP | RU'
   new_heir_explain: 'Por favor, facilite la mayor cantidad de información posible sobre su heredero: esto nos ayudará a contactarlo en caso de que ocurran los eventos que describa en la sección del Pipeline.'
   new_heir_explain_1: "Sea especialmente preciso con los datos de contacto (como teléfono o correo electrónico), ya que no se verificarán en este momento."
-  test_mode: 'Para probar el servicio, usa tu contacto como Heredero.'
+  test_mode: 'Para probar el servicio, usa tus propios datos de contacto como los de tu Heredero.'
   access_denied: 'Acceso denegado'
   access_denied_text: 'No tienes acceso a este sobre seguro o el enlace ha expirado.'
   envelope_from: 'Este sobre fue creado por '
@@ -306,7 +306,7 @@ messages:
 
 home_page:
   title: 'Presentamos “El Heredero Digital”'
-  description: 'Nuevo y seguro servicio de herencia digital.'
+  description: 'Una nueva y segura manera de legar activos digitales.'
   first_text: |
     ¿Tienes algún tipo de seguro? Piensa en este servicio como una forma de asegurarte de que tus activos digitales lleguen a las manos adecuadas si algo te sucede.
     Sí, configurarlo requiere un poco de esfuerzo y cuesta solo unos pocos dólares al mes, pero una vez que todo esté en su lugar, monitorearemos continuamente tu "último inicio de sesión" en las plataformas que elijas. Si tu inactividad supera el umbral que has establecido, te enviaremos un mensaje de confirmación para verificar cómo estás.
@@ -322,14 +322,14 @@ contact_page:
     Estamos buscando constantemente maneras de mejorar "The Digital Heir" para servirte mejor. 
     Si tienes una idea brillante para hacer que nuestro servicio sea aún más útil o fácil de usar, ¡queremos escucharla! 
     No dudes en compartirla — tus comentarios pueden dar forma al futuro de la herencia digital.
-  info_2_title: "¿Encontraste un error o fallo?"
+  info_2_title: "¿Encontraste un bug o un error?"
   info_2_text: |
     ¡Ups! Si encontraste algún error o fallo al usar la plataforma, ¡estamos en ello! 
     Ayúdanos a hacer que "The Digital Heir" sea más fluido y confiable informándonos sobre lo que salió mal. 
     Tu opinión es invaluable para garantizar un funcionamiento sin problemas.
   info_3_title: "¿Comentarios sobre la redacción o traducciones?"
   info_3_text: |
-    ¡Tus palabras importan! Especialmente si estás navegando en español y algo te parece confuso o incorrecto, nos encantaría tu ayuda. 
+    ¡Tus palabras importan! Especialmente si estás navegando y algo te parece confuso o incorrecto, nos encantaría tu ayuda. 
     Nuestro objetivo es comunicar con claridad en todos los idiomas. Si notas frases incómodas o formas mejores de expresarse, ¡no te lo guardes, compártelo con nosotros!
 
 about_page:
