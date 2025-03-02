@@ -43,7 +43,7 @@ class PipelineCreateType extends AbstractType
 
             ->add('submit', SubmitType::class, [
                 'label' => 'form.label.pipeline_save',
-                'attr' => ['class' => 'btn btn-primary'],
+                'attr' => ['class' => 'btn btn-outline-dark'],
             ]);
     }
 

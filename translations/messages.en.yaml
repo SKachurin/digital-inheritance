@@ -311,9 +311,56 @@ home_page:
     Do you have any form of insurance? Think of this service as a way to ensure your digital assets end up in the right hands if something happens to you.
     Yes, it takes a bit of effort to set up and costs only a few dollars per month, but once everything is in place, we’ll continuously monitor your “last login” on the platforms you choose. If your inactivity exceeds the threshold you set, we’ll send a confirmation message to check in on you.
     If there’s still no response, your digital assets will be securely passed on to the contacts you designated.
-    
   learn_more: "Learn more"
   register: 'Start now'
+  text_title: 'Secure Your Legacy'
+  info_1_text: 'At The Digital Heir, we urge you to secure access to your digital assets—so your loved ones can access them when you’re no longer online. It’s as easy as one, two, three—login, encrypt your credentials, instructions, or even a heartfelt letter, and add your heir’s contacts.'
+  info_2_text: 'You have full control: decide how we monitor your activity, where and when you receive check-in messages, and the specific scenarios that trigger the release of your data to your heir. This way, your crypto wallets, exchange accounts, and offshore savings won’t vanish into the void, leaving no one to claim them.'
+  info_3_text: |
+    After all, as Mikhail Bulgakov wrote in The Master and Margarita, “Manuscripts don’t burn.”
+    </br> Neither should your legacy.
+
+faq:
+  title: 'FAQ'
+  q1: 'What exactly is The Digital Heir Service, and how does it work?'
+  a1: |
+    The Digital Heir is a platform that safeguards your important digital information—such as login credentials, crypto wallet keys, or other sensitive data—in a secure, encrypted “note.” We periodically check your activity (via social media logins, WhatsApp, email, or whatever you configure). If you remain inactive past a certain threshold and don’t respond to our confirmation messages, we release a secure link to your designated heir. They can only unlock your information by correctly answering your secret questions.
+
+  q2: 'Is my data safe? How do you ensure the security of my information?'
+  a2: |
+    Yes. All your data—along with the security questions and your heir’s contact details—is encrypted before it’s stored. We use robust encryption methods (XSalsa20-Poly1305) that require correct secret answers to decrypt your note. We never save your security answers themselves; they exist only in your memory. Once encrypted, your sensitive details remain locked until someone provides the correct answers.
+
+  q3: 'Do I need to provide legal documents like a death certificate?'
+  a3: |
+    No. Our service is entirely independent of local or national laws regarding inheritance. We verify your well-being through automated checks—if you don’t respond for a set period, the note is released to your heir. There’s no need for a death certificate or other legal paperwork.
+
+  q4: 'How do you monitor if I’m still active, and what triggers the release of my data?'
+  a4: |
+    You define a “Pipeline” of actions in your account settings—this can include checking your “last seen” status on social media or sending you messages via email, WhatsApp, or SMS. If you fail to respond to these checks within the time intervals you choose, the system escalates through the next steps. Once all attempts fail, we assume you’re no longer available, and we send a link to your heir so they can try to decrypt your note.
+
+  q5: 'Do I have to tell my heir in advance, or do they need an account?'
+  a5: |
+    No. You can add your heir’s contact details (email, phone, etc.) without informing them. They don’t need to sign up or do anything unless the system determines it’s time to release your note. At that point, they’ll receive instructions on how to decrypt it—by answering your custom security questions.
+
+  q6: 'What if my heir doesn’t know the correct answers to the security questions?'
+  a6: |
+    If your heir can’t provide the exact answers, the note stays locked. We allow limited attempts—if none are successful, the data remains inaccessible. This design prevents unauthorized access and ensures only someone who truly knows your shared secrets can unlock your note.
+
+  q7: 'How much does it cost, and what if I stop paying?'
+  a7: |
+    There is a small monthly fee (a few dollars per month) for continuous coverage. Think of it like an insurance policy for your digital assets. If you stop paying, your Pipeline will eventually be disabled after a grace period, and your secure envelope won’t be released to anyone.
+
+  q8: 'Can I store multiple notes or large amounts of data?'
+  a8: |
+    Currently, each account is limited to one secure note (“envelope”). That note can contain up to 5,000 characters of text, which you can use to include any credentials, instructions, or messages you wish. If you want multiple notes, you’d need to register additional accounts.
+
+  q9: 'What if I forget my security answers or lose my main password?'
+  a9: |
+    Your main password is just for logging into the service; losing it doesn’t automatically compromise your encrypted data. However, if you forget your security question answers, no one—including us—can ever decrypt your note, because we don’t store those answers anywhere. Always keep them safely in mind (or in a secure place).
+
+  q10: 'Can I update my note, my heir’s details, or the Pipeline once it’s set up?'
+  a10: |
+    Absolutely. You can log into your dashboard at any time to edit your secure envelope (decrypt it first by providing your secret answers), change your heir’s contact information, or modify the Pipeline’s escalation steps. Any changes require you to re-encrypt your data, so remember your answers when updating.
 
 contact_page:
   title: 'Contact Us'

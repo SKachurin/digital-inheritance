@@ -85,7 +85,7 @@ class NoteEditType1 extends AbstractType
         $builder
             ->add('submit', SubmitType::class, [
                 'label' => 'form.label.edit_envelope',
-                'attr' => ['class' => 'btn btn-primary'],
+                'attr' => ['class' => 'btn btn-outline-dark'],
             ]);
         ;
     }

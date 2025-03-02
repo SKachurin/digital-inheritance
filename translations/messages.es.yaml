@@ -314,6 +314,81 @@ home_page:
 
   learn_more: 'Más información'
   register: 'Empieza ahora'
+  text_title: 'Asegura tu legado'
+  info_1_text: 'En The Digital Heir, te instamos a que asegures el acceso a tus activos digitales — para que tus seres queridos puedan acceder a ellos cuando ya no estés en línea. Es tan fácil como uno, dos, tres — inicia sesión, encripta tus credenciales, instrucciones o incluso una carta emotiva, y agrega los contactos de tus herederos.'
+  info_2_text: 'Tienes control total: decide cómo monitoreamos tu actividad, cuándo y dónde recibes mensajes de verificación, y los escenarios específicos que desencadenan la entrega de tus datos a tu heredero. De esta manera, tus billeteras de criptomonedas, cuentas de intercambio y ahorros offshore no desaparecerán en el vacío, dejando a nadie para reclamarlos.'
+  info_3_text: |
+    Después de todo, como escribió Mijaíl Bulgákov en El Maestro y Margarita, “Los manuscritos no arden.”
+    </br>Tampoco debería hacerlo tu legado."
+
+faq:
+  title: 'Preguntas Frecuentes (FAQ)'
+  q1: '¿Qué es exactamente The Digital Heir Service y cómo funciona?'
+  a1: >
+    The Digital Heir es una plataforma que protege tu información digital importante—por ejemplo, 
+    credenciales de inicio de sesión, llaves de criptomonedas u otros datos sensibles—en una “nota” segura y cifrada. 
+    Verificamos periódicamente tu actividad (ya sea a través de redes sociales, WhatsApp, correo electrónico 
+    o cualquier canal que configures). Si permaneces inactivo más allá del límite establecido y no respondes 
+    a nuestros mensajes de confirmación, liberamos un enlace seguro para tu heredero designado. 
+    Solo podrá desbloquear tu información respondiendo correctamente a tus preguntas secretas.
+
+  q2: '¿Están seguros mis datos? ¿Cómo garantizan la protección de mi información?'
+  a2: >
+    Sí. Todos tus datos—incluyendo tus preguntas secretas y los datos de contacto de tu heredero—se cifran antes de almacenarlos. 
+    Utilizamos métodos de cifrado robustos (XSalsa20-Poly1305) que exigen las respuestas correctas a las preguntas secretas 
+    para poder descifrar tu nota. Nunca guardamos tus respuestas en texto plano; solo existen en tu memoria. 
+    Una vez cifrados, tus datos confidenciales permanecen bloqueados hasta que alguien proporcione las respuestas correctas.
+
+  q3: '¿Necesito presentar documentos legales, como un certificado de defunción?'
+  a3: >
+    No. Nuestro servicio es completamente independiente de las leyes locales o nacionales sobre herencias. 
+    Verificamos tu estado mediante comprobaciones automáticas: si no respondes durante el período establecido, 
+    tu nota se envía a tu heredero. No se requiere certificado de defunción ni ningún otro trámite legal.
+
+  q4: '¿Cómo supervisan si sigo activo y qué desencadena la liberación de mis datos?'
+  a4: >
+    Tú defines un “Pipeline” de acciones en la configuración de tu cuenta: puede incluir la verificación 
+    de tu «última vez en línea» en redes sociales o el envío de mensajes por correo electrónico, WhatsApp o SMS. 
+    Si no respondes a estas comprobaciones en el plazo que determines, el sistema pasa a los siguientes pasos. 
+    Una vez que se agotan todas las opciones, asumimos que ya no estás disponible y enviamos un enlace a tu heredero 
+    para que intente descifrar tu nota.
+
+  q5: '¿Tengo que avisar a mi heredero con antelación o necesita una cuenta?'
+  a5: >
+    No. Puedes añadir los datos de tu heredero (correo electrónico, teléfono, etc.) sin notificarle previamente. 
+    No necesita registrarse ni hacer nada hasta que el sistema decida que es hora de liberar la nota. 
+    En ese momento, recibirá instrucciones para descifrarla, mediante la respuesta correcta a tus preguntas secretas.
+
+  q6: '¿Qué ocurre si mi heredero no conoce las respuestas correctas a las preguntas secretas?'
+  a6: >
+    Si tu heredero no puede proporcionar las respuestas exactas, la nota permanece cifrada. 
+    Permitimos un número limitado de intentos, pero si ninguno es exitoso, los datos seguirán siendo inaccesibles. 
+    Esto previene el acceso no autorizado y garantiza que solo quien realmente conozca tus secretos pueda desbloquear la nota.
+
+  q7: '¿Cuánto cuesta y qué pasa si dejo de pagar?'
+  a7: >
+    Existe una pequeña tarifa mensual (unos pocos dólares) para mantener el servicio activo. 
+    Piénsalo como un seguro para tus activos digitales. Si dejas de pagar, 
+    tu Pipeline se desactivará tras un período de gracia y tu nota cifrada no se liberará a nadie.
+
+  q8: '¿Puedo almacenar varias notas o grandes cantidades de datos?'
+  a8: >
+    Actualmente, cada cuenta está limitada a una sola “nota” cifrada. 
+    Dicha nota puede contener hasta 5000 caracteres de texto, donde puedes incluir credenciales, instrucciones o mensajes. 
+    Si necesitas más notas, tendrás que crear cuentas adicionales.
+
+  q9: '¿Qué sucede si olvido las respuestas a mis preguntas secretas o pierdo mi contraseña principal?'
+  a9: >
+    Tu contraseña principal solo se utiliza para iniciar sesión en el servicio; perderla no expone automáticamente tus datos cifrados. 
+    Sin embargo, si olvidas las respuestas a tus preguntas secretas, nadie—ni siquiera nosotros—podrá descifrar tu nota, 
+    ya que no almacenamos esas respuestas en ningún lugar. Siempre consérvalas de forma segura (en tu memoria o en un sitio protegido).
+
+  q10: '¿Puedo actualizar mi nota, los datos de mi heredero o el Pipeline una vez configurado?'
+  a10: >
+    Por supuesto. En cualquier momento puedes iniciar sesión en tu panel de control para editar tu nota cifrada 
+    (primero tendrás que descifrarla proporcionando las respuestas correctas), cambiar los datos de contacto de tu heredero 
+    o modificar los pasos de tu Pipeline. Cualquier modificación requiere volver a cifrar la información, 
+    así que no olvides tus respuestas.
 
 contact_page:
   title: 'Contáctanos'

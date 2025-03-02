@@ -1,160 +1,160 @@
-{% extends 'base.html.twig' %}
+    {% extends 'base.html.twig' %}
 
-{% block og_title %}{{ 'contact_page.title'|trans }}{% endblock %}
-{% block og_description %}{{ 'contact_page.description'|trans }}{% endblock %}
-{% block og_image %}{{ absolute_url('/banners/TheDigitalHeir_Contact_Us_banner2.png') }}{% endblock %}
+    {% block og_title %}{{ 'contact_page.title'|trans }}{% endblock %}
+    {% block og_description %}{{ 'contact_page.description'|trans }}{% endblock %}
+    {% block og_image %}{{ absolute_url('/banners/TheDigitalHeir_Contact_Us_banner2.png') }}{% endblock %}
 
-{% block content %}
-    <style>
-        /* General Styling */
-        .contact-wrapper {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 7rem 1rem 4rem;
-        }
-
-        h1.contact-title {
-            text-align: center;
-            /*font-family: Georgia, "Times New Roman", Times, serif;*/
-            font-family: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace !important;
-            color: #333;
-            font-size: 2.5rem;
-            margin-bottom: 2rem;
-            margin-top: 0;
-        }
-
-        /* Grid Layout for Desktop */
-        .contact-container {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            grid-template-areas:
-                "text1 image1"
-                "image2 text2"
-                "text3 image3";
-            gap: 2rem;
-        }
-
-        .contact-item {
-            padding: 30px;
-            background: white;
-            border-radius: 10px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-            transition: transform 0.3s;
-        }
-
-        .contact-item:hover {
-            transform: scale(1.02);
-        }
-
-        .contact-item img {
-            width: 100%;
-            height: auto;
-            border-radius: 10px;
-            object-fit: cover;
-        }
-
-        .contact-item p {
-            color: #555;
-        }
-
-        .contact-item h3 {
-            font-family: Georgia, "Times New Roman", Times, serif;
-            color: #333;
-            font-size: 1.8rem !important;
-            margin-bottom: 2rem;
-        }
-
-        /* Layout Adjustments */
-        .text-1 { grid-area: text1; }
-        .image-1 { grid-area: image1; }
-        .image-2 { grid-area: image2; }
-        .text-2 { grid-area: text2; }
-        .text-3 { grid-area: text3; }
-        .image-3 { grid-area: image3; }
-
-        /* Responsive Adjustments */
-        @media (max-width: 991px) {
-            .contact-container {
-                display: flex;
-                flex-direction: column;
-                gap: 2rem;
+    {% block content %}
+        <style>
+            /* General Styling */
+            .contact-wrapper {
+                max-width: 1200px;
+                margin: 0 auto;
+                padding: 7rem 1rem 4rem;
             }
 
             h1.contact-title {
                 text-align: center;
-                font-family: Georgia, "Times New Roman", Times, serif;
+                /*font-family: Georgia, "Times New Roman", Times, serif;*/
+                font-family: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace !important;
                 color: #333;
-                margin-bottom: 4rem;
-                margin-top: 14rem !important;
-                padding-top: 5rem !important;
-                font-size: 3.5rem !important;
+                font-size: 2.5rem;
+                margin-bottom: 2rem;
+                margin-top: 0;
             }
 
-            .contact-item h3 {
-                margin-top: 3rem !important;  /* Reduce top margin */
-                padding-top: 3rem !important; /* Ensure consistent spacing */
-                font-size: 2.9rem !important;
+            /* Grid Layout for Desktop */
+            .contact-container {
+                display: grid;
+                grid-template-columns: repeat(2, 1fr);
+                grid-template-areas:
+                    "text1 image1"
+                    "image2 text2"
+                    "text3 image3";
+                gap: 2rem;
             }
 
             .contact-item {
-                width: 100%;
-                margin-bottom: 2rem;
+                padding: 30px;
+                background: rgba(255, 255, 255, 0.9);
+                border-radius: 10px;
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+                transition: transform 0.3s;
+            }
+
+            .contact-item:hover {
+                transform: scale(1.02);
             }
 
             .contact-item img {
                 width: 100%;
                 height: auto;
                 border-radius: 10px;
+                object-fit: cover;
             }
 
-            /* Mobile Order */
-            .image-1 { order: 1; }
-            .text-1 { order: 2; }
-            .image-2 { order: 3; }
-            .text-2 { order: 4; }
-            .image-3 { order: 5; }
-            .text-3 { order: 6; }
-        }
-    </style>
+            .contact-item p {
+                color: #555;
+            }
 
-    <div class="contact-wrapper">
-        <h1 class="contact-title">{{ 'contact_page.title'|trans }}</h1>
-        <div class="contact-container">
-            <!-- Row 1: Text 1 - Image 1 -->
-            <div class="contact-item text-1">
-                <h3>{{ 'contact_page.info_1_title'|trans }}</h3>
-                <p>{{ 'contact_page.info_1_text'|trans }}</p>
-                <a href="https://t.me/TheDigitalHeir_com" class="btn btn-outline-dark btn-floating m-4 mt-4">
-                    <i class="">{{ 'contact_page.title'|trans }}</i>
-                </a>
-            </div>
-            <div class="contact-item image-1">
-                <img src="{{ absolute_url('/banners/TheDigitalHeir_Contact_Us_banner2.png') }}" alt="Contact Image 1">
-            </div>
+            .contact-item h3 {
+                font-family: Georgia, "Times New Roman", Times, serif;
+                color: #333;
+                font-size: 1.8rem !important;
+                margin-bottom: 2rem;
+            }
 
-            <!-- Row 2: Image 2 - Text 2 -->
-            <div class="contact-item image-2">
-                <img src="{{ absolute_url('/banners/TheDigitalHeir_Contact_Us_banner3.png') }}" alt="Contact Image 2">
-            </div>
-            <div class="contact-item text-2">
-                <h3>{{ 'contact_page.info_2_title'|trans }}</h3>
-                <p>{{ 'contact_page.info_2_text'|trans }}</p>
-                <a href="https://t.me/TheDigitalHeir_com" class="btn btn-outline-dark btn-floating m-4 mt-4">
-                    <i class="">{{ 'contact_page.title'|trans }}</i>
-                </a>
-            </div>
+            /* Layout Adjustments */
+            .text-1 { grid-area: text1; }
+            .image-1 { grid-area: image1; }
+            .image-2 { grid-area: image2; }
+            .text-2 { grid-area: text2; }
+            .text-3 { grid-area: text3; }
+            .image-3 { grid-area: image3; }
 
-            <!-- Row 3: Text 3 - Image 3 -->
-            <div class="contact-item text-3">
-                <h3>{{ 'contact_page.info_3_title'|trans }}</h3>
-                <p>{{ 'contact_page.info_3_text'|trans }}</p>
-                <a href="https://t.me/TheDigitalHeir_com" class="btn btn-outline-dark btn-floating m-4 mt-4">
-                    <i class="">{{ 'contact_page.title'|trans }}</i>
-                </a>
-            </div>
-            <div class="contact-item image-3">
-                <img src="{{ absolute_url('/banners/TheDigitalHeir_Contact_Us_banner1.png') }}" alt="Contact Image 3">
+            /* Responsive Adjustments */
+            @media (max-width: 991px) {
+                .contact-container {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 2rem;
+                }
+
+                h1.contact-title {
+                    text-align: center;
+                    font-family: Georgia, "Times New Roman", Times, serif;
+                    color: #333;
+                    margin-bottom: 4rem;
+                    margin-top: 14rem !important;
+                    padding-top: 5rem !important;
+                    font-size: 3.5rem !important;
+                }
+
+                .contact-item h3 {
+                    margin-top: 3rem !important;  /* Reduce top margin */
+                    padding-top: 3rem !important; /* Ensure consistent spacing */
+                    font-size: 2.9rem !important;
+                }
+
+                .contact-item {
+                    width: 100%;
+                    margin-bottom: 2rem;
+                }
+
+                .contact-item img {
+                    width: 100%;
+                    height: auto;
+                    border-radius: 10px;
+                }
+
+                /* Mobile Order */
+                .image-1 { order: 1; }
+                .text-1 { order: 2; }
+                .image-2 { order: 3; }
+                .text-2 { order: 4; }
+                .image-3 { order: 5; }
+                .text-3 { order: 6; }
+            }
+        </style>
+
+        <div class="contact-wrapper">
+            <h1 class="contact-title">{{ 'contact_page.title'|trans }}</h1>
+            <div class="contact-container">
+                <!-- Row 1: Text 1 - Image 1 -->
+                <div class="contact-item text-1">
+                    <h3>{{ 'contact_page.info_1_title'|trans }}</h3>
+                    <p>{{ 'contact_page.info_1_text'|trans }}</p>
+                    <a href="https://t.me/TheDigitalHeir_com" class="btn btn-outline-dark btn-floating m-4 mt-4 btn-in-text">
+                        <i class="">{{ 'contact_page.title'|trans }}</i>
+                    </a>
+                </div>
+                <div class="contact-item image-1">
+                    <img src="{{ absolute_url('/banners/TheDigitalHeir_Contact_Us_banner1_.png') }}" alt="Contact Image 1">
+                </div>
+
+                <!-- Row 2: Image 2 - Text 2 -->
+                <div class="contact-item image-2">
+                    <img src="{{ absolute_url('/banners/TheDigitalHeir_Contact_Us_banner2_.png') }}" alt="Contact Image 2">
+                </div>
+                <div class="contact-item text-2">
+                    <h3>{{ 'contact_page.info_2_title'|trans }}</h3>
+                    <p>{{ 'contact_page.info_2_text'|trans }}</p>
+                    <a href="https://t.me/TheDigitalHeir_com" class="btn btn-outline-dark btn-floating m-4 mt-4 btn-in-text">
+                        <i class="">{{ 'contact_page.title'|trans }}</i>
+                    </a>
+                </div>
+
+                <!-- Row 3: Text 3 - Image 3 -->
+                <div class="contact-item text-3">
+                    <h3>{{ 'contact_page.info_3_title'|trans }}</h3>
+                    <p>{{ 'contact_page.info_3_text'|trans }}</p>
+                    <a href="https://t.me/TheDigitalHeir_com" class="btn btn-outline-dark btn-floating m-4 mt-4 btn-in-text">
+                        <i class="">{{ 'contact_page.title'|trans }}</i>
+                    </a>
+                </div>
+                <div class="contact-item image-3">
+                    <img src="{{ absolute_url('/banners/TheDigitalHeir_Contact_Us_banner3_.png') }}" alt="Contact Image 3">
+                </div>
             </div>
         </div>
-    </div>
-{% endblock %}
+    {% endblock %}

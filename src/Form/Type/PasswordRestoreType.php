@@ -35,7 +35,7 @@ class PasswordRestoreType extends AbstractType
 
             ->add('Submit', SubmitType::class, [
                 'label'    => 'form.label.send',
-                'attr' => ['class' => 'btn btn-primary'],
+                'attr' => ['class' => 'btn btn-outline-dark'],
             ]);
         ;
     }

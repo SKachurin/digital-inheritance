@@ -77,7 +77,7 @@ class BeneficiaryDecryptType extends AbstractType
 
             ->add('submit', SubmitType::class, [
                 'label' => 'form.label.try_decrypt',
-                'attr' => ['class' => 'btn btn-primary'],
+                'attr' => ['class' => 'btn btn-outline-dark'],
             ]);
     }
 

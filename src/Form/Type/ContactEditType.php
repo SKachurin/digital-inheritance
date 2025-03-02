@@ -102,7 +102,7 @@ class ContactEditType extends AbstractType
             ])
             ->add('submit', SubmitType::class, [
                 'label' => 'updateContact',
-                'attr' => ['class' => 'btn btn-primary'],
+                'attr' => ['class' => 'btn btn-outline-dark'],
             ]);
         if (!$isVerified) { // Show only if not verified
             $builder->add('resend_verification', SubmitType::class, [

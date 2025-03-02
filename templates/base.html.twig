@@ -35,12 +35,14 @@
 
 <body>
 {% block body %}
-    <div class="d-flex bg-gray flex-column min-vh-100">
-        <header class="navbar navbar-expand-lg navbar-light bg-light fixed-top">
+{#    <div class="d-flex bg-gray flex-column min-vh-100">#}
+    <div class="d-flex flex-column min-vh-100">
+{#        <header class="navbar navbar-expand-lg navbar-light bg-light fixed-top">#}
+        <header class="navbar navbar-expand-lg navbar-light fixed-top">
             <div class="container-fluid d-flex align-items-center justify-content-center justify-content-md-between">
 
                 <!-- LOGO & TITLE -->
-                <a href="{{ path('home') }}" class="d-flex align-items-center text-dark text-decoration-none">
+                <a href="{{ path('home') }}" id="logo" class="d-flex align-items-center text-dark text-decoration-none">
 
                 <img src="{{ absolute_url('/build/logo-TheDigitalHeir-192x192.png') }}" alt="Logo" width="60" height="60" class="me-2">
                     <div class="d-flex flex-column">
@@ -70,18 +72,31 @@
 
                         <!-- LANGUAGE SELECTOR -->
                         <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="languageDropdown"
-                               data-bs-toggle="dropdown">
-                                <b> {{ 'header.language'|trans }}</b>
-                            </a>
-                            <ul class="dropdown-menu">
-                                <li><a class="dropdown-item" href="{{ path('change_language', {'lang': 'en'}) }}">English</a>
-                                </li>
-                                <li><a class="dropdown-item" href="{{ path('change_language', {'lang': 'ru'}) }}">Русский</a>
-                                </li>
-                                <li><a class="dropdown-item" href="{{ path('change_language', {'lang': 'es'}) }}">Español</a>
-                                </li>
-                            </ul>
+                            <div class="dropdown dropup language-widget-top">
+                                <button class="btn btn-outline-light dropdown-toggle" type="button" id="langDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <img src="{{ asset('images/' ~ app.request.locale ~ '.png') }}" alt="{{ app.request.locale }}" width="30" height="20">
+                                </button>
+                                <ul class="dropdown-menu" aria-labelledby="langDropdown">
+                                    <li><a class="dropdown-item" href="{{ path('change_language', {'lang': 'en'}) }}">
+                                            <img src="{{ asset('images/en.png') }}" width="30" alt="en"></a></li>
+                                    <li><a class="dropdown-item" href="{{ path('change_language', {'lang': 'ru'}) }}">
+                                            <img src="{{ asset('images/ru.png') }}" width="30" alt="ru"> </a></li>
+                                    <li><a class="dropdown-item" href="{{ path('change_language', {'lang': 'es'}) }}">
+                                            <img src="{{ asset('images/es.png') }}" width="30" alt="es"> </a></li>
+                                </ul>
+                            </div>
+{#                            <a class="nav-link dropdown-toggle" href="#" id="languageDropdown"#}
+{#                               data-bs-toggle="dropdown">#}
+{#                                <b> {{ 'header.language'|trans }}</b>#}
+{#                            </a>#}
+{#                            <ul class="dropdown-menu">#}
+{#                                <li><a class="dropdown-item" href="{{ path('change_language', {'lang': 'en'}) }}">English</a>#}
+{#                                </li>#}
+{#                                <li><a class="dropdown-item" href="{{ path('change_language', {'lang': 'ru'}) }}">Русский</a>#}
+{#                                </li>#}
+{#                                <li><a class="dropdown-item" href="{{ path('change_language', {'lang': 'es'}) }}">Español</a>#}
+{#                                </li>#}
+{#                            </ul>#}
                         </li>
                     </ul>
                 </nav>
@@ -97,7 +112,7 @@
             </div>
 
             <!-- ALERT MESSAGE BELOW HEADER -->
-            <div class="alert-container header text-center">
+            <div id="alert-test" class="alert-container header text-center">
                 <div class="alert alert-info p-2 px-3 m-0 d-lg-block d-none">
                     <b>{{ 'header.test_mode'|trans }}</b>
                 </div>
@@ -163,6 +178,7 @@
 <style>
     html {
         font-size: 14px; /* Default is 16px; lowering helps reduce scaling issues */
+        /*opacity: 0.85;*/
     }
 
     html[lang="es"] .navbar {
@@ -213,7 +229,7 @@
         font-size: 0.85rem;
         padding: 0.3rem 0.8rem;
         max-width: 80%;
-        margin-left: 10em !important;
+        /*margin-left: 10em !important;*/
     }
 
     footer {
@@ -235,9 +251,7 @@
         display: flex;
         flex-direction: column;
         min-height: 100vh; /* Ensures full height */
-
-        /*background: linear-gradient(to bottom, #1a1a2e, #16213e) !important;*/
-        /*color: #e0e0e0 !important;*/
+        background: rgba(234, 237, 240, 0.87);
     }
 
     .d-flex.bg-gray.flex-column.min-vh-100 {
@@ -315,15 +329,19 @@
 
     h1, h2 {
         margin-top: 4rem;
-        margin-bottom: 2rem;
+        margin-bottom: 4rem;
         padding-top: 4rem;
-        font-size: 2rem;
+        font-size: 2.2rem;
+        letter-spacing: 0.05em;
 
         /*font-family: 'Poppins', sans-serif;*/
-        font-weight: bold;
+        /*font-weight: bold;*/
         /*color: #00aaff;*/
         text-shadow: 2px 2px 10px rgba(46, 48, 49, 0.4);
         font-family: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace !important;
+        /*font-family: 'Merriweather', 'EB Garamond', 'Playfair Display', 'Georgia', serif;*/
+        font-weight: 700;
+        color: #222; /* Darker for contrast */
     }
 
     h3{
@@ -331,7 +349,9 @@
         padding-top: 1.8rem !important; /* Ensure consistent spacing */
         font-size: 1.7rem !important;
         font-family: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace !important;
-
+        /*font-family: 'Merriweather', 'EB Garamond', 'Playfair Display', 'Georgia', serif;*/
+        font-weight: 700;
+        color: #222; /* Darker for contrast */
     }
 
     h4{
@@ -345,10 +365,12 @@
         margin: 0 auto;
         padding-left: 1rem; /* Adds space from the left */
         padding-right: 1rem; /* Ensures balance on both sides */
+        /*background: rgba(234, 237, 240, 0.85);*/
     }
 
     form {
-        background: #f8f9fa; /* Light background */
+        /*background: #f8f9fa; !* Light background *!*/
+        background: rgba(255, 255, 255, 0.9);
         padding: 4rem;
         border-radius: 8px; /* Rounded corners */
         box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05); /* Subtle shadow */
@@ -399,14 +421,74 @@
         bottom: 4rem;
 
     }
+    /* Style for the floating language selector */
+    .language-widget-top {
+        float: right;
+        z-index: 105; /* Ensures it appears above other elements */
+
+    }
+
     /* Ensure dropdown aligns correctly */
     .language-widget .dropdown-menu {
         min-width: 1rem;
         right: 0; /* Align dropdown to the right */
         left: auto;
         bottom: 100%; /* Ensure it opens upward */
-        background-color: transparent;
     }
+
+    .language-widget-top {
+        position: relative;
+    }
+
+    .language-widget-top .dropdown-menu {
+        min-width: 10px;
+        position: absolute !important;
+        padding: 5px 0;
+        border-radius: 4px;
+        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+        margin-top: 0.5rem; /* Adds spacing for better appearance */
+        top: 100% !important;  /* Ensure it opens downward */
+        bottom: auto !important;
+        left: 0;
+        right: auto;
+    }
+
+    /* Ensure proper dropdown behavior */
+    .language-widget-top .dropdown-menu[data-bs-popper] {
+        top: 100% !important;
+        bottom: auto !important;
+    }
+
+
+    /* When dropdown is open, flip the arrow */
+    .language-widget-top.show .dropdown-toggle::after {
+        content: "\f0d8"; /* Unicode for upward caret */
+    }
+    .language-widget-top {
+        display: inline-block;
+        text-align: center;
+    }
+
+    .language-widget-top .dropdown-toggle {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .language-widget-top {
+        position: relative;
+    }
+
+    /* Default: Arrow should point DOWN */
+    .language-widget-top .dropdown-toggle::after {
+        border-bottom: 0;
+        border-top: .3em solid; /* Arrow down */
+    }
+
+    .dropdown-menu img {
+        margin-bottom: 1rem;
+    }
+
     .dropdown-menu img {
         margin-bottom: 1rem;
     }
@@ -430,13 +512,70 @@
         z-index: 999; /* Ensures it's above other elements */
     }
 
-    @media (max-width: 768px) { /* For mobile */
-    /**/
+    html {
+        background: url('/images/back.webp') no-repeat center center;
+        background-size: cover;
+        background-attachment: fixed;
+        /*padding: 20px;*/
+        border-radius: 8px;
     }
+
+    header {
+        background:rgba(234, 237, 240, 0.87);
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Soft shadow */
+        padding: 12px 20px;
+        border-bottom: 2px solid rgba(0, 0, 0, 0.1);
+    }
+
+    #alert-test {
+        display: flex; /* Allows centering */
+        justify-content: center; /* Centers content */
+        width: 100%; /* Ensures full width */
+    }
+
+    #alert-test .alert {
+        display: inline-block; /* Shrinks to text width */
+        padding: 6px 12px; /* Adjust padding */
+        text-align: center; /* Ensures text is centered */
+        max-width: 90%; /* Prevents it from being too wide */
+        border-radius: 5px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    /* BODY TEXT – MODERN SANS-SERIF */
+    body, p, li, input, textarea {
+        font-family: 'Inter', 'Roboto', 'Source Sans Pro', 'Lora', sans-serif;
+        color: #333; /* Softer contrast */
+        line-height: 1.8;
+    }
+
+    /* MENU & UI ELEMENTS – CLEAN LOOK */
+    .navbar, button, .btn, .form-control, label {
+        font-family: 'Inter', 'Montserrat', 'Poppins', sans-serif;
+    }
+
 
     @media (min-width: 992px) {
         .navbar .container-fluid {
             justify-content: space-between !important;
+        }
+
+        .container {
+            max-width: 900px; /* Increase width for a better desktop experience */
+        }
+
+        form {
+            padding: 3rem; /* Make the form more prominent */
+            background: rgba(255, 255, 255, 0.9);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1); /* Soft shadow for better separation */
+        }
+
+        label {
+            font-weight: 600;
+        }
+
+        input {
+            font-size: 1.1rem; /* Make input fields more readable */
         }
     }
 
@@ -456,7 +595,7 @@
         }
 
         .navbar .container-fluid {
-            justify-content: center !important;
+            /*justify-content: center !important;*/
         }
 
         body {
@@ -550,7 +689,7 @@
             top: 0;
             right: -100%; /* Start hidden */
             height: 100vh;
-            width: 300px;
+            width: 45%;
             background: white;
             box-shadow: -2px 0 10px rgba(0, 0, 0, 0.1);
             padding-top: 60px;
@@ -561,6 +700,7 @@
 
         .navbar-menu.show {
             right: 0; /* Slide in when opened */
+            background: rgba(234, 237, 240, 0.95);
         }
 
         .navbar-nav {
@@ -570,7 +710,8 @@
         }
 
         .navbar-nav .nav-item {
-            padding: 20px 0;
+            padding: 2rem 0;
+            font-size: 2.5rem;
         }
 
         ul.navbar-nav {
@@ -592,7 +733,8 @@
             justify-content: center;
             min-width: 70px;
             cursor: pointer;
-            background: rgba(255, 255, 255, 0.8);
+            background: rgba(234, 237, 240, 0.87);
+            /*background: rgba(255, 255, 255, 0.8);*/
             border-radius: 8px; /* Make sure it's not too round */
             box-shadow: 0 0 5px rgba(0, 0, 0, 0.2);
         }
@@ -657,21 +799,18 @@
 
         }
 
-        #langDropdown{
-            min-width: 1rem;
-            margin-right: 100px;
-        }
 
         /* Style for the floating language selector */
         .language-widget {
             float: right;
             z-index: 105; /* Ensures it appears above other elements */
             padding: 0.5rem;
-            bottom: 8rem;
+            bottom: 7rem;
             right: 5.5rem;
 
         }
         /* Ensure dropdown aligns correctly */
+        .language-widget-top .dropdown-menu,
         .language-widget .dropdown-menu {
             min-width: 1rem;
             right: 0; /* Align dropdown to the right */
@@ -679,17 +818,18 @@
             bottom: 100%; /* Ensure it opens upward */
             background-color: transparent;
         }
-        .dropdown-menu img {
-            margin-bottom: 2rem;
-        }
 
         .language-widget .dropdown-menu img {
             width: 60px;
             height: 40px;
         }
 
+        .dropdown-menu img {
+            margin-bottom: 2rem;
+        }
+
          .mb-4 a.btn{
-            line-height: 1.2;
+            line-height: 1.5;
             white-space: normal;
             max-width: 35vw;
             word-break: break-word;
@@ -699,7 +839,7 @@
 
          .btn-outline-danger{
              margin-left: -7rem !important;
-             line-height: 1.2;
+             line-height: 1.5;
              font-size: 1.9rem !important;
              max-width: 35vw;
              word-break: break-word;
@@ -733,6 +873,109 @@
             padding: 10px;
         }
 
+        /* Align the language button with other menu items */
+        .language-widget-top {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start; /* Left-align */
+            width: 100%; /* Prevents extra spacing */
+        }
+
+        /* Fix button width */
+        .language-widget-top .dropdown-toggle {
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            width: auto; /* Prevent it from stretching */
+            padding: 0.3rem 0.6rem;
+            border-radius: 5px;
+            font-size: 2.2rem !important;
+            /*min-height: 7rem !important;*/
+        }
+
+        /* Fix flag size */
+        .language-widget-top .dropdown-toggle img {
+            margin-right: 5px;
+            width: 60px;
+            height: 40px;
+        }
+
+        /* Fix dropdown position */
+        .language-widget-top .dropdown-menu {
+            width: auto;
+            min-width: 120px;
+            left: 0 !important; /* Make sure it aligns with the button */
+            right: auto !important;
+            text-align: center;  /* Center all content */
+            padding: 0;
+            margin-left: 2rem;
+            margin-top: 1rem !important;
+        }
+
+        /* Fix menu item spacing */
+        .language-widget-top .dropdown-menu img {
+            width: 60px;
+            height: 40px;
+            margin-right: 5px;
+        }
+
+        .dropdown-menu {
+            position: absolute !important;
+            top: 100% !important; /* Ensure it drops below the button */
+            left: 0 !important;
+            right: auto !important;
+            min-width: 120px;
+            margin-top: 5px; /* Proper spacing */
+        }
+
+
+        .language-widget-top .dropdown-item {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 10px 0; /* Adjust spacing */
+        }
+
+        body::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw; /* Full width */
+            height: 100vh; /* Full height */
+            background: rgba(0, 0, 0, 0.3); /* Dark overlay */
+            backdrop-filter: blur(8px); /* Blur effect */
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease-in-out;
+            z-index: 999; /* Ensure it appears above content but below the menu */
+        }
+
+        /* When the menu is open, enable blur */
+        body.menu-open::before {
+            opacity: 0.6;
+            pointer-events: auto;
+        }
+
+        footer div.text-center.p-3{
+            font-size: 1.5rem;
+        }
+
+        #logo {
+            margin-left: 2.5rem !important;
+        }
+
+        form {
+            margin-right: 2.5rem !important;
+        }
+
+        .btn-in-text{
+            margin-top: 5rem !important;
+        }
+
+        body, p, li, input, textarea {
+            line-height: 1.8 !important;
+        }
     }
 
 </style>
@@ -744,6 +987,16 @@
         menuToggle.addEventListener("click", function () {
             mobileMenu.classList.toggle("show");
             menuToggle.classList.toggle("open"); // Toggle the cross animation
+            document.body.classList.toggle("menu-open");
+        });
+
+        // Close menu when clicking outside of it
+        document.addEventListener("click", function (event) {
+            if (!mobileMenu.contains(event.target) && !menuToggle.contains(event.target)) {
+                mobileMenu.classList.remove("show");
+                menuToggle.classList.remove("open");
+                document.body.classList.remove("menu-open");
+            }
         });
     });
 </script>

@@ -166,7 +166,7 @@ class NoteCreationType extends AbstractType
 
         $builder->add('submit', SubmitType::class, [
             'label' => 'form.label.note_create',
-            'attr' => ['class' => 'btn btn-primary'],
+            'attr' => ['class' => 'btn btn-outline-dark'],
         ]);
     }
 

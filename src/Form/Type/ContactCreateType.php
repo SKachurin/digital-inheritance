@@ -110,7 +110,7 @@ class ContactCreateType extends AbstractType
             ])
             ->add('submit', SubmitType::class, [
                 'label' => 'create_contact',
-                'attr' => ['class' => 'btn btn-primary'],
+                'attr' => ['class' => 'btn btn-outline-dark'],
             ])
         ;
 

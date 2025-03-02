@@ -122,7 +122,7 @@ class BeneficiaryCreateType extends AbstractType
 //                'second_options' => ['label' => 'form.label.beneficiary_second_question_answer_repeat'],
 //            ])
             ->add('submit', SubmitType::class, [
-                'attr' => ['class' => 'btn btn-primary'],
+                'attr' => ['class' => 'btn btn-outline-dark'],
             ]);
 
     }

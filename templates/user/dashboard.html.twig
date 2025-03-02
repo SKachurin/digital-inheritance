@@ -1,6 +1,10 @@
 {% extends 'base.html.twig' %}
     {% block content %}
         <style>
+            .container-buttons {
+                background: rgba(255, 255, 255, 0.8);
+                padding: 2rem;
+            }
             .form-container {
                 padding-top: 4em;
             }
@@ -71,9 +75,10 @@
                 padding: 0.5rem;
                 border: 1px solid #ced4da;
                 border-radius: 6px;
-                background-color: #f1f3f5;
+                /*background-color: #f1f3f5;*/
                 box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
                 transition: background-color 0.3s ease;
+                background: rgba(255, 255, 255, 0.9);
             }
 
             details:hover {
@@ -188,7 +193,7 @@
         </script>
 
         <div class="container">
-            <h1>{{ 'header.dashboard'|trans }}</h1>
+            <h1 style="padding-top: 3em;">{{ 'header.dashboard'|trans }}</h1>
             <p id="hey">{{ 'dashboard.text'|trans|raw }}</p>
 
             <!-- Introduction Text Spoiler (Default Open) -->
@@ -213,7 +218,7 @@
                     </div>
                 {% endfor %}
             {% endfor %}
-
+            <div class="container-buttons">
             {% if customerFirstEmailVerified %}
                 <section class="mb-4">
                     <a class="btn btn-outline-dark btn-floating m-1 mt-4" href="/contact/{{ customerFirstEmail }}/edit" role="button">
@@ -700,7 +705,7 @@
                 </div>
             </section>
 {#            <p>explanation</p>#}
-
+            </div>
         </div>
 
     {% endblock %}

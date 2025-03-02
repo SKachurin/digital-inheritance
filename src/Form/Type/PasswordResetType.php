@@ -33,7 +33,7 @@ class PasswordResetType extends AbstractType
             ])
             ->add('submit', SubmitType::class, [
                 'label' => 'Reset Password',
-                'attr' => ['class' => 'btn btn-primary'],
+                'attr' => ['class' => 'btn btn-outline-dark'],
             ]);
     }
 }
