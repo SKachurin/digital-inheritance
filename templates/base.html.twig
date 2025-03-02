@@ -591,6 +591,19 @@
     /* Mobile & Tablet: Adjust header */
     @media (max-width: 991px) { /* Apply only to devices smaller than 992px */
 
+        html::before {
+            content: "";
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: url('/images/back.webp') center center no-repeat;
+            background-size: cover;
+            z-index: -1; /* Make it behind everything else */
+            -webkit-transform: translateZ(0);
+        }
+
         header {
             height: 15rem !important;
         }
@@ -826,6 +839,19 @@
             left: auto;
             bottom: 100%; /* Ensure it opens upward */
             background-color: transparent;
+        }
+
+        .language-widget.dropup .dropdown-menu {
+            bottom: 100% !important;  /* Moves dropdown above button */
+            top: auto !important;
+            transform: translateY(0) !important;  /* Ensures correct position */
+            display: none; /* Default state - hidden */
+        }
+
+        /* When dropdown is open */
+        .language-widget.dropup .dropdown-menu.show  {
+            display: block !important; /* Only show when active */
+            margin-left: 2rem !important;
         }
 
         .language-widget .dropdown-menu img {
