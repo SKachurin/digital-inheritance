@@ -519,9 +519,6 @@
     }
 
     html {
-        /*background: url('/images/back.webp') no-repeat center center;*/
-        /*background-size: cover;*/
-        /*border-radius: 8px;*/
         background: url('/images/back.webp') no-repeat center center local;
         background-size: cover;
         background-attachment: fixed;
@@ -591,7 +588,20 @@
     /* Mobile & Tablet: Adjust header */
     @media (max-width: 991px) { /* Apply only to devices smaller than 992px */
 
-        html::before {
+        /*html::before {*/
+        /*    content: "";*/
+        /*    position: fixed;*/
+        /*    top: 0;*/
+        /*    left: 0;*/
+        /*    width: 100vw;*/
+        /*    height: 100vh;*/
+        /*    background: url('/images/back.webp') center center no-repeat;*/
+        /*    background-size: cover;*/
+        /*    z-index: -1; !* Make it behind everything else *!*/
+        /*    -webkit-transform: translateZ(0);*/
+        /*}*/
+
+        body::before {
             content: "";
             position: fixed;
             top: 0;
@@ -600,8 +610,18 @@
             height: 100vh;
             background: url('/images/back.webp') center center no-repeat;
             background-size: cover;
-            z-index: -1; /* Make it behind everything else */
-            -webkit-transform: translateZ(0);
+            z-index: -1;
+            pointer-events: none; /* Prevents interactions */
+            will-change: transform; /* Optimizes performance */
+        }
+
+        body {
+            min-height: 100vh;
+            overflow-x: hidden; /* Prevents unwanted horizontal scroll */
+        }
+
+        html, body {
+            scroll-behavior: smooth;
         }
 
         header {
