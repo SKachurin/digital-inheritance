@@ -267,8 +267,8 @@
 
     /* Ensure the main content area stretches */
     main {
-        flex-grow: 1;
-        min-height: calc(100vh - 200px); /* Adjust based on your header and footer height */
+        flex: 1;
+        min-height: auto; /* Allow natural height */
     }
 
     body, main {
@@ -600,6 +600,10 @@
         /*    z-index: -1; !* Make it behind everything else *!*/
         /*    -webkit-transform: translateZ(0);*/
         /*}*/
+
+        html {
+            background-attachment: scroll !important; /* Instead of fixed */
+        }
 
         body::before {
             content: "";
