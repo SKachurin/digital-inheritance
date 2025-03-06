@@ -60,22 +60,37 @@ home:
     path:       /
     controller: Symfony\Bundle\FrameworkBundle\Controller\TemplateController
     defaults:
-        # the path of the template to render
         template:  'home_new.html.twig'
 
 about:
     path:       /about
     controller: Symfony\Bundle\FrameworkBundle\Controller\TemplateController
     defaults:
-        # the path of the template to render
         template:  'about.html.twig'
 
 contact_us:
     path:       /contact_us
     controller: Symfony\Bundle\FrameworkBundle\Controller\TemplateController
     defaults:
-        # the path of the template to render
         template:  'contactUs.html.twig'
+
+terms:
+    path:       /terms
+    controller: Symfony\Bundle\FrameworkBundle\Controller\TemplateController
+    defaults:
+        template:  'legal/terms.html.twig'
+
+privacy:
+    path:       /privacy
+    controller: Symfony\Bundle\FrameworkBundle\Controller\TemplateController
+    defaults:
+        template:  'legal/privacy.html.twig'
+
+refund:
+    path:       /refund
+    controller: Symfony\Bundle\FrameworkBundle\Controller\TemplateController
+    defaults:
+        template:  'legal/refund.html.twig'
 
 email_verification_route:
     path:       /verify-email/{token}

@@ -1,0 +1,195 @@
+terms_page:
+  og_title: '“The Digital Heir" | Terms & Conditions'
+  title: 'Terms & Conditions'
+  description: 'Terms & Conditions page on “The Digital Heir"'
+  date: 'Last Updated: March 6, 2025'
+  1_title: '1. Introduction'
+  1_text: |
+    Welcome to The Digital Heir (the “Service”), owned and operated by individual entrepreneur Sergey Kachurin, identification code: 345757380  (Georgia) (hereafter “we,” “us,” or “our”). The Digital Heir is designed to allow users to safeguard digital assets and instructions in the event of their unavailability or passing.
+    Our order process is conducted by our online reseller Paddle.com (“Paddle”). Paddle.com is the Merchant of Record for all our orders. Paddle provides all customer service inquiries and handles returns.
+    </br></br>
+    Please read these Terms & Conditions (“Terms”) carefully. By using or accessing The Digital Heir, you agree to these Terms and to comply with all applicable laws and regulations. These Terms include references to our Refund Policy and Privacy Policy.
+    </br></br>
+    Important Disclaimer: The Digital Heir is not a legal or financial advisory service. We do not provide estate planning advice or handle official legal inheritance procedures. Our service simply encrypts and stores your digital instructions for release under certain inactivity conditions. Consult a qualified attorney or financial adviser for formal estate planning.
+  2_title: '2. Paddle as Merchant of Record'
+  2_text_1: 'Payment Processing: All payments for our Service are processed through Paddle. We never directly handle your credit card or PayPal details.'
+  2_text_2: 'Order Completion: When purchasing a subscription or license to The Digital Heir, you will be redirected to the Paddle Checkout. Your transaction is subject to Paddle’s Buyer Terms, which can be reviewed at paddle.com/legal/checkout-buyer-terms.'
+  2_text_3: 'Billing Description: Your statement will show a charge from “PADDLE.COM” or “Paddle” (not from The Digital Heir directly).'
+
+  3_title: '3. Eligibility & Account Requirements'
+  3_text: |
+    Age Requirement: You must be at least 18 years old (or the age of majority in your jurisdiction) to create an account and use The Digital Heir.
+    Accurate Information: You agree to provide accurate and up-to-date information when creating an account or making any purchase, particularly for email addresses, phone numbers, and social media handles that you want us to monitor.
+
+  4_title: '4. Our Service'
+  4_text_1: 'Encrypted Note / “Envelope”: The Digital Heir allows you to encrypt a single digital “note” containing instructions, login credentials, or other sensitive data.'
+  4_text_2: 'Activity Monitoring: We periodically check your last login status via social media or other provided contact methods. If you remain inactive beyond user-defined intervals, we escalate contact attempts and, eventually, release your encrypted note to your designated heir(s).'
+  4_text_3: 'No Legal Guarantee: We do not guarantee acceptance by heirs, compliance with inheritance laws, or official recognition in any jurisdiction. Your usage is purely voluntary and does not replace official estate planning.'
+
+  5_title: '5. Subscriptions & Renewals'
+  5_text: |
+    Recurring Billing: Our subscription plans renew automatically unless you cancel at least 48 hours before the end of your current billing cycle.
+    Price Changes: We will notify you of any change in subscription pricing in accordance with Paddle’s policies and local laws.
+
+
+  6_title: '6. Cancellation & Refunds'
+  6_text: |
+    14-Day Policy: Following Paddle’s standard policy, you have 14 days from the purchase date to request a refund. For the full terms, see our Refund Policy below.
+    Cancellation: You may cancel your subscription at any time. Cancellation becomes effective at the end of the current billing cycle; no partial refunds are provided for any remaining portion of the subscription term, unless otherwise required by law.
+
+  7_title: '7. Intellectual Property'
+  7_text: |
+    Ownership: All content, trademarks, logos, and intellectual property relating to The Digital Heir belong to [Company Name] or are used under license.
+    Restrictions: You may not copy, redistribute, sell, or create derivative works from our service materials without express written permission.
+
+
+  8_title: '8. Acceptable Use'
+  8_text: |
+    Prohibited Conduct: You agree not to misuse our service for any unlawful activities, including attempting to hack or reverse-engineer our encryption.
+    Data Integrity: You must keep your secret answers and account login credentials confidential. We do not store your exact security question answers; losing them may render your note permanently inaccessible.
+
+
+  9_title: '9. Limitation of Liability'
+  9_text: |
+    To the maximum extent permitted by law, The Digital Heir (and our officers, directors, employees) shall not be liable for any indirect, incidental, special, or consequential damages arising from your use of the Service, including the release or non-release of your encrypted note.
+
+  10_title: '10. Indemnification'
+  10_text: |
+    You agree to indemnify and hold The Digital Heir and its affiliates harmless from any claims, losses, liabilities, or expenses arising out of your misuse of the service or breach of these Terms.
+
+  11_title: '11. Privacy & Data Protection'
+  11_text: |
+    Our data practices are detailed in our Privacy Policy below, including how we store encrypted data and how Paddle processes your payment information.
+
+  12_title: '12. Governing Law & Disputes'
+  12_text: |
+    For U.S. consumers, these Terms shall be governed by the laws of New York, in line with Paddle’s Buyer Terms.
+    For consumers outside the U.S., these Terms shall be governed by the laws of England.
+    Any disputes shall follow the arbitration or court procedures outlined in Paddle’s Buyer Terms.
+
+  13_title: '13. Contact & Notices'
+  13_text: |
+    For any inquiries regarding these Terms, please contact:
+    Support: help@paddle.com or support@thedigitalheir.com (general inquiries).
+    Company: Individual entrepreneur Sergey Kachurin — identification code: 345757380, Georgia, +995 55 110 5323.
+
+  14_title: '14. Changes to These Terms'
+  14_text: |
+    We reserve the right to update or modify these Terms at any time. We will notify you of significant changes, and continued use of the Service after such notice constitutes acceptance of the revised Terms.
+
+privacy_page:
+  og_title: '“The Digital Heir" | Privacy Policy'
+  title: 'Privacy Policy'
+  description: 'Privacy Policy page on “The Digital Heir"'
+  date: 'Last Updated: March 6, 2025'
+  intro: 'The Digital Heir respects your privacy and is committed to protecting your personal data. This Privacy Policy explains how we collect, use, and secure your information when you visit our site or use our services.'
+
+  1_title: '1. Data Controller & Merchant of Record'
+  1_text: |
+    Paddle is the Merchant of Record for all transactions. For payment data, Paddle acts as the data controller/processor under their own Privacy Policy (paddle.com/legal/privacy).
+    For user registration, encrypted notes, and contact details, The Digital Heir (Individual entrepreneur Sergey Kachurin, identification code: 345757380, Georgia) acts as the data controller.
+
+  2_title: '2. Information We Collect'
+  2_text_1: 'Registration Data: Email, preferred username, optional phone number, social media links, etc. All data (except the first account email) is encrypted before storage and is not used for any other purposes beyond providing The Digital Heir service.'
+  2_text_2: 'Payment Data: Collected and processed by Paddle (we do not store your credit card or PayPal details).'
+  2_text_3: 'Encrypted Note Content: The text you submit to create your “Envelope.” We store this content in an encrypted form.'
+  2_text_4: 'Heir Contact Details: Emails and phone numbers for your designated heir(s), also encrypted.'
+  2_text_5: 'We never store your security answers in plaintext. After using them to encrypt your note, we discard them.'
+
+  3_title: '3. How We Use Your Data'
+  3_text: |
+    Account Management: To create and maintain your user account.
+  3_text_: 'Service Delivery:'
+  3_text_1: 'Monitoring your last online status (when configured)'
+  3_text_2: 'Sending alerts or messages if you’re inactive'
+  3_text_3: 'Releasing your encrypted data to heir(s) upon final inactivity detection'
+  3_text_4: 'Customer Support: Responding to inquiries, bug reports, or feature requests.'
+  3_text_5: 'Legal & Compliance: Working with Paddle to handle payment disputes, refunds, and chargebacks. Complying with applicable laws or lawful requests.'
+
+  4_title: '4. Cookies & Tracking'
+  4_text: |
+    We use minimal essential cookies to maintain session state and enhance user experience. Paddle may also use cookies during the checkout process to recognize returning customers and manage fraud prevention. For more detail, see Paddle’s Cookie Policy.
+
+  5_title: '5. Data Sharing & Third Parties'
+  5_text: |
+    Paddle: As our Merchant of Record, Paddle receives payment and billing information.
+    Service Providers: We may share limited data with hosting providers (for server infrastructure) or email providers (to send notifications).
+    Legal Obligations: We may disclose information to law enforcement if required by law.
+    We never sell your personal or encrypted data to third parties.
+
+  6_title: '6. International Transfers'
+  6_text: |
+    Depending on your location, your personal data may be transferred to servers located in different countries. We apply appropriate safeguards to ensure your data is protected in line with GDPR and other applicable regulations.
+
+  7_title: '7. Data Retention'
+  7_text: |
+    User Account Data: Stored as long as your account is active or as needed to provide services.
+    Encrypted Content: Retained until you delete your account or the note. If your subscription lapses and you request deletion, we purge all stored content.
+
+  8_title: '8. Your Rights'
+  8_text: |
+    Depending on your jurisdiction, you may have rights to:
+    Access your personal data
+    Rectify errors in your data
+    Erase your data or request restricted processing
+    Object to certain data uses
+    Data portability
+    For any of these requests, contact us at support@thedigitalheir.com.
+
+  9_title: '9. Security Measures'
+  9_text: |
+    We use industry-standard encryption (e.g., XSalsa20-Poly1305) to protect your note content, plus secure HTTPS channels for data transmission. Paddle is PCI DSS compliant, ensuring safe payment handling.
+
+  10_title: '10. Children’s Privacy'
+  10_text: |
+    The Digital Heir does not knowingly collect data from children under 18. By using this service, you explicitly confirm that you are 18 or older. 
+    If you believe a minor has provided data, please contact us to remove it immediately.
+
+  11_title: '11. Updates to This Policy'
+  11_text: |
+    We may occasionally update this Privacy Policy. We will notify you of any significant changes. Continued use of our services after updates constitute acceptance of the revised terms.
+
+  12_title: '12. Contact Us'
+  12_text: |
+    For privacy concerns or any other inquiries:
+    Email: support@thedigitalheir.com
+    Paddle Buyer Support: help@paddle.com / paddle.net
+    
+  13_title: 'Final Note'
+  13_text: |
+    By using The Digital Heir, you acknowledge and agree to these Terms & Conditions, Refund Policy, and Privacy Policy. If you have any questions or concerns, please reach out to us or Paddle’s Buyer Support at any time.
+    Remember: “Our order process is conducted by our online reseller Paddle.com. Paddle.com is the Merchant of Record for all our orders. Paddle provides all customer service inquiries and handles returns.”
+    </br></br>
+    © 2025 Individual entrepreneur Sergey Kachurin. All rights reserved.
+    </br></br>
+    Individual entrepreneur Sergey Kachurin — identification code: 345757380  Georgia, Batumi, Akaki Tsereteli St, 15, ap. 56
+
+refund_page:
+  og_title: '“The Digital Heir" | Refund Policy'
+  title: 'Refund Policy'
+  description: 'Refund Policy page on “The Digital Heir"'
+  date: 'Last Updated: March 6, 2025'
+  intro: 'We strive for complete satisfaction with The Digital Heir. However, if you are not satisfied, you may be eligible for a refund under the conditions below:'
+
+  1_title: '14-Day Money-Back Guarantee'
+  1_text: |
+    Refunds available within 14 days. You may request a refund by contacting Paddle Support.
+    Paddle will process the refund in accordance with their Buyer Terms & Conditions.
+
+  2_title: 'How to Request a Refund'
+  2_text: 'Contact Paddle directly via email: help@paddle.com, or visit paddle.net. You will be asked to provide the email address used for your order and your order ID or any relevant receipt details.'
+
+  3_title: 'Exceptions'
+  3_text: |
+    If you have already triggered the “final release” of your Encrypted Note (i.e., The Digital Heir has deemed you inactive and delivered your information to your heir), we normally cannot grant a refund, as the core service has been fulfilled.
+    In cases of abuse, fraud, or manipulative behavior (as determined solely by Paddle or The Digital Heir), refunds may be refused.
+
+  4_title: 'Refund Processing'
+  4_text: |
+    Refunds are handled exclusively by Paddle as our Merchant of Record.
+    If approved, refunds typically appear back in your account within 5–10 business days, depending on your payment method.
+
+  5_title: 'Chargebacks'
+  5_text: |
+    If you do not recognize a Paddle charge or have a dispute, please contact Paddle first.
+    Unwarranted chargebacks may result in a ban from future use of The Digital Heir, subject to Paddle’s dispute resolution process.

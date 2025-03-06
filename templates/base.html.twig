@@ -124,6 +124,11 @@
         </main>
 
         <footer class="bg-dark text-center text-white mt-auto">
+            <div class="container-footer-legal d-flex align-items-center justify-content-center justify-content-md-between" style="">
+                <a class="text-white" href="{{ path('terms') }}">{{ 'terms_page.title'|trans({}, 'legal') }}</a>
+                <a class="text-white" href="{{ path('privacy') }}">{{ 'privacy_page.title'|trans({}, 'legal') }}</a>
+                <a class="text-white" href="{{ path('refund') }}">{{ 'refund_page.title'|trans({}, 'legal') }}</a>
+            </div>
             <!-- Grid container -->
             <div class="container p-4 pb-0">
                 <!-- Section: Social media -->
@@ -210,6 +215,14 @@
         margin: 0 auto;
         padding: 0 1rem;   /* Adjust padding for spacing */
         width: 100%;
+    }
+
+    .container-footer-legal {
+        width: 80%;
+        padding-right: var(--bs-gutter-x, .75rem);
+        padding-left: var(--bs-gutter-x, .75rem);
+        margin-right: auto;
+        margin-left: auto;
     }
 
     .nav {
@@ -845,13 +858,12 @@
 
         }
 
-
         /* Style for the floating language selector */
         .language-widget {
             float: right;
             z-index: 105; /* Ensures it appears above other elements */
             padding: 0.5rem;
-            bottom: 7rem;
+            bottom: 7.5rem;
             right: 5.5rem;
 
         }
@@ -1034,6 +1046,11 @@
 
         body, p, li, input, textarea {
             line-height: 1.8 !important;
+        }
+
+        .container-footer-legal {
+            font-size: 2rem;
+            margin-bottom: 3rem;
         }
     }
 
