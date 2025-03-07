@@ -193,3 +193,20 @@ refund_page:
   5_text: |
     If you do not recognize a Paddle charge or have a dispute, please contact Paddle first.
     Unwarranted chargebacks may result in a ban from future use of The Digital Heir, subject to Paddle’s dispute resolution process.
+
+checkout_page:
+  og_title: '“The Digital Heir" | Checkout'
+  title: 'Checkout'
+  description: 'Checkout page on “The Digital Heir"'
+  intro: |
+    If you appreciate the idea behind "The Digital Heir", enjoy the service, and want to support it's growth, consider choosing a <b>Premium monthly subscription</b>. Your support helps us continue improving and expanding the platform!
+
+  standard: 'Standard'
+  premium: 'Premium'
+  desc_standard: 'Monthly subscription to TheDigitalHeir service'
+  desc_premium: 'If you love the service and want to support its development, subscribe to the Premium plan.'
+  price_standard: '$5.00/month'
+  price_premium: '$25.00/month'
+  buy_standard: 'Buy Standard'
+  buy_premium: 'Buy Premium'
+
