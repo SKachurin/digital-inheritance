@@ -5,4 +5,3 @@ twig:
     globals:
         recaptcha_site_key: '%env(RECAPTCHA_SITE_KEY)%'
         recaptcha_site_key_v2: '%env(RECAPTCHA_SITE_KEY_V2)%'
-        paddle_vendor_id: '%env(PADDLE_VENDOR_ID)%'

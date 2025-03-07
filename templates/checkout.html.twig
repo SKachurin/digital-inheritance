@@ -1,221 +1,7 @@
-{#{% extends 'base.html.twig' %}#}
-
-{#{% block og_title %}{{ 'checkout_page.og_title'|trans({}, 'legal')}}{% endblock %}#}
-
-{#{% block og_description %}{{ 'checkout_page.description'|trans }}{% endblock %}#}
-{#{% block og_image %}{{ absolute_url('/build/logo-TheDigitalHeir-192x192.png') }}{% endblock %}#}
-
-{#{% block content %}#}
-{#    <style>#}
-{#        .faq {#}
-{#            padding: 5rem 9%;#}
-{#            background: rgba(250, 250, 250, 0.95);#}
-{#            text-align: center;#}
-{#            margin-top: 12rem;#}
-{#            margin-left: 9%;#}
-{#            margin-right: 9%;#}
-
-{#        }#}
-
-{#        .faq h1 {#}
-{#            margin-top: 0rem !important;#}
-{#            padding-top: 0rem !important;#}
-{#            margin-bottom: 4rem !important;#}
-
-{#        }#}
-
-{#        body {#}
-{#            font-family: 'Inter', 'Roboto', sans-serif;#}
-{#            color: #333;#}
-{#            text-align: left;#}
-{#        }#}
-
-{#        h1 {#}
-{#            font-size: 2.8rem;#}
-{#            font-weight: 800;#}
-{#            text-align: center;#}
-{#            margin-bottom: 4rem;#}
-{#            letter-spacing: -0.5px;#}
-{#        }#}
-
-{#        .container.text h3 {#}
-{#            margin: 0 0 2rem 7rem !important;#}
-{#        }#}
-
-{#        .container.text h4 {#}
-{#            margin: 0 0 2rem 8rem !important;#}
-{#        }#}
-
-{#        h4 {#}
-{#            font-size: 1.5rem;#}
-{#            font-weight: 600;#}
-{#            color: #222;#}
-{#            margin-top: 2rem;#}
-{#        }#}
-
-{#        p {#}
-{#            color: #444;#}
-{#            max-width: 80%;#}
-{#            margin: 0 auto 1.2rem;#}
-{#            font-size: 1.2rem;#}
-{#        }#}
-
-
-{#        .faq ul {#}
-{#            list-style: disc inside;#}
-{#            padding-left: 1.5rem;#}
-{#            margin-bottom: 1.5rem;#}
-{#        }#}
-
-{#        .faq ul li {#}
-{#            font-size: 1.2rem;#}
-{#            line-height: 1.5;#}
-{#            margin-bottom: 0.6rem;#}
-{#            text-indent: 0; /* Ensures proper alignment */#}
-{#            padding-left: 4rem; /* Ensures lists have proper indentation */#}
-{#        }#}
-
-{#        .faq ol li {#}
-{#            font-size: 1.2rem;#}
-{#            line-height: 1.5;#}
-{#            margin-bottom: 0.6rem;#}
-{#            text-indent: 0; /* Ensures proper alignment */#}
-{#            padding-left: 4rem; /* Ensures lists have proper indentation */#}
-{#        }#}
-
-{#        .faq ul li::marker {#}
-{#            font-size: 1.4rem;#}
-{#            color: #111;#}
-{#        }#}
-
-{#        .container.text {#}
-{#            max-width: 700px;#}
-{#            margin: auto;#}
-{#            text-align: left;#}
-{#        }#}
-
-{#        .container.text {#}
-{#            max-width: 900px; /* Keeps all content within a readable width */#}
-{#            margin: 0 auto; /* Centers the container */#}
-{#            text-align: left; /* Ensures natural text alignment */#}
-{#            padding: 0 2rem; /* Adds space from edges */#}
-{#        }#}
-
-{#        .container.text > * {#}
-{#            max-width: 80%; /* Matches paragraph width */#}
-{#            margin: 0 auto 1.5rem; /* Keeps spacing uniform */#}
-{#        }#}
-
-{#        #ol li {#}
-{#            padding-left: 1rem !important;#}
-{#        }#}
-
-{#        h3, h4 {#}
-{#            font-size: 1.5rem;#}
-{#            font-weight: 600;#}
-{#            margin-top: 2rem;#}
-{#        }#}
-
-{#        @media (max-width: 991px) {#}
-{#            .faq {#}
-{#                margin-top: 27rem;#}
-{#                margin-left: 2%;#}
-{#                margin-right: 2%;#}
-{#                padding: 5rem 2%;#}
-{#            }#}
-{#            .container.text {#}
-{#                padding-top: 2rem;#}
-{#            }#}
-{#            .container.text > * {#}
-{#                max-width: 100%;#}
-{#            }#}
-
-{#            p {#}
-{#                color: #444;#}
-{#                max-width: 100%;#}
-{#                margin: 1rem 2rem 2rem 2rem !important;#}
-{#                font-size: 2rem;#}
-{#            }#}
-
-{#            .faq ul li {#}
-{#                padding-left: 4rem; /* Ensures lists have proper indentation */#}
-{#                font-size: 2rem;#}
-{#            }#}
-
-{#            .faq ol li {#}
-{#                padding-left: 4rem; /* Ensures lists have proper indentation */#}
-{#                font-size: 2rem;#}
-{#            }#}
-
-{#            .container.text h3 {#}
-{#                margin: 1rem 2rem 2rem 2rem !important;#}
-{#                font-size: 2.9rem;#}
-{#            }#}
-{#            .container.text h4 {#}
-{#                margin: 1rem 2rem 2rem 2rem !important;#}
-{#                font-size: 2.3rem !important;#}
-{#            }#}
-
-{#            #ol {#}
-{#                padding-left: 6rem !important;#}
-{#            }#}
-
-{#        }#}
-{#    </style>#}
-{#<section class="faq">#}
-{#    <div class="container text">#}
-
-{#        <h1 class="mt-7 pt5" style="padding-top: 4em;">#}
-{#            {{ 'checkout_page.title'|trans({}, 'legal') }}#}
-{#        </h1>#}
-
-{#        <script src="https://cdn.paddle.com/paddle/paddle.js"></script>#}
-{#        <script>#}
-{#            Paddle.Setup({ vendor: '*****'  });#}
-{#        </script>#}
-
-
-{#        <button id="checkout-button">Buy Now</button>#}
-
-
-{#        <p>{{ 'checkout_page.intro'|trans({}, 'legal')|raw }}</p>#}
-
-{#        <h3>{{ 'checkout_page.1_title'|trans({}, 'legal') }}</h3>#}
-{#        <p>{{ 'checkout_page.1_text'|trans({}, 'legal')|raw }}</p>#}
-
-
-{#        <h3>{{ 'checkout_page.2_title'|trans({}, 'legal')  }}</h3>#}
-{#        <p>{{ 'checkout_page.2_text'|trans({}, 'legal')|raw }}</p>#}
-
-
-
-{#    </div>#}
-{#</section>#}
-
-{#    <script>#}
-{#        document.getElementById('checkout-button').addEventListener('click', function() {#}
-{#            Paddle.Checkout.open({#}
-{#                product: YOUR_PRODUCT_ID, // Replace with the Paddle Product ID#}
-{#                title: "The Digital Heir Subscription", // Optional: Title of the checkout modal#}
-{#                email: "{{ app.user ? app.user.email : '' }}", // Prefill email if user is logged in#}
-{#                passthrough: JSON.stringify({ user_id: "{{ app.user ? app.user.id : 'guest' }}" }), // Optional metadata#}
-{#                successCallback: function(data) {#}
-{#                    console.log("Checkout successful!", data);#}
-{#                    // Redirect or show confirmation#}
-{#                },#}
-{#                closeCallback: function() {#}
-{#                    console.log("Checkout closed.");#}
-{#                }#}
-{#            });#}
-{#        });#}
-{#    </script>#}
-
-{#{% endblock %}#}
-
 {% extends 'base.html.twig' %}
 
 {% block og_title %}{{ 'checkout_page.og_title'|trans({}, 'legal')}}{% endblock %}
-{% block og_description %}{{ 'checkout_page.description'|trans }}{% endblock %}
+{% block og_description %}{{ 'checkout_page.description'|trans({}, 'legal') }}{% endblock %}
 {% block og_image %}{{ absolute_url('/build/logo-TheDigitalHeir-192x192.png') }}{% endblock %}
 
 {% block content %}
@@ -386,7 +172,7 @@
             <script src="https://cdn.paddle.com/paddle/paddle.js"></script>
             <script>
                 document.addEventListener("DOMContentLoaded", function () {
-                    Paddle.Setup({ vendor: {{ paddle_vendor_id }} });
+                    Paddle.Setup({ vendor: PADDLE_VENDOR_ID });
                 });
             </script>
 
@@ -434,6 +220,7 @@
         // Replace these IDs with actual Paddle Product IDs
         const STANDARD_PRODUCT_ID = 'pri_01jnrgsgxw34wfwqj3e8482d64';
         const PREMIUM_PRODUCT_ID = 'pri_01jnrh59cc4mjgh0dqy92dwm66';
+        const PADDLE_VENDOR_ID = 218633;
     </script>
 
 {% endblock %}

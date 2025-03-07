@@ -47,7 +47,6 @@ services:
       RECAPTCHA_SECRET_KEY_V2: "${RECAPTCHA_SECRET_KEY_V2}"
       ADMIN_TG: "${ADMIN_TG}"
       ADMIN_WA: "${ADMIN_WA}"
-      PADDLE_VENDOR_ID: "${PADDLE_VENDOR_ID}"
     extra_hosts:
       - "host.docker.internal:host-gateway"
     cap_add:

@@ -51,7 +51,6 @@ jobs:
           export RECAPTCHA_SECRET_KEY_V2="${{ secrets.RECAPTCHA_SECRET_KEY_V2 }}";
           export ADMIN_TG="${{ secrets.ADMIN_TG}}";
           export ADMIN_WA="${{ secrets.ADMIN_WA }}";
-          export ADMIN_WA="${{ secrets.PADDLE_VENDOR_ID }}";
           cd /var/www/;
           chmod +x deploy.sh;
           bash deploy.sh;
