@@ -49,6 +49,10 @@ class EmailIncomingMessageHandler
             'body-plain' => $payload['body-plain'],
         ]);
 
+//        foreach ($payload as $key => $value) {
+//            $this->logger->error("Payload field: $key", ['value' => $value]);
+//        }
+
         if (str_contains(strtolower($recipient), 'support')) {
             $this->supportForwarder->forwardSupportEmail($sender, $payload['subject'], $text);
 
