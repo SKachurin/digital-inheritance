@@ -108,4 +108,4 @@ services:
 
     App\Service\SupportEmailForwarderService:
         arguments:
-            admin_tg: '%env(ADMIN_TG)%'
+            $admin_tg: '%env(ADMIN_TG)%'
