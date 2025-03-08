@@ -11,18 +11,19 @@ class EmailIncomingMessageHandler
     public function __construct(
         private readonly MessageProcessorService $messageProcessorService,
         private readonly SendEmailService $sendEmailService,
-        private readonly LoggerInterface $logger
+        private readonly SupportEmailForwarderService $supportForwarder,
+//        private readonly LoggerInterface $logger
     )
     {}
 
     public function handle(array $payload): array
     {
-        $this->logger->error('5.0 EmailIncomingMessageHandler STARTED', [
-//            'payload' => $payload,
-            'stripped-text' => $payload['stripped-text'],
-            'body-plain' => $payload['body-plain'],
-
-        ]);
+//        $this->logger->error('5.0 EmailIncomingMessageHandler STARTED', [
+////            'payload' => $payload,
+//            'stripped-text' => $payload['stripped-text'],
+//            'body-plain' => $payload['body-plain'],
+//
+//        ]);
 
         /**
          * body-plain string
@@ -36,9 +37,17 @@ class EmailIncomingMessageHandler
          * without quoted parts and signature block (if found)
          */
         $text = $payload['stripped-text'] ?? $payload['body-plain'];
+        $sender = $payload['sender'] ?? '';
+        $recipient = $payload['recipient'] ?? '';
+
+        if (str_contains(strtolower($recipient), 'support@thedigitalheir.com')) {
+            $this->supportForwarder->forwardSupportEmail($sender, $text);
+
+            return ['status_code' => 200, 'payload' => ['success' => true]];
+        }
 
         $this->messageProcessorService->processMessage(
-            sender: $payload['sender'],
+            sender: $sender,
             text: $text,
             sendMessage: fn($contact, $message) => $this->sendEmailService->sendMessageEmail($contact, $message)
         );

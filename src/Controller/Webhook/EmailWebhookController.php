@@ -12,7 +12,7 @@ class EmailWebhookController extends AbstractController
 {
     public function __construct(
         private readonly EmailIncomingMessageHandler $incomingMessageHandler,
-        private readonly LoggerInterface $logger
+//        private readonly LoggerInterface $logger
     ) {
     }
 
