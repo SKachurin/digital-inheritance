@@ -25,20 +25,29 @@ FROM composer:2.7.2 as vendor-prod
 
 WORKDIR /app
 
-# composer files first (lock file ensures consistent dependencies)
-COPY ../../composer.json composer.json
-COPY ../../composer.lock composer.lock
+# Install required PHP extensions BEFORE composer install
+ADD https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions /usr/local/bin/
+RUN chmod +x /usr/local/bin/install-php-extensions \
+    && install-php-extensions apcu pdo pdo_mysql
 
-# Run composer install (without application code yet!)
+# Setup SSH for private repositories (optional but recommended)
+RUN mkdir -p -m 0700 ~/.ssh && ssh-keyscan github.com >> ~/.ssh/known_hosts
+
+# Composer files first
+COPY composer.json composer.lock ./
+
+# Now composer install with extensions properly installed
 RUN --mount=type=ssh composer install --no-interaction --no-dev --prefer-dist --no-autoloader --no-scripts
 
-# NOW copy the entire codebase after dependencies installed
-COPY ../../ /app/
+# Finally, copy the full codebase
+COPY . /app/
 
-# Finish composer autoload optimization
+# Finish composer setup
 RUN composer dump-autoload --optimize
 
+# Set permissions explicitly
 RUN chown -R 1000:1000 vendor && chmod -R 775 vendor
+
 
 FROM vendor as vendor-test
 
