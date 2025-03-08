@@ -21,25 +21,24 @@ COPY ../../composer.json /app/
 COPY ../../composer.lock /app/
 
 
-FROM vendor as vendor-prod
+FROM composer:2.7.2 as vendor-prod
 
 WORKDIR /app
 
-# Temporarily disable DB for build
-ENV APP_ENV=build
+# composer files first (lock file ensures consistent dependencies)
+COPY ../../composer.json composer.json
+COPY ../../composer.lock composer.lock
 
-#COPY . /app
-COPY . /app/
+# Run composer install (without application code yet!)
+RUN --mount=type=ssh composer install --no-interaction --no-dev --prefer-dist --no-autoloader --no-scripts
 
-#RUN --mount=type=ssh composer install --no-interaction --no-dev --prefer-dist \
-#    && composer dump-autoload -o
-RUN --mount=type=ssh \
-    composer install --no-interaction --no-dev --prefer-dist \
-    && composer dump-autoload --optimize
+# NOW copy the entire codebase after dependencies installed
+COPY ../../ /app/
 
-RUN chown -R 1000:1000 vendor
+# Finish composer autoload optimization
+RUN composer dump-autoload --optimize
 
-RUN chmod -R 775 vendor
+RUN chown -R 1000:1000 vendor && chmod -R 775 vendor
 
 FROM vendor as vendor-test
 
@@ -55,97 +54,42 @@ RUN --mount=type=ssh composer install --no-interaction --prefer-dist \
 
 FROM php:8.3.3-fpm-alpine3.19 AS prod
 
-#COPY . /var/www
-#COPY ../.. /var/www
-#COPY ../.. /var/www/
+WORKDIR /var/www
 
-# Copy your full app code so bin/console is actually present
-COPY . /var/www/
-
-# copy the vendor folder from the vendor stage
+# FIRST copy composer vendor (dependency rarely changes)
 COPY --from=vendor-prod /app/vendor/ /var/www/vendor/
 
-# ARG to pass PGID
+# THEN copy application source code (changes frequently, Docker notices clearly)
+COPY . /var/www/
+
 ARG PGID
-
-# Install Composer
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
-
-# Install necessary packages including shadow
-RUN apk add --no-cache shadow
-
-# Ensure PGID is not 0, if so, skip creating new group
-RUN if [ "$PGID" -ne 0 ]; then \
-    addgroup -g $PGID newgroup && usermod -aG newgroup www-data; \
-    fi
-
 ARG DATABASE_URL
 ENV DATABASE_URL=${DATABASE_URL}
 
-# Add docker php ext repo
-ADD https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions /usr/local/bin/
+# Add PHP extension installer script once clearly and efficiently
+RUN curl -fsSL https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions \
+    -o /usr/local/bin/install-php-extensions && chmod +x /usr/local/bin/install-php-extensions
 
-# Install libcap
-RUN apk add --no-cache libcap && \
-    setcap 'cap_net_bind_service=+ep' /usr/local/sbin/php-fpm
+# Install system packages and PHP extensions clearly in one command
+RUN apk update && apk upgrade && apk add --no-cache shadow libcap curl nano supervisor \
+    && install-php-extensions mbstring pdo pdo_mysql pcntl opcache intl apcu mcrypt \
+    && setcap 'cap_net_bind_service=+ep' /usr/local/sbin/php-fpm
 
-# Install dependencies
-#RUN apk update && apk upgrade && apk add \
-#    curl \
-#    nano \
-#    shadow \
-#    supervisor && \
-#    chmod +x /usr/local/bin/install-php-extensions && sync && \
-#    install-php-extensions mbstring pdo pdo_mysql pcntl opcache intl apcu mcrypt
-
-RUN apk update && apk upgrade \
-    && apk add --no-cache curl nano shadow supervisor \
-    && chmod +x /usr/local/bin/install-php-extensions && sync \
-    && install-php-extensions mbstring pdo pdo_mysql pcntl opcache intl apcu mcrypt
-
-# Install php extensions
-#RUN chmod +x /usr/local/bin/install-php-extensions && sync \
-#    && install-php-extensions mbstring pdo pdo_mysql pcntl opcache intl apcu mcrypt
-
-# Copy php config
+# Configure php.ini
 RUN cp /usr/local/etc/php/php.ini-production /usr/local/etc/php/php.ini
 
-# Copy custom supervisord.conf
+# Supervisor config (correct)
 COPY ./docker/php-fpm/supervisord.conf /etc/supervisord.conf
-
-# Copy supervisor config
 COPY ./docker/php-fpm/supervisor.d/prod.ini /etc/supervisor.d/default.ini
 
-# Copy app inside container
-#COPY ../.. /var/www
-#COPY --from=vendor-prod /app/vendor/ /var/www/vendor/
+# Permissions after copying everything
+RUN chown -R www-data:www-data /var/www \
+    && chmod +x bin/console \
+    && mkdir -p var/cache var/log /var/log \
+    && chown -R www-data:www-data var/cache var/log /var/log \
+    && chmod -R 775 var/cache var/log /var/log
 
-RUN chown -R www-data:www-data /var/www
-
-RUN mkdir -p /var/log && \
-    touch /var/log/supervisord.log && \
-    chmod -R 775 /var/log
-
-#RUN mkdir -p /var/www/var/cache/prod && \
-#    chown -R www-data:www-data /var/www/var/cache && \
-#    chmod -R 775 /var/www/var/cache
-#
-#RUN mkdir -p /var/www/var/log && \
-#    chown -R www-data:www-data /var/www/var/log && \
-#    chmod -R 775 /var/www/var/log
-#
-#RUN mkdir -p /tmp && \
-#    chown -R www-data:www-data /tmp
-
-#Create the usual Symfony directories
-RUN mkdir -p /var/www/var/cache /var/www/var/log /tmp \
-    && chown -R www-data:www-data /var/www/var/cache /var/www/var/log /tmp \
-    && chmod -R 775 /var/www/var/cache /var/www/var/log
-
-# Set permissions for Symfony console
-RUN chmod +x /var/www/bin/console
-RUN chown -R www-data:www-data /var/www
-
+# Correct supervisor entrypoint (original and correct)
 CMD ["supervisord", "--nodaemon", "-c", "/etc/supervisord.conf"]
 
 EXPOSE 9000
