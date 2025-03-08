@@ -43,9 +43,10 @@ class EmailIncomingMessageHandler
 
         $this->logger->error('5.0 EmailIncomingMessageHandler STARTED', [
             'payload' => $payload,
+            'recipient' => $payload['recipient'] ?? 'recipient_missing',
+            'sender' => $payload['sender'] ?? 'sender_missing',
             'stripped-text' => $payload['stripped-text'],
             'body-plain' => $payload['body-plain'],
-
         ]);
 
         if (str_contains(strtolower($recipient), 'support')) {

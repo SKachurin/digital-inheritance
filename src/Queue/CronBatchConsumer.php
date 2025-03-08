@@ -227,9 +227,9 @@ class CronBatchConsumer
         }
 
 
-        $this->logger->error('3.5 CronBatchConsumer == processPipeline()', [
-            '$pipeline->getActionStatus()' => $pipeline->getActionStatus()
-        ]);
+//        $this->logger->error('3.5 CronBatchConsumer == processPipeline()', [
+//            '$pipeline->getActionStatus()' => $pipeline->getActionStatus()
+//        ]);
     }
 
     private function calculateNextActionTime(\DateTimeImmutable $lastUpdate, string $intervalValue): \DateTimeImmutable
