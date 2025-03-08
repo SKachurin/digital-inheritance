@@ -16,11 +16,12 @@ class SupportEmailForwarderService
     {
     }
 
-    public function forwardSupportEmail(string $sender, string $text): void
+    public function forwardSupportEmail(string $sender, string $subject, string $text): void
     {
         $forwardedMessage = sprintf(
-            "New support email from: %s\n\n%s",
+            "New support email from: %s\n, subject: %s, \n\n%s",
             $sender,
+            $subject,
             $text
         );
 
@@ -29,7 +30,7 @@ class SupportEmailForwarderService
         if (!is_string($user)) {
 
             $this->logger->info('Forwarding support email', [
-                'Exception' => "Invalid Telegram contact."
+                '$user' => $user
             ]);
 
             return;

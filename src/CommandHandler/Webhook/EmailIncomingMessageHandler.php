@@ -3,6 +3,7 @@
 namespace App\CommandHandler\Webhook;
 
 use App\Service\MessageProcessorService;
+use App\Service\SupportEmailForwarderService;
 use Psr\Log\LoggerInterface;
 use App\Service\SendEmailService;
 
@@ -40,8 +41,8 @@ class EmailIncomingMessageHandler
         $sender = $payload['sender'] ?? '';
         $recipient = $payload['recipient'] ?? '';
 
-        if (str_contains(strtolower($recipient), 'support@thedigitalheir.com')) {
-            $this->supportForwarder->forwardSupportEmail($sender, $text);
+        if (str_contains(strtolower($recipient), 'support')) {
+            $this->supportForwarder->forwardSupportEmail($sender, $payload['subject'], $text);
 
             return ['status_code' => 200, 'payload' => ['success' => true]];
         }
