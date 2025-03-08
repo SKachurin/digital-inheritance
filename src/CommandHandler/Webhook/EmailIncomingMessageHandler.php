@@ -13,7 +13,7 @@ class EmailIncomingMessageHandler
         private readonly MessageProcessorService $messageProcessorService,
         private readonly SendEmailService $sendEmailService,
         private readonly SupportEmailForwarderService $supportForwarder,
-//        private readonly LoggerInterface $logger
+        private readonly LoggerInterface $logger
     )
     {}
 
@@ -40,6 +40,13 @@ class EmailIncomingMessageHandler
         $text = $payload['stripped-text'] ?? $payload['body-plain'];
         $sender = $payload['sender'] ?? '';
         $recipient = $payload['recipient'] ?? '';
+
+        $this->logger->error('5.0 EmailIncomingMessageHandler STARTED', [
+            'payload' => $payload,
+            'stripped-text' => $payload['stripped-text'],
+            'body-plain' => $payload['body-plain'],
+
+        ]);
 
         if (str_contains(strtolower($recipient), 'support')) {
             $this->supportForwarder->forwardSupportEmail($sender, $payload['subject'], $text);
