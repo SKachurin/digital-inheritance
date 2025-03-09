@@ -407,6 +407,16 @@ contact_page:
     ¡Tus palabras importan! Especialmente si estás navegando y algo te parece confuso o incorrecto, nos encantaría tu ayuda. 
     Nuestro objetivo es comunicar con claridad en todos los idiomas. Si notas frases incómodas o formas mejores de expresarse, ¡no te lo guardes, compártelo con nosotros!
 
+404_page:
+  og_title: '“The Digital Heir" | Página 404'
+  title: 'Página 404'
+  description: '¡Vaya! Página 404 en “The Digital Heir”'
+  text: |
+    La senda por la que has llegado hasta aquí es incierta, ¿una jugada del destino o un simple desliz digital?
+    </br></br>
+    No temas, pues toda historia tiene su retorno. Déjanos conducirte de vuelta:
+  button: 'Página principal'
+
 about_page:
   title: 'Acerca de “El Heredero Digital”'
   description: 'Conozca más sobre una forma segura de transferir sus activos digitales.'

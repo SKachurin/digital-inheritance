@@ -150,3 +150,32 @@ RUN groupmod --non-unique --gid $PGID www-data
 RUN usermod --non-unique --uid $PUID --gid $PGID www-data
 
 RUN chown -R www-data:www-data /var/www
+
+# not tested
+
+#FROM composer:2.7.2 as vendor
+#
+#WORKDIR /app
+#
+#RUN mkdir -p -m 0700 ~/.ssh && ssh-keyscan github.com >> ~/.ssh/known_hosts
+#
+## Add PHP extension installer
+#ADD https://github.com/mlocati/docker-php-extension-installer/releases/latest/download/install-php-extensions /usr/local/bin/
+#RUN chmod +x /usr/local/bin/install-php-extensions && sync \
+#    && install-php-extensions apcu pdo pdo_mysql
+#
+#COPY ../../composer.json composer.json
+#COPY ../../composer.lock composer.lock
+#
+#FROM vendor as vendor-prod
+#
+## Dependencies first
+#RUN --mount=type=ssh composer install --no-interaction --no-dev --prefer-dist --no-autoloader --no-scripts
+#
+## Application source code
+#COPY ../../ /app/
+#
+## Finalize autoload
+#RUN composer dump-autoload --optimize
+#
+#RUN chown -R 1000:1000 vendor && chmod -R 775 vendor

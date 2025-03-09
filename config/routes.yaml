@@ -62,6 +62,12 @@ home:
     defaults:
         template:  'home_new.html.twig'
 
+404:
+    path:       /404
+    controller: Symfony\Bundle\FrameworkBundle\Controller\TemplateController
+    defaults:
+        template:  '404.html.twig'
+
 about:
     path:       /about
     controller: Symfony\Bundle\FrameworkBundle\Controller\TemplateController

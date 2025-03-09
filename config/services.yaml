@@ -109,3 +109,7 @@ services:
     App\Service\SupportEmailForwarderService:
         arguments:
             $admin_tg: '%env(ADMIN_TG)%'
+
+    App\EventListener\ExceptionListener:
+        tags:
+            - { name: kernel.event_listener, event: kernel.exception }

@@ -41,14 +41,6 @@ class EmailIncomingMessageHandler
         $sender = $payload['sender'] ?? '';
         $recipient = $payload['recipient'] ?? '';
 
-        $this->logger->error('5.0 EmailIncomingMessageHandler STARTED', [
-            'payload' => $payload,
-            'recipient' => $payload['recipient'] ?? 'recipient_missing',
-            'sender' => $payload['sender'] ?? 'sender_missing',
-            'stripped-text' => $payload['stripped-text'],
-            'body-plain' => $payload['body-plain'],
-        ]);
-
 //        foreach ($payload as $key => $value) {
 //            $this->logger->error("Payload field: $key", ['value' => $value]);
 //        }

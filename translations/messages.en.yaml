@@ -378,6 +378,16 @@ contact_page:
     Your words matter! Especially if you’re browsing in Spanish, and something feels off or unclear, we’d love your help.
     Our goal is to communicate clearly in every language. If you notice awkward phrases or better ways to say things, don’t keep it to yourself—share it with us!
 
+404_page:
+  og_title: '“The Digital Heir" | 404 page'
+  title: '404 page'
+  description: 'Oh dear! 404 page on “The Digital Heir"'
+  text: |
+    Well, well… It seems you have wandered off the path, whether by fate or sheer mischief.
+    </br></br>
+    But do not despair! Even the most bewildering journeys have a way back:
+  button: 'Return home'
+
 about_page:
   title: 'About “The Digital Heir”'
   description: 'Learn more about secure way to transfer your digital assets.'
