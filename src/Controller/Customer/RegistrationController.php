@@ -87,16 +87,11 @@ class RegistrationController extends AbstractController
             }
 
             // Proceed with the command dispatch
-            $envelope = $this->commandBus->dispatch($form->getData());
-            $handledStamp = $envelope->last(HandledStamp::class);
-
-            if (!$handledStamp) {
-                throw new \RuntimeException('CommandBus failed to process the registration.');
-            }
+            $this->commandBus->dispatch($form->getData());
 
             $this->addFlash('success', $this->translator->trans('errors.flash.registration_is_processed'));
 
-            return $this->redirectToRoute('user_login');
+            return $this->redirectToRoute('wait');
         }
 
         return $this->render('user/registration.html.twig', [

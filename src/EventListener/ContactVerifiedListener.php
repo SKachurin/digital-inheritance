@@ -2,10 +2,7 @@
 
 namespace App\EventListener;
 
-use App\Entity\Contact;
-use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 use Symfony\Component\Messenger\MessageBusInterface;
-use Symfony\Component\Messenger\Stamp\HandledStamp;
 use App\Command\ActionCreateCommand;
 
 class ContactVerifiedListener
@@ -18,12 +15,8 @@ class ContactVerifiedListener
     {
         $contact = $event->getContact();  // Use event to pass Contact
 
-        $envelope = $this->commandBus->dispatch(new ActionCreateCommand($contact));
-        $handledStamp = $envelope->last(HandledStamp::class);
+        $this->commandBus->dispatch(new ActionCreateCommand($contact));
 
-        if (!$handledStamp) {
-            throw new UnprocessableEntityHttpException('500 internal error (CommandBus not responding).');
-        }
 
     }
 }

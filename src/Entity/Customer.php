@@ -465,6 +465,16 @@ class Customer implements UserInterface, PasswordAuthenticatedUserInterface
 //    }
 
 
+    public function isTrialActive(): bool
+    {
+        $trialEnd = (clone $this->getCreatedAt())->modify('+3 days');
+        return new \DateTimeImmutable() < $trialEnd;
+    }
+
+    public function getTrialEndDate(): \DateTimeImmutable
+    {
+        return (clone $this->getCreatedAt())->modify('+3 days');
+    }
 
     public function eraseCredentials(): void
     {

@@ -265,6 +265,8 @@ TEST_1_min: 'TEST 1 min'
 1_month: '1 month'
 
 errors:
+  reg:
+    email_verification_required: "Your need to verify your email address first. Link for verification active only 1 hour"
   note:
     edit:
       second_question_answer_required: 'Answer to the second question is required if you have text of the question.'
@@ -387,6 +389,20 @@ contact_page:
     </br></br>
     But do not despair! Even the most bewildering journeys have a way back:
   button: 'Return home'
+
+wait_page:
+  og_title: '“The Digital Heir" | Wait page'
+  title: 'Wait page'
+  description: 'A small formality before you continue! Wait page on “The Digital Heir"'
+  text: |
+    Hold your horses! Before you can step further, we need to make sure you’re really you.
+    </br></br>
+    An email has been dispatched—containing a fine little link, active for only 1 hour. Click it while it lasts.
+    </br></br>
+    If it’s playing hard to get, have a look in your spam folder. Even the best letters sometimes end up in the wrong pile.
+
+  button: 'Resend email'
+  
 
 about_page:
   title: 'About “The Digital Heir”'

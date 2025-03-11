@@ -16,7 +16,9 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 
 class SocialVerificationController extends AbstractController
 {
-    private readonly TranslatorInterface $translator;
+    public function __construct(
+        private TranslatorInterface $translator
+    ) {}
 
     /**
      * @throws Exception

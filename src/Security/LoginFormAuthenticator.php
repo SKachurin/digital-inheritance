@@ -2,6 +2,8 @@
 
 namespace App\Security;
 
+use App\Repository\ContactRepository;
+use App\Repository\CustomerRepository;
 use ReCaptcha\ReCaptcha;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -18,22 +20,23 @@ use Symfony\Component\Security\Http\Authenticator\Passport\Badge\CsrfTokenBadge;
 use Symfony\Component\Security\Http\Authenticator\Passport\Badge\RememberMeBadge;
 use Symfony\Component\Security\Http\Authenticator\Passport\Credentials\PasswordCredentials;
 use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
 {
     use TargetPathTrait;
 
-    private RouterInterface $router;
-    private ReCaptcha $recaptcha;
-    private AuthenticationUtils $authenticationUtils;
-    private ReCaptcha $recaptchaV3;
-    private ReCaptcha $recaptchaV2;
 
-    public function __construct(RouterInterface $router, ReCaptcha $recaptchaV3, ReCaptcha $recaptchaV2)
+    public function __construct(
+        private RouterInterface     $router,
+        private ReCaptcha           $recaptcha,
+        private ReCaptcha           $recaptchaV3,
+        private ReCaptcha           $recaptchaV2,
+        private CustomerRepository  $customerRepository,
+        private ContactRepository   $contactRepository,
+        private TranslatorInterface $translator,
+    )
     {
-        $this->router = $router;
-        $this->recaptchaV3 = $recaptchaV3;
-        $this->recaptchaV2 = $recaptchaV2;
     }
 
     public function authenticate(Request $request): Passport
@@ -53,6 +56,8 @@ class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
         } else {
             $this->validateRecaptchaV3($recaptchaResponse);
         }
+
+        $this->isEmailVerified($username, $request);
 
         // Create and return the Passport
         return new Passport(
@@ -111,6 +116,13 @@ class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
 
     public function onAuthenticationFailure(Request $request, AuthenticationException $exception): Response
     {
+        // wait page
+        if ($exception instanceof CustomUserMessageAuthenticationException &&
+            $exception->getMessage() === $this->translator->trans('errors.reg.email_verification_required')) {
+
+            return new RedirectResponse($this->router->generate('wait'));
+        }
+
         $request->getSession()->set('authentication_error', $exception->getMessage());
 
         return new RedirectResponse($this->router->generate('user_login'));
@@ -119,6 +131,17 @@ class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
     protected function getLoginUrl(Request $request): string
     {
         return $this->router->generate('user_login');
+    }
+
+    private function isEmailVerified(string $username, Request $request): void
+    {
+        $customer = $this->customerRepository->findOneBy(['customerEmail' => $username]);
+        $email = $this->contactRepository->findOneBy(['customer' => $customer]);
+
+        if (!$email || !$email->getIsVerified()) {
+            throw new CustomUserMessageAuthenticationException($this->translator->trans('errors.reg.email_verification_required'));
+        }
+
     }
 }
 

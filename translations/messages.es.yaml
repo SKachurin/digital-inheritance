@@ -264,6 +264,8 @@ TEST_1_min: 'PRUEBA 1 min'
 1_month: '1 mes'
 
 errors:
+  reg:
+    email_verification_required: 'Necesitas verificar tu dirección de correo electrónico primero. El enlace de verificación estará activo solo por 1 hora.'
   note:
     edit:
       second_question_answer_required: 'Se requiere una respuesta a la segunda pregunta si el texto de la pregunta está presente.'
@@ -416,6 +418,18 @@ contact_page:
     </br></br>
     No temas, pues toda historia tiene su retorno. Déjanos conducirte de vuelta:
   button: 'Página principal'
+
+wait_page:
+  og_title: '“The Digital Heir” | Verificación de correo'
+  title: 'Verificación de correo'
+  description: '¡Un pequeño trámite antes de continuar! Página Verificación de correo en “The Digital Heir”'
+  text: |
+    ¡Un momento, caballero o dama! Antes de seguir adelante, necesitamos asegurarnos de que es usted en persona.
+    </br></br>
+    Ya le hemos enviado un correo con un enlace, pero cuidado: solo vivirá por 1 hora. Úselo antes de que se desvanezca.
+    </br></br>
+    Si no aparece, eche un vistazo en su carpeta de spam. A veces, hasta las cartas más importantes terminan en el lugar equivocado.
+  button: 'Reenviar correo'
 
 about_page:
   title: 'Acerca de “El Heredero Digital”'
