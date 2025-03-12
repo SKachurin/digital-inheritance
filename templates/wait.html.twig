@@ -3,7 +3,7 @@
 {% block og_title %}{{ 'wait_page.og_title'|trans }}{% endblock %}
 
 {% block og_description %}{{ 'wait_page.description'|trans }}{% endblock %}
-{% block og_image %}{{ absolute_url('/build/logo-TheDigitalHeir-192x192.png') }}{% endblock %}
+{% block og_image %}{{ '/build/logo-TheDigitalHeir-192x192.png' }}{% endblock %}
 
 {% block content %}
     <style>
@@ -215,7 +215,7 @@
 
         <div class="banner-container">
             <video autoplay loop muted playsinline width="50%">
-                <source src="{{ absolute_url('/banners/black_cat_21sec.mp4') }}" type="video/mp4">
+                <source src="{{ '/banners/black_cat_21sec.mp4' }}" type="video/mp4">
                 Your browser does not support the video tag.
             </video>
         </div>

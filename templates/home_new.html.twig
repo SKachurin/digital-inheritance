@@ -2,7 +2,7 @@
 
 {% block og_title %}{{ 'home_page.title'|trans }}{% endblock %}
 {% block og_description %}{{ 'home_page.description'|trans }}{% endblock %}
-{% block og_image %}{{ absolute_url('/banners/The_Master_and_Margarita.png') }}{% endblock %}
+{% block og_image %}{{ '/banners/The_Master_and_Margarita.png' }}{% endblock %}
 
 {% block content %}
     <style>
@@ -167,7 +167,7 @@
             {% endif %}
         </div>
         <div class="hero-image">
-            <img src="{{ absolute_url('/banners/TheDigitalHeir_Contact_Us_banner1_.png') }}" alt="Contact Image 1">
+            <img src="{{ '/banners/TheDigitalHeir_Contact_Us_banner1_.png' }}" alt="Contact Image 1">
         </div>
     </section>
 

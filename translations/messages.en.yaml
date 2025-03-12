@@ -391,9 +391,9 @@ contact_page:
   button: 'Return home'
 
 wait_page:
-  og_title: '“The Digital Heir" | Wait page'
-  title: 'Wait page'
-  description: 'A small formality before you continue! Wait page on “The Digital Heir"'
+  og_title: '“The Digital Heir" | A Necessary Pause'
+  title: 'A Necessary Pause'
+  description: 'A small formality before you continue! A Necessary Pause on “The Digital Heir"'
   text: |
     Hold your horses! Before you can step further, we need to make sure you’re really you.
     </br></br>

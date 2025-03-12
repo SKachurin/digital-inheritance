@@ -15,7 +15,7 @@
 {#    TRANSLATE default_title AND default_description #}
     <meta property="og:title" content="{% block og_title %}{{ 'default_title'|trans }}{% endblock %}">
     <meta property="og:description" content="{% block og_description %}{{ 'default_description'|trans }}{% endblock %}">
-    <meta property="og:image" content="{% block og_image %}{{ absolute_url('/build/logo-TheDigitalHeir-192x192.png') }}{% endblock %}">
+    <meta property="og:image" content="{% block og_image %}{{ '/build/logo-TheDigitalHeir-192x192.png' }}{% endblock %}">
     <meta property="og:url" content="{{ app.request.uri }}">
 
 
@@ -44,7 +44,7 @@
                 <!-- LOGO & TITLE -->
                 <a href="{{ path('home') }}" id="logo" class="d-flex align-items-center text-dark text-decoration-none">
 
-                <img src="{{ absolute_url('/build/logo-TheDigitalHeir-192x192.png') }}" alt="Logo" width="60" height="60" class="me-2">
+                <img src="{{ '/build/logo-TheDigitalHeir-192x192.png' }}" alt="Logo" width="60" height="60" class="me-2">
                     <div class="d-flex flex-column">
                         <span class="fs-6 font-monospace"><b>The Eternity</b></span>
                         <span class="fs-4 font-monospace"><b>The Digital Heir</b></span>
