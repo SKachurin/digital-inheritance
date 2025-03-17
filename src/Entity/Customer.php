@@ -104,6 +104,9 @@ class Customer implements UserInterface, PasswordAuthenticatedUserInterface
      */
     #[ORM\OneToMany(targetEntity: Contact::class, mappedBy: 'customer', cascade: ['remove'])]
     private Collection $contacts;
+
+    #[ORM\Column(type: 'datetime_immutable', nullable: true)]
+    private ?\DateTimeImmutable $deleted_at = null;
 //
 //    #[ORM\Column(type: 'string', length: 32, nullable: true)]
 //    private ?string $referralId = null;
@@ -476,9 +479,21 @@ class Customer implements UserInterface, PasswordAuthenticatedUserInterface
         return (clone $this->getCreatedAt())->modify('+3 days');
     }
 
+    public function setDeletedAtValue(?\DateTimeImmutable $deletedAt): self
+    {
+        $this->deleted_at = $deletedAt;
+        return $this;
+    }
+
+    public function getDeletedAt(): ?\DateTimeImmutable
+    {
+        return $this->deleted_at;
+    }
+
     public function eraseCredentials(): void
     {
         // Implement eraseCredentials() method.
     }
+
 
 }

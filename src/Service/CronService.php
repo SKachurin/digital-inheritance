@@ -4,10 +4,11 @@ declare(strict_types=1);
 
 namespace App\Service;
 
-use App\Enum\CustomerPaymentStatusEnum;
+use App\Message\DeleteMarkedAccountsMessage;
 use App\Repository\CustomerRepository;
 use App\Queue\CronBatchProducer;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Notifier\Exception\TransportExceptionInterface;
 
 class CronService
@@ -17,6 +18,7 @@ class CronService
     public function __construct(
         private CustomerRepository $customerRepository,
         private CronBatchProducer $batchProducer,
+        private readonly MessageBusInterface $bus
 //        LoggerInterface $logger
 
     ) {
@@ -33,9 +35,7 @@ class CronService
 
         while (true) {
             // Fetch a batch
-            $customers = $this->customerRepository->findBy(
-                ['customerPaymentStatus' => CustomerPaymentStatusEnum::PAID->value],
-                ['id' => 'ASC'],
+            $customers = $this->customerRepository->findPaidAndNotDeletedForCron(
                 $batchSize,
                 $offset
             );
@@ -56,7 +56,14 @@ class CronService
             $offset += $batchSize;
         }
 
-//        $this->logger->info('All customers have been queued for pipeline processing.');
+        $now = new \DateTimeImmutable();
+        $hour = (int)$now->format('H');
+        $minute = (int)$now->format('i');
+
+        // Run deleteMarkedAccounts once between 00:00 and 00:15
+        if ($hour === 0 && $minute <= 15) {
+            $this->bus->dispatch(new DeleteMarkedAccountsMessage());
+        }
 
     }
 

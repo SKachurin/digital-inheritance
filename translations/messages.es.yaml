@@ -90,6 +90,8 @@ form:
 
     okayPassword_repeat: 'Repita la Contraseña de Verificación'
     beneficiary_lang:  'Elige el idioma para tu heredero'
+    choose_type: 'Selecciona un contacto verificado para 2FA'
+    choose_type_button: 'Choose this Type for 2FA'
 
   constraints:
     your_login: 'Por favor, introduzca su usuario.'
@@ -134,6 +136,7 @@ form:
       spanish: 'Español'
 
 Submit: 'Enviar'
+delete_message_sent: 'Mensaje enviado. Debes confirmar la eliminación haciendo clic en el enlace del mensaje.'
 forgot_pass: '¿Olvidó su contraseña?'
 click_here: 'Haga clic aquí'
 restore_pass: 'Recuperación de contraseña'
@@ -167,6 +170,8 @@ dashboard:
     Para encriptar tu 'Sobre', combinamos una cadena de tus respuestas con nuestro secreto.
     Como tus respuestas nunca se almacenan en ningún lugar, cada vez que edites el 'Sobre', primero tendrás que descifrarlo.
 
+  delete_account: 'Eliminar mi cuenta'
+  delete_account_tip: 'De acuerdo con las normas del RGPD, puedes eliminar todos tus datos de esta aplicación.'
   make_a_payment: 'Realice un Pago'
   make_a_payment_tip: "Esta función aún no está lista. Por ahora, todos los nuevos clientes se consideran Pagados."
   create_your_pipeline: 'Cree su Pipeline'
@@ -203,6 +208,9 @@ dashboard:
   add_your_second_email_tip: "Cuantos más contactos agregue, más Acciones tendrá para construir su Pipeline."
   edit_your_email: 'Editar dirección de correo electrónico'
   edit_your_email_tip: "Después de editar este contacto, no olvide verificar el nuevo."
+  cancel_deletion_message: |
+    Has iniciado el proceso de eliminación de todos tus datos de esta aplicación. Tus datos serán eliminados permanentemente muy pronto.
+  cancel_deletion_button: 'Cancelar eliminación'
 
 decrypt_your_secure_envelope: 'Descifre su Sobre Seguro'
 decrypt_first: 'Para editar su sobre seguro, primero descífrelo.'
@@ -297,6 +305,7 @@ errors:
     note_updated: 'Su nota ha sido actualizada.'
     pipeline_created: 'Su proceso (Pipeline) ha sido creado.'
     pipeline_saved: 'Su proceso (Pipeline) ha sido guardado.'
+    cancel_delete_success: 'El proceso de eliminación ha sido cancelado. Tu cuenta y datos se han conservado.'
 
 messages:
   verification: '¡Gracias por registrarte! 🔐 Por favor, verifica tu teléfono haciendo clic en el siguiente enlace: '
@@ -304,6 +313,16 @@ messages:
   not_right: "No es la respuesta que esperaba... 🤔"
   resetting: "¡Me alegra oírlo! 😊"
   check_message: '¡Oye! ¿Estás bien? 🤗'
+  confirm_delete_account: "Para confirmar la eliminación de tu cuenta, haz clic en este enlace: %link%"
+  incorrect_delete_token: 'Token inválido o caducado.'
+
+  correct_delete_token: |
+    El token es válido.
+    </br></br>
+    Todas las funciones de tu cuenta han sido desactivadas y tus datos serán eliminados en 30 días.
+    Hasta entonces, puedes cancelar este proceso desde tu Panel de Control.
+    </br></br>
+    Nota: Dependiendo de tu proveedor de suscripción, es posible que debas cancelarla manualmente.
   notification_message: "Hola %beneficiary_name%,\n\nLa persona llamada %customer_name% ha listado este contacto como un contacto de emergencia en The Digital Heir. Haz clic en el enlace para acceder al sobre seguro:"
 
 home_page:

@@ -90,6 +90,8 @@ form:
 
     okayPassword_repeat: 'Repeat the Okay Password'
     beneficiary_lang:  'Choose language for your Heir'
+    choose_type: 'Select a verified contact for 2FA'
+    choose_type_button: 'Choose this Type for 2FA'
 
   constraints:
     your_login: 'Please enter your login.'
@@ -134,6 +136,8 @@ form:
       spanish: 'Spanish'
 
 Submit: 'Submit'
+title_delete_account: 'You are selecting type of your contact to receive confirmation'
+delete_message_sent: 'Message sent. You need to confirm the deletion by clicking the link in the message.'
 forgot_pass: 'Forgot password?'
 click_here: 'Click here'
 restore_pass: 'Password Recovery'
@@ -167,6 +171,8 @@ dashboard:
     For encrypting your 'Envelope,' we combine a string from your answers with our secret. 
     Since your answers are never stored anywhere, each time you edit the ‘Envelope,’ you’ll need to decrypt it first.
 
+  delete_account: 'Delete my account'
+  delete_account_tip: 'In accordance with GDPR rules, you can delete all your data from this app.'
   make_a_payment: 'Make a Payment'
   make_a_payment_tip: "This feature isn't ready yet. For now, all new customers are treated as Paid."
   create_your_pipeline: 'Create Your Pipeline'
@@ -203,6 +209,9 @@ dashboard:
   add_your_second_email_tip: "The more contacts you add, the more Actions you'll have to build your Pipeline."
   edit_your_email: 'Edit Email Address'
   edit_your_email_tip: "After editing this contact, don't forget to verify the new one!"
+  cancel_deletion_message: |
+    You’ve started the process of deleting all your data from this app. Your data will be permanently deleted soon.
+  cancel_deletion_button: 'Cancel Deletion Process'
 
 decrypt_your_secure_envelope: 'Decrypt Your Secure Envelope'
 decrypt_first: 'To edit your secure envelope, please decrypt it first.'
@@ -297,6 +306,7 @@ errors:
     note_updated: 'Your note has been updated.'
     pipeline_created: 'Your Pipeline is created.'
     pipeline_saved: 'Your Pipeline has been saved.'
+    cancel_delete_success: 'The deletion process has been canceled. Your account and data remain intact.'
 
 messages:
   verification: 'Thank you for registering! 🔐 Please verify your phone by clicking on the following link: '
@@ -304,6 +314,15 @@ messages:
   not_right: "Not the answer I expected... 🤔"
   resetting: "It's nice to hear it 😊!"
   check_message: 'Hey! Are you okay? 🤗'
+  confirm_delete_account: "To confirm your account deletion, click on this link: %link%"
+  incorrect_delete_token: 'Invalid or expired token.'
+  correct_delete_token: |
+    The token is valid. 
+    </br></br>
+    All functions in your account have been disabled, and your data will be deleted in 30 days.
+    Until then, you can cancel this process from your Dashboard.
+    </br></br>
+    Please note: Depending on your subscription provider, you may need to cancel your subscription manually.
   notification_message: "Hey %beneficiary_name%,\n\nPerson named %customer_name% has listed this contact as an emergency contact on The Digital Heir. Click the link to access the secure envelope:"
 
 home_page:
@@ -402,7 +421,7 @@ wait_page:
     If it’s playing hard to get, have a look in your spam folder. Even the best letters sometimes end up in the wrong pile.
 
   button: 'Resend email'
-  
+
 
 about_page:
   title: 'About “The Digital Heir”'

@@ -22,4 +22,21 @@ class ContactRepository extends BaseRepository
         parent::__construct($registry, Contact::class);
     }
 
+    /**
+     * Get verified contacts of a specific type for a given customer
+     *
+     * @return Contact[]
+     */
+    public function findVerifiedContactsByType(int $customerId, string $contactType): array
+    {
+        return $this->createQueryBuilder('c')
+            ->andWhere('c.customer = :customerId')
+            ->andWhere('c.contactTypeEnum = :contactType')
+            ->andWhere('c.isVerified = true')
+            ->setParameter('customerId', $customerId)
+            ->setParameter('contactType', $contactType)
+            ->getQuery()
+            ->getResult();
+    }
+
 }

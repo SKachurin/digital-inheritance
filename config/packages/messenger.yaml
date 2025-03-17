@@ -41,7 +41,10 @@ framework:
         routing:
             'App\Queue\Doctrine\Customer\CustomerCreatedMessage': async
             'App\Command\ActionCreateCommand': async
+            'App\Message\CustomerDeletedMessage': async
+            'App\Message\CustomerDeleteVerificationMessage': async
             'App\Message\CronBatchMessage': batch
+            'App\Message\DeleteMarkedAccountsMessage': batch
 
         failure_transport: failed
 

@@ -6,6 +6,7 @@ namespace App\Repository;
 
 use App\Entity\Contact;
 use App\Entity\Customer;
+use App\Enum\CustomerPaymentStatusEnum;
 use App\Repository\Collection\PageCollection;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -51,4 +52,28 @@ class CustomerRepository extends BaseRepository
 
         return null;
     }
+
+    public function findAllMarkedForDeletion(): array
+    {
+        return $this->createQueryBuilder('c')
+            ->where('c.deleted_at IS NOT NULL')
+            ->andWhere('c.deleted_at <= :date')
+            ->setParameter('date', new \DateTime('-1 day')) //30 days TODO
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function findPaidAndNotDeletedForCron(int $batchSize, int $offset): array
+    {
+        return $this->createQueryBuilder('c')
+            ->where('c.customerPaymentStatus = :paid')
+            ->andWhere('c.deleted_at IS NULL')  // Exclude marked for deletion
+            ->setParameter('paid', CustomerPaymentStatusEnum::PAID->value)
+            ->orderBy('c.id', 'ASC')
+            ->setMaxResults($batchSize)
+            ->setFirstResult($offset)
+            ->getQuery()
+            ->getResult();
+    }
+
 }

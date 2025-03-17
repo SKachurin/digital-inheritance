@@ -110,6 +110,19 @@ checkout:
     defaults:
         template:  'checkout.html.twig'
 
+
+customer_delete:
+    path:       /customer/delete
+    controller: App\Controller\Customer\CustomerDeleteController
+
+customer_delete_verification_route:
+    path:       /customer-delete/{token}
+    controller: App\Controller\Customer\CustomerDeleteVerificationController
+
+customer_cancel_deletion:
+    path:       /cancel-deletion
+    controller: App\Controller\Customer\CancelDeletionController
+
 email_verification_route:
     path:       /verify-email/{token}
     controller: App\Controller\Contact\EmailVerificationController::verifyEmail

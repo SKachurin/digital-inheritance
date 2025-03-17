@@ -1,0 +1,31 @@
+{% extends 'base.html.twig' %}
+
+
+{% block content %}
+    <div class="container">
+        <h1 style="padding-top: 3em;">{{ 'title_delete_account'|trans }}</h1>
+
+        {% for label, messages in app.flashes %}
+            {% for message in messages %}
+                <div class="alert alert-{{ label }}" style="font-size: 1.5rem !important;">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endfor %}
+
+
+        {% if not sent %}
+            {{ form_start(form) }}
+            {{ form_end(form) }}
+        {% endif %}
+
+        {% if sent %}
+            <div class="alert alert-warning" role="alert">
+                {{ 'delete_message_sent'|trans }}
+            </div>
+        {% endif %}
+
+
+    </div>
+{% endblock %}
+

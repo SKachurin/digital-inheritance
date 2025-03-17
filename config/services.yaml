@@ -113,3 +113,7 @@ services:
     App\EventListener\ExceptionListener:
         tags:
             - { name: kernel.event_listener, event: kernel.exception }
+
+    App\EventListener\CustomerIsDeletedListener:
+        tags:
+            - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest }
