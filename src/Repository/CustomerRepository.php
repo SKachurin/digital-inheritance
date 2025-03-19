@@ -58,7 +58,7 @@ class CustomerRepository extends BaseRepository
         return $this->createQueryBuilder('c')
             ->where('c.deleted_at IS NOT NULL')
             ->andWhere('c.deleted_at <= :date')
-            ->setParameter('date', new \DateTime('-1 day')) //30 days TODO
+            ->setParameter('date', new \DateTime('-30 days'))
             ->getQuery()
             ->getResult();
     }

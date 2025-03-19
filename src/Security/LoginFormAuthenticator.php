@@ -117,6 +117,7 @@ class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
     public function onAuthenticationFailure(Request $request, AuthenticationException $exception): Response
     {
         // wait page
+        // also you get here if trying to Log in without Register
         if ($exception instanceof CustomUserMessageAuthenticationException &&
             $exception->getMessage() === $this->translator->trans('errors.reg.email_verification_required')) {
 

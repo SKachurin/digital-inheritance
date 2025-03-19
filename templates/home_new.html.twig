@@ -28,13 +28,6 @@
             padding-top: 0rem;
         }
 
-        /*.hero-content p {*/
-        /*    font-size: 1.2rem;*/
-        /*    color: #555;*/
-        /*    margin-top: 1rem;*/
-        /*    max-width: 90%;*/
-        /*}*/
-
         .btn-primary {
             display: inline-block;
             margin-top: 1.5rem;
@@ -99,16 +92,115 @@
         }
 
         .faq-answer {
-            display: none;
-            padding: 1rem;
+            /*display: none;*/
+            /*padding: 1rem;*/
             font-size: 1.2rem;
             color: #555;
             text-align: left;
         }
 
-        .faq-toggle {
+        /* =======================================
+             TILDA-STYLE FAQ ITEM
+             (Circle plus → X on open, with transitions)
+          ======================================= */
+        .tilda-faq-item {
+            border-bottom: 1px solid #ddd;
+            padding: 1.5rem 0;
+            text-align: left; /* match your existing style */
+        }
+
+        /* The clickable question row */
+        .tilda-faq-button {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+            cursor: pointer;
+            background: none;
+            border: none;
             font-size: 1.5rem;
             font-weight: bold;
+            padding: 1rem;
+            margin: 0;
+        }
+
+        /* We'll toggle an ".open" class to animate the plus → X */
+        .tilda-faq-item.open .icon-line2 {
+            transform: rotate(90deg);
+        }
+
+        /* Circle + lines default style */
+        .tilda-icon {
+            width: 40px;
+            height: 40px;
+            fill: none;
+            /*stroke: #11263a;*/
+            stroke-width: 2px;
+            transition: fill 0.3s ease, stroke 0.3s ease;
+        }
+
+        .tilda-icon circle {
+            /*fill: transparent;*/
+            transition: fill 0.3s ease;
+        }
+
+        /* The two lines that form a plus sign */
+        .tilda-icon .icon-line1,
+        .tilda-icon .icon-line2 {
+            transition: transform 0.3s ease, stroke 0.3s ease;
+            transform-origin: center;
+            stroke: #11263a;
+        }
+
+        /* On hover, fill circle and lines become white */
+
+        .tilda-faq-button:hover .tilda-icon {
+            fill: #4f808f !important;
+            stroke: #ffffff !important;
+        }
+        .tilda-icon circle:hover {
+            fill: #4f808f !important;
+            transition: fill 0.3s ease;
+        }
+        .tilda-icon:hover {
+            fill: #4f808f !important;
+            transition: fill 0.3s ease;
+        }
+
+        .tilda-faq-button:hover .tilda-icon .icon-line1,
+        .tilda-faq-button:hover .tilda-icon .icon-line2 {
+            stroke: #ffffff !important;
+        }
+
+
+        /* Keyboard focus style (for accessibility) */
+        .tilda-faq-button:focus-visible .tilda-icon {
+            fill: #4f808f;
+            stroke: #ffffff;
+        }
+
+        /* Slide-down answer: use max-height transitions for a smooth open/close */
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.6s ease;
+            padding: 0 1rem;
+        }
+
+        .tilda-faq-item.open .faq-answer {
+            /*padding: 1rem;*/
+            max-height: 500px;
+        }
+
+        .tilda-faq-button.faq-question #text{
+            max-width: 90% !important;
+        }
+
+        .tilda-faq-item.open .icon-line1 {
+            transform: rotate(45deg) !important;
+        }
+        .tilda-faq-item.open .icon-line2 {
+            transform: rotate(45deg) !important;
         }
 
         @media (max-width: 991px) {
@@ -116,6 +208,14 @@
             .faq h2 {
                 margin-top: 0rem !important;
 
+            }
+            .tilda-icon {
+                width: 80px !important;
+                height: 80px !important;
+                transform: translateY(6%);
+            }
+            .tilda-faq-button.faq-question #text{
+                max-width: 80% !important;
             }
             .hero {
                 flex-direction: column;
@@ -141,11 +241,6 @@
             .faq-answer,
             .faq-question {
                 font-size: 2.5rem !important;
-            }
-
-            .faq-toggle {
-                font-size: 3.5rem !important;
-                margin-left: 3rem;
             }
 
         }
@@ -174,96 +269,145 @@
     <section class="faq">
         <h2>{{ 'faq.title'|trans }}</h2>
         <div class="faq-container">
-            <div class="faq-item">
-                <button class="faq-question">
-                    {{ 'faq.q1'|trans }} <span class="faq-toggle">+</span>
+            <div class="tilda-faq-item faq-item">
+                <button class="tilda-faq-button faq-question" type="button">
+                    <span id="text"> {{ 'faq.q1'|trans }} </span>
+                    <svg class="tilda-icon" viewBox="-1 -1 42 42" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="20" cy="20" r="20"></circle>
+                        <line class="icon-line1" x1="10" y1="20" x2="30" y2="20"></line>
+                        <line class="icon-line2" x1="20" y1="10" x2="20" y2="30"></line>
+                    </svg>
                 </button>
                 <div class="faq-answer">
                     <p>{{ 'faq.a1'|trans }}</p>
                 </div>
             </div>
 
-            <div class="faq-item">
-                <button class="faq-question">
-                    {{ 'faq.q2'|trans }} <span class="faq-toggle">+</span>
+            <div class="tilda-faq-item faq-item">
+                <button class="tilda-faq-button faq-question" type="button">
+                    <span id="text">  {{ 'faq.q2'|trans }} </span>
+                    <svg class="tilda-icon" viewBox="-1 -1 42 42" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="20" cy="20" r="20"></circle>
+                        <line class="icon-line1" x1="10" y1="20" x2="30" y2="20"></line>
+                        <line class="icon-line2" x1="20" y1="10" x2="20" y2="30"></line>
+                    </svg>
                 </button>
                 <div class="faq-answer">
                     <p>{{ 'faq.a2'|trans }}</p>
                 </div>
             </div>
 
-            <div class="faq-item">
-                <button class="faq-question">
-                    {{ 'faq.q3'|trans }} <span class="faq-toggle">+</span>
+            <div class="tilda-faq-item faq-item">
+                <button class="tilda-faq-button faq-question" type="button">
+                    <span id="text">  {{ 'faq.q3'|trans }} </span>
+                    <svg class="tilda-icon" viewBox="-1 -1 42 42" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="20" cy="20" r="20"></circle>
+                        <line class="icon-line1" x1="10" y1="20" x2="30" y2="20"></line>
+                        <line class="icon-line2" x1="20" y1="10" x2="20" y2="30"></line>
+                    </svg>
                 </button>
                 <div class="faq-answer">
                     <p>{{ 'faq.a3'|trans }}</p>
                 </div>
             </div>
 
-            <div class="faq-item">
-                <button class="faq-question">
-                    {{ 'faq.q4'|trans }} <span class="faq-toggle">+</span>
+            <div class="tilda-faq-item faq-item">
+                <button class="tilda-faq-button faq-question" type="button">
+                    <span id="text"> {{ 'faq.q4'|trans }} </span>
+                    <svg class="tilda-icon" viewBox="-1 -1 42 42" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="20" cy="20" r="20"></circle>
+                        <line class="icon-line1" x1="10" y1="20" x2="30" y2="20"></line>
+                        <line class="icon-line2" x1="20" y1="10" x2="20" y2="30"></line>
+                    </svg>
                 </button>
                 <div class="faq-answer">
                     <p>{{ 'faq.a4'|trans }}</p>
                 </div>
             </div>
 
-            <div class="faq-item">
-                <button class="faq-question">
-                    {{ 'faq.q5'|trans }} <span class="faq-toggle">+</span>
+            <div class="tilda-faq-item faq-item">
+                <button class="tilda-faq-button faq-question" type="button">
+                    <span id="text"> {{ 'faq.q5'|trans }} </span>
+                    <svg class="tilda-icon" viewBox="-1 -1 42 42" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="20" cy="20" r="20"></circle>
+                        <line class="icon-line1" x1="10" y1="20" x2="30" y2="20"></line>
+                        <line class="icon-line2" x1="20" y1="10" x2="20" y2="30"></line>
+                    </svg>
                 </button>
                 <div class="faq-answer">
                     <p>{{ 'faq.a5'|trans }}</p>
                 </div>
             </div>
 
-            <div class="faq-item">
-                <button class="faq-question">
-                    {{ 'faq.q6'|trans }} <span class="faq-toggle">+</span>
+            <div class="tilda-faq-item faq-item">
+                <button class="tilda-faq-button faq-question" type="button">
+                    <span id="text">{{ 'faq.q6'|trans }}</span>
+                    <svg class="tilda-icon" viewBox="-1 -1 42 42" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="20" cy="20" r="20"></circle>
+                        <line class="icon-line1" x1="10" y1="20" x2="30" y2="20"></line>
+                        <line class="icon-line2" x1="20" y1="10" x2="20" y2="30"></line>
+                    </svg>
                 </button>
                 <div class="faq-answer">
                     <p>{{ 'faq.a6'|trans }}</p>
                 </div>
             </div>
 
-            <div class="faq-item">
-                <button class="faq-question">
-                    {{ 'faq.q7'|trans }} <span class="faq-toggle">+</span>
+            <div class="tilda-faq-item faq-item">
+                <button class="tilda-faq-button faq-question" type="button">
+                    <span id="text">{{ 'faq.q7'|trans }}</span>
+                    <svg class="tilda-icon" viewBox="-1 -1 42 42" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="20" cy="20" r="20"></circle>
+                        <line class="icon-line1" x1="10" y1="20" x2="30" y2="20"></line>
+                        <line class="icon-line2" x1="20" y1="10" x2="20" y2="30"></line>
+                    </svg>
                 </button>
                 <div class="faq-answer">
                     <p>{{ 'faq.a7'|trans }}</p>
                 </div>
             </div>
 
-            <div class="faq-item">
-                <button class="faq-question">
-                    {{ 'faq.q8'|trans }} <span class="faq-toggle">+</span>
+            <div class="tilda-faq-item faq-item">
+                <button class="tilda-faq-button faq-question" type="button">
+                    <span id="text">{{ 'faq.q8'|trans }}</span>
+                    <svg class="tilda-icon" viewBox="-1 -1 42 42" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="20" cy="20" r="20"></circle>
+                        <line class="icon-line1" x1="10" y1="20" x2="30" y2="20"></line>
+                        <line class="icon-line2" x1="20" y1="10" x2="20" y2="30"></line>
+                    </svg>
                 </button>
                 <div class="faq-answer">
                     <p>{{ 'faq.a8'|trans }}</p>
                 </div>
             </div>
 
-            <div class="faq-item">
-                <button class="faq-question">
-                    {{ 'faq.q9'|trans }} <span class="faq-toggle">+</span>
+            <div class="tilda-faq-item faq-item">
+                <button class="tilda-faq-button faq-question" type="button">
+                    <span id="text">{{ 'faq.q9'|trans }}</span>
+                    <svg class="tilda-icon" viewBox="-1 -1 42 42" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="20" cy="20" r="20"></circle>
+                        <line class="icon-line1" x1="10" y1="20" x2="30" y2="20"></line>
+                        <line class="icon-line2" x1="20" y1="10" x2="20" y2="30"></line>
+                    </svg>
                 </button>
                 <div class="faq-answer">
                     <p>{{ 'faq.a9'|trans }}</p>
                 </div>
             </div>
 
-            <div class="faq-item">
-                <button class="faq-question">
-                    {{ 'faq.q10'|trans }} <span class="faq-toggle">+</span>
+            <div class="tilda-faq-item faq-item">
+                <button class="tilda-faq-button faq-question" type="button">
+                    <span id="text">{{ 'faq.q10'|trans }}</span>
+                    <svg class="tilda-icon" viewBox="-1 -1 42 42" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="20" cy="20" r="20"></circle>
+                        <line class="icon-line1" x1="10" y1="20" x2="30" y2="20"></line>
+                        <line class="icon-line2" x1="20" y1="10" x2="20" y2="30"></line>
+                    </svg>
                 </button>
                 <div class="faq-answer">
                     <p>{{ 'faq.a10'|trans }}</p>
                 </div>
             </div>
-
         </div>
     </section>
 
@@ -274,14 +418,17 @@
             faqItems.forEach((item) => {
                 item.addEventListener("click", function () {
                     const answer = this.nextElementSibling;
-                    const toggle = this.querySelector(".faq-toggle");
 
-                    if (answer.style.display === "block") {
-                        answer.style.display = "none";
-                        toggle.textContent = "+";
-                    } else {
-                        answer.style.display = "block";
-                        toggle.textContent = "−";
+                    // if (answer.style.display === "block") {
+                    //     answer.style.display = "none";
+                    // } else {
+                    //     answer.style.display = "block";
+                    // }
+
+                    // Toggle class on the parent `.tilda-faq-item`
+                    const parentItem = this.closest(".tilda-faq-item");
+                    if (parentItem) {
+                        parentItem.classList.toggle("open");
                     }
                 });
             });
@@ -289,3 +436,5 @@
     </script>
 
 {% endblock %}
+
+
