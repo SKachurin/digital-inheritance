@@ -76,12 +76,12 @@ form:
     send: 'Send'
     edit: 'Edit'
     note: 'Text for your Envelope'
-    note_create: 'Create Note'
+    note_create: 'Create Envelope'
     try_decrypt: 'Try to decrypt this with my answer'
     text_encoded_customer_first: 'Text encoded with answer to your security question one'
     text_encoded_customer_second: 'Text encoded with answer to your security question two'
-    text_encoded_beneficiary_first: "Text encoded with answer to your Beneficiary's security question one"
-    text_encoded_beneficiary_second: "Text encoded with answer to your Beneficiary's security question two"
+    text_encoded_beneficiary_first: "Text encoded with answer to your Heir's security question one"
+    text_encoded_beneficiary_second: "Text encoded with answer to your Heir's security question two"
     okayPassword: | 
       This 'Okay Password' will be used to confirm that you're okay and to reset the Pipeline state. 
       Choose one or several words combined (e.g., 'Iamfine' or 'IAmOkay'), but avoid using your main password or security answers, as this interaction will take place over open channels.
@@ -103,15 +103,15 @@ form:
     beneficiary_name: 'This field is for your reference—to remember who this person is.'
     customer_email: 'This will be your ID in our system. We will encrypt it with our best algorithm.'
     beneficiary_email: "This will be your Heir's ID in our system. We will use this email if/when it comes to delivering your envelope."
-    customer_second_email: 'This field will be used to email you if you use it in the Pipeline Constructor. It will also be encrypted.'
+    customer_second_email: 'This field will be used to email you if you use it in the Pipeline constructor. It will also be encrypted.'
     beneficiary_second_email: 'This field will be used as a CC email for your Heir.'
     customer_full_name: 'This field will be used to mention you in the letter to your Heir. It will also be encrypted.'
     beneficiary_full_name: 'Full Name. We will use it in the invitation for your Heir to answer your questions in an effort to decode your envelope.'
-    customer_country_code: 'If you plan to use SMS in the Pipeline Constructor, we recommend filling in the Country Code.'
+    customer_country_code: 'If you plan to use SMS in the Pipeline constructor, we recommend filling in the Country Code.'
     beneficiary_country_code: 'It is required if you are providing the phone number of your Heir.'
-    customer_first_phone: 'This field will be used to send SMS notifications if you use it in the Pipeline Constructor. It will also be encrypted.'
+    customer_first_phone: 'This field will be used to send SMS notifications if you use it in the Pipeline constructor. It will also be encrypted.'
     beneficiary_first_phone: 'Providing the phone number of your Heir could help us achieve our delivery goal faster.'
-    customer_second_phone: 'This field will be used to send SMS notifications if you use it in the Pipeline Constructor. It will also be encrypted.'
+    customer_second_phone: 'This field will be used to send SMS notifications if you use it in the Pipeline constructor. It will also be encrypted.'
     beneficiary_second_phone: 'Providing the phone number of your Heir could help us achieve our delivery goal faster.'
     customer_first_question: 'Your answer to this question will be used for encoding and decoding purposes.'
     beneficiary_first_question: 'First security question for your Heir. Their answer will be used to decode your envelope.'
@@ -144,7 +144,7 @@ restore_pass: 'Password Recovery'
 enter_email: "Please enter your first email(It's your login). Email have to be previously verified"
 create_your_secure_envelope_text: |
   There are no limits to what you can enter here (though the field limit is 5000 characters). This could include crypto wallet credentials, online bank credentials, etc.
-  This envelope will be encrypted with half of our security key and half of the hash from your answer to the security questions.
+  This envelope will be encrypted with half of our security key and half of the hash from your answer to the secret questions.
   As we never save your answers, once encrypted, only you and God will have the knowledge required to decrypt this note.
   We will never save your answers again—all decryption will be done on the fly from the answers you provide when accessing the note.
 
@@ -180,9 +180,9 @@ dashboard:
   edit_your_pipeline: 'Edit Your Pipeline'
   edit_your_pipeline_tip: 'Saving the Pipeline resets it. If you need more Actions, verify additional Contacts.'
   create_your_secure_envelope: 'Create Your Secure Envelope'
-  create_your_secure_envelope_tip: 'A text field that will be encrypted using answers to your security questions.'
+  create_your_secure_envelope_tip: 'A text field that will be encrypted using answers to your secret questions.'
   edit_your_secure_envelope: 'Edit Your Secure Envelope'
-  edit_your_secure_envelope_tip: 'To edit, you must first decrypt it using answers to your security questions.'
+  edit_your_secure_envelope_tip: 'To edit, you must first decrypt it using answers to your secret questions.'
   delete_your_secure_envelope: 'Delete Your Secure Envelope'
   create_your_heir: 'Create Your Digital Heir'
   create_your_heir_tip: "Your Digital Heir will receive an invitation to decrypt the Envelope when the Pipeline reaches its end."
@@ -234,9 +234,9 @@ text_pipeline_2: ''
 confirm_delete_note: 'Are you sure you want to delete your secure envelope?'
 confirm_delete_beneficiary: 'Are you sure you want to delete your Heir?'
 
-your_questions: 'Security Questions to encrypt your Envelope'
+your_questions: 'Secret Questions to encrypt your Envelope'
 your_questions_explain: |
-  Below are the Security Questions to protect your sensitive data. When you submit this form, we are going to encrypt your text from the field "Text for your Envelope" with all the answers you provided.
+  Below are the Secret Questions to protect your sensitive data. When you submit this form, we are going to encrypt your text from the field "Text for your Envelope" with all the answers you provided.
   Even the questions themselves are going to be encrypted (but with our own cryptography).
   We will never save your answers. If you forget this answer, you will lose all your data.
 
@@ -258,13 +258,14 @@ action: 'Action'
 okayPassword: 'Okay Password'
 okayPassword_edit: 'Edit Okay Password'
 heir_contacts: 'Heir Contacts'
-heir_questions: 'Security Questions for Your Heir'
+heir_questions: 'Secret Questions for Your Heir'
 heir_contacts_explain: 'We will use these contacts to send an invitation to decrypt your envelope when your pipeline reaches its end.'
 heir_questions_explain: 'We will encode your envelope with the answers to these questions. If your Heir guesses either of them correctly, the envelope will be decoded.'
-heir_questions_edit: 'You can edit your security questions and answers in Edit Envelope in DashBoard ... Or here is the button below'
+heir_questions_edit: 'You can edit your secret questions and answers in Edit Envelope in DashBoard ... Or here is the button below'
 
 not_set: 'Not Set'
 TEST_1_min: 'TEST 1 min'
+TEST_10_min: 'TEST 10 min'
 1_hour: '1 hour'
 5_hours: '5 hours'
 12_hours: '12 hours'
@@ -303,7 +304,7 @@ errors:
     envelope_is_processed: 'Your Envelope is being processed.'
     envelope_deleted: 'Your Envelope has been successfully deleted.'
     verify_contact: "Verify at least one Contact (it's better be Telegram/Social)."
-    note_updated: 'Your note has been updated.'
+    note_updated: 'Your Envelope has been updated.'
     pipeline_created: 'Your Pipeline is created.'
     pipeline_saved: 'Your Pipeline has been saved.'
     cancel_delete_success: 'The deletion process has been canceled. Your account and data remain intact.'
@@ -349,11 +350,11 @@ faq:
 
   q2: 'Is my data safe? How do you ensure the security of my information?'
   a2: |
-    Yes. All your data—along with the security questions and your heir’s contact details—is encrypted before it’s stored. We use robust encryption methods (XSalsa20-Poly1305) that require correct secret answers to decrypt your note. We never save your security answers themselves; they exist only in your memory. Once encrypted, your sensitive details remain locked until someone provides the correct answers.
+    Yes. All your data—along with the secret questions and your heir’s contact details—is encrypted before it’s stored. We use robust encryption methods (XSalsa20-Poly1305) that require correct secret answers to decrypt your note. We never save your security answers themselves; they exist only in your memory. Once encrypted, your sensitive details remain locked until someone provides the correct answers.
 
   q3: 'Do I need to provide legal documents like a death certificate?'
   a3: |
-    No. Our service is entirely independent of local or national laws regarding inheritance. We verify your well-being through automated checks—if you don’t respond for a set period, the note is released to your heir. There’s no need for a death certificate or other legal paperwork.
+    No. Our service is entirely independent of local or national laws regarding inheritance. We verify your well-being through automated checks—if you don’t respond for a set period, the Envelope is released to your heir. There’s no need for a death certificate or other legal paperwork.
 
   q4: 'How do you monitor if I’m still active, and what triggers the release of my data?'
   a4: |
@@ -361,11 +362,11 @@ faq:
 
   q5: 'Do I have to tell my heir in advance, or do they need an account?'
   a5: |
-    No. You can add your heir’s contact details (email, phone, etc.) without informing them. They don’t need to sign up or do anything unless the system determines it’s time to release your note. At that point, they’ll receive instructions on how to decrypt it—by answering your custom security questions.
+    No. You can add your heir’s contact details (email, phone, etc.) without informing them. They don’t need to sign up or do anything unless the system determines it’s time to release your note. At that point, they’ll receive instructions on how to decrypt it—by answering your custom secret questions.
 
-  q6: 'What if my heir doesn’t know the correct answers to the security questions?'
+  q6: "What if my heir doesn’t know the correct answers to the secret questions?"
   a6: |
-    If your heir can’t provide the exact answers, the note stays locked. We allow limited attempts—if none are successful, the data remains inaccessible. This design prevents unauthorized access and ensures only someone who truly knows your shared secrets can unlock your note.
+    If your heir can’t provide the exact answers, the Envelope stays locked. We allow limited attempts—if none are successful, the data remains inaccessible. This design prevents unauthorized access and ensures only someone who truly knows your shared secrets can unlock your note.
 
   q7: 'How much does it cost, and what if I stop paying?'
   a7: |
@@ -382,6 +383,49 @@ faq:
   q10: 'Can I update my note, my heir’s details, or the Pipeline once it’s set up?'
   a10: |
     Absolutely. You can log into your dashboard at any time to edit your secure envelope (decrypt it first by providing your secret answers), change your heir’s contact information, or modify the Pipeline’s escalation steps. Any changes require you to re-encrypt your data, so remember your answers when updating.
+
+  q11: 'Is there a public repository where I can verify your code and security claims?'
+  a11: |
+    Absolutely. We believe in transparency and trust. You can find a link to our 
+    GitHub repository in the footer of our website. Feel free to explore the code, 
+    review how it has evolved over time, and see how we’ve implemented security 
+    measures. We encourage open scrutiny to ensure that what we say matches 
+    what our software actually does.
+
+  q12: 'Is there really a 0% chance that someone unauthorized can access my Envelope?'
+  a12: |
+    Yes—under normal conditions, it is virtually impossible for an unauthorized person 
+    to decrypt your data. We never store your secret answers, and only the specific 
+    contacts you designate will even receive a link to your Envelope. Without the correct 
+    answers to your questions, no one (not even us) can unlock your note. 
+    Maybe after reading all this, you’re still not 100% comfortable entrusting us with your most sensitive secrets. 
+    That’s okay. You could just use our service as a kind of ‘middleman’ or secure pointer—for instance, 
+    you might only include clues about where the real information is hidden or which book on your shelf contains the details. 
+    Then, only someone with the right answers will unlock those hints at the right time.
+
+  q13: "Why do we use terms like ‘under normal conditions’ and ‘virtually impossible’ to describe our security?"
+  a13: |
+    When it comes to encryption, nothing is 100% unbreakable if someone had unlimited time and super-powerful computers. 
+    We use “under normal conditions” to mean that if you choose strong, secret answers, keep your devices secure, 
+    and we correctly use modern encryption methods (like XSalsa20-Poly1305), then cracking your data would require resources far beyond what is realistic. 
+    “Virtually impossible” simply conveys that, in everyday use, the chance of an attacker succeeding is so minuscule that it isn’t a real concern—even though,
+    in theory, no system is perfect.
+
+  q14: 'Could my Envelope be compromised if someone physically steals your servers or if there’s a data breach?'
+  a14: |
+    Even if our servers were physically stolen or hacked, everything we store is strongly encrypted. 
+    Crucially, we never keep your secret answers, so an attacker only gets encrypted data with no 
+    practical way to unlock it. As long as your secret questions and answers remain known only to you 
+    (and eventually your heir), your Envelope stays secure—regardless of what happens to our hardware.
+
+  q15: 'What if a future quantum computer breaks current encryption methods?'
+  a15: |
+    At present, XSalsa20-Poly1305 and similar ciphers remain extremely secure against classical computers. 
+    Quantum computing could change the cryptography landscape in the future, but for now, 
+    no publicly known quantum machine can feasibly break this encryption. If large-scale quantum decryption 
+    ever becomes feasible, we’ll adapt our cryptography accordingly and let our users know 
+    how to transition to quantum-resistant methods.
+   
 
 contact_page:
   title: 'Contact Us'
@@ -482,7 +526,7 @@ about_page:
     item3:
       title: "3. Release of the Encrypted Message"
       bullet1: "Once the heir receives the link, they must answer your personalized question(s)."
-      bullet2: "Correct answers decrypt the note for them."
+      bullet2: "Correct answers decrypt the Envelope for them."
       bullet3: "Incorrect answers keep the information securely locked."
 
     item4:
@@ -545,7 +589,7 @@ note_creation:
   default_text: |
     Replace this text with your data:
     There are no limits to what you can enter here (though the field limit is 5000 characters). This could include crypto wallet credentials, online bank credentials, etc.
-    This envelope will be encrypted with half of our security key and half of the hash from your answer to the security questions.
+    This envelope will be encrypted with half of our security key and half of the hash from your answer to the secret questions.
     Once encrypted, your answers will be deleted from our database, leaving only you and God with the knowledge required to decrypt this note.
     We will never save your answers again—all decryption will be done on the fly from the answers you provide when accessing the note.
 

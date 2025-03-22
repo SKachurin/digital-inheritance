@@ -58,7 +58,7 @@ form:
     customer_social_app: 'Aplicación de Telegram para rastrear su actividad. Esta función minimiza la interacción con nuestro servicio.'
     customer_social_app_link: 'Enlace a su perfil de Telegram (nombre de usuario, número de teléfono o enlace)'
     customer_okay_password: ' ????????? Se utilizará para verificar si se encuentra bien. Elija algo cotidiano (como "El día ha sido estupendo") para que parezca un mensaje normal a cualquiera que lo vea.'
-    customer_okay_password_repeat: ' ????????? Repita la Contraseña de Verificación'
+    customer_okay_password_repeat: ' ????????? Repita la Okay Password'
     password: 'Una contraseña normal para iniciar sesión en nuestro servicio. Si la pierde o se filtra, otros aún no podrán ver sus notas sin sus respuestas secretas.'
     password_repeat: 'Repita la contraseña'
     contact_edit: 'Editar contacto'
@@ -88,7 +88,7 @@ form:
       Por razones de seguridad, puedes agregar hasta 20 palabras en tus respuestas; verificaremos si alguna de ellas coincide con tu 'Contraseña de Confirmación'.
       Puedes cambiar tu 'Contraseña de Confirmación' en la sección Editar Pipeline
 
-    okayPassword_repeat: 'Repita la Contraseña de Verificación'
+    okayPassword_repeat: 'Repita la Okay Password'
     beneficiary_lang:  'Elige el idioma para tu heredero'
     choose_type: 'Selecciona un contacto verificado para 2FA'
     choose_type_button: 'Choose this Type for 2FA'
@@ -143,7 +143,7 @@ restore_pass: 'Recuperación de contraseña'
 enter_email: 'Por favor, introduzca su primer correo electrónico (es su usuario). El correo debe haber sido verificado previamente.'
 create_your_secure_envelope_text: |
   No hay límites en lo que puede introducir aquí (aunque el campo tiene un límite de 5000 caracteres). Podría incluir credenciales de monederos de criptomonedas, bancos en línea, etc.
-  Este sobre se cifrará con la mitad de nuestra clave de seguridad y la mitad del hash derivado de sus respuestas a las preguntas de seguridad.
+  Este sobre se cifrará con la mitad de nuestra clave de seguridad y la mitad del hash derivado de sus respuestas a las preguntas secretas.
   Como nunca guardamos tus respuestas, una vez cifradas, solo tú y Dios tendrán el conocimiento necesario para descifrar esta nota.
   Nunca guardaremos sus respuestas: todo se descifrará al instante cada vez que proporcione las respuestas al acceder a la nota.
 
@@ -179,9 +179,9 @@ dashboard:
   edit_your_pipeline: 'Editar su Pipeline'
   edit_your_pipeline_tip: 'Guardar el Pipeline lo reinicia. Si necesita más Acciones, verifique más Contactos.'
   create_your_secure_envelope: 'Cree su Sobre Seguro'
-  create_your_secure_envelope_tip: 'Un campo de texto que será cifrado con las respuestas a sus preguntas de seguridad.'
+  create_your_secure_envelope_tip: 'Un campo de texto que será cifrado con las respuestas a sus preguntas secretas.'
   edit_your_secure_envelope: 'Edite su Sobre Seguro'
-  edit_your_secure_envelope_tip: 'Para editarlo, primero debe descifrarlo con las respuestas a sus preguntas de seguridad.'
+  edit_your_secure_envelope_tip: 'Para editarlo, primero debe descifrarlo con las respuestas a sus preguntas secretas.'
   delete_your_secure_envelope: 'Eliminar su Sobre Seguro'
   create_your_heir: 'Cree su Heredero Digital'
   create_your_heir_tip: "Su Heredero Digital recibirá una invitación para descifrar el Sobre cuando el Pipeline llegue a su fin."
@@ -232,9 +232,9 @@ text_pipeline_2: ''
 confirm_delete_note: '¿Está seguro de que desea eliminar su sobre seguro?'
 confirm_delete_beneficiary: '¿Está seguro de que desea eliminar a su heredero?'
 
-your_questions: 'Preguntas de Seguridad para cifrar su Sobre'
+your_questions: 'Preguntas secretas para cifrar su Sobre'
 your_questions_explain: |
-  A continuación se muestran las preguntas de seguridad para proteger sus datos confidenciales. Cuando envíe este formulario, ciframos el texto del campo "Texto para su Sobre" con todas las respuestas que haya proporcionado.
+  A continuación se muestran las preguntas secretas para proteger sus datos confidenciales. Cuando envíe este formulario, ciframos el texto del campo "Texto para su Sobre" con todas las respuestas que haya proporcionado.
   Incluso las preguntas mismas se cifrarán (pero con nuestra propia criptografía).
   Nunca guardaremos sus respuestas. Si las olvida, perderá toda su información.
 
@@ -253,16 +253,17 @@ email_send_2: 'Enviar al correo secundario y esperar'
 _for_: 'durante'
 text_add_action_button: 'Puede agregar otro formulario e incluir una de las acciones existentes con un intervalo diferente, por ejemplo.'
 action: 'Acción'
-okayPassword: 'Contraseña de Verificación'
-okayPassword_edit: 'Editar Contraseña de Verificación'
+okayPassword: 'Okay Password'
+okayPassword_edit: 'Editar Okay Password'
 heir_contacts: 'Contactos del Heredero'
-heir_questions: 'Preguntas de Seguridad para el Heredero'
+heir_questions: 'Preguntas secretas para el Heredero'
 heir_contacts_explain: 'Utilizaremos estos contactos para enviar una invitación a descifrar su sobre cuando su pipeline llegue al final.'
 heir_questions_explain: 'Cifraremos su sobre con las respuestas a estas preguntas. Si su heredero acierta cualquiera de ellas, el sobre se descifrará.'
 heir_questions_edit: 'Puede editar sus preguntas y respuestas de seguridad en "Editar Sobre" en el Panel de Control... O aquí abajo con el botón correspondiente.'
 
 not_set: 'No establecido'
 TEST_1_min: 'PRUEBA 1 min'
+TEST_10_min: 'PRUEBA 10 min'
 1_hour: '1 hora'
 5_hours: '5 horas'
 12_hours: '12 horas'
@@ -345,7 +346,7 @@ home_page:
 faq:
   title: 'Preguntas Frecuentes (FAQ)'
   q1: '¿Qué es exactamente The Digital Heir Service y cómo funciona?'
-  a1: >
+  a1: |
     The Digital Heir es una plataforma que protege tu información digital importante—por ejemplo, 
     credenciales de inicio de sesión, llaves de criptomonedas u otros datos sensibles—en una “nota” segura y cifrada. 
     Verificamos periódicamente tu actividad (ya sea a través de redes sociales, WhatsApp, correo electrónico 
@@ -354,20 +355,20 @@ faq:
     Solo podrá desbloquear tu información respondiendo correctamente a tus preguntas secretas.
 
   q2: '¿Están seguros mis datos? ¿Cómo garantizan la protección de mi información?'
-  a2: >
+  a2: |
     Sí. Todos tus datos—incluyendo tus preguntas secretas y los datos de contacto de tu heredero—se cifran antes de almacenarlos. 
     Utilizamos métodos de cifrado robustos (XSalsa20-Poly1305) que exigen las respuestas correctas a las preguntas secretas 
     para poder descifrar tu nota. Nunca guardamos tus respuestas en texto plano; solo existen en tu memoria. 
     Una vez cifrados, tus datos confidenciales permanecen bloqueados hasta que alguien proporcione las respuestas correctas.
 
   q3: '¿Necesito presentar documentos legales, como un certificado de defunción?'
-  a3: >
+  a3: |
     No. Nuestro servicio es completamente independiente de las leyes locales o nacionales sobre herencias. 
     Verificamos tu estado mediante comprobaciones automáticas: si no respondes durante el período establecido, 
     tu nota se envía a tu heredero. No se requiere certificado de defunción ni ningún otro trámite legal.
 
   q4: '¿Cómo supervisan si sigo activo y qué desencadena la liberación de mis datos?'
-  a4: >
+  a4: |
     Tú defines un “Pipeline” de acciones en la configuración de tu cuenta: puede incluir la verificación 
     de tu «última vez en línea» en redes sociales o el envío de mensajes por correo electrónico, WhatsApp o SMS. 
     Si no respondes a estas comprobaciones en el plazo que determines, el sistema pasa a los siguientes pasos. 
@@ -375,41 +376,79 @@ faq:
     para que intente descifrar tu nota.
 
   q5: '¿Tengo que avisar a mi heredero con antelación o necesita una cuenta?'
-  a5: >
+  a5: |
     No. Puedes añadir los datos de tu heredero (correo electrónico, teléfono, etc.) sin notificarle previamente. 
     No necesita registrarse ni hacer nada hasta que el sistema decida que es hora de liberar la nota. 
     En ese momento, recibirá instrucciones para descifrarla, mediante la respuesta correcta a tus preguntas secretas.
 
   q6: '¿Qué ocurre si mi heredero no conoce las respuestas correctas a las preguntas secretas?'
-  a6: >
+  a6: |
     Si tu heredero no puede proporcionar las respuestas exactas, la nota permanece cifrada. 
     Permitimos un número limitado de intentos, pero si ninguno es exitoso, los datos seguirán siendo inaccesibles. 
     Esto previene el acceso no autorizado y garantiza que solo quien realmente conozca tus secretos pueda desbloquear la nota.
 
   q7: '¿Cuánto cuesta y qué pasa si dejo de pagar?'
-  a7: >
+  a7: |
     Existe una pequeña tarifa mensual (unos pocos dólares) para mantener el servicio activo. 
     Piénsalo como un seguro para tus activos digitales. Si dejas de pagar, 
     tu Pipeline se desactivará tras un período de gracia y tu nota cifrada no se liberará a nadie.
 
   q8: '¿Puedo almacenar varias notas o grandes cantidades de datos?'
-  a8: >
+  a8: |
     Actualmente, cada cuenta está limitada a una sola “nota” cifrada. 
     Dicha nota puede contener hasta 5000 caracteres de texto, donde puedes incluir credenciales, instrucciones o mensajes. 
     Si necesitas más notas, tendrás que crear cuentas adicionales.
 
   q9: '¿Qué sucede si olvido las respuestas a mis preguntas secretas o pierdo mi contraseña principal?'
-  a9: >
+  a9: |
     Tu contraseña principal solo se utiliza para iniciar sesión en el servicio; perderla no expone automáticamente tus datos cifrados. 
     Sin embargo, si olvidas las respuestas a tus preguntas secretas, nadie—ni siquiera nosotros—podrá descifrar tu nota, 
     ya que no almacenamos esas respuestas en ningún lugar. Siempre consérvalas de forma segura (en tu memoria o en un sitio protegido).
 
   q10: '¿Puedo actualizar mi nota, los datos de mi heredero o el Pipeline una vez configurado?'
-  a10: >
+  a10: |
     Por supuesto. En cualquier momento puedes iniciar sesión en tu panel de control para editar tu nota cifrada 
     (primero tendrás que descifrarla proporcionando las respuestas correctas), cambiar los datos de contacto de tu heredero 
     o modificar los pasos de tu Pipeline. Cualquier modificación requiere volver a cifrar la información, 
     así que no olvides tus respuestas.
+
+  q11: '¿Existe un repositorio público donde pueda verificar su código y comprobar las medidas de seguridad?'
+  a11: |
+    Así es. Creemos en la transparencia y la confianza. Encontrarás un enlace a 
+    nuestro repositorio de GitHub en el pie de página de nuestro sitio web. 
+    Siéntete libre de explorar el código, revisar cómo ha evolucionado con el tiempo 
+    y ver cómo hemos implementado las medidas de seguridad. Alentamos la revisión abierta 
+    para garantizar que lo que decimos coincida con el funcionamiento real de nuestro software.
+
+  q12: '¿De verdad hay un 0% de probabilidad de que alguien no autorizado acceda a mi Sobre?'
+  a12: |
+    Sí—en condiciones normales, resulta prácticamente imposible que una persona sin 
+    autorización descifre tu información. Nunca almacenamos tus respuestas secretas, 
+    y solo los contactos que tú designes recibirán un enlace a tu Sobre. Sin las respuestas 
+    correctas, nadie (ni siquiera nosotros) puede desbloquearlo. 
+    Puede que después de leer todo esto, aún no te sientas del todo seguro confiándonos tus secretos más delicados. No pasa nada. Puedes usar nuestro servicio como una especie de ‘intermediario’ o puntero seguro: por ejemplo, podrías incluir solo indicaciones sobre dónde está realmente guardada la información o en qué libro de tu biblioteca se hallan los detalles. Así, solo quien tenga las respuestas correctas podrá desbloquear esas pistas en el momento adecuado.
+
+  q13: "¿Por qué usamos expresiones como ‘en condiciones normales’ y ‘prácticamente imposible’ para describir nuestra seguridad?"
+  a13: |
+    En el mundo de la encriptación, nada es 100% inquebrantable si alguien contara con tiempo ilimitado y recursos computacionales extraordinarios. Decimos “en condiciones normales” para indicar que, si eliges respuestas secretas fuertes, mantienes tus dispositivos seguros y nosotros aplicamos correctamente métodos de encriptación modernos (como XSalsa20-Poly1305), descifrar tus datos requeriría recursos muy superiores a lo que es realista. “Prácticamente imposible” se utiliza para señalar que, en el uso cotidiano, la probabilidad de un ataque exitoso es tan insignificante que no representa una amenaza, aunque en teoría ningún sistema sea perfecto.
+
+  q14: '¿Podría verse comprometido mi Sobre si alguien roba físicamente sus servidores o si ocurre una filtración de datos?'
+  a14: >
+    Incluso si alguien robara físicamente nuestros servidores o lograra un acceso indebido, 
+    todo lo que almacenamos está fuertemente cifrado. 
+    Lo más importante es que nunca guardamos tus respuestas secretas, 
+    así que un atacante solo obtendría datos cifrados sin una forma práctica de descifrarlos. 
+    Mientras tus preguntas y respuestas de seguridad permanezcan solo en tu memoria (y en la de tu heredero), 
+    tu Sobre continuará seguro—sin importar lo que suceda con nuestro hardware.
+
+  q15: '¿Qué ocurre si en el futuro una computadora cuántica logra romper los métodos de cifrado actuales?'
+  a15: >
+    A día de hoy, XSalsa20-Poly1305 y cifrados similares siguen siendo extremadamente seguros 
+    frente a computadoras clásicas. La computación cuántica podría cambiar el panorama de la criptografía, 
+    pero actualmente no existe ninguna máquina cuántica que pueda romper estos algoritmos de manera factible. 
+    Si en algún momento las computadoras cuánticas hicieran posible descifrar estos cifrados, 
+    adaptaremos nuestros métodos de cifrado y ayudaremos a nuestros usuarios a 
+    migrar a soluciones resistentes a la computación cuántica.
 
 contact_page:
   title: 'Contáctanos'
@@ -571,7 +610,7 @@ note_creation:
   default_text: |
     Reemplace este texto con sus datos:
     No hay límites en lo que puede ingresar aquí (aunque el campo tiene un límite de 5000 caracteres). Puede incluir credenciales de monederos de criptomonedas, credenciales bancarias en línea, etc.
-    Este sobre se cifrará con la mitad de nuestra clave de seguridad y la mitad del hash derivado de las respuestas a sus preguntas de seguridad.
+    Este sobre se cifrará con la mitad de nuestra clave de seguridad y la mitad del hash derivado de las respuestas a sus preguntas secretas.
     Una vez cifrado, sus respuestas se eliminarán de nuestra base de datos, dejando únicamente a usted y a Dios con el conocimiento necesario para descifrar la nota.
     Nunca guardaremos sus respuestas: todo el descifrado se realizará al instante cada vez que proporcione las respuestas al acceder a la nota.
 
