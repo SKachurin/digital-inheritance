@@ -206,7 +206,7 @@
             Paddle.Checkout.open({
                 product: productId,
                 title: "The Digital Heir Subscription",
-                email: "{{ app.user ? app.user.email : '' }}",
+                email: "{{ app.user ? app.user.customerEmail : '' }}",
                 passthrough: JSON.stringify({ user_id: "{{ app.user ? app.user.id : 'guest' }}" }),
                 successCallback: function(data) {
                     console.log("Checkout successful!", data);

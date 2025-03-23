@@ -173,8 +173,6 @@ dashboard:
 
   delete_account: 'Delete my account'
   delete_account_tip: 'In accordance with GDPR rules, you can delete all your data from this app.'
-  make_a_payment: 'Make a Payment'
-  make_a_payment_tip: "This feature isn't ready yet. For now, all new customers are treated as Paid."
   create_your_pipeline: 'Create Your Pipeline'
   create_your_pipeline_tip: 'A sequence of Actions the system will take to check on you. Saving the Pipeline resets it.'
   edit_your_pipeline: 'Edit Your Pipeline'
@@ -212,6 +210,12 @@ dashboard:
   cancel_deletion_message: |
     You’ve started the process of deleting all your data from this app. Your data will be permanently deleted soon.
   cancel_deletion_button: 'Cancel Deletion Process'
+  trial_active: "Trial Active"
+  trial_active_tip: "You're currently in the trial period."
+  make_a_payment: 'Make a Payment'
+  make_a_payment_tip: "This feature isn't ready yet. For now, all new customers are treated as Paid."
+  payment_completed: "Payment Completed"
+  payment_completed_tip: "Thank you! Your payment is confirmed."
 
 decrypt_your_secure_envelope: 'Decrypt Your Secure Envelope'
 decrypt_first: 'To edit your secure envelope, please decrypt it first.'
@@ -334,7 +338,7 @@ home_page:
     Yes, it takes a bit of effort to set up and costs only a few dollars per month, but once everything is in place, we’ll continuously monitor your “last login” on the platforms you choose. If your inactivity exceeds the threshold you set, we’ll send a confirmation message to check in on you.
     If there’s still no response, your digital assets will be securely passed on to the contacts you designated.
   learn_more: "Learn more"
-  register: 'Start now'
+  register: 'Start now for free'
   text_title: 'Secure Your Legacy'
   info_1_text: 'At The Digital Heir, we urge you to secure access to your digital assets—so your loved ones can access them when you’re no longer online. It’s as easy as one, two, three—login, encrypt your credentials, instructions, or even a heartfelt letter, and add your heir’s contacts.'
   info_2_text: 'You have full control: decide how we monitor your activity, where and when you receive check-in messages, and the specific scenarios that trigger the release of your data to your heir. This way, your crypto wallets, exchange accounts, and offshore savings won’t vanish into the void, leaving no one to claim them.'
@@ -520,7 +524,7 @@ about_page:
     item2:
       title: "2. Escalation Pipeline"
       bullet1: "If you fail to respond, the system escalates to the next contact method."
-      bullet2: "You define the sequence (e.g., wait 24 hours, send WhatsApp; if no response, send email, etc.)."
+      bullet2: "You can build a sequence that works for you (e.g., wait 24 hours, send WhatsApp; if no response, send email, etc.)."
       bullet3: "If all attempts fail, the system sends a secure link to your chosen heir(s)."
 
     item3:
@@ -537,7 +541,7 @@ about_page:
   privacy_security:
     title: "Privacy & Security at Every Step"
     bullet1: "Encrypted Contacts: Your contact and heir details are encrypted before storage."
-    bullet2: "Encrypted Secret Answers: Once saved, the answers are removed from our database. Only you and your heir can unlock."
+    bullet2: "Encrypted Secret Answers: They never saved to the database. Only you and your heir can unlock the Envelope."
     bullet3: "No Selling of Data: We do not watch you, track you, or sell your data to any third party."
     bullet4: "Independence from Big Tech: No death certificate or lengthy procedures required. Your data remains yours."
 
@@ -547,7 +551,7 @@ about_page:
     item1:
       title: " Create Your Account"
       bullet1: "Register with minimal personal information."
-      bullet2: "Pay the small monthly fee for continuous coverage."
+      bullet2: "Pay a small monthly fee for continuous coverage."
 
     item2:
       title: " Enter Your Contacts"

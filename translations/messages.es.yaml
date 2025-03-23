@@ -211,6 +211,10 @@ dashboard:
   cancel_deletion_message: |
     Has iniciado el proceso de eliminación de todos tus datos de esta aplicación. Tus datos serán eliminados permanentemente muy pronto.
   cancel_deletion_button: 'Cancelar eliminación'
+  trial_active: "Prueba activa"
+  trial_active_tip: "Actualmente estás en el período de prueba."
+  payment_completed: "Pago completado"
+  payment_completed_tip: "¡Gracias! Tu pago ha sido confirmado."
 
 decrypt_your_secure_envelope: 'Descifre su Sobre Seguro'
 decrypt_first: 'Para editar su sobre seguro, primero descífrelo.'
@@ -335,7 +339,7 @@ home_page:
     Si aún no hay respuesta, tus activos digitales se transferirán de manera segura a los contactos que hayas designado.
 
   learn_more: 'Más información'
-  register: 'Empieza ahora'
+  register: 'Empieza ahora gratis'
   text_title: 'Asegura tu legado'
   info_1_text: 'En The Digital Heir, te instamos a que asegures el acceso a tus activos digitales — para que tus seres queridos puedan acceder a ellos cuando ya no estés en línea. Es tan fácil como uno, dos, tres — inicia sesión, encripta tus credenciales, instrucciones o incluso una carta emotiva, y agrega los contactos de tus herederos.'
   info_2_text: 'Tienes control total: decide cómo monitoreamos tu actividad, cuándo y dónde recibes mensajes de verificación, y los escenarios específicos que desencadenan la entrega de tus datos a tu heredero. De esta manera, tus billeteras de criptomonedas, cuentas de intercambio y ahorros offshore no desaparecerán en el vacío, dejando a nadie para reclamarlos.'
@@ -349,7 +353,7 @@ faq:
   a1: |
     The Digital Heir es una plataforma que protege tu información digital importante—por ejemplo, 
     credenciales de inicio de sesión, llaves de criptomonedas u otros datos sensibles—en una “nota” segura y cifrada. 
-    Verificamos periódicamente tu actividad (ya sea a través de redes sociales, WhatsApp, correo electrónico 
+    Verificamos periódicamente tu estado en línea (ya sea a través de redes sociales, WhatsApp, correo electrónico 
     o cualquier canal que configures). Si permaneces inactivo más allá del límite establecido y no respondes 
     a nuestros mensajes de confirmación, liberamos un enlace seguro para tu heredero designado. 
     Solo podrá desbloquear tu información respondiendo correctamente a tus preguntas secretas.
@@ -535,13 +539,13 @@ about_page:
 
     item1:
       title: "1. Comprobaciones automáticas de actividad"
-      bullet1: "Realizamos comprobaciones periódicas de tu actividad (redes sociales, WhatsApp, correo electrónico) en los intervalos que elijas."
+      bullet1: "Verificamos periódicamente tu estado en línea (redes sociales, WhatsApp, correo electrónico) en los intervalos que elijas."
       bullet2: "Estos intervalos personalizados nos permiten verificar que sigues activo."
 
     item2:
       title: "2. Proceso de escalado"
       bullet1: "Si no respondes, el sistema pasa al siguiente método de contacto."
-      bullet2: "Defines la secuencia (por ejemplo: esperar 24 horas, enviar WhatsApp; si no hay respuesta, enviar email, etc.)."
+      bullet2: "Puedes crear una secuencia que se adapte a ti (por ejemplo, esperar 24 horas, enviar WhatsApp; si no hay respuesta, enviar correo electrónico, etc.)."
       bullet3: "Si todos los intentos fallan, el sistema envía un enlace seguro a tu heredero designado."
 
     item3:
@@ -558,7 +562,7 @@ about_page:
   privacy_security:
     title: "Privacidad y seguridad en cada paso"
     bullet1: "Contactos cifrados: tus contactos y detalles de herederos se almacenan cifrados."
-    bullet2: "Respuestas secretas cifradas: una vez guardadas, las respuestas se eliminan de nuestra base de datos. Solo tú y tu heredero podréis desbloquearlas."
+    bullet2: "Respuestas secretas cifradas: nunca se guardan en la base de datos. Solo tú y tu heredero pueden desbloquear el Sobre."
     bullet3: "No vendemos tus datos: no te rastreamos ni compartimos información con terceros."
     bullet4: "Independencia de las grandes corporaciones: sin certificados de defunción ni largos trámites legales. Tus datos te pertenecen."
 
