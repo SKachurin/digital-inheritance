@@ -31,7 +31,7 @@ class VerificationEmailService
      * @throws Exception
      * @throws \Exception
      */
-    public function sendVerificationEmail(Contact $contact, string $message): void  //TODO translate twig for email
+    public function sendVerificationEmail(Contact $contact, string $message): void
     {
         $verificationToken = $this->tokenRepository->findOneBy(['contact' => $contact]);
         if ($verificationToken) {

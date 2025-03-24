@@ -127,6 +127,10 @@ email_verification_route:
     path:       /verify-email/{token}
     controller: App\Controller\Contact\EmailVerificationController::verifyEmail
 
+resend_verification:
+    path: /resend-verification
+    controller: App\Controller\Contact\ResendVerificationController::resend
+
 wa_verification_route:
     path:       /verify-wa/{token}
     controller: App\Controller\Contact\WhatsAppVerificationController::verifyWa

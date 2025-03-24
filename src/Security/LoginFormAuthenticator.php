@@ -116,10 +116,13 @@ class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
 
     public function onAuthenticationFailure(Request $request, AuthenticationException $exception): Response
     {
-        // wait page
-        // also you get here if trying to Log in without Register
+        $username = $request->request->get('_username');
+
+        // wait email verification page
         if ($exception instanceof CustomUserMessageAuthenticationException &&
             $exception->getMessage() === $this->translator->trans('errors.reg.email_verification_required')) {
+
+            $request->getSession()->set('unverified_email', $username);
 
             return new RedirectResponse($this->router->generate('wait'));
         }
@@ -137,6 +140,11 @@ class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
     private function isEmailVerified(string $username, Request $request): void
     {
         $customer = $this->customerRepository->findOneBy(['customerEmail' => $username]);
+
+        if (!$customer) {
+            return;
+        }
+
         $email = $this->contactRepository->findOneBy(['customer' => $customer]);
 
         if (!$email || !$email->getIsVerified()) {

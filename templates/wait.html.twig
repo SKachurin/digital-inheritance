@@ -145,6 +145,11 @@
             height: auto;
         }
 
+        form {
+            background: transparent !important;
+            box-shadow: none !important;
+        }
+
         @media (max-width: 991px) {
             .faq {
                 margin-top: 27rem;
@@ -152,9 +157,11 @@
                 margin-right: 2%;
                 padding: 5rem 2%;
             }
+
             .container.text {
                 padding-top: 2rem;
             }
+
             .container.text > * {
                 max-width: 100%;
             }
@@ -181,6 +188,7 @@
                 font-size: 2.5rem;
                 padding-bottom: 3rem !important;
             }
+
             .container.text h4 {
                 margin: 1rem 2rem 2rem 2rem !important;
                 font-size: 2.3rem !important;
@@ -194,24 +202,46 @@
                 width: 80% !important;
             }
 
+            #resend {
+                margin-top: 1rem !important;
+            }
+
+
         }
-    </style>
+
+</style>
 <section class="faq">
     <div class="container text">
+        {% set email = app.session.get('unverified_email') %}
+
+        {% set flashes = app.flashes %}
+        {% set hasSuccess = flashes['success'] is defined and flashes['success']|length > 0 %}
+
+        {% for label, messages in flashes %}
+            {% for msg in messages %}
+                <div class="alert alert-{{ label }}">
+                    {{ msg }}
+                </div>
+            {% endfor %}
+        {% endfor %}
 
         <h1 class="mt-7 pt5" style="padding-top: 4em;">
             {{ 'wait_page.title'|trans }}
         </h1>
-{#        <p>{{ '404_page.text'|trans |raw }}</p>#}
-{#        <p>{{ '404_page.intro'|trans |raw }}</p>#}
 
         <h3>{{ 'wait_page.text'|trans |raw }}</h3>
 
-{#        <div class="btn-container">#}
-{#            <a id="go_home" href="{{ path('home') }}" class="btn btn-outline-dark btn-floating btn-in-text">#}
-{#                {{ '404_page.button'|trans }}#}
-{#            </a>#}
-{#        </div>#}
+
+        {% if email %}
+            <div class="btn-container">
+                <form method="post" action="{{ path('resend_verification') }}">
+                    <input type="hidden" name="email" value="{{ email }}">
+                    <button type="submit" class="btn btn-outline-dark btn-floating btn-in-text" id="resend">
+                        {{ 'wait_page.button'|trans }}
+                    </button>
+                </form>
+            </div>
+        {% endif %}
 
         <div class="banner-container">
             <video autoplay loop muted playsinline width="50%">
@@ -219,9 +249,31 @@
                 Your browser does not support the video tag.
             </video>
         </div>
-
-
     </div>
+
+    <script>
+        setTimeout(function() {
+            let alerts = document.querySelectorAll('.alert-success');
+            alerts.forEach(function(alert) {
+                alert.style.transition = "opacity 1s";
+                alert.style.opacity = 0;
+            });
+        }, 4000); // hide after 4s
+
+    </script>
+    {% if hasSuccess %}
+        <script>
+            setTimeout(function() {
+                const button = document.getElementById('resend');
+                if (button) {
+                    button.disabled = true;
+                    button.style.transition = "opacity 1s";
+                    button.style.opacity = 0;
+                }
+            }, 4000);
+        </script>
+    {% endif %}
+
 </section>
 {% endblock %}
 
