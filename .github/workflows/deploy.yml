@@ -51,6 +51,7 @@ jobs:
           export RECAPTCHA_SECRET_KEY_V2="${{ secrets.RECAPTCHA_SECRET_KEY_V2 }}";
           export ADMIN_TG="${{ secrets.ADMIN_TG}}";
           export ADMIN_WA="${{ secrets.ADMIN_WA }}";
+          export CRYPTOCLOUD_API_KEY="${{ secrets.CRYPTOCLOUD_API_KEY }}";
           cd /var/www/;
           chmod +x deploy.sh;
           bash deploy.sh;

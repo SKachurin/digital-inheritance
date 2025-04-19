@@ -186,6 +186,16 @@ email_webhook:
     controller: App\Controller\Webhook\EmailWebhookController
     methods: [POST]
 
+payment_webhook:
+    path: /api/payment
+    controller: App\Controller\Webhook\PaymentWebhookController
+    methods: [POST]
+
+create_invoice:
+        path: /api/create-invoice
+        controller: App\Controller\Checkout\CreateInvoiceController
+        methods: [POST]
+
 beneficiary_access_note:
     path:       /secret-envelope/{token}
     controller: App\Controller\Beneficiary\BeneficiaryAccessController

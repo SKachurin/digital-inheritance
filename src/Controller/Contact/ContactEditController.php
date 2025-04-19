@@ -14,7 +14,6 @@ use App\Service\CryptoService;
 use App\Service\VerificationEmailService;
 use App\Service\VerificationWhatsAppService;
 use App\Service\VerificationSocialService;
-use Doctrine\DBAL\Exception;
 use Random\RandomException;
 use SodiumException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -24,8 +23,6 @@ use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Messenger\Stamp\HandledStamp;
-use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Contracts\HttpClient\Exception\DecodingExceptionInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 class ContactEditController extends AbstractController
@@ -92,7 +89,7 @@ class ContactEditController extends AbstractController
 
         $form->handleRequest($request);
 
-        $lang = $currentCustomer ? $currentCustomer->getLang() : 'en';
+        $lang = $currentCustomer->getLang() ?? 'en';
 
         $message = $this->translator->trans('messages.verification', [], 'messages', $lang);
 

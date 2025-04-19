@@ -622,7 +622,7 @@
                             <div class="tooltip-box">{{ 'dashboard.edit_your_secure_envelope_tip'|trans }}</div>
                         </div>
 
-                        <form action="{{ path('note_delete', {'noteId': customerHasNote}) }}" method="post" style="display:inline-block; margin: 0; padding: 0; background: transparent" onsubmit="return confirm('{{ 'confirm_delete_note'|trans }}');">
+                        <form action="{{ path('note_delete', {'noteId': customerHasNote}) }}" method="post" style="display:inline-block; margin: 0; padding: 0; background: transparent; box-shadow: none;" onsubmit="return confirm('{{ 'confirm_delete_note'|trans }}');">
                             <input type="hidden" name="_token" value="{{ csrf_token('delete_note') }}">
                             <button type="submit" class="btn btn-outline-danger btn-floating m-1 mt-4">
                                 <i class="">{{ 'dashboard.delete_your_secure_envelope'|trans }}</i>
@@ -694,30 +694,9 @@
                     </section>
     {#                <p>explanation</p>#}
                 {% endif %}
-
-{#                    <section class="mb-4">#}
-{#                        <a class="btn btn-outline-dark btn-floating m-1 mt-4" href="#" role="button"><i#}
-{#                                    class="">{{ 'dashboard.make_a_payment'|trans }}</i></a>#}
-
-{#                        <!-- Tooltip Trigger (Question Mark) -->#}
-{#                        <div class="tooltip-container">#}
-{#                            <button class="tooltip-btn">#}
-{#                                <svg id="question" xmlns="http://www.w3.org/2000/svg" version="1.0" width="30pt"#}
-{#                                     height="30pt" viewBox="0 0 300.000000 164.000000" preserveAspectRatio="xMidYMid meet">#}
-{#                                    <g transform="translate(0.000000,164.000000) scale(0.050000,-0.050000)" fill="#000000"#}
-{#                                       stroke="none">#}
-{#                                        <path d="M2284 3001 c-1071 -290 -1298 -1701 -372 -2320 789 -527 1868 -30 1986 915 114 904 -735 1642 -1614 1405z m580 -143 c395 -82 772 -450 853 -834 243 -1140 -1126 -1871 -1922 -1027 -748 793 -7 2084 1069 1861z"/>#}
-{#                                        <path d="M2414 2449 c-154 -49 -314 -214 -263 -270 76 -84 105 -87 184 -18 179 158 458 158 551 0 68 -115 25 -205 -152 -316 -228 -143 -300 -425 -102 -401 56 6 68 21 109 131 17 45 64 91 161 155 482 318 85 902 -488 719z"/>#}
-{#                                        <path d="M2533 1279 c-109 -86 -51 -239 90 -239 86 0 137 50 137 135 0 67 -76 145 -140 145 -19 0 -58 -19 -87 -41z"/>#}
-{#                                    </g>#}
-{#                                </svg>#}
-{#                            </button>#}
-{#                            <div class="tooltip-box">{{ 'dashboard.make_a_payment_tip'|trans }}</div>#}
-{#                        </div>#}
-{#                    </section>#}
                     {% if customerPaymentStatus == 'trial' %}
                         <section class="mb-4">
-                            <a class="btn btn-outline-primary btn-floating m-1 mt-4" href="#" role="button">
+                            <a class="btn btn-outline-primary btn-floating m-1 mt-4" href="{{ path('checkout') }}" role="button">
                                 <i>{{ 'dashboard.trial_active'|trans }}</i>
                             </a>
 

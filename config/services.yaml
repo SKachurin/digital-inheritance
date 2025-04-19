@@ -121,3 +121,11 @@ services:
     App\EventListener\CustomerPaymentStatusListener:
         tags:
             - { name: kernel.event_listener, event: kernel.request, method: onKernelRequest, priority: 0 }
+
+    App\Controller\Checkout\CreateInvoiceController:
+        arguments:
+            $apiKey: '%env(CRYPTOCLOUD_API_KEY)%'
+
+    App\Controller\Webhook\PaymentWebhookController:
+        arguments:
+            $apiKey: '%env(CRYPTOCLOUD_API_KEY)%'

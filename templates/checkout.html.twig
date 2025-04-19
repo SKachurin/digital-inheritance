@@ -15,6 +15,10 @@
             margin-right: 9%;
         }
 
+        .quantity-input {
+            line-height: 1;
+        }
+
         .faq h1 {
             margin-top: 0rem !important;
             padding-top: 0rem !important;
@@ -169,58 +173,102 @@
                 {{ 'checkout_page.title'|trans({}, 'legal') }}
             </h1>
 
-            <script src="https://cdn.paddle.com/paddle/paddle.js"></script>
-            <script>
-                document.addEventListener("DOMContentLoaded", function () {
-                    Paddle.Setup({ vendor: PADDLE_VENDOR_ID });
-                });
-            </script>
-
             <p>{{ 'checkout_page.intro'|trans({}, 'legal')|raw }}</p>
 
             <!-- Product Table -->
             <div class="product-table">
-                <!-- Standard Subscription -->
-                <div class="product">
-                    <img src="{{ '/build/logo-TheDigitalHeir-192x192.png' }}" alt="Standard Plan">
-                    <h3>{{ 'checkout_page.standard'|trans({}, 'legal')|raw }}</h3>
-                    <p>{{ 'checkout_page.desc_standard'|trans({}, 'legal')|raw }}</p>
-                    <p class="price">{{ 'checkout_page.price_standard'|trans({}, 'legal')|raw }}</p>
-                    <button onclick="openCheckout(STANDARD_PRODUCT_ID)">{{ 'checkout_page.buy_standard'|trans({}, 'legal')|raw }}</button>
-                </div>
+                    <!-- Standard Subscription -->
+                    <div class="product">
+                        <img src="{{ '/build/logo-TheDigitalHeir-192x192.png' }}" alt="Standard Plan">
+                        <h3>{{ 'checkout_page.standard'|trans({}, 'legal')|raw }}</h3>
+                        <p>{{ 'checkout_page.desc_standard'|trans({}, 'legal')|raw }}</p>
+                        <p class="price">{{ 'checkout_page.price_standard'|trans({}, 'legal')|raw }}</p>
 
-                <!-- Premium Subscription -->
-                <div class="product">
-                    <img src="{{ '/build/logo_invert_TheDigitalHeir_192x192.png' }}" alt="Premium Plan">
-                    <h3>{{ 'checkout_page.premium'|trans({}, 'legal')|raw }}</h3>
-                    <p>{{ 'checkout_page.desc_premium'|trans({}, 'legal')|raw }}</p>
-                    <p class="price">{{ 'checkout_page.price_premium'|trans({}, 'legal')|raw }}</p>
-                    <button onclick="openCheckout(PREMIUM_PRODUCT_ID)">{{ 'checkout_page.buy_premium'|trans({}, 'legal')|raw }}</button>
-                </div>
+                        <div style="display: flex; justify-content: center; align-items: center; gap: 1rem; margin-top: 1rem; margin-bottom: 1rem;">
+                            <label for="standardQty" style="font-weight: bold;">{{ 'checkout_page.month'|trans({}, 'legal') }}</label>
+                            <input type="number" id="standardQty" value="3" min="1" step="1" style="max-width: 80px; text-align: center;">
+                        </div>
+                        <p style="margin-top: 0.5rem;">Total: $<span id="standardTotal">5.00</span></p>
+
+                        <button onclick="goToPayment('standard')" class="btn btn-dark mt-3">
+                            {{ 'checkout_page.buy_standard'|trans({}, 'legal') }}
+                        </button>
+                    </div>
+
+                    <!-- Premium Subscription -->
+                    <div class="product">
+                        <img src="{{ '/build/logo_invert_TheDigitalHeir_192x192.png' }}" alt="Premium Plan">
+                        <h3>{{ 'checkout_page.premium'|trans({}, 'legal')|raw }}</h3>
+                        <p>{{ 'checkout_page.desc_premium'|trans({}, 'legal')|raw }}</p>
+                        <p class="price">{{ 'checkout_page.price_premium'|trans({}, 'legal')|raw }}</p>
+
+                        <div style="display: flex; justify-content: center; align-items: center; gap: 1rem; margin-top: 1rem; margin-bottom: 1rem;">
+                            <label for="premiumQty" style="font-weight: bold;">{{ 'checkout_page.month'|trans({}, 'legal') }}</label>
+                            <input type="number" id="premiumQty" value="3" min="1" step="1" style="max-width: 80px; text-align: center;">
+                        </div>
+                        <p style="margin-top: 0.5rem;">Total: $<span id="premiumTotal">25.00</span></p>
+
+                        <button onclick="goToPayment('premium')" class="btn btn-dark mt-3">
+                            {{ 'checkout_page.buy_premium'|trans({}, 'legal') }}
+                        </button>
+                    </div>
+
             </div>
         </div>
     </section>
 
     <script>
-        function openCheckout(productId) {
-            Paddle.Checkout.open({
-                product: productId,
-                title: "The Digital Heir Subscription",
-                email: "{{ app.user ? app.user.customerEmail : '' }}",
-                passthrough: JSON.stringify({ user_id: "{{ app.user ? app.user.id : 'guest' }}" }),
-                successCallback: function(data) {
-                    console.log("Checkout successful!", data);
+
+        const PRICES = {
+            standard: 5,
+            premium: 25
+        };
+
+        function goToPayment(plan) {
+            const qty = parseInt(document.getElementById(`${plan}Qty`).value) || 1;
+            const total = (qty * PRICES[plan]).toFixed(2);
+
+            fetch('/api/create-invoice', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
                 },
-                closeCallback: function() {
-                    console.log("Checkout closed.");
-                }
-            });
+                body: JSON.stringify({
+                    plan: plan,
+                    quantity: qty,
+                    amount: total
+                })
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if (data && data.invoice_url) {
+                        window.open(data.invoice_url, '_blank');
+                    } else {
+                        alert('Failed to create invoice. Please try again.');
+                    }
+                })
+                .catch(error => {
+                    console.error('Invoice error:', error);
+                    alert('Server error. Please try again later.');
+                });
         }
 
-        // Replace these IDs with actual Paddle Product IDs
-        const STANDARD_PRODUCT_ID = 'pri_01jnrgsgxw34wfwqj3e8482d64';
-        const PREMIUM_PRODUCT_ID = 'pri_01jnrh59cc4mjgh0dqy92dwm66';
-        const PADDLE_VENDOR_ID = 218633;
+        function updateTotal(plan) {
+            const qty = parseInt(document.getElementById(`${plan}Qty`).value) || 1;
+            const total = (qty * PRICES[plan]).toFixed(2);
+
+            document.getElementById(`${plan}Total`).textContent = total;
+        }
+
+        document.addEventListener("DOMContentLoaded", () => {
+            ['standard', 'premium'].forEach(plan => {
+                const input = document.getElementById(`${plan}Qty`);
+                if (input) {
+                    input.addEventListener('input', () => updateTotal(plan));
+                    updateTotal(plan); // initialize on load
+                }
+            });
+        });
     </script>
 
 {% endblock %}

@@ -29,6 +29,9 @@ class Transaction
     private ?float $amount = null;
 
     #[ORM\Column(type: 'string', length: 64, nullable: true)]
+    private ?string $plan = null;
+
+    #[ORM\Column(type: 'string', length: 64, nullable: true)]
     private ?string $currency = null;
 
     #[ORM\Column(type: 'string', length: 100, nullable: true)]
@@ -63,6 +66,17 @@ class Transaction
     public function setAmount(float $amount): self
     {
         $this->amount = $amount;
+        return $this;
+    }
+
+    public function getPlan(): ?string
+    {
+        return $this->plan;
+    }
+
+    public function setPlan(string $plan): self
+    {
+        $this->plan = $plan;
         return $this;
     }
     public function getCurrency(): ?string
