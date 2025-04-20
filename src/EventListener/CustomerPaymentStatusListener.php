@@ -49,7 +49,7 @@ class CustomerPaymentStatusListener
             return;
         }
 
-        if ($customer->isTrialActive()) {
+        if ($customer->getCustomerPaymentStatus() === CustomerPaymentStatusEnum::NOT_PAID && $customer->isTrialActive()) {
             $this->twig->addGlobal('customerPaymentStatus', 'trial');
             return;
         }

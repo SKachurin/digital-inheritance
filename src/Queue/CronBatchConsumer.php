@@ -7,8 +7,6 @@ use App\Entity\Contact;
 use App\Entity\Pipeline;
 use App\Enum\ActionStatusEnum;
 use App\Enum\ActionTypeEnum;
-use App\Enum\ContactTypeEnum;
-use App\Enum\CustomerPaymentStatusEnum;
 use App\Enum\IntervalEnum;
 use App\Message\CronBatchMessage;
 use App\Repository\ActionRepository;
@@ -54,45 +52,12 @@ class CronBatchConsumer
     {
         $customerIds = $message->getCustomerIds();
 
-//        $this->logger->error('3 CronBatchConsumer == $customerIds', [
-//            'customerIds' => $customerIds
-//        ]);
-
-        //Load customers
-//        $customers = $this->customerRepository->findBy([
-//            'id' => $customerIds,
-//            'customerPaymentStatus' => CustomerPaymentStatusEnum::PAID->value
-//        ]);
-        $customers = [];
-        foreach ($customerIds as $customerId) {
-            $customer = $this->customerRepository->findBy([
-                'id' => $customerId,
-                'customerPaymentStatus' => CustomerPaymentStatusEnum::PAID->value
-            ]);
-            $customers = array_merge($customers, $customer);
-        }
-
-//        $this->logger->error('3-1 CronBatchConsumer', [
-//            '$customers' => $customers
-//        ]);
+        $customers = $this->customerRepository->findActiveOrTrialByIds($customerIds);
 
         //Process each customer's pipeline
         foreach ($customers as $customer) {
 
             $pipeline = $this->pipelineRepository->findOneBy(['customer' => $customer]);
-
-//            if ($pipeline) {
-//
-//                $this->logger->error('3-3 CronBatchConsumer', [
-//                    '$pipeline->getPipelineStatus()' => $pipeline->getPipelineStatus()
-//                ]);
-//            }
-//            else {
-//                $this->logger->error('Pipeline is NULL for customer', [
-//                    'customerId' => $customer->getId()
-//                ]);
-//                continue;
-//            }
 
             if ($pipeline && $pipeline->getPipelineStatus() === ActionStatusEnum::ACTIVATED) {
 
@@ -119,24 +84,12 @@ class CronBatchConsumer
         $actionSequence = $pipeline->getActionSequence();
         $lastUpdate = $pipeline->getUpdatedAt();
 
-
-//        $this->logger->error('3.1 processPipeline == Checking Pipeline', [
-//            'pipelineId' => $pipeline->getId(),
-//            'actionType' => $activeAction,
-//            'actionStatus' => $activeActionStatus
-//        ]);
-
         if (empty($actionSequence)) {
-//            $this->logger->error(sprintf('No action sequence for pipeline ID %d', $pipeline->getId()));
             return;
         }
 
         // Sort actions by position (just to be safe)
         usort($actionSequence, fn($a, $b) => (int)$a['position'] <=> (int)$b['position']);
-
-//        $this->logger->error('3.1-0 processPipeline', [
-//            '$actionSequence' => $actionSequence
-//        ]);
 
         // Find active action
         foreach ($actionSequence as $actionData) {
@@ -146,25 +99,13 @@ class CronBatchConsumer
                 //it has Interval
                 $intervalValue = $actionData['interval'] ?? null;
 
-//                $this->logger->error('3.1-1 processPipeline', [
-//                    '$intervalValue' => $intervalValue
-//                ]);
-
                 if (!$intervalValue) {
-//                    $this->logger->error(sprintf('No action sequence for pipeline ID %d', $pipeline->getId()));
                     break; // major error - we don't have interval for this Action          //TODO ADMIN_ALERT Service
                 }
 
                 //calculate time
                 $nextActionTime = $this->calculateNextActionTime($lastUpdate, $intervalValue);
                 $now = new \DateTimeImmutable('now', new \DateTimeZone('UTC'));
-
-//                $this->logger->error('3.1-2 processPipeline', [
-//                    '$now' => $now,
-//                    '$nextActionTime' => $nextActionTime,
-//                    '$activeAction' => $activeAction,
-//                    '$actionData[actionType] ' => $actionData['actionType']
-//                ]);
 
                 // Branch based on action type:
                 if ($activeAction->value === ActionTypeEnum::SOCIAL_CHECK->value) {
@@ -197,7 +138,6 @@ class CronBatchConsumer
                     }
 
                     // Otherwise, re-run executeActiveAction (or continue with further processing)
-//                    $result = $this->executeActiveAction($pipeline, $actionData, $now);
                     if (!isset($result)) {
 
                         $result = $activeActionStatus;
@@ -225,11 +165,6 @@ class CronBatchConsumer
                 }
             }
         }
-
-
-//        $this->logger->error('3.5 CronBatchConsumer == processPipeline()', [
-//            '$pipeline->getActionStatus()' => $pipeline->getActionStatus()
-//        ]);
     }
 
     private function calculateNextActionTime(\DateTimeImmutable $lastUpdate, string $intervalValue): \DateTimeImmutable
@@ -253,11 +188,6 @@ class CronBatchConsumer
         // Action & Contact
         [$action, $contact] = $this->retrieveActionAndContact($pipeline, $actionType);
 
-//        $this->logger->error('3.2 executeActiveAction == Checking Action Type', [
-//            'pipelineId' => $pipeline->getId(),
-//            'actionType' => $actionType->value,
-//        ]);
-
         return match ($actionType) {
             ActionTypeEnum::SOCIAL_CHECK => $this->sendSocialCheck($actionData, $now, $contact),
             ActionTypeEnum::MESSENGER_SEND,
@@ -269,7 +199,6 @@ class CronBatchConsumer
     }
 
     /**
-     * @throws \SodiumException
      * @throws \Exception
      */
     private function processPendingAction(Pipeline $pipeline, array $actionData, \DateTimeImmutable $now): void
@@ -297,12 +226,10 @@ class CronBatchConsumer
                 throw new \Exception("Unsupported action type: $actionType->value");
 
         }
-
-//        $this->logger->error('9 processPendingAction');
     }
 
     /**
-     * @throws \Symfony\Component\Mailer\Exception\TransportExceptionInterface
+     * @throws \Symfony\Component\Mailer\Exception\TransportExceptionInterface|TransportExceptionInterface
      */
     private function processFailedAction(Pipeline $pipeline, array $actionData, \DateTimeImmutable $now) : void
     {
@@ -314,7 +241,6 @@ class CronBatchConsumer
 
         if (!empty($nextAction)) {
             $nextAction = reset($nextAction); // Get the first matching action
-//            $this->logger->info(sprintf('Setting next action: %s for pipeline ID %d', $nextAction['actionType'], $pipeline->getId()));
 
             // Update pipeline with next action
             $pipeline->setActionType(ActionTypeEnum::from($nextAction['actionType']));
@@ -329,8 +255,6 @@ class CronBatchConsumer
             $this->entityManager->persist($pipeline);
             $this->entityManager->flush();
 
-//            $this->logger->info(sprintf('No next action found for pipeline ID %d', $pipeline->getId()));
-
             // process Failed Pipeline Function
             $result = $this->processFailedPipeline($pipeline, $now);
 
@@ -342,7 +266,7 @@ class CronBatchConsumer
     }
 
     /**
-     * @throws \Symfony\Component\Mailer\Exception\TransportExceptionInterface
+     * @throws \Symfony\Component\Mailer\Exception\TransportExceptionInterface|TransportExceptionInterface
      */
     private function processFailedPipeline(Pipeline $pipeline, \DateTimeImmutable $now) : bool
     {
@@ -413,12 +337,6 @@ class CronBatchConsumer
                 $maxAllowedTime = $now->sub($interval);
 
                 if ($lastOnlineTime < $maxAllowedTime) {
-
-                    $this->logger->error('3.2-2 sendSocialCheck()', [
-                        '$lastOnlineTime' => $lastOnlineTime,
-                        'now' => $now,
-                    ]);
-
                     return ActionStatusEnum::FAIL; // user is offline too long
                 }
 
@@ -426,11 +344,6 @@ class CronBatchConsumer
                 return ActionStatusEnum::ACTIVATED;
 
             } catch (\Exception $e) {
-//                $this->logger->info(sprintf(
-//                    'Invalid timestamp for user %s: %s',
-//                    $user,
-//                    $timestamp
-//                ));
             }
         }
 
@@ -448,14 +361,8 @@ class CronBatchConsumer
      */
     private function sendMessenger(Action $action, Contact $contact, string $message): ActionStatusEnum
     {
-//        $this->logger->error('3.3 sendMessenger == Called', [
-//            'contactId' => $contact->getId(),
-//            'message' => $message
-//        ]);
 
         $response = $this->whatsAppService->sendMessageWhatsApp($contact, $message);
-
-//        $this->logger->error('4 CronBatchConsumer == $response' . $response);
 
         $data = $this->decodeJsonResponse($response);
 
@@ -482,8 +389,6 @@ class CronBatchConsumer
     {
 
         $response = $this->emailService->sendMessageEmail($contact, $message);
-
-//        $this->logger->error('4 CronBatchConsumer sendEmail == $response' . $response);
 
         $data = $this->decodeJsonResponse($response);
 

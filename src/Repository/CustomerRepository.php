@@ -76,4 +76,26 @@ class CustomerRepository extends BaseRepository
             ->getResult();
     }
 
+    /**
+     * @param array $customerIds
+     * @return Customer[]
+     */
+    public function findActiveOrTrialByIds(array $customerIds): array
+    {
+        $qb = $this->createQueryBuilder('c');
+
+        $qb->where($qb->expr()->in('c.id', ':ids'))
+            ->andWhere(
+                $qb->expr()->orX(
+                    'c.customerPaymentStatus = :paid',
+                    'c.createdAt >= :trialStart'
+                )
+            )
+            ->setParameter('ids', $customerIds)
+            ->setParameter('paid', CustomerPaymentStatusEnum::PAID->value)
+            ->setParameter('trialStart', (new \DateTimeImmutable())->modify('-3 days'));
+
+        return $qb->getQuery()->getResult();
+    }
+
 }

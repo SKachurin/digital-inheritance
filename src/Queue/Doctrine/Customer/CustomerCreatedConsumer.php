@@ -19,22 +19,20 @@ use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 use App\Repository\ContactRepository;
-//use Psr\Log\LoggerInterface;
 
 #[AsMessageHandler]
 class CustomerCreatedConsumer
 {
-//    private LoggerInterface $logger;
     public function __construct(
-        protected SerializerInterface $serializer,
-        protected MessageBusInterface $commandBus,
+        protected SerializerInterface         $serializer,
+        protected MessageBusInterface         $commandBus,
         protected UserPasswordHasherInterface $passwordHasher,
-        private EntityManagerInterface $entityManager,
-        private ContactRepository $contactRepository,
-        private CryptoService $cryptoService,
-        private VerificationEmailService $verificationEmailService
-    ) {
-//        $this->logger = $logger;
+        private EntityManagerInterface        $entityManager,
+        private ContactRepository             $contactRepository,
+        private CryptoService                 $cryptoService,
+        private VerificationEmailService      $verificationEmailService
+    )
+    {
     }
 
     /**
@@ -62,7 +60,7 @@ class CustomerCreatedConsumer
 
 //            ->setCustomerSocialApp($input->getCustomerSocialApp()) // TODO CustomerSocialAppEnum::from($input->getCustomerSocialApp()))
             ->setCustomerSocialApp(CustomerSocialAppEnum::TELEGRAM)
-            ->setCustomerPaymentStatus(CustomerPaymentStatusEnum::PAID) //TODO FOR TESTS ONLY
+            ->setCustomerPaymentStatus(CustomerPaymentStatusEnum::NOT_PAID)
         ;
 
         $this->entityManager->persist($customer);
