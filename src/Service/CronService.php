@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\Message\DeleteMarkedAccountsMessage;
+use App\Message\MarkExpiredAsNotPaidMessage;
 use App\Repository\CustomerRepository;
 use App\Queue\CronBatchProducer;
 use Psr\Log\LoggerInterface;
@@ -63,6 +64,11 @@ class CronService
         // Run deleteMarkedAccounts once between 00:00 and 00:15
         if ($hour === 0 && $minute <= 15) {
             $this->bus->dispatch(new DeleteMarkedAccountsMessage());
+        }
+
+        // Run once between 02:00–02:10
+        if ($hour === 2 && $minute <= 10) {
+            $this->bus->dispatch(new MarkExpiredAsNotPaidMessage());
         }
 
     }

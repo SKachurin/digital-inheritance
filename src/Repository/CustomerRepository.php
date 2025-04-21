@@ -98,4 +98,14 @@ class CustomerRepository extends BaseRepository
         return $qb->getQuery()->getResult();
     }
 
+    public function findPaidWithPagination(int $limit, int $offset): array
+    {
+        return $this->createQueryBuilder('c')
+            ->where('c.customerPaymentStatus = :paid')
+            ->setParameter('paid', CustomerPaymentStatusEnum::PAID->value)
+            ->setMaxResults($limit)
+            ->setFirstResult($offset)
+            ->getQuery()
+            ->getResult();
+    }
 }

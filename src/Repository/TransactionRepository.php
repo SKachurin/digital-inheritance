@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Repository;
 
+use App\Entity\Customer;
 use App\Entity\Transaction;
 use App\Repository\Collection\PageCollection;
 use Doctrine\Persistence\ManagerRegistry;
@@ -22,5 +23,18 @@ class TransactionRepository extends BaseRepository
     {
         // @phpstan-ignore-next-line
         parent::__construct($registry, Transaction::class);
+    }
+
+    public function findLastPaidByCustomer(Customer $customer): ?Transaction
+    {
+        return $this->createQueryBuilder('t')
+            ->where('t.customer = :customer')
+            ->andWhere('t.status = :status')
+            ->setParameter('customer', $customer)
+            ->setParameter('status', 'paid')
+            ->orderBy('t.createdAt', 'DESC')
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult();
     }
 }
