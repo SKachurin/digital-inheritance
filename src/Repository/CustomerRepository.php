@@ -88,7 +88,7 @@ class CustomerRepository extends BaseRepository
             ->andWhere(
                 $qb->expr()->orX(
                     'c.customerPaymentStatus = :paid',
-                    'c.createdAt >= :trialStart'
+                    'c.created_at >= :trialStart'
                 )
             )
             ->setParameter('ids', $customerIds)
