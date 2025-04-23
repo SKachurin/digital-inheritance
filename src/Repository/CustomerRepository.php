@@ -63,12 +63,22 @@ class CustomerRepository extends BaseRepository
             ->getResult();
     }
 
-    public function findPaidAndNotDeletedForCron(int $batchSize, int $offset): array
+    public function findPaidAndTrialAndNotDeletedForCron(int $batchSize, int $offset): array
     {
         return $this->createQueryBuilder('c')
-            ->where('c.customerPaymentStatus = :paid')
-            ->andWhere('c.deleted_at IS NULL')  // Exclude marked for deletion
+//            ->where('c.customerPaymentStatus = :paid')
+//            ->andWhere('c.deleted_at IS NULL')  // Exclude marked for deletion
+//            ->setParameter('paid', CustomerPaymentStatusEnum::PAID->value)
+//            ->orderBy('c.id', 'ASC')
+//            ->setMaxResults($batchSize)
+//            ->setFirstResult($offset)
+//            ->getQuery()
+//            ->getResult();
+            ->where('(c.customerPaymentStatus = :paid OR (c.customerPaymentStatus = :notPaid AND c.created_at >= :trialStart))')
+            ->andWhere('c.deleted_at IS NULL')
             ->setParameter('paid', CustomerPaymentStatusEnum::PAID->value)
+            ->setParameter('notPaid', CustomerPaymentStatusEnum::NOT_PAID->value)
+            ->setParameter('trialStart', new \DateTimeImmutable('-3 days'))
             ->orderBy('c.id', 'ASC')
             ->setMaxResults($batchSize)
             ->setFirstResult($offset)

@@ -14,16 +14,14 @@ use Symfony\Component\Notifier\Exception\TransportExceptionInterface;
 
 class CronService
 {
-    private LoggerInterface $logger;
-
     public function __construct(
-        private CustomerRepository $customerRepository,
-        private CronBatchProducer $batchProducer,
-        private readonly MessageBusInterface $bus
-//        LoggerInterface $logger
+        private CustomerRepository           $customerRepository,
+        private CronBatchProducer            $batchProducer,
+        private readonly MessageBusInterface $bus,
+        private LoggerInterface              $logger
 
-    ) {
-//        $this->logger = $logger;
+    )
+    {
     }
 
     /**
@@ -36,7 +34,7 @@ class CronService
 
         while (true) {
             // Fetch a batch
-            $customers = $this->customerRepository->findPaidAndNotDeletedForCron(
+            $customers = $this->customerRepository->findPaidAndTrialAndNotDeletedForCron(
                 $batchSize,
                 $offset
             );
@@ -67,8 +65,9 @@ class CronService
         }
 
         // Run once between 02:00–02:10
-        if ($hour === 2 && $minute <= 10) {
+        if ($hour === 2 && $minute <= 15) {
             $this->bus->dispatch(new MarkExpiredAsNotPaidMessage());
+            $this->logger->info('CronBatchProducer dispatching CronBatchMessage');
         }
 
     }
