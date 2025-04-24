@@ -39,6 +39,7 @@ class MarkExpiredAsNotPaidConsumer
 
                 if (!$lastTransaction) {
                     $paidCustomer->setCustomerPaymentStatus(CustomerPaymentStatusEnum::NOT_PAID);
+                    $this->em->persist($paidCustomer);
                     continue;
                 }
 
@@ -63,6 +64,7 @@ class MarkExpiredAsNotPaidConsumer
 
                 if ($paidUntil && $paidUntil < $now) {
                     $paidCustomer->setCustomerPaymentStatus(CustomerPaymentStatusEnum::NOT_PAID);
+                    $this->em->persist($paidCustomer);
                 }
             }
 
