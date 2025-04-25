@@ -18,7 +18,7 @@ class CronService
         private CustomerRepository           $customerRepository,
         private CronBatchProducer            $batchProducer,
         private readonly MessageBusInterface $bus,
-//        private LoggerInterface              $logger
+        private LoggerInterface              $logger
 
     )
     {
@@ -62,12 +62,13 @@ class CronService
         // Run deleteMarkedAccounts once between 00:00 and 00:15
         if ($hour === 0 && $minute <= 15) {
             $this->bus->dispatch(new DeleteMarkedAccountsMessage());
+            $this->logger->error('CronBatchProducer dispatching DeleteMarkedAccountsMessage');
         }
 
         // Run once between 02:00–02:10
         if ($hour === 2 && $minute <= 15) {
             $this->bus->dispatch(new MarkExpiredAsNotPaidMessage());
-//            $this->logger->error('CronBatchProducer dispatching CronBatchMessage');
+            $this->logger->error('CronBatchProducer dispatching MarkExpiredAsNotPaidMessage');
         }
 
     }
