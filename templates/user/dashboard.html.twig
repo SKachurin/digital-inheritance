@@ -716,7 +716,7 @@
 
                     {% elseif customerPaymentStatus == 'not_paid' %}
                         <section class="mb-4">
-                            <a class="btn btn-outline-danger btn-floating m-1 mt-4" href="{{ path('checkout') }}" role="button">
+                            <a style="margin-left: 0.25rem !important;" class="btn btn-outline-danger btn-floating m-1 mt-4" href="{{ path('checkout') }}" role="button">
                                 <i>{{ 'dashboard.make_a_payment'|trans }}</i>
                             </a>
 

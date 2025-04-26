@@ -11,7 +11,7 @@ use Psr\Log\LoggerInterface;
 class CronController extends AbstractController
 {
     public function __construct(
-        private LoggerInterface $logger
+//        private LoggerInterface $logger
     )
     {
     }
@@ -31,7 +31,7 @@ class CronController extends AbstractController
 
         try {
             $cronService->executeFiveMinuteTasks();
-            $this->logger->error('Executing cron tasks: ' . (new \DateTimeImmutable())->format('Y-m-d H:i:s'));
+//            $this->logger->error('Executing cron tasks: ' . (new \DateTimeImmutable())->format('Y-m-d H:i:s'));
 
             return new Response('Tasks executed successfully.', Response::HTTP_OK);
 
