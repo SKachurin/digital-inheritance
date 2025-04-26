@@ -18,7 +18,7 @@ class CronService
         private CustomerRepository           $customerRepository,
         private CronBatchProducer            $batchProducer,
         private readonly MessageBusInterface $bus,
-//        private LoggerInterface              $logger
+        private LoggerInterface              $logger
 
     )
     {
@@ -66,9 +66,9 @@ class CronService
         }
 
         // Run once between 02:00–02:10
-        if ($hour === 14 && $minute <= 15) {
+        if ($hour === 15 && $minute <= 45) {
             $this->bus->dispatch(new MarkExpiredAsNotPaidMessage());
-//            $this->logger->error('CronBatchProducer dispatching MarkExpiredAsNotPaidMessage');
+            $this->logger->error('CronBatchProducer dispatching MarkExpiredAsNotPaidMessage');
         }
 
     }
