@@ -66,7 +66,7 @@ class CronService
         }
 
         // Run once between 02:00–02:10
-        if ($hour === 15 && $minute <= 45) {
+        if ($hour === 16 && $minute <= 30) {
             $this->bus->dispatch(new MarkExpiredAsNotPaidMessage());
             $this->logger->error('CronBatchProducer dispatching MarkExpiredAsNotPaidMessage');
         }
