@@ -26,7 +26,11 @@ class PaymentWebhookController extends AbstractController
     {
         $data = json_decode($request->getContent(), true);
 
-        $this->logger->info('CryptoCloud webhook', ['payload' => $data]);
+        $this->logger->error('CryptoCloud webhook received', [
+            'raw_body' => $request->getContent(),
+            'decoded_payload' => $data,
+            'headers' => $request->headers->all(),
+        ]);
 
         if (!isset($data['status']) || $data['status'] !== 'paid') {
             return new Response('Ignored', 200);
