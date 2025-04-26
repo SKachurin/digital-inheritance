@@ -18,7 +18,7 @@ class MarkExpiredAsNotPaidConsumer
         private readonly CustomerRepository     $customerRepository,
         private readonly TransactionRepository  $transactionRepository,
         private readonly EntityManagerInterface $em,
-        private LoggerInterface                 $logger
+//        private LoggerInterface                 $logger
     )
     {
     }
@@ -33,7 +33,7 @@ class MarkExpiredAsNotPaidConsumer
             $paidCustomers = $this->customerRepository->findPaidWithPagination($batchSize, $offset);
 
             if (count($paidCustomers) === 0) {
-                $this->logger->error('No more paid customers found in batch.');
+//                $this->logger->error('No more paid customers found in batch.');
                 break;
             }
 
@@ -43,7 +43,7 @@ class MarkExpiredAsNotPaidConsumer
                 if (!$lastTransaction) {
                     $paidCustomer->setCustomerPaymentStatus(CustomerPaymentStatusEnum::NOT_PAID);
                     $this->em->persist($paidCustomer);
-                    $this->logger->error('Marked customer ID ' . $paidCustomer->getId() . ' as NOT_PAID — no transaction found.');
+//                    $this->logger->error('Marked customer ID ' . $paidCustomer->getId() . ' as NOT_PAID — no transaction found.');
                     continue;
                 }
 
@@ -60,32 +60,17 @@ class MarkExpiredAsNotPaidConsumer
                     $paidUntil = null;
                     //TODO huge problem - message the admin
 
-                    $this->logger->error(sprintf(
-                        'Customer ID %d has invalid pricePlan (%s) or amount (%s)',
-                        $paidCustomer->getId(),
-                        $plan,
-                        $amount
-                    ));
-
                 } else {
                     $monthsPaid = (int) floor($amount / $pricePerMonth);
                     $daysPaid = (int) floor($monthsPaid * 31);
                     $paidUntil = (clone $lastTransaction->getCreatedAt())->modify(sprintf('+%d days', $daysPaid));
-
-                    $this->logger->error(sprintf(
-                        'Customer ID %d paid until %s (plan: %s, amount: %.2f)',
-                        $paidCustomer->getId(),
-                        $paidUntil->format('Y-m-d H:i:s'),
-                        $plan,
-                        $amount
-                    ));
 
                 }
 
                 if ($paidUntil && $paidUntil < $now) {
                     $paidCustomer->setCustomerPaymentStatus(CustomerPaymentStatusEnum::NOT_PAID);
                     $this->em->persist($paidCustomer);
-                    $this->logger->error('Marked customer ID ' . $paidCustomer->getId() . ' as NOT_PAID — expired.');
+//                    $this->logger->error('Marked customer ID ' . $paidCustomer->getId() . ' as NOT_PAID — expired.');
                 }
             }
 

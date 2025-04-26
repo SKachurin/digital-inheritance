@@ -32,7 +32,7 @@ class TransactionRepository extends BaseRepository
             ->andWhere('t.status = :status')
             ->setParameter('customer', $customer)
             ->setParameter('status', 'paid')
-            ->orderBy('t.createdAt', 'DESC')
+            ->orderBy('t.created_at', 'DESC')
             ->setMaxResults(1)
             ->getQuery()
             ->getOneOrNullResult();
