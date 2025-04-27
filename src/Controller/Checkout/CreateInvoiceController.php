@@ -49,8 +49,10 @@ class CreateInvoiceController extends AbstractController
 
         $response = $this->http->request('POST', 'https://api.cryptocloud.plus/v2/invoice/create', [
             'headers' => [
-                "Authorization: Token ". $this->apiKey,
-                "Content-Type: application/json"
+                'Authorization' => 'Token ' . $this->apiKey,
+                'Content-Type' => 'application/json',
+                'Accept' => 'application/json',
+                'User-Agent' => 'TheDigitalHeirBot/1.0',
             ],
             'json' => [
                 'shop_id' => '4Hj4s1isHiUkAAz2',

@@ -52,7 +52,7 @@ class MarkExpiredAsNotPaidConsumer
 
                 $pricePerMonth = match ($plan) {
                     'standard' => 5,
-                    'premium' => 25,
+                    'premium' => 1, //TODO 25
                     default => null,
                 };
 
