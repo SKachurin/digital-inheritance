@@ -39,9 +39,10 @@ class LoginType extends AbstractType
                 'mapped'=> false,
                 'label'    => 'form.label.remember_me',
                 'label_attr' => [
-                    'class' => 'checkbox-inline checkbox-switch',
+                    'class' => 'checkbox-inline checkbox-switch form-check-label',
                 ],
                 'required' => false,
+                'disabled' => true,
             ])
             ->add('g-recaptcha-response', HiddenType::class, [
                 'mapped' => false,

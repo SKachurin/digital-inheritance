@@ -73,6 +73,10 @@ form:
     your_login: 'Ваш логин — это Ваша электронная почта'
     login_password: 'Пароль'
     remember_me: 'Запомнить меня'
+    remember_me_tip: |
+      <a href="https://www.kaspersky.ru/resource-center/definitions/what-is-session-hijacking" target="_blank" rel="noopener noreferrer">
+      Перехват сеанса
+      </a> это реальная угроза безопасности — поэтому мы отключили эту функцию.
     send: 'Отправить'
     edit: 'Редактировать'
     note: 'Текст для Вашего конверта'

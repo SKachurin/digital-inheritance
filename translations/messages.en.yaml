@@ -73,6 +73,10 @@ form:
     your_login: 'Your Email Is Your Login'
     login_password: 'Password'
     remember_me: 'Remember me'
+    remember_me_tip: |
+      <a href="https://www.proofpoint.com/us/threat-reference/session-hijacking" target="_blank" rel="noopener noreferrer">
+      Session hijacking
+      </a> is a real security threat — that's why we disable it.
     send: 'Send'
     edit: 'Edit'
     note: 'Text for your Envelope'

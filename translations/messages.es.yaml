@@ -73,6 +73,10 @@ form:
     your_login: 'Su correo electrónico es su usuario'
     login_password: 'Contraseña'
     remember_me: 'Recordarme'
+    remember_me_tip: |
+      <a href="https://www.proofpoint.com/es/threat-reference/session-hijacking" target="_blank" rel="noopener noreferrer">
+      El secuestro de sesión
+      </a> es una amenaza real para la seguridad — por eso lo desactivamos.
     send: 'Enviar'
     edit: 'Editar'
     note: 'Texto para su Sobre'
