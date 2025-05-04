@@ -106,7 +106,7 @@ refund:
 
 checkout:
     path:       /checkout
-    controller: Symfony\Bundle\FrameworkBundle\Controller\TemplateController
+    controller: App\Controller\Checkout\CheckoutTwigController
     defaults:
         template:  'checkout.html.twig'
 

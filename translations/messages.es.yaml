@@ -216,8 +216,10 @@ dashboard:
     Has iniciado el proceso de eliminación de todos tus datos de esta aplicación. Tus datos serán eliminados permanentemente muy pronto.
   cancel_deletion_button: 'Cancelar eliminación'
   trial_active: "Prueba activa"
+  trial_active_left: '(quedan %days% días)'
   trial_active_tip: "Actualmente estás en el período de prueba."
   payment_completed: "Pago completado"
+  payment_completed_left: '(quedan %days% días)'
   payment_completed_tip: "¡Gracias! Tu pago ha sido confirmado."
 
 decrypt_your_secure_envelope: 'Descifre su Sobre Seguro'

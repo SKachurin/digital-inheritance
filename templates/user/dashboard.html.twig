@@ -697,7 +697,7 @@
                     {% if customerPaymentStatus == 'trial' %}
                         <section class="mb-4">
                             <a class="btn btn-outline-primary btn-floating m-1 mt-4" href="{{ path('checkout') }}" role="button">
-                                <i>{{ 'dashboard.trial_active'|trans }}</i>
+                                <i>{{ 'dashboard.trial_active'|trans }} | ({{ customerPaymentDaysLeft }} days left)</i>
                             </a>
 
                             <div class="tooltip-container">
@@ -736,8 +736,8 @@
 
                     {% elseif customerPaymentStatus == 'paid' %}
                         <section class="mb-4">
-                            <a class="btn btn-outline-success btn-floating m-1 mt-4 disabled" role="button">
-                                <i>{{ 'dashboard.payment_completed'|trans }}</i>
+                            <a class="btn btn-outline-success btn-floating m-1 mt-4" href="{{ path('checkout') }}" role="button">
+                                <i>{{ 'dashboard.payment_completed'|trans }} | {{ 'dashboard.payment_completed_left'|trans({ '%days%': customerPaymentDaysLeft }) }}</i>
                             </a>
 
                             <div class="tooltip-container">

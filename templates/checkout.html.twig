@@ -218,11 +218,12 @@
     </section>
 
     <script>
-{#// TODO premium: 25 #}
-        const PRICES = {
-            standard: 5,
-            premium: 1
-        };
+        {# // TODO premium: 25 #}
+        //         const PRICES = {
+        //             standard: 5,
+        //             premium: 1
+        //         };
+        const PRICES = {{ planPrices|json_encode|raw }};
 
         function goToPayment(plan) {
             const qty = parseInt(document.getElementById(`${plan}Qty`).value) || 1;

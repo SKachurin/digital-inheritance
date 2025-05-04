@@ -82,6 +82,7 @@ class Customer implements UserInterface, PasswordAuthenticatedUserInterface
      * @var Collection<int, Transaction>
      */
     #[ORM\OneToMany(targetEntity: Transaction::class, mappedBy: 'customer')]
+    #[ORM\OrderBy(['created_at' => 'DESC'])]
     private Collection $transactions;
 
     /**

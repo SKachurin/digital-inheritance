@@ -216,8 +216,10 @@ dashboard:
   make_a_payment: 'Совершите платеж'
   make_a_payment_tip: "Функция пока не готова. Сейчас все новые клиенты считаются заплатившими."
   trial_active: "Пробный период активен"
+  trial_active_left: '(осталось %days% дн.)'
   trial_active_tip: "В данный момент у вас активен пробный период."
   payment_completed: "Платёж выполнен"
+  payment_completed_left: '(осталось %days% дн.)'
   payment_completed_tip: "Спасибо! Ваш платёж подтверждён."
 
 

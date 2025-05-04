@@ -37,6 +37,9 @@ class Transaction
     #[ORM\Column(type: 'string', length: 100, nullable: true)]
     private ?string $paymentMethod = null;
 
+    #[ORM\Column(type: 'datetime_immutable', nullable: true)]
+    private ?\DateTimeImmutable $paidUntil = null;
+
     #[ORM\Column(type: 'string', length: 100, nullable: true)]
     private ?string $status = null;
 
@@ -97,6 +100,18 @@ class Transaction
         $this->paymentMethod = $paymentMethod;
         return $this;
     }
+
+    public function getPaidUntil(): ?\DateTimeImmutable
+    {
+        return $this->paidUntil;
+    }
+
+    public function setPaidUntil(\DateTimeImmutable $paidUntil): self
+    {
+        $this->paidUntil = $paidUntil;
+        return $this;
+    }
+
     public function getStatus(): ?string
     {
         return $this->status;

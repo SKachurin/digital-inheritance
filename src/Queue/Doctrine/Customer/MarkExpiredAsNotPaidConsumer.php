@@ -47,27 +47,20 @@ class MarkExpiredAsNotPaidConsumer
                     continue;
                 }
 
-                $plan = $lastTransaction->getPlan();
-                $amount = $lastTransaction->getAmount();
+//                $plan = $lastTransaction->getPlan();
+//                $amount = $lastTransaction->getAmount();
+//
+//                $pricePerMonth = $this->planPriceResolver->getPricePerMonth($plan);
 
-                $pricePerMonth = match ($plan) {
-                    'standard' => 5,
-                    'premium' => 1, //TODO 25
-                    default => null,
-                };
+                $paidUntil = $lastTransaction->getPaidUntil();
 
-                if (!$pricePerMonth || !$amount) {
-                    $paidUntil = null;
+                if (!$paidUntil) {
+
+                    return;
                     //TODO huge problem - message the admin
-
-                } else {
-                    $monthsPaid = (int) floor($amount / $pricePerMonth);
-                    $daysPaid = (int) floor($monthsPaid * 31);
-                    $paidUntil = (clone $lastTransaction->getCreatedAt())->modify(sprintf('+%d days', $daysPaid));
-
                 }
 
-                if ($paidUntil && $paidUntil < $now) {
+                if ($paidUntil < $now) {
                     $paidCustomer->setCustomerPaymentStatus(CustomerPaymentStatusEnum::NOT_PAID);
                     $this->em->persist($paidCustomer);
 //                    $this->logger->error('Marked customer ID ' . $paidCustomer->getId() . ' as NOT_PAID — expired.');

@@ -5,7 +5,9 @@ declare(strict_types=1);
 namespace App\Controller\Webhook;
 
 use App\Entity\Transaction;
+use App\Enum\CustomerPaymentStatusEnum;
 use App\Repository\CustomerRepository;
+use App\Service\PlanPriceResolver;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -18,6 +20,7 @@ class PaymentWebhookController extends AbstractController
         private string                   $apiKey,
         private EntityManagerInterface   $em,
         private CustomerRepository       $customerRepository,
+        private PlanPriceResolver        $planPriceResolver,
         private readonly LoggerInterface $logger,
     )
     {
@@ -76,14 +79,45 @@ class PaymentWebhookController extends AbstractController
             return new Response('Customer not found', 404);
         }
 
+        // Sum check
+        $pricePerMonth = $this->planPriceResolver->getPricePerMonth($plan);
+
+        if (!$pricePerMonth || $amount < $pricePerMonth) {
+
+            $this->logger->error('Payment amount too low', [
+                'amount' => $amount,
+                'plan' => $plan,
+                'pricePerMonth' => $pricePerMonth,
+            ]);                                         // TODO message Admin
+
+            return new Response('Amount too low for selected plan', 400);
+        }
+
+        $now = new \DateTimeImmutable();
+        $startDate = $now;
+
+        $latestTransaction = $customer->getTransactions()->first();
+        if ($latestTransaction && $latestTransaction->getPaidUntil() > $now) {
+            $startDate = $latestTransaction->getPaidUntil();
+        }
+
+        $monthsPaid = (int)floor($amount / $pricePerMonth);
+        $daysToAdd = $monthsPaid * 31;
+        $paidUntil = $startDate->modify("+{$daysToAdd} days");
+
         $transaction = (new Transaction($customer))
             ->setAmount((float) $amount)
             ->setCurrency($data['currency'] ?? 'USD')
             ->setPaymentMethod('CryptoCloud')
             ->setStatus('paid')
-            ->setPlan($plan);
+            ->setPlan($plan)
+            ->setPaidUntil($paidUntil);
+
+        $customer->setCustomerPaymentStatus(CustomerPaymentStatusEnum::PAID);
 
         $this->em->persist($transaction);
+        $this->em->persist($customer);
+
         $this->em->flush();
 
         return new Response('OK', 200);
