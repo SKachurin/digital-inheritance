@@ -45,13 +45,15 @@ class CreateInvoiceController extends AbstractController
             return new JsonResponse(['error' => 'Unauthenticated'], 401);
         }
 
-        $orderId = sprintf('order_%d/%e/%s', $user->getId(), $dto->plan, uniqid());
+//        $orderId = sprintf('order_%d/%e/%s', $user->getId(), $dto->plan, uniqid());
+        $orderId =  sprintf('order_%d/%s/%s', $user->getId(), $dto->plan, uniqid());
 
         $response = $this->http->request('POST', 'https://api.cryptocloud.plus/v2/invoice/create', [
             'headers' => [
                 'Authorization' => 'Token ' . $this->apiKey,
                 'Content-Type' => 'application/json',
                 'Accept' => 'application/json',
+                'Accept-Encoding' => 'gzip, deflate, br',
                 'User-Agent' => 'TheDigitalHeirBot/1.0',
             ],
             'json' => [
