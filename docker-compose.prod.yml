@@ -47,6 +47,7 @@ services:
       RECAPTCHA_SECRET_KEY_V2: "${RECAPTCHA_SECRET_KEY_V2}"
       ADMIN_TG: "${ADMIN_TG}"
       ADMIN_WA: "${ADMIN_WA}"
+      CRYPTOCLOUD_API_KEY: "${CRYPTOCLOUD_API_KEY}"
     extra_hosts:
       - "host.docker.internal:host-gateway"
     cap_add:
