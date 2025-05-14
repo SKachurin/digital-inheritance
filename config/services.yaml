@@ -129,9 +129,3 @@ services:
     App\Controller\Webhook\PaymentWebhookController:
         arguments:
             $apiKey: '%env(CRYPTOCLOUD_API_KEY)%'
-
-    App\HttpClient\LoggingHttpClient:
-        decorates: 'http_client'
-        arguments:
-            $client: '@App\HttpClient\LoggingHttpClient.inner'
-            $logger: '@logger'
