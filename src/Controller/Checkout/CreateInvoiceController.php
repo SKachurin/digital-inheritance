@@ -53,7 +53,7 @@ class CreateInvoiceController extends AbstractController
                 'Authorization' => 'Token ' . $this->apiKey,
                 'Content-Type' => 'application/json',
                 'Accept' => 'application/json',
-                'Accept-Encoding' => 'gzip, deflate, br',
+                'Accept-Encoding' => 'identity',
                 'User-Agent' => 'TheDigitalHeirBot/1.0',
             ],
             'json' => [
