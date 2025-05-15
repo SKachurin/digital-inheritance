@@ -9,7 +9,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
-use Symfony\Contracts\HttpClient\Exception\DecodingExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
@@ -45,7 +44,6 @@ class CreateInvoiceController extends AbstractController
             return new JsonResponse(['error' => 'Unauthenticated'], 401);
         }
 
-//        $orderId = sprintf('order_%d/%e/%s', $user->getId(), $dto->plan, uniqid());
         $orderId =  sprintf('order_%d/%s/%s', $user->getId(), $dto->plan, uniqid());
 
         $response = $this->http->request('POST', 'https://api.cryptocloud.plus/v2/invoice/create', [

@@ -27,7 +27,12 @@ class PaymentWebhookController extends AbstractController
     }
     public function __invoke(Request $request): Response
     {
-        $data = json_decode($request->getContent(), true);
+        if (!$request->headers->contains('content-type', 'application/x-www-form-urlencoded')) {
+            //TODO send alert to admin
+            return new Response('Unsupported content type', 415);
+        }
+
+        $data = $request->request->all();
 
         $this->logger->error('CryptoCloud webhook received', [
             'raw_body' => $request->getContent(),
