@@ -126,10 +126,10 @@ services:
         arguments:
             $apiKey: '%env(CRYPTOCLOUD_API_KEY)%'
 
-    App\Controller\Webhook\PaymentWebhookController:
+    App\Service\Payment\CryptoCloudInvoiceVerifier:
         arguments:
             $apiKey: '%env(CRYPTOCLOUD_API_KEY)%'
 
-    App\Service\CryptoCloudInvoiceVerifier:
+    App\Service\Payment\CryptoCloudPaymentHandler:
         arguments:
             $apiKey: '%env(CRYPTOCLOUD_API_KEY)%'
