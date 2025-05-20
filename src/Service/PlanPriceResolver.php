@@ -13,7 +13,7 @@ class PlanPriceResolver
     {
         return match ($plan) {
             self::STANDARD => 5,
-            self::PREMIUM => 1, //TODO 25
+            self::PREMIUM => 0.1, //TODO 25
             default => null,
         };
     }
