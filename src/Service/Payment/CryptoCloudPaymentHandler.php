@@ -41,10 +41,18 @@ class CryptoCloudPaymentHandler
             return new Response('Invalid token format', 403);
         }
 
-        $check_secretKey = explode('-',$tokenParts[2]);
+        $header = $tokenParts[0];
+        $payload = $tokenParts[1];
+        $actualSignature = $tokenParts[2];
 
-        if ($check_secretKey[0] !== $this->secretKey) {
+        $signedData = "$header.$payload";
+        $rawSignature = hash_hmac('sha256', $signedData, $this->secretKey, true);
+        $expectedSignature = rtrim(strtr(base64_encode($rawSignature), '+/', '-_'), '=');
+
+        if (!hash_equals($expectedSignature, $actualSignature)) {
+
             $this->logger->error('token secret error');
+
             return new Response('Invalid token secret', 403);
         }
 
