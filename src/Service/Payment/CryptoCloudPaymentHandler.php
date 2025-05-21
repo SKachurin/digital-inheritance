@@ -101,10 +101,31 @@ class CryptoCloudPaymentHandler
         }
 
         $pricePerMonth = $this->planPriceResolver->getPricePerMonth($plan);
-        if (!$pricePerMonth || $amount < $pricePerMonth) {
-            // TODO Calculate paid interval
-            $this->logger->error('Missing order data 3');
-            return new Response('Amount too low for selected plan', 400);
+
+        if (!$pricePerMonth || $amount <= 0) {
+            $this->logger->error('Invalid plan price or zero payment', [
+                'plan' => $plan,
+                'amount' => $amount,
+            ]);
+            return new Response('Invalid amount', 400);
+        }
+
+        // billing with days
+        $monthsPaid = 0;
+        if ( $amount < $pricePerMonth) {
+            $daysPaid = (int) floor(($amount / ($pricePerMonth / 31)));
+
+            if ($daysPaid < 1) {
+                $this->logger->error('Amount too low to grant even one day', [
+                    'pricePerMonth' => $pricePerMonth,
+                    'amount' => $amount,
+                ]);
+                return new Response('Amount too low', 400);
+            }
+        } else {
+            $monthsPaid = (int)floor($amount / $pricePerMonth);
+            $amountLeft = $amount - ($monthsPaid * $pricePerMonth);
+            $daysPaid = (int) floor(($amountLeft / ($pricePerMonth / 31)));
         }
 
         $now = new \DateTimeImmutable();
@@ -115,8 +136,7 @@ class CryptoCloudPaymentHandler
             $startDate = $latestTransaction->getPaidUntil();
         }
 
-        $monthsPaid = (int)floor($amount / $pricePerMonth);
-        $daysToAdd = $monthsPaid * 31;
+        $daysToAdd = ($monthsPaid * 31) + $daysPaid;
         $paidUntil = $startDate->modify("+{$daysToAdd} days");
 
         $transaction = (new Transaction($customer))
