@@ -132,4 +132,4 @@ services:
 
     App\Service\Payment\CryptoCloudPaymentHandler:
         arguments:
-            $apiKey: '%env(CRYPTOCLOUD_API_KEY)%'
+            $secretKey: '%env(CRYPTOCLOUD_SECRET_KEY)%'

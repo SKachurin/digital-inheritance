@@ -48,6 +48,7 @@ services:
       ADMIN_TG: "${ADMIN_TG}"
       ADMIN_WA: "${ADMIN_WA}"
       CRYPTOCLOUD_API_KEY: "${CRYPTOCLOUD_API_KEY}"
+      CRYPTOCLOUD_SECRET_KEY: "${CRYPTOCLOUD_SECRET_KEY}"
     extra_hosts:
       - "host.docker.internal:host-gateway"
     cap_add:

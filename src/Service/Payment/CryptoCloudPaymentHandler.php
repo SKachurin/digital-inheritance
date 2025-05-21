@@ -19,7 +19,7 @@ class CryptoCloudPaymentHandler
         private readonly CustomerRepository         $customerRepository,
         private readonly PlanPriceResolver          $planPriceResolver,
         private readonly EntityManagerInterface     $em,
-        private string                              $apiKey,
+        private readonly string                     $secretKey,
         private readonly LoggerInterface            $logger,
     )
     {
@@ -33,39 +33,38 @@ class CryptoCloudPaymentHandler
             'token' => $token
         ]);
 
-        // Strip "b" prefix if exists
-        if (str_starts_with($token, 'b') && substr_count($token, '.') === 2) {
-            $token = substr($token, 1);
-            $this->logger->error('token 2', [
-                'token' => $token
-            ]);
+        // Check key
+        $tokenParts = explode('.', $token);
+
+        if (count($tokenParts) !== 3) {
+            $this->logger->error('Malformed JWT token', ['token' => $token]);
+            return new Response('Invalid token format', 403);
+        }
+
+        $check_secretKey = explode('-',$tokenParts[2]);
+
+        if ($check_secretKey[0] !== $this->secretKey) {
+            $this->logger->error('token secret error');
+            return new Response('Invalid token secret', 403);
         }
 
         // Get $uuid from 2 sources
-        $uuid = $data['invoice_info']['uuid'] ?? null;
-        if (empty($uuid)) {
-            $this->logger->error('Missing order data ');
-            return new Response('Missing order data', 400);
-        }
+        $payloadBase64 = $tokenParts[1] ?? '';
+        $payloadJson = base64_decode($payloadBase64);
+        $payload = json_decode($payloadJson, true);
 
-        $uuid_hidden = null;
-        if (str_contains($token, $this->apiKey)) {
-            $uuid_hidden = str_replace($this->apiKey, '', $token);
+        $uuidHidden = $payload['id'] ?? null;
 
-            $this->logger->error('uuid_hidden ', [
-                'uuid_hidden' => $uuid_hidden
-            ]);
-        }
+        $uuid = $data['invoice_id'] ?? null;
 
-        if ($uuid !== $uuid_hidden) {
+        if ($uuid !== $uuidHidden) {
             $this->logger->warning('UUID mismatch in webhook', [
                 'uuid_from_postback' => $uuid,
-                'uuid_hidden' => $uuid_hidden,
+                'uuid_hidden' => $uuidHidden,
                 'token' => $token,
             ]);
             return new Response('UUID mismatch', 400);
         }
-
 
         // request $invoice data form vendor Again
         $invoice = $this->verifier->verify($uuid);

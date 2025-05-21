@@ -35,9 +35,10 @@ class PaymentWebhookController extends AbstractController
 
         $orderId = $data['order_id'] ?? null;
         $token = $data['token'] ?? null;
+        $invoiceId = $data['invoice_id'] ?? null;
 
         // Basic check
-        if (!$token || !$orderId ) {
+        if (!$token || !$orderId || !$invoiceId ) {
             return new Response('Invalid payload', 400);
         }
 

@@ -52,6 +52,7 @@ jobs:
           export ADMIN_TG="${{ secrets.ADMIN_TG}}";
           export ADMIN_WA="${{ secrets.ADMIN_WA }}";
           export CRYPTOCLOUD_API_KEY="${{ secrets.CRYPTOCLOUD_API_KEY }}";
+          export CRYPTOCLOUD_SECRET_KEY="${{ secrets.CRYPTOCLOUD_SECRET_KEY }}";
           cd /var/www/;
           chmod +x deploy.sh;
           bash deploy.sh;
