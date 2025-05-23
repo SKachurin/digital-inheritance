@@ -29,11 +29,7 @@ class CryptoCloudPaymentHandler
     {
         $token = $data['token'];
 
-        $this->logger->error('token 1', [
-            'token' => $token
-        ]);
-
-        // Check key
+        // Checking key
         $tokenParts = explode('.', $token);
 
         if (count($tokenParts) !== 3) {
@@ -50,13 +46,11 @@ class CryptoCloudPaymentHandler
         $expectedSignature = rtrim(strtr(base64_encode($rawSignature), '+/', '-_'), '=');
 
         if (!hash_equals($expectedSignature, $actualSignature)) {
-
             $this->logger->error('token secret error');
-
             return new Response('Invalid token secret', 403);
         }
 
-        // Get $uuid from 2 sources
+        // Checking $uuid from 2 sources
         $payloadBase64 = $tokenParts[1] ?? '';
         $payloadJson = base64_decode($payloadBase64);
         $payload = json_decode($payloadJson, true);

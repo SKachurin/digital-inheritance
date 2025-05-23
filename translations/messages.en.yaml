@@ -1,4 +1,6 @@
 title: 'The Digital Heir Service'
+default_title: 'Introducing “The Digital Heir"'
+default_description: 'A new and secure way to leave digital assets as an inheritance.'
 header:
   dashboard: 'Dashboard'
   login: 'Login'

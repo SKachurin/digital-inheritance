@@ -1,4 +1,6 @@
 title: 'The Digital Heir Service'
+default_title: 'Представляем сервис «Цифровой Наследник»'
+default_description: 'Новое и безопасное решение для наследования цифровых активов.'
 header:
   dashboard: 'Панель управления'
   login: 'Войти'

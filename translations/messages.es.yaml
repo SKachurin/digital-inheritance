@@ -1,4 +1,6 @@
 title: 'The Digital Heir Service'
+default_title: 'Presentamos “El Heredero Digital”'
+default_description: 'Una nueva y segura manera de legar activos digitales.'
 header:
   dashboard: 'Panel de Control'
   login: 'Iniciar Sesión'
