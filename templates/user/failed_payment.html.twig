@@ -1,0 +1,235 @@
+{% extends 'base.html.twig' %}
+
+{% block og_title %}{{ 'about_page.title'|trans }}{% endblock %}
+
+{% block og_description %}{{ 'about_page.description'|trans }}{% endblock %}
+{% block og_image %}{{ '/build/logo-TheDigitalHeir-192x192.png' }}{% endblock %}
+
+
+{% block title %}Payment Successful{% endblock %}
+
+{% block content %}
+    <section class="faq">
+        <div class="container text">
+            <div class="confirmation-content">
+                <h1>Payment Failed</h1>
+                <p>Your access has NOT been activated. You can contact Support:</p>
+                <a href="https://t.me/TheDigitalHeir_com" class="btn btn-outline-dark btn-floating m-4 mt-4 btn-in-text">
+                    <i class="">{{ 'contact_page.title'|trans }}</i>
+                </a>
+            </div>
+
+            <div class="gradient-wrapper">
+                <canvas id="stripe-style-gradient"></canvas>
+            </div>
+        </div>
+    </section>
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+
+    <style>
+        .confirmation-content {
+            margin-bottom: 9em;
+        }
+
+        .faq {
+            position: relative;
+            overflow: hidden;
+            padding: 5rem 9%;
+            margin: 12rem 9% 0;
+            background: #fff;
+            text-align: center
+        }
+
+        .confirmation-content {
+            position: relative;
+            z-index: 2;
+            color: #111
+        }
+
+        .gradient-wrapper {
+            position: absolute;
+            bottom: -4rem;
+            left: -15%;
+            width: 130%;
+            height: 300px;
+            transform: rotate(-7deg);
+            pointer-events: none
+        }
+
+        #stripe-style-gradient {
+            width: 100%;
+            height: 100%;
+            display: block;
+            filter: blur(48px);
+            opacity: .95
+        }
+
+        :root {
+            --grad0: #a960ee;
+            --grad1: #ff333d;
+            --grad2: #90e0ff;
+            --grad3: #ffcb57;
+        }
+
+        @media (max-width: 991px) {
+            .confirmation-content {
+                margin-bottom: 3em;
+            }
+            .gradient-wrapper {
+                position: absolute;
+                bottom: -4rem;
+                left: -1%;
+
+            }
+
+            .faq {
+                margin-top: 27rem;
+                margin-left: 2%;
+                margin-right: 2%;
+                padding: 5rem 2%;
+            }
+            .container.text {
+                padding-top: 2rem;
+            }
+            .container.text > * {
+                max-width: 100%;
+            }
+
+            p {
+                color: #444;
+                max-width: 100%;
+                margin: 1rem 2rem 2rem 2rem !important;
+                font-size: 2rem;
+            }
+
+            .faq ul li {
+                padding-left: 4rem;
+                font-size: 2rem;
+            }
+
+            .container.text h3 {
+                margin: 1rem 2rem 2rem 2rem !important;
+                font-size: 2.9rem;
+            }
+            .container.text h4 {
+                margin: 1rem 2rem 2rem 2rem !important;
+                font-size: 2.3rem !important;
+            }
+
+            #ol {
+                padding-left: 6rem !important;
+            }
+
+        }
+    </style>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const cvs = document.getElementById('stripe-style-gradient');
+            const wrap = cvs.parentElement;
+            const gl = cvs.getContext('webgl');
+            if (!gl) return;
+
+            function resize() {
+                cvs.width = wrap.offsetWidth;
+                cvs.height = wrap.offsetHeight;
+                gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
+            }
+            resize();
+            window.addEventListener('resize', resize);
+
+            const css = getComputedStyle(document.documentElement);
+            const palette = ['--grad0', '--grad1', '--grad2', '--grad3'].map(v => {
+                const hex = css.getPropertyValue(v).trim() || '#ffffff';
+                const b = parseInt(hex.slice(1), 16);
+                return [((b >> 16) & 255) / 255, ((b >> 8) & 255) / 255, (b & 255) / 255];
+            });
+
+            const vs = `
+                attribute vec2 p;
+                void main(){gl_Position = vec4(p,0.0,1.0);}
+            `;
+
+            const fs = `
+                precision mediump float;
+                uniform float u_time;
+                uniform vec2 u_res;
+                uniform vec3 u_col[4];
+
+                // Smooth wave functions for flowing motion
+                float wave(vec2 uv, float speed, float freq, vec2 dir) {
+                    return sin(dot(uv, dir) * freq + u_time * speed) * 0.5 + 0.5;
+                }
+
+                void main(){
+                    vec2 uv = gl_FragCoord.xy / u_res;
+                    uv = uv * 2.0 - 1.0;
+                    uv.x *= u_res.x / u_res.y;
+
+                    float t = u_time * 0.4;
+
+                    // Create flowing wave patterns - ensure values stay in 0-1 range
+                    float wave1 = wave(uv, 1.0, 2.0, vec2(1.0, 0.3));
+                    float wave2 = wave(uv + vec2(t * 0.08, 0.0), 0.7, 1.8, vec2(-0.6, 1.0));
+                    float wave3 = wave(uv + vec2(0.0, t * 0.12), 1.3, 1.5, vec2(0.8, -0.5));
+                    float wave4 = wave(uv + vec2(t * 0.06, t * 0.09), 0.5, 2.5, vec2(-0.7, 0.4));
+
+                    // Create flowing color zones
+                    vec3 col = u_col[0];
+                    col = mix(col, u_col[1], smoothstep(0.2, 0.8, wave1));
+                    col = mix(col, u_col[2], smoothstep(0.3, 0.7, wave2));
+                    col = mix(col, u_col[3], smoothstep(0.4, 0.6, wave3));
+
+                    // Add flowing variations
+                    col = mix(col, u_col[0], smoothstep(0.1, 0.9, wave4) * 0.3);
+
+                    // Ensure minimum brightness to avoid black areas
+                    col = max(col, vec3(0.1));
+
+                    // Soft edge fade - less aggressive
+                    float edge = smoothstep(1.2, 0.6, length(uv));
+                    edge = max(edge, 0.3); // Prevent completely black edges
+
+                    gl_FragColor = vec4(col * edge, 1.0);
+                }
+            `;
+
+            function compile(type, src) {
+                const s = gl.createShader(type);
+                gl.shaderSource(s, src);
+                gl.compileShader(s);
+                if (!gl.getShaderParameter(s, gl.COMPILE_STATUS))
+                    console.error(gl.getShaderInfoLog(s));
+                return s;
+            }
+
+            const prog = gl.createProgram();
+            gl.attachShader(prog, compile(gl.VERTEX_SHADER, vs));
+            gl.attachShader(prog, compile(gl.FRAGMENT_SHADER, fs));
+            gl.linkProgram(prog);
+            gl.useProgram(prog);
+
+            palette.forEach((c, i) => gl.uniform3fv(gl.getUniformLocation(prog, 'u_col[' + i + ']'), c));
+
+            const buf = gl.createBuffer();
+            gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+            gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 1, -1, -1, 1, -1, 1, 1, -1, 1, 1]), gl.STATIC_DRAW);
+            const loc = gl.getAttribLocation(prog, 'p');
+            gl.enableVertexAttribArray(loc);
+            gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
+
+            const uTime = gl.getUniformLocation(prog, 'u_time');
+            const uRes = gl.getUniformLocation(prog, 'u_res');
+
+            (function draw(ms) {
+                gl.uniform1f(uTime, ms * 0.001);
+                gl.uniform2f(uRes, cvs.width, cvs.height);
+                gl.drawArrays(gl.TRIANGLES, 0, 6);
+                requestAnimationFrame(draw);
+            })(0);
+        });
+    </script>
+{% endblock %}

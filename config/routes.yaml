@@ -104,6 +104,18 @@ refund:
     defaults:
         template:  'legal/refund.html.twig'
 
+successful_payment:
+    path: /successful-payment
+    controller: Symfony\Bundle\FrameworkBundle\Controller\TemplateController
+    defaults:
+        template: 'user/successful_payment.html.twig'
+
+failed_payment:
+    path: /failed-payment
+    controller: Symfony\Bundle\FrameworkBundle\Controller\TemplateController
+    defaults:
+        template: 'user/failed_payment.html.twig'
+
 checkout:
     path:       /checkout
     controller: App\Controller\Checkout\CheckoutTwigController
