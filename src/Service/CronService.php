@@ -15,9 +15,10 @@ use Symfony\Component\Notifier\Exception\TransportExceptionInterface;
 class CronService
 {
     public function __construct(
-        private CustomerRepository           $customerRepository,
-        private CronBatchProducer            $batchProducer,
-        private readonly MessageBusInterface $bus,
+        private CustomerRepository             $customerRepository,
+        private CronBatchProducer              $batchProducer,
+        private readonly MessageBusInterface   $bus,
+        private readonly BackupDatabaseService $backupDatabaseService
 //        private LoggerInterface              $logger
 
     )
@@ -69,6 +70,11 @@ class CronService
         if ($hour === 1 && $minute <= 15) {
             $this->bus->dispatch(new MarkExpiredAsNotPaidMessage());
 //            $this->logger->error('CronBatchProducer dispatching MarkExpiredAsNotPaidMessage');
+        }
+
+        // Run DB backup once daily at 03:00–03:10
+        if ($hour === 3 && $minute <= 10) {
+            $this->backupDatabaseService->run();
         }
 
     }

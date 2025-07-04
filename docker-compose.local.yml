@@ -51,6 +51,11 @@ services:
       RECAPTCHA_SECRET_KEY_V2: "${RECAPTCHA_SECRET_KEY_V2}"
       ADMIN_TG: "${ADMIN_TG}"
       ADMIN_WA: "${ADMIN_WA}"
+      CRYPTOCLOUD_API_KEY: "${CRYPTOCLOUD_API_KEY}"
+      CRYPTOCLOUD_SECRET_KEY: "${CRYPTOCLOUD_SECRET_KEY}"
+      AWS_ACCESS_KEY_ID: "${AWS_ACCESS_KEY_ID}"
+      AWS_SECRET_ACCESS_KEY: "${AWS_SECRET_ACCESS_KEY}"
+      S3_BUCKET: "${S3_BUCKET}"
     extra_hosts:
       - "host.docker.internal:host-gateway"
     networks:
@@ -65,6 +70,7 @@ services:
       MYSQL_DATABASE: local
     volumes:
       - ./docker/mysql-data:/var/lib/mysql:rw
+      - ./docker/mysql/my.cnf:/etc/mysql/conf.d/my.cnf:ro
     ports:
       - "13000:3306"
     networks:

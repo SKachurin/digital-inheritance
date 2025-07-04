@@ -49,6 +49,9 @@ services:
       ADMIN_WA: "${ADMIN_WA}"
       CRYPTOCLOUD_API_KEY: "${CRYPTOCLOUD_API_KEY}"
       CRYPTOCLOUD_SECRET_KEY: "${CRYPTOCLOUD_SECRET_KEY}"
+      AWS_ACCESS_KEY_ID: "${AWS_ACCESS_KEY_ID}"
+      AWS_SECRET_ACCESS_KEY: "${AWS_SECRET_ACCESS_KEY}"
+      S3_BUCKET: "${S3_BUCKET}"
     extra_hosts:
       - "host.docker.internal:host-gateway"
     cap_add:
@@ -65,6 +68,7 @@ services:
       MYSQL_DATABASE: "${MYSQL_DATABASE}"
     volumes:
       - /var/lib/mysql-data:/var/lib/mysql:rw
+      - ./docker/mysql/my.cnf:/etc/mysql/conf.d/my.cnf:ro
     ports:
       - "13000:3306"
     networks:

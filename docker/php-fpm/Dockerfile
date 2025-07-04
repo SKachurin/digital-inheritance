@@ -80,7 +80,13 @@ RUN curl -fsSL https://github.com/mlocati/docker-php-extension-installer/release
     -o /usr/local/bin/install-php-extensions && chmod +x /usr/local/bin/install-php-extensions
 
 # Install system packages and PHP extensions clearly in one command
-RUN apk update && apk upgrade && apk add --no-cache shadow libcap curl nano supervisor \
+RUN apk update && apk upgrade && apk add --no-cache \
+        shadow libcap curl nano supervisor unzip mysql-client python3 py3-pip \
+    && python3 -m venv /opt/awscli-venv \
+    && . /opt/awscli-venv/bin/activate \
+    && pip install --upgrade pip \
+    && pip install awscli \
+    && ln -s /opt/awscli-venv/bin/aws /usr/bin/aws \
     && install-php-extensions mbstring pdo pdo_mysql pcntl opcache intl apcu mcrypt \
     && setcap 'cap_net_bind_service=+ep' /usr/local/sbin/php-fpm
 

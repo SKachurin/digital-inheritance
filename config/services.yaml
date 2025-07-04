@@ -133,3 +133,9 @@ services:
     App\Service\Payment\CryptoCloudPaymentHandler:
         arguments:
             $secretKey: '%env(CRYPTOCLOUD_SECRET_KEY)%'
+
+    App\Service\BackupDatabaseService:
+        arguments:
+            $databaseUrl: '%env(resolve:DATABASE_URL)%'
+            $s3Bucket: '%env(S3_BUCKET)%'
+            $admin_tg: '%env(ADMIN_TG)%'

@@ -91,6 +91,8 @@ class RegistrationController extends AbstractController
 
             $this->addFlash('success', $this->translator->trans('errors.flash.registration_is_processed'));
 
+            $request->getSession()->set('unverified_email', $customerData->getCustomerEmail());
+
             return $this->redirectToRoute('wait');
         }
 
