@@ -26,10 +26,16 @@ class BackupDatabaseService
             throw new \InvalidArgumentException('Invalid DATABASE_URL');
         }
 
-        $this->dbHost = $parts['host'] ?? 'localhost';
-        $this->dbUser = $parts['user'] ?? 'root';
+        $this->dbHost = $parts['host'] ?? '';
+        $this->dbUser = $parts['user'] ?? '';
         $this->dbPass = $parts['pass'] ?? '';
         $this->dbName = ltrim($parts['path'] ?? '', '/');
+
+        $this->logger->error('DB Dump Params', [
+            'host' => $this->dbHost,
+            'user' => $this->dbUser,
+            'db' => $this->dbName
+        ]);
     }
 
     public function run(): void
@@ -51,7 +57,7 @@ class BackupDatabaseService
         if ($this->createBackup($todayFile)) {
 
             if (file_exists($yesterdayFile)) {
-                if (filesize($todayFile) > filesize($yesterdayFile)) {
+                if (filesize($todayFile) >= filesize($yesterdayFile)) {
                     unlink($yesterdayFile);
                     $this->uploadToS3($todayFile);
                 } else {
@@ -81,6 +87,14 @@ class BackupDatabaseService
         );
 
         exec($cmd, $output, $status);
+
+        if ($status !== 0) {
+        $this->logger->error('Backup command failed', [
+            'command' => $cmd,
+            'output' => implode("\n", $output),
+            'status' => $status
+        ]);
+    }
         return $status === 0;
     }
 
