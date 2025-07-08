@@ -30,12 +30,6 @@ class BackupDatabaseService
         $this->dbUser = $parts['user'] ?? '';
         $this->dbPass = $parts['pass'] ?? '';
         $this->dbName = ltrim($parts['path'] ?? '', '/');
-
-        $this->logger->error('DB Dump Params', [
-            'host' => $this->dbHost,
-            'user' => $this->dbUser,
-            'db' => $this->dbName
-        ]);
     }
 
     public function run(): void
