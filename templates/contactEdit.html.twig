@@ -29,17 +29,19 @@
                     <h1 class="form-header" style="padding-top: 2em;">{{ 'contact_edit'|trans }}</h1>
                     <h4 style="padding-bottom: 3em;">{{ 'contact_can_edit'|trans }}</h4>
                 {% endif %}
+
+                {% for label, messages in app.flashes %}
+                    {% for message in messages %}
+                        <div class="alert alert-{{ label }}">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endfor %}
+
                 {{ form(form) }}
             </div>
         </div>
 
-        {% for label, messages in app.flashes %}
-            {% for message in messages %}
-                <div class="alert alert-{{ label }}">
-                    {{ message }}
-                </div>
-            {% endfor %}
-        {% endfor %}
     </div>
 {% endblock %}
 

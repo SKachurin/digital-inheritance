@@ -61,6 +61,10 @@
         {% endif %}
 
         <input type="hidden" name="_target_path" value="{{ path('user_home') }}">
+
+{#        {{ form_row(form._token) }}#}
+        <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}">
+
         {{ form_end(form) }}
 
 

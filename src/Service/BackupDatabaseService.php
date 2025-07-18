@@ -51,7 +51,7 @@ class BackupDatabaseService
         if ($this->createBackup($todayFile)) {
 
             if (file_exists($yesterdayFile)) {
-                if (filesize($todayFile) >= filesize($yesterdayFile)) {
+                if (filesize($todayFile) >= filesize($yesterdayFile) * 0.7) {
                     unlink($yesterdayFile);
                     $this->uploadToS3($todayFile);
                 } else {

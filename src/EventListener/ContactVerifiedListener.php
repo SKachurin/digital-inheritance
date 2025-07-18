@@ -15,8 +15,8 @@ class ContactVerifiedListener
     {
         $contact = $event->getContact();  // Use event to pass Contact
 
-        $this->commandBus->dispatch(new ActionCreateCommand($contact));
-
+//        $this->commandBus->dispatch(new ActionCreateCommand($contact));
+        $this->commandBus->dispatch(new ActionCreateCommand($contact->getId()));
 
     }
 }

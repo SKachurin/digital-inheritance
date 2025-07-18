@@ -50,6 +50,8 @@
             {{ form_row(form.beneficiaryFirstPhone) }}
             {{ form_row(form.beneficiarySecondPhone) }}
 
+            {{ form_row(form._token) }}
+
             {{ form_end(form) }}
         </div>
         {% for label, messages in app.flashes %}

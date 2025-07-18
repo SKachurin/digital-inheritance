@@ -50,6 +50,9 @@
             {{ form_row(form.beneficiaryCountryCode) }}
             {{ form_row(form.beneficiaryFirstPhone) }}
             {{ form_row(form.beneficiarySecondPhone) }}
+
+            {{ form_row(form._token) }}
+
             {{ form_end(form) }}
             <div class="divider">{{ 'heir_questions'|trans }}</div>
             <p style="margin-bottom: 1em !important; margin-top: 1em !important;">{{ 'heir_questions_edit'|trans }}</p>

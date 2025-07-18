@@ -16,6 +16,9 @@
 
         {% if not sent %}
             {{ form_start(form) }}
+
+            {{ form_row(form._token) }}
+
             {{ form_end(form) }}
         {% endif %}
 

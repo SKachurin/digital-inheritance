@@ -59,6 +59,9 @@
                     {{ form_row(form.customerFirstQuestionAnswer) }}
                     {{ form_row(form.customerSecondQuestion) }}
                     {{ form_row(form.customerSecondQuestionAnswer) }}
+
+                    {{ form_row(form._token) }}
+
                     <div class="divider">{{ 'heir_questions'|trans }}</div>
                     <p>{{ 'heir_questions_explain'|trans }}</p>
                     {{ form_end(form) }}

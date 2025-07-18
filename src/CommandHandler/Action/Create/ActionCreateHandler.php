@@ -4,6 +4,7 @@ namespace App\CommandHandler\Action\Create;
 
 use App\Command\ActionCreateCommand;
 use App\Entity\Action;
+use App\Repository\ContactRepository;
 use App\Enum\ActionTypeEnum;
 use App\Enum\ContactTypeEnum;
 use App\Enum\IntervalEnum;
@@ -14,14 +15,19 @@ class ActionCreateHandler
 {
     public function __construct(
         private EntityManagerInterface $entityManager,
-        private ActionRepository $actionRepository
+        private ActionRepository       $actionRepository,
+        private ContactRepository      $contactRepository
     )
     {
     }
 
     public function __invoke(ActionCreateCommand $command): void
     {
-        $contact = $command->getContact();
+        $contact = $this->contactRepository->find($command->getContactId());
+
+        if (!$contact) {
+            return;
+        }
         $contactType = $contact->getContactTypeEnum();
         $customer = $contact->getCustomer();
 

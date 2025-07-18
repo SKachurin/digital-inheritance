@@ -38,6 +38,9 @@
                     <div class="g-recaptcha" data-sitekey="{{ recaptcha_site_key_v2 }}"></div>
                 </div>
             {% endif %}
+
+            {{ form_row(form._token) }}
+
             {{ form_end(form) }}
 
             <script>

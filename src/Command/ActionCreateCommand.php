@@ -6,12 +6,12 @@ use App\Entity\Contact;
 
 class ActionCreateCommand
 {
-    public function __construct(private Contact $contact)
+    public function __construct(public readonly int $contactId)
     {
     }
 
-    public function getContact(): Contact
+    public function getContactId(): int
     {
-        return $this->contact;
+        return $this->contactId;
     }
 }

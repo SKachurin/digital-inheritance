@@ -219,6 +219,7 @@
 
     <script>
         const PRICES = {{ planPrices|json_encode|raw }};
+        const csrfToken = '{{ csrf_token("create_invoice") }}';
 
         function goToPayment(plan) {
             const qty = parseInt(document.getElementById(`${plan}Qty`).value) || 1;
@@ -227,7 +228,8 @@
             fetch('/api/create-invoice', {
                 method: 'POST',
                 headers: {
-                    'Content-Type': 'application/json'
+                    'Content-Type': 'application/json',
+                    'X-CSRF-TOKEN': csrfToken
                 },
                 body: JSON.stringify({
                     plan: plan,

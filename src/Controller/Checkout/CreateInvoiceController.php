@@ -8,18 +8,21 @@ use App\Application\Dto\CreateInvoiceRequestDto;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
+use Symfony\Component\Security\Csrf\CsrfToken;
 use Symfony\Contracts\HttpClient\Exception\ClientExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\RedirectionExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\ServerExceptionInterface;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\Security\Csrf\CsrfTokenManagerInterface;
 
 class CreateInvoiceController extends AbstractController
 {
     public function __construct(
-        private HttpClientInterface $http,
-        private string              $apiKey
+        private HttpClientInterface                $http,
+        private string                             $apiKey,
+        private readonly CsrfTokenManagerInterface $csrfTokenManager
     )
     {
     }
@@ -43,6 +46,14 @@ class CreateInvoiceController extends AbstractController
         if (!$user instanceof \App\Entity\Customer) {
             return new JsonResponse(['error' => 'Unauthenticated'], 401);
         }
+
+        $data = json_decode($request->getContent(), true);
+        $token = $request->headers->get('X-CSRF-TOKEN');
+
+        if (!$this->csrfTokenManager->isTokenValid(new CsrfToken('create_invoice', $token))) {
+            return new JsonResponse(['error' => 'Invalid CSRF token'], 403);
+        }
+
 
         $orderId =  sprintf('order_%d/%s/%s', $user->getId(), $dto->plan, uniqid());
 
