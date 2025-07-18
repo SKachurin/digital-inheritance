@@ -179,7 +179,7 @@ dashboard:
   delete_account: 'Eliminar mi cuenta'
   delete_account_tip: 'De acuerdo con las normas del RGPD, puedes eliminar todos tus datos de esta aplicación.'
   make_a_payment: 'Realice un Pago'
-  make_a_payment_tip: "Esta función aún no está lista. Por ahora, todos los nuevos clientes se consideran Pagados."
+  make_a_payment_tip: "Si este botón está en rojo, significa que el Pipeline no verificará tu estado en línea ni enviará un mensaje a tu heredero."
   create_your_pipeline: 'Cree su Pipeline'
   create_your_pipeline_tip: 'Una secuencia de Acciones que el sistema tomará para verificar su estado. Guardar el Pipeline lo reinicia.'
   edit_your_pipeline: 'Editar su Pipeline'

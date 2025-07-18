@@ -220,7 +220,7 @@ dashboard:
   trial_active_left: '(%days% days left)'
   trial_active_tip: "You're currently in the trial period."
   make_a_payment: 'Make a Payment'
-  make_a_payment_tip: "This feature isn't ready yet. For now, all new customers are treated as Paid."
+  make_a_payment_tip: "If this button is red, it means the Pipeline will not check your online status and will not send a message to your Heir."
   payment_completed: "Payment Completed"
   payment_completed_left: '(%days% days left)'
   payment_completed_tip: "Thank you! Your payment is confirmed."
