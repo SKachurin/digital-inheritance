@@ -201,10 +201,10 @@ dashboard:
   add_your_social_tip: "We check your 'last online' status to avoid sending unnecessary messages."
   verify_edit_your_phone: 'Verify/Edit Phone Number'
   verify_edit_your_phone_tip: 'We can verify your phone number via WhatsApp only. Verifying your contact creates an Action for use in your Pipeline.'
-  add_your_second_phone: 'Add a Second Phone Number'
-  add_your_second_phone_tip: "The more contacts you add, the more Actions you'll have to build your Pipeline."
+  add_your_second_phone: 'Add a Second Phone Number if it connected to WhatsApp'
+  add_your_second_phone_tip: "We’ll verify your numbers via WhatsApp message. Please use a number that’s connected to WhatsApp.. The more Actions you'll have to build your Pipeline."
   add_your_phone: 'Add a Phone Number'
-  add_your_phone_tip: "The more contacts you add, the more Actions you'll have to build your Pipeline."
+  add_your_phone_tip: "We’ll verify your numbers via WhatsApp message. Please use a number that’s connected to WhatsApp."
   edit_your_phone: 'Edit Phone Number'
   edit_your_phone_tip: "After editing this contact, don't forget to verify the new one!"
   verify_edit_your_email: 'Verify/Edit Email Address'
@@ -252,7 +252,7 @@ your_questions_explain: |
   Even the questions themselves are going to be encrypted (but with our own cryptography).
   We will never save your answers. If you forget this answer, you will lose all your data.
 
-text_pipeline_your_actions: 'Now you have these actions to build your custom pipeline'
+text_pipeline_your_actions: 'Now you have these actions to build your custom pipeline:'
 pipeline_create_help: |
   We originally intended for you to use "If I was online" as the first action in your pipeline, so the system could check automatically without bothering you with excessive messages.
   But of course, it's your choice.
@@ -260,9 +260,10 @@ pipeline_create_help: |
 
 text_pipeline_your_actions_edit: 'Here is your sequence now:'
 social_check: 'If I was online in Telegram more than the selected time interval ago'
+social_send: 'Sent to Telegram'
 messenger_send: 'Send message via Messenger and wait'
 messenger_send_2: 'Send message via Messenger (second number) and wait'
-email_send: 'Send email and wait'
+email_send: 'Send email and wait and wait'
 email_send_2: 'Send to secondary email and wait'
 _for_: 'for'
 text_add_action_button: 'You can add another form and include one of the existing actions with a different interval, for example.'

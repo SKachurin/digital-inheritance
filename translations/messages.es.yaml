@@ -202,10 +202,10 @@ dashboard:
   add_your_social_tip: "Comprobamos su estado 'última vez en línea' para evitar enviar mensajes innecesarios."
   verify_edit_your_phone: 'Verificar/Editar número de teléfono'
   verify_edit_your_phone_tip: 'Podemos verificar su número de teléfono solo a través de WhatsApp. Al verificar su contacto, creamos una Acción que puede usar en su Pipeline.'
-  add_your_second_phone: 'Agregar un segundo número de teléfono'
-  add_your_second_phone_tip: "Cuantos más contactos agregue, más Acciones tendrá para construir su Pipeline."
+  add_your_second_phone: 'Agregar un segundo número de teléfono si lo tiene WhatsApp'
+  add_your_second_phone_tip: "Podemos verificar su número de teléfono solo a través de WhatsApp. Al verificar su contacto, creamos una Acción que puede usar en su Pipeline."
   add_your_phone: 'Agregar número de teléfono'
-  add_your_phone_tip: "Cuantos más contactos agregue, más Acciones tendrá para construir su Pipeline."
+  add_your_phone_tip: "Podemos verificar su número de teléfono solo a través de WhatsApp. Al verificar su contacto, creamos una Acción que puede usar en su Pipeline."
   edit_your_phone: 'Editar número de teléfono'
   edit_your_phone_tip: "Después de editar este contacto, no olvide verificar el nuevo."
   verify_edit_your_email: 'Verificar/Editar correo electrónico'
@@ -250,7 +250,7 @@ your_questions_explain: |
   Incluso las preguntas mismas se cifrarán (pero con nuestra propia criptografía).
   Nunca guardaremos sus respuestas. Si las olvida, perderá toda su información.
 
-text_pipeline_your_actions: 'Ahora tiene estas acciones para crear su pipeline personalizado'
+text_pipeline_your_actions: 'Ahora tiene estas acciones para crear su pipeline personalizado:'
 pipeline_create_help: |
   Originalmente, pretendíamos que utilizara "Si he estado en línea" como la primera acción de su pipeline, de modo que el sistema pudiera verificarlo de manera automática sin molestarlo con mensajes excesivos.
   Pero la decisión es suya.
@@ -258,6 +258,7 @@ pipeline_create_help: |
 
 text_pipeline_your_actions_edit: 'Esta es su secuencia actual:'
 social_check: 'Si estuve desconectado de Telegram más de lo indicado en el intervalo'
+social_send: 'Enviar mensaje por Telegram y esperar'
 messenger_send: 'Enviar mensaje por Messenger y esperar'
 messenger_send_2: 'Enviar mensaje por Messenger (segundo numero) y esperar'
 email_send: 'Enviar correo electrónico y esperar'

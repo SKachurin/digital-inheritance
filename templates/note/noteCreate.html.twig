@@ -31,14 +31,33 @@
             background-color: #bbbb;
             margin: 2em !important;
         }
+        #box {
+            margin-bottom: 1.5rem;
+            padding: 0.5rem;
+            border: 1px solid #ced4da;
+            border-radius: 6px;
+            /*background-color: #f1f3f5;*/
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            transition: background-color 0.3s ease;
+            background: rgba(255, 255, 255, 0.9);
+        }
+
+        #box:hover {
+            background-color: #e9ecef;
+        }
     </style>
     <div class="container">
         <h1 style="padding-top: 3em; font-size: 2rem;">{{ 'header.dashboard'|trans }}</h1>
 
         <div class="row">
             <div class="col-md-12">
-                <h1 class="form-header" style="padding-top: 2em;">{{ 'create_your_secure_envelope'|trans }}</h1>
-                <p> {{ 'create_your_secure_envelope_text'|trans|nl2br }} </p>
+                <h1 class="form-header" style="padding-top: 2em;">{{ 'dashboard.create_your_secure_envelope'|trans }}</h1>
+                <!-- Introduction Text Spoiler (Default Open) -->
+                <div id="box">
+                    <div class="mb-3" style="padding: 2rem;">
+                        <p>{{ 'create_your_secure_envelope_text'|trans|raw }}</p>
+                    </div>
+                </div>
                 {{ form_start(form) }}
                 {% if decodedNote %}
                     <div class="form-group">

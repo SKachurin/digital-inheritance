@@ -60,7 +60,7 @@ class NoteCreateController extends AbstractController
                     throw new UnprocessableEntityHttpException('500 internal error (CommandBus not responding).');
                 }
 
-                $this->addFlash('success', $this->translator->trans('errors.flash.envelop_is_processed'));
+                $this->addFlash('success', $this->translator->trans('errors.flash.envelope_is_processed'));
 
                 return $this->redirectToRoute('user_home');
 
