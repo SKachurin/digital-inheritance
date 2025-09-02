@@ -11,14 +11,18 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Messenger\Stamp\HandledStamp;
 use Symfony\Component\Security\Core\Exception\CustomUserMessageAuthenticationException;
+use Symfony\Component\Uid\Uuid;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 class RegistrationController extends AbstractController
 {
+    private const RECAPTCHA_V3_THRESHOLD = 0.5;
+    private const COOKIE_NAME = 'ref';
+
     public function __construct(
         private MessageBusInterface $commandBus,
-        private ReCaptcha           $recaptchaV3,
-        private ReCaptcha           $recaptchaV2,
+        private ReCaptcha $recaptchaV3,
+        private ReCaptcha $recaptchaV2,
         private TranslatorInterface $translator
     )
     {
@@ -29,56 +33,42 @@ class RegistrationController extends AbstractController
      */
     public function new(Request $request): Response
     {
-        $customer = $this->getUser();
-
-        if ($customer instanceof \App\Entity\Customer) {
+        // Redirect if already authenticated
+        if ($this->getUser() instanceof \App\Entity\Customer) {
             return $this->redirectToRoute('user_home');
         }
 
-        $customer = new CustomerCreateInputDto('', '', '');
-        $form = $this->createForm(RegistrationType::class, $customer);
+        $customerDto = new CustomerCreateInputDto('', '', '', null, null);
+        $form = $this->createForm(RegistrationType::class, $customerDto);
 
         $form->handleRequest($request);
-
-        /** @var CustomerCreateInputDto $customerData */
-        $customerData = $form->getData();
 
         $errorMessage = '';
 
         if ($form->isSubmitted() && $form->isValid()) {
-//            dd($customerData);
             $requestData = $request->request->all();
-//            dd($requestData);
-            $form = $this->createForm(RegistrationType::class, $customerData);
 
-            $recaptchaResponse = $requestData['registration']['g-recaptcha-response'] ?? null;
-            // if it's v3 or v2
-            if (!$recaptchaResponse) {
-                // it's V2
-                $recaptchaResponse = $requestData['g-recaptcha-response'] ?? null;
+            $recaptchaV2Token = $requestData['g-recaptcha-response'] ?? null;
 
-                if (!$recaptchaResponse) {
+            if ($recaptchaV2Token) {
+                $this->validateRecaptchaV2($recaptchaV2Token);
+            } else {
+                $recaptchaV3Token = $requestData['registration']['g-recaptcha-response'] ?? null;
+
+                if (!$recaptchaV3Token) {
                     return $this->render('user/registration.html.twig', [
                         'form' => $form,
                         'error' => 'Missing reCAPTCHA token.',
                     ]);
                 }
 
-                $this->validateRecaptchaV2($recaptchaResponse, $form->getData());
+                $this->validateRecaptchaV3($recaptchaV3Token, $request);
 
-            } else {
-//                dd($recaptchaResponse);
-                // it's V3
-                $this->validateRecaptchaV3($recaptchaResponse, $request);
+                $errorMessage = $request->getSession()->get('authentication_error');
 
-                $session = $request->getSession();
-                $errorMessage = $session->get('authentication_error');
-
-//                dd($errorMessage);
                 if ($errorMessage === 'Suspicious activity detected.') {
+                    $request->getSession()->remove('authentication_error');
 
-                    //v3 score is low, fallback to v2
-                    $session->remove('authentication_error'); //clear it
                     return $this->render('user/registration.html.twig', [
                         'form' => $form,
                         'error' => $errorMessage
@@ -86,12 +76,23 @@ class RegistrationController extends AbstractController
                 }
             }
 
+            $refCookie = $request->cookies->get(self::COOKIE_NAME);
+
+            if ($refCookie && Uuid::isValid($refCookie)) {
+                $customerDto->setInvitedByUuid($refCookie);
+            }
+
+
             // Proceed with the command dispatch
-            $this->commandBus->dispatch($form->getData());
+            $envelope = $this->commandBus->dispatch($customerDto);
+            $handledStamp = $envelope->last(HandledStamp::class);
+            if (!$handledStamp) {
+                throw new \RuntimeException('CommandBus failed to process the registration.');
+            }
 
             $this->addFlash('success', $this->translator->trans('errors.flash.registration_is_processed'));
 
-            $request->getSession()->set('unverified_email', $customerData->getCustomerEmail());
+            $request->getSession()->set('unverified_email', $customerDto->getCustomerEmail());
 
             return $this->redirectToRoute('wait');
         }
@@ -112,36 +113,17 @@ class RegistrationController extends AbstractController
 
 //        $score = 0.2; // <-- for test V2
         $score = $recaptchaValidation->getScore();
-        if ($score < 0.5) {
+        if ($score < self::RECAPTCHA_V3_THRESHOLD) {
             $request->getSession()->set('authentication_error', 'Suspicious activity detected.');
         }
     }
 
-    private function validateRecaptchaV2(string $recaptchaResponse, $form): void
+    private function validateRecaptchaV2(string $recaptchaResponse): void
     {
         $recaptchaValidation = $this->recaptchaV2->verify($recaptchaResponse);
 
-        if ($recaptchaValidation) {
-            $this->ifValidatedV2($form);
-        }
-
-        if (!$recaptchaValidation->isSuccess()) {
+        if (!$recaptchaValidation || !$recaptchaValidation->isSuccess()) {
             throw new CustomUserMessageAuthenticationException('reCAPTCHA v2 validation failed.');
         }
-    }
-
-    private function ifValidatedV2($form): void
-    {
-        // Proceed with the command dispatch
-        $envelope = $this->commandBus->dispatch($form);
-        $handledStamp = $envelope->last(HandledStamp::class);
-
-        if (!$handledStamp) {
-            throw new \RuntimeException('CommandBus failed to process the registration.');
-        }
-
-        $this->addFlash('success', $this->translator->trans('errors.flash.registration_is_processed'));
-
-        $this->redirectToRoute('user_login');
     }
 }

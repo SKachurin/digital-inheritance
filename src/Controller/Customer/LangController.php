@@ -12,6 +12,7 @@ use Symfony\Component\HttpFoundation\RequestStack;
 class LangController extends AbstractController
 {
     private const LANGUAGE_COOKIE = 'preferred_language';
+    private const COOKIE_DURATION = '+1 year';
 
     public function __construct(
         private RequestStack $requestStack,
@@ -34,7 +35,7 @@ class LangController extends AbstractController
 
         $cookie = Cookie::create(self::LANGUAGE_COOKIE)
             ->withValue($lang)
-            ->withExpires(strtotime('now + 1 year'))
+            ->withExpires(new \DateTime(self::COOKIE_DURATION))
             ->withPath('/')
             ->withSecure(false)
             ->withHttpOnly(true)

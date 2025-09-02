@@ -108,12 +108,13 @@ class Customer implements UserInterface, PasswordAuthenticatedUserInterface
 
     #[ORM\Column(type: 'datetime_immutable', nullable: true)]
     private ?\DateTimeImmutable $deleted_at = null;
-//
-//    #[ORM\Column(type: 'string', length: 32, nullable: true)]
-//    private ?string $referralId = null;
-//
-//    #[ORM\Column(type: 'string', length: 32, nullable: true)]
-//    private ?string $invitedBy = null;
+
+    #[ORM\Column(type: 'string', length: 36, unique: true, nullable: true)]
+    private string $referralCode;
+
+    #[ORM\ManyToOne(targetEntity: self::class)]
+    #[ORM\JoinColumn(name: 'invited_by', referencedColumnName: 'id', nullable: true)]
+    private ?Customer $invitedBy = null;
 
     public function __construct()
     {
@@ -445,28 +446,28 @@ class Customer implements UserInterface, PasswordAuthenticatedUserInterface
     {
         return $this->contacts;
     }
-//
-//    public function getReferralId(): ?string
-//    {
-//        return $this->referralId;
-//    }
-//
-//    public function setReferralId(?string $referralId): self
-//    {
-//        $this->referralId = $referralId;
-//        return $this;
-//    }
-//
-//    public function getInvitedBy(): ?string
-//    {
-//        return $this->invitedBy;
-//    }
-//
-//    public function setInvitedBy(?string $invitedBy): self
-//    {
-//        $this->invitedBy = $invitedBy;
-//        return $this;
-//    }
+
+    public function getReferralCode(): ?string
+    {
+        return $this->referralCode;
+    }
+
+    public function setReferralCode(?string $referralCode): self
+    {
+        $this->referralCode = $referralCode;
+        return $this;
+    }
+
+    public function getInvitedBy(): ?Customer
+    {
+        return $this->invitedBy;
+    }
+
+    public function setInvitedBy(?Customer $invitedBy): self
+    {
+        $this->invitedBy = $invitedBy;
+        return $this;
+    }
 
 
     public function isTrialActive(): bool

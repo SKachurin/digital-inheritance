@@ -8,6 +8,7 @@ use App\Entity\Contact;
 use App\Entity\Customer;
 use App\Enum\CustomerPaymentStatusEnum;
 use App\Enum\CustomerSocialAppEnum;
+use App\Repository\CustomerRepository;
 use App\Service\CryptoService;
 use App\Service\VerificationEmailService;
 use Doctrine\DBAL\Exception;
@@ -19,6 +20,7 @@ use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Serializer\SerializerInterface;
 use App\Repository\ContactRepository;
+use Symfony\Component\Uid\Uuid;
 
 #[AsMessageHandler]
 class CustomerCreatedConsumer
@@ -28,6 +30,7 @@ class CustomerCreatedConsumer
         protected MessageBusInterface         $commandBus,
         protected UserPasswordHasherInterface $passwordHasher,
         private EntityManagerInterface        $entityManager,
+        private CustomerRepository            $customerRepository,
         private ContactRepository             $contactRepository,
         private CryptoService                 $cryptoService,
         private VerificationEmailService      $verificationEmailService
@@ -47,6 +50,14 @@ class CustomerCreatedConsumer
         $input = $message->getCustomerCreateInputDto();
 
         $customer = new Customer();
+
+
+        $referrer = $this->customerRepository->findOneBy(['referralCode' => $input->getInvitedByUuid()]);
+        if ($referrer) {
+            $customer->setInvitedBy($referrer);
+        }
+
+        $customer->setReferralCode(Uuid::v4()->toRfc4122());
 
         $customer
             ->setCustomerName($input->getCustomerName())

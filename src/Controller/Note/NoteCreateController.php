@@ -27,6 +27,10 @@ class NoteCreateController extends AbstractController
     public function create(Request $request): Response
     {
         $customer = $this->getUser();
+        if (! $customer instanceof \App\Entity\Customer) {
+            return $this->redirectToRoute('user_login');
+        }
+
         $note = null;
         $beneficiaries = $customer->getBeneficiary();
 

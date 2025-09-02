@@ -29,7 +29,6 @@ class LoginFormAuthenticator extends AbstractLoginFormAuthenticator
 
     public function __construct(
         private RouterInterface     $router,
-        private ReCaptcha           $recaptcha,
         private ReCaptcha           $recaptchaV3,
         private ReCaptcha           $recaptchaV2,
         private CustomerRepository  $customerRepository,
