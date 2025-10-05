@@ -1,0 +1,9 @@
+{# Reusable Action Button with Tooltip Component #}
+<section class="mb-4">
+    <a class="btn {{ btn_class|default('btn-outline-dark') }} btn-floating m-1 mt-4"
+       href="{{ href }}"
+       role="button"
+       {% if extra_style is defined %}style="{{ extra_style }}"{% endif %}>
+        <i>{{ text }}</i>
+    </a>
+</section>

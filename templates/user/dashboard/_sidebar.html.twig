@@ -1,0 +1,93 @@
+{# Build the nav model once here so all pages share it #}
+{% set nav = [
+    { key: 'dashboard_home',         label: 'dashboard.nav.home',            icon: 'home_pic.png',     route: 'user_home' },
+    { key: 'dashboard_email_first',  label: 'dashboard.nav.email_first',     icon: 'mail_pic.png',     route: 'user_home_email' },
+    { key: 'dashboard_email_second', label: 'dashboard.nav.email_second',    icon: 'mail_1_pic.png',   route: 'user_home_email_' },
+    { key: 'dashboard_phone_first',  label: 'dashboard.nav.phone_first',     icon: 'phone_pic.png',    route: 'user_home_phone' },
+    { key: 'dashboard_phone_second', label: 'dashboard.nav.phone_second',    icon: 'phone_1_pic.png',  route: 'user_home_phone_' },
+    { key: 'dashboard_social',       label: 'dashboard.nav.social',          icon: 'social_1_pic.png', route: 'user_home_social' },
+    { key: 'dashboard_heir',         label: 'dashboard.nav.heir',            icon: 'heir_1_pic.png',   route: 'user_home_heir' },
+    { key: 'dashboard_envelope',     label: 'dashboard.nav.envelope',        icon: 'env_pic.png',      route: 'user_home_env' },
+    { key: 'dashboard_pipeline',     label: 'dashboard.nav.pipeline',        icon: 'pipe_pic.png',     route: 'user_home_pipe'},
+    { key: 'dashboard_pay',          label: 'dashboard.nav.payments',        icon: 'pay_pic.png',      route: 'user_home_pay'}
+
+] %}
+
+{% set nav1 = [
+    { key: 'dashboard_referral',     label: 'dashboard.nav.referral',             icon: 'ref_pic.png',      route: 'user_home_ref' },
+    { key: 'customer_delete',        label: 'dashboard.nav.delete',               icon: 'mail_pic.png',     route: 'customer_delete' },
+] %}
+
+<div class="sidebar-header">
+    <h2>The Eternity</h2>
+    <p>The Digital Heir</p>
+</div>
+
+<div class="sidebar-content">
+    <p class="sidebar-note">{{ 'header.test_mode'|trans }}</p>
+
+    <nav class="sidebar-nav">
+        <ul>
+            {% for item in nav %}
+                {% set isActive = (current ?? '') == item.route %}
+                <li class="nav-item {{ isActive ? 'active' : '' }}">
+                    <a href="{{ path(item.route) }}">
+                        <span class="nav-icon">
+                            <img src="{{ asset('build/icons/' ~ item.icon) }}" alt="{{ item.label|trans }} icon">
+                        </span>
+                        <span class="nav-text">{{ item.label|trans }}</span>
+                    </a>
+                </li>
+            {% endfor %}
+        </ul>
+
+        <ul>
+            {% for item in nav1 %}
+                {% set isActive = (current ?? '') == item.route %}
+                <li class="nav-item {{ isActive ? 'active' : '' }}">
+                    <a href="{{ path(item.route) }}">
+                        <span class="nav-icon">
+                            <img src="{{ asset('build/icons/' ~ item.icon) }}" alt="{{ item.label|trans }} icon">
+                        </span>
+                        <span class="nav-text">{{ item.label|trans }}</span>
+                    </a>
+                </li>
+            {% endfor %}
+
+{#           <li class="nav-item {{ (current ?? '') == 'dashboard_referral' ? 'active' : '' }}">#}
+{#                <a href="{{ path('dashboard_referral') }}">#}
+{#                <a href="#">#}
+{#                    <span class="nav-icon">#}
+{#                        <img src="{{ asset('build/icons/ref_pic.png') }}" alt="referral icon">#}
+{#                    </span>#}
+{#                    <span class="nav-text">Referral Program</span>#}
+{#                </a>#}
+{#            </li>#}
+{#            <li class="nav-item {{ (current ?? '') == 'dashboard_delete' ? 'active' : '' }}">#}
+{#                <a href="{{ path('dashboard_delete') }}">#}
+{#                <a href="#">#}
+{#                    <span class="nav-icon">#}
+{#                        <img src="{{ asset('build/icons/del_pic.png') }}" alt="delete icon">#}
+{#                    </span>#}
+{#                    <span class="nav-text">Delete Your Account</span>#}
+{#                </a>#}
+{#            </li>#}
+        </ul>
+    </nav>
+</div>
+
+<style>
+    .sidebar-nav .nav-icon img {
+        width: 30px !important;
+        height: 30px !important;
+        object-fit: contain;
+        margin-right: 8px;
+        vertical-align: middle;
+    }
+
+    .sidebar-nav .nav-item a {
+        display: flex;
+        align-items: center;
+        gap: 6px;
+    }
+</style>

@@ -22,7 +22,7 @@ class CustomerIsDeletedListener
         $route = $request->attributes->get('_route');
 
         // Only trigger on dashboard
-        if ($route !== 'user_home') {
+        if ($route !== 'user_home' && $route !== 'user_home_1') {
             return;
         }
 

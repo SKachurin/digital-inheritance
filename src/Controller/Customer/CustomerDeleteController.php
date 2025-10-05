@@ -47,12 +47,12 @@ class CustomerDeleteController extends AbstractController
     //            $this->commandBus->dispatch($formData);
             $this->commandBus->dispatch(new CustomerDeletedMessage($customer->getId(), $formData->getContactType()));
 
-            return $this->render('user/deleteRequest.html.twig', [
+            return $this->render('user/dashboard/deleteRequest.html.twig', [
                 'sent' => true,
             ]);
         }
 
-        return $this->render('user/deleteRequest.html.twig', [
+        return $this->render('user/dashboard/deleteRequest.html.twig', [
             'sent' => false,
             'form' => $form->createView(),
         ]);

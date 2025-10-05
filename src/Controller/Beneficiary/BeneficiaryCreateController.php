@@ -62,7 +62,7 @@ class BeneficiaryCreateController extends AbstractController
             return $this->redirectToRoute('user_home');
         }
 
-       return $this->render('beneficiaryCreate.html.twig', [
+       return $this->render('beneficiary/beneficiaryCreate.html.twig', [
             'form' => $form,
        ]);
 

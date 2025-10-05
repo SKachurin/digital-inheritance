@@ -1,9 +1,9 @@
-{% extends 'base.html.twig' %}
+{% extends 'user/dashboard/layout.html.twig' %}
 
 
-{% block content %}
-    <div class="container">
-        <h1 style="padding-top: 3em;">{{ 'title_delete_account'|trans }}</h1>
+{% block dashboard_main %}
+    <div class="transactions-section">
+        <h2 style="padding-top: 3em;">{{ 'title_delete_account'|trans }}</h2>
 
         {% for label, messages in app.flashes %}
             {% for message in messages %}

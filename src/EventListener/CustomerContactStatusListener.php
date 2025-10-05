@@ -26,12 +26,21 @@ class CustomerContactStatusListener
         $this->contactRepository = $contactRepository;
     }
 
+    // TODO - FOR EACH CONTACT PERSONAL ?
     public function onKernelRequest(RequestEvent $event): void
     {
         $request = $event->getRequest();
         $route = $request->attributes->get('_route');
 
-        $targetRoutes = ['user_home'];
+        $targetRoutes = [
+            'user_home',
+            'user_home_1',
+            'user_home_email',
+            'user_home_email_',
+            'user_home_phone',
+            'user_home_phone_',
+            'user_home_social',
+        ];
 
         if (in_array($route, $targetRoutes, true)) {
 

@@ -1,0 +1,46 @@
+{% extends 'user/dashboard/layout.html.twig' %}
+
+{% block dashboard_main %}
+    <div class="transactions-section">
+        <h2>Your Digital Heir</h2>
+
+        {% for label, messages in app.flashes %}
+            {% for message in messages %}
+                <div class="alert alert-{{ label }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endfor %}
+
+        <div class="transaction-card">
+{#            {% include '/user/dashboard/_heir_section.html.twig' %}#}
+            {% if customerHasBeneficiary is defined and customerHasBeneficiary %}
+                <section class="mb-4">
+                    <div class="tooltip-box">{{ 'dashboard.edit_your_heir_tip'|trans }}</div>
+
+                    <a class="btn btn-outline-dark btn-floating m-1 mt-4" href="/beneficiary/{{ customerHasBeneficiary }}/edit" role="button">
+                        <i class="">{{ 'dashboard.edit_your_heir'|trans }}</i>
+                    </a>
+
+                    <form action="{{ path('beneficiary_delete', {'beneficiaryId': customerHasBeneficiary}) }}" method="post" style="display:inline-block; margin: 0; padding: 0; background: transparent;" onsubmit="return confirm('{{ 'confirm_delete_beneficiary'|trans }}');">
+                        <input type="hidden" name="_token" value="{{ csrf_token('delete_beneficiary') }}">
+                        <button type="submit" class="btn btn-outline-danger btn-floating m-1 mt-4">
+                            <i class="">{{ 'dashboard.delete_your_beneficiary'|trans }}</i>
+                        </button>
+                    </form>
+                </section>
+                {#                <p>explanation</p>#}
+            {% endif %}
+
+            {% if customerHasBeneficiary is defined and not customerHasBeneficiary %}
+                <section class="mb-4">
+                    <div class="tooltip-box">{{ 'dashboard.create_your_heir_tip'|trans }}</div>
+
+                    <a class="btn btn-outline-dark btn-floating m-1 mt-4" href="/beneficiary/create" role="button"><i class="">{{ 'dashboard.create_your_heir'|trans }}</i></a>
+
+                </section>
+                {#                <p>explanation</p>#}
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,21 @@
+{% extends 'user/dashboard/layout.html.twig' %}
+
+{% block dashboard_main %}
+    <div class="transactions-section">
+        <h2>{{ 'dashboard.introduction_text_spoiler'|trans|raw }}</h2>
+        <div class="transaction-card">
+            <div class="crypto-header">
+                <p>{{ 'dashboard.introduction_text_1'|trans|raw }}</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="all-transactions-section">
+        <h2>{{ 'dashboard.more_security_spoiler'|trans|raw }}</h2>
+        <div class="transaction-card">
+            <div class="crypto-header">
+                <p>{{ 'dashboard.more_security_text'|trans|raw }}</p>
+            </div>
+        </div>
+    </div>
+{% endblock %}

@@ -1,0 +1,52 @@
+{% extends 'user/dashboard/layout.html.twig' %}
+
+{% block dashboard_main %}
+    <div class="transactions-section">
+        <h2>Second phone number</h2>
+
+        {% for label, messages in app.flashes %}
+            {% for message in messages %}
+                <div class="alert alert-{{ label }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endfor %}
+
+        <div class="transaction-card">
+{#            {% include '/user/dashboard/_phone_second_section.html.twig' %}#}
+            {% if customerSecondPhoneVerified %}
+                <section class="mb-4">
+                    <div class="tooltip-box">{{ 'dashboard.edit_your_phone_tip'|trans }}</div>
+
+                    <a class="btn btn-outline-dark btn-floating m-1 mt-4" href="/contact/{{ customerSecondPhone }}/edit" role="button">
+                        <i class="">{{ 'dashboard.edit_your_phone'|trans }}</i>
+                    </a>
+                </section>
+                {#                <p>explanation</p>#}
+            {% endif %}
+
+            {% if customerSecondPhone is not defined or not customerSecondPhone %}
+                <section class="mb-4">
+                    <div class="tooltip-box">{{ 'dashboard.add_your_second_phone_tip'|trans }}</div>
+
+                    <a class="btn btn-outline-dark btn-floating m-1 mt-4" href="/contact/phone/create" role="button">
+                        <i class="">{{ 'dashboard.add_your_second_phone'|trans }}</i>
+                    </a>
+                </section>
+                {#                <p>explanation</p>#}
+            {% endif %}
+
+            {% if customerSecondPhone is defined and customerSecondPhone and not customerSecondPhoneVerified %}
+                <section class="mb-4">
+                    <div class="tooltip-box">{{ 'dashboard.verify_edit_your_phone_tip'|trans }}</div>
+
+                    <a class="btn btn-outline-dark btn-floating m-1 mt-4" href="/contact/{{ customerSecondPhone }}/edit" role="button">
+                        <i class="">{{ 'dashboard.verify_edit_your_phone'|trans }}</i>
+                    </a>
+                </section>
+                {#                <p>explanation</p>#}
+            {% endif %}
+
+        </div>
+    </div>
+{% endblock %}

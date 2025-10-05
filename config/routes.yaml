@@ -16,11 +16,77 @@ user_login:
     path:       /log
     controller: App\Controller\Customer\LoginController::index
 
+user_home_1:
+    path:       /lk_old
+    defaults:
+        _controller: Symfony\Bundle\FrameworkBundle\Controller\TemplateController::templateAction
+        template:    user/dashboard.html.twig
+
 user_home:
     path:       /lk
     defaults:
         _controller: Symfony\Bundle\FrameworkBundle\Controller\TemplateController::templateAction
-        template:    user/dashboard.html.twig
+        template:    user/dashboard/index.html.twig
+
+user_home_email:
+    path:       /lk_email
+    defaults:
+        _controller: Symfony\Bundle\FrameworkBundle\Controller\TemplateController::templateAction
+        template:    user/dashboard/email_first.html.twig
+
+user_home_email_:
+    path:       /lk_email_
+    defaults:
+        _controller: Symfony\Bundle\FrameworkBundle\Controller\TemplateController::templateAction
+        template:    user/dashboard/email_second.html.twig
+
+user_home_phone:
+    path:       /lk_phone
+    defaults:
+        _controller: Symfony\Bundle\FrameworkBundle\Controller\TemplateController::templateAction
+        template:    user/dashboard/phone_first.html.twig
+
+user_home_phone_:
+    path:       /lk_phone_
+    defaults:
+        _controller: Symfony\Bundle\FrameworkBundle\Controller\TemplateController::templateAction
+        template:    user/dashboard/phone_second.html.twig
+
+user_home_heir:
+    path:       /lk_heir
+    defaults:
+        _controller: Symfony\Bundle\FrameworkBundle\Controller\TemplateController::templateAction
+        template:    user/dashboard/heir.html.twig
+
+user_home_social:
+    path:       /lk_soc
+    defaults:
+        _controller: Symfony\Bundle\FrameworkBundle\Controller\TemplateController::templateAction
+        template:    user/dashboard/social.html.twig
+
+user_home_env:
+    path:       /lk_env
+    defaults:
+        _controller: Symfony\Bundle\FrameworkBundle\Controller\TemplateController::templateAction
+        template:    user/dashboard/envelope.html.twig
+
+user_home_pipe:
+    path:       /lk_pipe
+    defaults:
+        _controller: Symfony\Bundle\FrameworkBundle\Controller\TemplateController::templateAction
+        template:    user/dashboard/pipeline.html.twig
+
+user_home_pay:
+    path:       /lk_pay
+    defaults:
+        _controller: Symfony\Bundle\FrameworkBundle\Controller\TemplateController::templateAction
+        template:    user/dashboard/payment.html.twig
+
+user_home_ref:
+    path:       /lk_ref
+    defaults:
+        _controller: App\Controller\Customer\ReferralController
+        template:    user/dashboard/referral.html.twig
 
 note_create:
     path:       /note/create
@@ -34,7 +100,7 @@ note_delete:
     path:       /note/{noteId}/delete
     controller: App\Controller\Note\NoteDeleteController::delete
 
-#?? Do i need it note_decrypt ??
+#?? Do I need it note_decrypt ??
 note_decrypt:
     path:       /note/{noteId}/decrypt/{question}
     controller: App\Controller\Note\NoteDecryptController::decrypt

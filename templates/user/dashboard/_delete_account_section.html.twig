@@ -1,0 +1,8 @@
+{# Account Deletion #}
+{% include '/user/dashboard/_action_button.html.twig' with {
+    'href': '/customer/delete',
+    'text': 'dashboard.delete_account'|trans,
+    'tooltip': 'dashboard.delete_account_tip'|trans,
+    'btn_class': 'btn-outline-danger',
+    'extra_style': 'margin-left: 0.25rem !important;'
+} %}

@@ -70,6 +70,11 @@
             background: #fff;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             transition: transform 0.3s ease;
+
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between; /* distribute content evenly */
+            align-items: center;
         }
 
         .product:hover {
@@ -104,7 +109,7 @@
             display: block;
             width: 100%;
             padding: 1rem;
-            margin-top: 1rem;
+            /*margin-top: 1rem;*/
             background: #1A202C;
             color: white;
             font-weight: bold;
@@ -112,6 +117,8 @@
             border-radius: 5px;
             cursor: pointer;
             transition: background 0.3s ease;
+
+            margin-top: auto;
         }
 
         .product button:hover {
@@ -179,7 +186,7 @@
             <div class="product-table">
                     <!-- Standard Subscription -->
                     <div class="product">
-                        <img src="{{ '/build/logo-TheDigitalHeir-192x192.png' }}" alt="Standard Plan">
+                        <img src="{{ '/build/logo-TheDigitalHeir-192x192.png' }}" alt="{{ 'checkout_page.standard'|trans({}, 'legal')|raw }}">
                         <h3>{{ 'checkout_page.standard'|trans({}, 'legal')|raw }}</h3>
                         <p>{{ 'checkout_page.desc_standard'|trans({}, 'legal')|raw }}</p>
                         <p class="price">{{ 'checkout_page.price_standard'|trans({}, 'legal')|raw }}</p>
@@ -197,7 +204,7 @@
 
                     <!-- Premium Subscription -->
                     <div class="product">
-                        <img src="{{ '/build/logo_invert_TheDigitalHeir_192x192.png' }}" alt="Premium Plan">
+                        <img src="{{ '/build/logo_invert_TheDigitalHeir_192x192.png' }}" alt="{{ 'checkout_page.premium'|trans({}, 'legal')|raw }}">
                         <h3>{{ 'checkout_page.premium'|trans({}, 'legal')|raw }}</h3>
                         <p>{{ 'checkout_page.desc_premium'|trans({}, 'legal')|raw }}</p>
                         <p class="price">{{ 'checkout_page.price_premium'|trans({}, 'legal')|raw }}</p>

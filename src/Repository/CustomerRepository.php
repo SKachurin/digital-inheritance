@@ -118,4 +118,48 @@ class CustomerRepository extends BaseRepository
             ->getQuery()
             ->getResult();
     }
+
+    /**
+     * @param Customer $customer
+     * @return int
+     */
+    public function countReferrals(Customer $customer): int
+    {
+        return (int) $this->createQueryBuilder('c')
+            ->select('COUNT(c.id)')
+            ->where('c.invitedBy = :customer')
+            ->setParameter('customer', $customer)
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
+
+    /**
+     * @param Customer $customer
+     * @return int
+     */
+    public function countActiveReferrals(Customer $customer): int
+    {
+        return (int) $this->createQueryBuilder('c')
+            ->select('COUNT(c.id)')
+            ->where('c.invitedBy = :customer')
+            ->andWhere('c.customerPaymentStatus = :status')
+            ->setParameter('customer', $customer)
+            ->setParameter('status', CustomerPaymentStatusEnum::PAID->value)
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
+
+    /**
+     * @param Customer $customer
+     * @return string | null
+     */
+    public function getReferralCode(Customer $customer): ?string
+    {
+        return $this->createQueryBuilder('c')
+            ->select('c.referralCode')
+            ->where('c.id = :customer')
+            ->setParameter('customer', $customer->getId())
+            ->getQuery()
+            ->getOneOrNullResult()['referralCode'] ?? null;
+    }
 }

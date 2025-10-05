@@ -198,7 +198,7 @@ dashboard:
   verify_edit_your_social: 'Verify/Edit Your Social'
   verify_edit_your_social_tip: 'Verifying your contact creates an Action, allowing you to use it in your Pipeline.'
   add_your_social: 'Add Your Social Media'
-  add_your_social_tip: "We check your 'last online' status to avoid sending unnecessary messages."
+  add_your_social_tip: "We will check your 'last online' status to avoid sending unnecessary messages."
   verify_edit_your_phone: 'Verify/Edit Phone Number'
   verify_edit_your_phone_tip: 'We can verify your phone number via WhatsApp only. Verifying your contact creates an Action for use in your Pipeline.'
   add_your_second_phone: 'Add a Second Phone Number if it connected to WhatsApp'
@@ -217,13 +217,42 @@ dashboard:
     You’ve started the process of deleting all your data from this app. Your data will be permanently deleted soon.
   cancel_deletion_button: 'Cancel Deletion Process'
   trial_active: "Trial Active"
-  trial_active_left: '(%days% days left)'
+  trial_active_left: 'days left'
   trial_active_tip: "You're currently in the trial period."
   make_a_payment: 'Make a Payment'
   make_a_payment_tip: "If this button is red, it means the Pipeline will not check your online status and will not send a message to your Heir."
   payment_completed: "Payment Completed"
-  payment_completed_left: '(%days% days left)'
+  payment_completed_left: 'days left'
   payment_completed_tip: "Thank you! Your payment is confirmed."
+  pipe_status: "Pipeline Status"
+  pipe_active: "Active"
+  pipe_inactive: "Inactive"
+  nav:
+    home: "Home"
+    email_first: "First Email"
+    email_second: "Second Email"
+    phone_first: "First Phone"
+    phone_second: "Second Phone"
+    social: "Social"
+    heir: "Digital Heir"
+    envelope: "Secure Envelope"
+    pipeline: "Pipeline"
+    payments: "Payments"
+    referral: "Referral Program"
+    delete: "Delete Profile"
+  ref:
+    title: "Your Referral Status"
+    intro: |
+      When a new customer registers using your referral link or QR code, you’ll earn 20% of all their payments — for life.  <br><br>
+      We save the referral code on their first visit and apply it when they register.  
+      Note: if someone registers from another device, we can’t track them as your referral — unless they later log in from the original device.
+    total_invited: "Total People Invited"
+    still_paid: "Still Active with Paid Status"
+    your_balance: "Your Current Balance/Reward"
+    check_balance: "Check Balance"
+    ref_link: "Your Referral Link"
+    copy_link: "Copy Link"
+    your_qr: "Your Ref QR"
 
 decrypt_your_secure_envelope: 'Decrypt Your Secure Envelope'
 decrypt_first: 'To edit your secure envelope, please decrypt it first.'

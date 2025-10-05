@@ -199,7 +199,7 @@ dashboard:
   verify_edit_your_social: 'Verificar/Editar redes sociales'
   verify_edit_your_social_tip: 'Cuando verifique su contacto, crearemos una Acción para que pueda utilizarla en su Pipeline.'
   add_your_social: 'Agregar redes sociales'
-  add_your_social_tip: "Comprobamos su estado 'última vez en línea' para evitar enviar mensajes innecesarios."
+  add_your_social_tip: "Verificamos su estado de ‘última vez en línea’ para evitar enviar mensajes innecesarios."
   verify_edit_your_phone: 'Verificar/Editar número de teléfono'
   verify_edit_your_phone_tip: 'Podemos verificar su número de teléfono solo a través de WhatsApp. Al verificar su contacto, creamos una Acción que puede usar en su Pipeline.'
   add_your_second_phone: 'Agregar un segundo número de teléfono si lo tiene WhatsApp'
@@ -218,11 +218,40 @@ dashboard:
     Has iniciado el proceso de eliminación de todos tus datos de esta aplicación. Tus datos serán eliminados permanentemente muy pronto.
   cancel_deletion_button: 'Cancelar eliminación'
   trial_active: "Prueba activa"
-  trial_active_left: '(quedan %days% días)'
+  trial_active_left: 'quedan días'
   trial_active_tip: "Actualmente estás en el período de prueba."
   payment_completed: "Pago completado"
-  payment_completed_left: '(quedan %days% días)'
+  payment_completed_left: 'quedan días'
   payment_completed_tip: "¡Gracias! Tu pago ha sido confirmado."
+  pipe_status: "Estado del pipeline"
+  pipe_active: "Activo"
+  pipe_inactive: "Inactivo"
+  nav:
+    home: "Inicio"
+    email_first: "Primer correo"
+    email_second: "Segundo correo"
+    phone_first: "Primer teléfono"
+    phone_second: "Segundo teléfono"
+    social: "Redes sociales"
+    heir: "Heredero digital"
+    envelope: "Sobre seguro"
+    pipeline: "Pipeline"
+    payments: "Pagos"
+    referral: "Programa de referidos"
+    delete: "Eliminar perfil"
+  ref:
+    title: "Tu estado de referidos"
+    intro: |
+      Cuando un nuevo cliente se registre con tu enlace o código QR, ganarás el 20% de todos sus pagos — para siempre. <br><br>
+      Guardamos el código de referido en su primera visita y lo aplicamos cuando complete el registro.  
+      Nota: si la persona se registra desde otro dispositivo, no podremos reconocerla como tu referido — salvo que después inicie sesión desde el dispositivo original.
+    total_invited: "Personas invitadas"
+    still_paid: "De ellos siguen con estado de pago"
+    your_balance: "Tu saldo/recompensa actual"
+    check_balance: "Consultar saldo"
+    ref_link: "Tu enlace de referido"
+    copy_link: "Copiar enlace"
+
 
 decrypt_your_secure_envelope: 'Descifre su Sobre Seguro'
 decrypt_first: 'Para editar su sobre seguro, primero descífrelo.'

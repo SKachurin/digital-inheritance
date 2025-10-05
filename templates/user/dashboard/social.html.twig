@@ -1,0 +1,55 @@
+{% extends 'user/dashboard/layout.html.twig' %}
+
+{% block dashboard_main %}
+    <div class="transactions-section">
+        <h2>Your Contact. Type: Social</h2>
+
+        {% for label, messages in app.flashes %}
+            {% for message in messages %}
+                <div class="alert alert-{{ label }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endfor %}
+
+        <div class="transaction-card">
+{#            {% include '/user/dashboard/_social_section.html.twig' %}#}
+            {% if customerSocial is not defined or not customerSocial %}
+                <section class="mb-4">
+                    <div class="tooltip-box">{{ 'dashboard.add_your_social_tip'|trans }}</div>
+
+                    <a class="btn btn-outline-dark btn-floating m-1 mt-4" href="/contact/social/create" role="button">
+                        <i class="">{{ 'dashboard.add_your_social'|trans }}</i>
+                    </a>
+
+                </section>
+                {#                <p>explanation</p>#}
+            {% endif %}
+
+            {% if customerSocial is defined and customerSocial and not customerSocialVerified %}
+                <section class="mb-4">
+                    <div class="tooltip-box">{{ 'dashboard.verify_edit_your_social_tip'|trans }}</div>
+
+                    <a class="btn btn-outline-dark btn-floating m-1 mt-4" href="/contact/{{ customerSocial }}/edit" role="button">
+                        <i class="">{{ 'dashboard.verify_edit_your_social'|trans }}</i>
+                    </a>
+
+                </section>
+                {#                <p>explanation</p>#}
+            {% endif %}
+
+            {% if customerSocialVerified %}
+                <section class="mb-4">
+                    <div class="tooltip-box">{{ 'dashboard.edit_your_social_tip'|trans }}</div>
+
+                    <a class="btn btn-outline-dark btn-floating m-1 mt-4" href="/contact/{{ customerSocial }}/edit" role="button">
+                        <i class="">{{ 'dashboard.edit_your_social'|trans }}</i>
+                    </a>
+
+                </section>
+                {#                <p>explanation</p>#}
+            {% endif %}
+
+        </div>
+    </div>
+{% endblock %}

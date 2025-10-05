@@ -43,6 +43,7 @@ framework:
             'App\Command\ActionCreateCommand': async
             'App\Message\CustomerDeletedMessage': async
             'App\Message\CustomerDeleteVerificationMessage': async
+            'App\Message\ReferralBonusMessage': async
             'App\Message\CronBatchMessage': batch
             'App\Message\DeleteMarkedAccountsMessage': batch
 

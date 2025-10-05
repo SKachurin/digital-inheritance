@@ -131,7 +131,7 @@ class BeneficiaryEditController extends AbstractController
             return $this->redirectToRoute('user_home');
         }
 
-        return $this->render('beneficiaryEdit.html.twig', [
+        return $this->render('beneficiary/beneficiaryEdit.html.twig', [
             'form' => $form->createView(),
         ]);
     }

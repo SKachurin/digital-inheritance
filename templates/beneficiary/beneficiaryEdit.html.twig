@@ -1,5 +1,5 @@
-{% extends 'base.html.twig' %}
-    {% block content %}
+{% extends '/user/dashboard/layout.html.twig' %}
+    {% block dashboard_main %}
         <style>
             .form-container {
                 padding-top: 4em;
@@ -15,10 +15,10 @@
             .button-group a {
                 margin-left: 1em;
             }
-            p {
-                margin-bottom: 1em !important;
-                margin-top: 1em !important;
-            }
+            /*p {*/
+            /*    margin-bottom: 1em !important;*/
+            /*    margin-top: 1em !important;*/
+            /*}*/
             .divider {
                 font-size: 1.5em;
                 display: flex;
@@ -33,7 +33,7 @@
                 margin: 2em !important;
             }
         </style>
-        <div class="container">
+        <div class="transactions-section">
             <h1>{{ 'dashboard.edit_your_heir'|trans }}</h1>
 
             <p>{{ 'header.new_heir_explain'|trans }}</p>

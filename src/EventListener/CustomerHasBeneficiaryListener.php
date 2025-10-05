@@ -30,7 +30,7 @@ class CustomerHasBeneficiaryListener
         $route = $request->attributes->get('_route');
 
         // Define the routes where this listener should be active
-        $targetRoutes = ['user_home'];
+        $targetRoutes = ['user_home', 'user_home_1', 'user_home_heir',];
 
         if (in_array($route, $targetRoutes, true)) {
             $token = $this->tokenStorage->getToken();

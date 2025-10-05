@@ -1,47 +1,31 @@
-{% extends 'base.html.twig' %}
-{% block content %}
-    <style>
-        .form-container {
-            padding-top: 4em;
-        }
-        .form-header {
-            margin-bottom: 1em; /* Add some space between the header and the form */
-        }
-        .button-group {
-            display: flex;
-            align-items: center;
-            margin-top: 0.5em; /* Adjust margin to align buttons properly */
-        }
-        .button-group a {
-            margin-left: 1em; /* Space between the buttons and the text area */
-        }
-    </style>
-    <div class="container">
-        <h1 style="padding-top: 3em; font-size: 2rem;">{{ 'header.dashboard'|trans }}</h1>
+{% extends 'user/dashboard/layout.html.twig' %}
 
-        <div class="row">
-            <div class="col-md-12">
-                {% if not decodedNote %}
-                    <h1 class="form-header" style="padding-top: 2em;">{{ 'contact_edit'|trans }}</h1>
-                    <h4 style="padding-bottom: 3em;">{{ 'contact_can_edit'|trans }}</h4>
-                {% endif %}
-                {% if decodedNote %}
-                    <h1 class="form-header" style="padding-top: 2em;">{{ 'contact_edit'|trans }}</h1>
-                    <h4 style="padding-bottom: 3em;">{{ 'contact_can_edit'|trans }}</h4>
-                {% endif %}
+{% block dashboard_main %}
 
-                {% for label, messages in app.flashes %}
-                    {% for message in messages %}
-                        <div class="alert alert-{{ label }}">
-                            {{ message }}
-                        </div>
+    <div class="transactions-section">
+        <h2>{{ 'contact_edit'|trans }}</h2>
+        <div class="transaction-card">
+            <div class="crypto-header">
+                <div class="col-md-12">
+                    {% if not decodedNote %}
+                        <h4 style="padding-bottom: 3em;">{{ 'contact_can_edit'|trans }}</h4>
+                    {% endif %}
+                    {% if decodedNote %}
+                        <h4 style="padding-bottom: 3em;">{{ 'contact_can_edit'|trans }}</h4>
+                    {% endif %}
+
+                    {% for label, messages in app.flashes %}
+                        {% for message in messages %}
+                            <div class="alert alert-{{ label }}">
+                                {{ message }}
+                            </div>
+                        {% endfor %}
                     {% endfor %}
-                {% endfor %}
 
-                {{ form(form) }}
+                    {{ form(form) }}
+                </div>
             </div>
         </div>
-
     </div>
 {% endblock %}
 

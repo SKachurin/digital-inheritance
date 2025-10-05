@@ -1,5 +1,5 @@
-{% extends 'base.html.twig' %}
-{% block content %}
+{% extends '/user/dashboard/layout.html.twig' %}
+{% block dashboard_main %}
         <style>
             .form-container {
                 padding-top: 4em;
@@ -14,10 +14,6 @@
             }
             .button-group a {
                 margin-left: 1em;
-            }
-            p {
-                margin-bottom: 3em !important;
-                margin-top: 3em !important;
             }
             .divider {
                 font-size: 1.5em;
@@ -48,12 +44,11 @@
                 background-color: #e9ecef;
             }
         </style>
-    <div class="container">
-        <h1 style="padding-top: 3em; font-size: 2rem;">{{ 'header.dashboard'|trans }}</h1>
+    <div class="transactions-section">
+        <h2 style="padding-top: 3em; font-size: 2rem;">{{ 'pipeline'|trans }}</h2>
 
         <div class="row">
             <div class="col-md-12">
-                <h1 class="form-header" style="padding-top: 2em;">{{ 'pipeline'|trans }}</h1>
                 <h4 style="padding-bottom: 3em;">{{ 'create_edit_your_pipeline'|trans }}</h4>
                 <div id="box">
                     <div class="mb-3" style="padding: 2rem;">

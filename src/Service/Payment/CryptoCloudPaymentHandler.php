@@ -4,13 +4,16 @@ declare(strict_types=1);
 
 namespace App\Service\Payment;
 
+use App\Entity\Customer;
 use App\Entity\Transaction;
 use App\Enum\CustomerPaymentStatusEnum;
+use App\Message\ReferralBonusMessage;
 use App\Repository\CustomerRepository;
 use App\Service\PlanPriceResolver;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\Messenger\MessageBusInterface;
 
 class CryptoCloudPaymentHandler
 {
@@ -20,6 +23,7 @@ class CryptoCloudPaymentHandler
         private readonly PlanPriceResolver          $planPriceResolver,
         private readonly EntityManagerInterface     $em,
         private readonly string                     $secretKey,
+        private readonly MessageBusInterface        $bus,
         private readonly LoggerInterface            $logger,
     )
     {
@@ -90,7 +94,7 @@ class CryptoCloudPaymentHandler
         }
 
         $customer = $this->customerRepository->find((int) $customerId);
-        if (!$customer) {
+        if (!$customer instanceof Customer) {
             return new Response('Customer not found', 404);
         }
 
@@ -146,6 +150,21 @@ class CryptoCloudPaymentHandler
         $this->em->persist($transaction);
         $this->em->persist($customer);
         $this->em->flush();
+
+        $inviter = $customer->getInvitedBy();
+
+        if ($inviter instanceof Customer) {
+            $bonusAmount = round($transaction->getAmount() * 0.20, 2);
+
+            $this->bus->dispatch(
+                new ReferralBonusMessage(
+                    inviterId: $inviter->getId(),
+                    amount: $bonusAmount,
+                    currency: $transaction->getCurrency() ?? 'USD',
+                    invoiceUuid: $uuid
+                )
+            );
+        }
 
         return new Response('OK', 200);
     }

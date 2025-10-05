@@ -1,0 +1,38 @@
+{% extends 'user/dashboard/layout.html.twig' %}
+
+{% block dashboard_main %}
+    <div class="transactions-section">
+        <h2>Your Pipeline</h2>
+
+        {% for label, messages in app.flashes %}
+            {% for message in messages %}
+                <div class="alert alert-{{ label }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endfor %}
+
+        <div class="transaction-card">
+{#            {% include '/user/dashboard/_pipeline_section.html.twig' %}#}
+            {% if customerHasPipeline is defined and customerHasPipeline %}
+                <section class="mb-4">
+                    <div class="tooltip-box">{{ 'dashboard.edit_your_pipeline_tip'|trans }}</div>
+                    <div class="tooltip-box">{{ 'pipeline_create_help'|trans|nl2br }}</div>
+
+                    <a class="btn btn-outline-dark btn-floating m-1 mt-4" href="/pipeline/{{ customerHasPipeline }}/edit" role="button"><i class="">{{ 'dashboard.edit_your_pipeline'|trans }}</i></a>
+
+                </section>
+                {#                <p>explanation</p>#}
+            {% endif %}
+            {% if customerHasPipeline is defined and not customerHasPipeline %}
+                <section class="mb-4">
+                    <div class="tooltip-box">{{ 'dashboard.create_your_pipeline_tip'|trans }}</div>
+
+                    <a class="btn btn-outline-dark btn-floating m-1 mt-4" href="/pipeline/create" role="button"><i class="">{{ 'dashboard.create_your_pipeline'|trans }}</i></a>
+
+                </section>
+                {#                <p>explanation</p>#}
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

@@ -37,7 +37,7 @@ class NoteCreateController extends AbstractController
         if ($beneficiaries->isEmpty()) {
             $this->addFlash('info', $this->translator->trans('errors.flash.add_heir'));
 
-            return $this->redirectToRoute('user_home');
+            return $this->redirectToRoute('user_home_heir');
         }
 
         if ($customer instanceof \App\Entity\Customer) {

@@ -1,0 +1,49 @@
+{% extends 'user/dashboard/layout.html.twig' %}
+
+{% block dashboard_main %}
+    <div class="transactions-section">
+        <h2>Your Payment Status</h2>
+
+        {% for label, messages in app.flashes %}
+            {% for message in messages %}
+                <div class="alert alert-{{ label }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endfor %}
+
+        <div class="transaction-card">
+{#            {% include '/user/dashboard/_payment_section.html.twig' %}#}
+            {% if customerPaymentStatus == 'trial' %}
+                <section class="mb-4">
+                    <div class="tooltip-box">{{ 'dashboard.trial_active_tip'|trans }}</div>
+
+                    <a class="btn btn-outline-primary btn-floating m-1 mt-4" href="{{ path('checkout') }}" role="button">
+                        <i>{{ 'dashboard.trial_active'|trans }} | ({{ customerPaymentDaysLeft }} days left)</i>
+                    </a>
+
+                </section>
+
+            {% elseif customerPaymentStatus == 'not_paid' %}
+                <section class="mb-4">
+                    <div class="tooltip-box">{{ 'dashboard.make_a_payment_tip'|trans }}</div>
+
+                    <a style="margin-left: 0.25rem !important;" class="btn btn-outline-danger btn-floating m-1 mt-4" href="{{ path('checkout') }}" role="button">
+                        <i>{{ 'dashboard.make_a_payment'|trans }}</i>
+                    </a>
+
+                </section>
+
+            {% elseif customerPaymentStatus == 'paid' %}
+                <section class="mb-4">
+                    <div class="tooltip-box">{{ 'dashboard.payment_completed_tip'|trans }}</div>
+
+                    <a class="btn btn-outline-success btn-floating m-1 mt-4" href="{{ path('checkout') }}" role="button">
+                        <i>{{ 'dashboard.payment_completed'|trans }}  | ({{ customerPaymentDaysLeft }} days left}}</i>
+                    </a>
+
+                </section>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

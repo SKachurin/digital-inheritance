@@ -8,6 +8,7 @@ enum CustomerPaymentStatusEnum: string
 {
     case NOT_PAID = 'not_paid';
     case PAID = 'paid';
+    case TRIAL = 'trial';
 
 
     /**
@@ -17,7 +18,8 @@ enum CustomerPaymentStatusEnum: string
     {
         return [
             self::NOT_PAID->value,
-            self::PAID->value
+            self::PAID->value,
+            self::TRIAL->value,
         ];
     }
 
@@ -26,6 +28,7 @@ enum CustomerPaymentStatusEnum: string
         return match ($status) {
             self::NOT_PAID->value => self::NOT_PAID,
             self::PAID->value => self::PAID,
+            self::TRIAL->value => self::TRIAL,
             default => null,
         };
     }

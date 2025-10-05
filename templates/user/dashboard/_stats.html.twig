@@ -1,0 +1,53 @@
+{% import 'user/dashboard/_icons.html.twig' as icons %}
+
+<div class="stats-container">
+
+    {% if customerHasPipeline and customerPaymentStatus in ['trial', 'paid'] %}
+        <a class="stat-card" href="{{ path('user_home_pipe') }}">
+            <div class="stat-value" >
+                {{ 'dashboard.pipe_active'|trans }}
+            </div>
+            <div class="stat-label">{{ 'dashboard.pipe_status'|trans }}</div>
+        </a>
+    {% else %}
+        <a class="stat-card" href="{{ path('user_home_pay') }}">
+            <div class="stat-value" >
+                {{ 'dashboard.pipe_inactive'|trans }}
+            </div>
+            <div class="stat-label" style="color: #dc3545">{{ 'dashboard.pipe_status'|trans }}</div>
+        </a>
+    {% endif %}
+
+    <a class="stat-card" href="{{ path('user_home_pay') }}">
+        {% if customerPaymentStatus == 'trial' %}
+            <div class="stat-value">{{ customerPaymentDaysLeft }}</div>
+            <div class="stat-label">{{ 'dashboard.trial_active_left'|trans }}</div>
+
+        {% elseif customerPaymentStatus == 'not_paid' %}
+            <div class="stat-value">0</div>
+            <div class="stat-label" style="color: #dc3545">{{ 'dashboard.make_a_payment'|trans }}</div>
+
+        {% elseif customerPaymentStatus == 'paid' %}
+            <div class="stat-value">{{ customerPaymentDaysLeft }}</div>
+            <div class="stat-label">{{ 'dashboard.payment_completed_left'|trans }}</div>
+        {% endif %}
+    </a>
+
+    <a class="stat-card" href="{{ path('user_home_ref') }}">
+        <div class="stat-value">{{ customerReferralCount|default(100) }}</div>
+        <div class="stat-label">{{ 'dashboard.ref.total_invited'|trans }}</div>
+    </a>
+
+    <a class="stat-card" href="{{ path('user_home_ref') }}">
+        <div class="stat-value">{{ icons.qr('icon icon-qr') }}</div>
+        <div class="stat-label">{{ 'dashboard.ref.your_qr'|trans }}</div>
+    </a>
+</div>
+
+
+<style>
+    .icon { width: 24px; height: 24px; display:inline-block; }
+    .icon-qr { width: 32px; height: 32px; }
+    .stat-card .stat-value .icon,
+    .stat-card .stat-value svg { width: 36px; height: 36px; }
+</style>
