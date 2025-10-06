@@ -328,33 +328,22 @@ h2 {
    RESPONSIVE DASHBOARD
    ========================= */
 
-
 /* Tablet view  */
-@media (max-width: 1024px) {
+@media screen and (max-width: 1200px) and (min-width: 992px) {
 
-    .dashboard-container {
-        grid-template-columns: 1fr; /* Collapse to single column */
-        margin-top: 9.5em;
-    }
-
-    .sidebar-left {
-        display: none; /* Hide sidebar */
-    }
-
-    .sidebar-right {
-        display: none; /* Hide right sidebar */
-    }
-
-    /* Stats: 2 columns */
-    .stats-container {
-        grid-template-columns: repeat(2, 1fr);
-    }
-
-    .bottom-nav {
+    .nav-item a .nav-text {
         display: none;
     }
 
+    .sidebar-note {
+        display: none;
+    }
+
+    .dashboard-container {
+        grid-template-columns: 100px 1fr 240px; /* narrower sidebar */
+    }
 }
+
 
 /* Mobile view  */
 @media (max-width: 991px) {

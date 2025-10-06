@@ -27,6 +27,13 @@ class ReferralController extends AbstractController
         }
 
         $rewardsEarned = null;
+
+        if(!$customer->getReferralCode()) {
+            return $this->render('user/dashboard/referral.html.twig', [
+                'rewardsEarned' => $rewardsEarned,
+            ]);
+        }
+
         if ($request->query->getBoolean('checkBalance')) {
             $rewardsEarned = $this->transactionRepository->getReferralBalance($customer);
         }
