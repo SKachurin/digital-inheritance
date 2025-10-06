@@ -348,6 +348,10 @@ h2 {
 /* Mobile view  */
 @media (max-width: 991px) {
 
+    .sidebar-left {
+        display: none;
+    }
+
     .dashboard-container {
         grid-template-columns: 1fr;
         margin-top: 9.5em;
