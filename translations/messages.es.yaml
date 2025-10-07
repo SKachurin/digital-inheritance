@@ -97,7 +97,7 @@ form:
     okayPassword_repeat: 'Repita la Okay Password'
     beneficiary_lang:  'Elige el idioma para tu heredero'
     choose_type: 'Selecciona un contacto verificado para 2FA'
-    choose_type_button: 'Choose this Type for 2FA'
+    choose_type_button: "Elegir este tipo para 2FA"
 
   constraints:
     your_login: 'Por favor, introduzca su usuario.'
@@ -142,6 +142,7 @@ form:
       spanish: 'Español'
 
 Submit: 'Enviar'
+title_delete_account: "Estás eligiendo el tipo de contacto que usarás para recibir la confirmación."
 delete_message_sent: 'Mensaje enviado. Debes confirmar la eliminación haciendo clic en el enlace del mensaje.'
 forgot_pass: '¿Olvidó su contraseña?'
 click_here: 'Haga clic aquí'

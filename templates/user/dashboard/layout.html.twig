@@ -32,83 +32,96 @@
 {% block content %}
     {% set current = app.request.attributes.get('_route') %}
 
-    <div class="dashboard-container">
-        {# LEFT SIDEBAR #}
-        <aside class="sidebar-left">
-            {% include 'user/dashboard/_sidebar.html.twig' with {
-                current: current
-            } %}
-        </aside>
+    {% if customerIsDeleted %}
 
-        {# MAIN COLUMN #}
-        <main class="main-content">
-            {% include 'user/dashboard/_stats.html.twig' %}
-            {% block dashboard_main %}{# page-specific content goes here #}{% endblock %}
-        </main>
-
-        {# RIGHT COLUMN #}
-        <aside class="sidebar-right">
-            {% include 'user/dashboard/_right.html.twig' %}
-        </aside>
-    </div>
-
-    <nav class="bottom-nav">
-        <div class="bottom-nav-top hidden">
-            <a href="{{ path('user_home_email') }}" class="{{ current == 'user_home_email' ? 'active' }}">
-                <img src="{{ asset('build/icons/mail_pic.png') }}" alt="First Email" class="nav-icon">
-                <span>{{ 'dashboard.nav.email_first'|trans }}</span>
-            </a>
-            <a href="{{ path('user_home_email_') }}" class="{{ current == 'user_home_email_' ? 'active' }}">
-                <img src="{{ asset('build/icons/mail_1_pic.png') }}" alt="Second Email" class="nav-icon">
-                <span>{{ 'dashboard.nav.email_second'|trans }}</span>
-            </a>
-            <a href="{{ path('user_home_phone') }}" class="{{ current == 'user_home_phone' ? 'active' }}">
-                <img src="{{ asset('build/icons/phone_pic.png') }}" alt="First Phone" class="nav-icon">
-                <span>{{ 'dashboard.nav.phone_first'|trans }}</span>
-            </a>
-            <a href="{{ path('user_home_phone_') }}" class="{{ current == 'user_home_phone_' ? 'active' }}">
-                <img src="{{ asset('build/icons/phone_1_pic.png') }}" alt="Second Phone" class="nav-icon">
-                <span>{{ 'dashboard.nav.phone_second'|trans }}</span>
-            </a>
-            <a href="{{ path('user_home_social') }}" class="{{ current == 'user_home_social' ? 'active' }}">
-                <img src="{{ asset('build/icons/social_1_pic.png') }}" alt="Social" class="nav-icon">
-                <span>{{ 'dashboard.nav.social'|trans }}</span>
-            </a>
-            <a href="{{ path('user_home_heir') }}" class="{{ current == 'user_home_heir' ? 'active' }}">
-                <img src="{{ asset('build/icons/heir_1_pic.png') }}" alt="Digital Heir" class="nav-icon">
-                <span>{{ 'dashboard.nav.heir'|trans }}</span>
-            </a>
-            <a href="{{ path('user_home_env') }}" class="{{ current == 'user_home_env' ? 'active' }}">
-                <img src="{{ asset('build/icons/env_pic.png') }}" alt="Secure Envelope" class="nav-icon">
-                <span>{{ 'dashboard.nav.envelope'|trans }}</span>
-            </a>
+        <div class="container">
+            <h1 style="padding-top: 3em;">{{ 'header.dashboard'|trans }}</h1>
+            <p id="hey">{{ 'dashboard.text'|trans|raw }}</p>
+            <div class="container-buttons" style="background: rgba(255, 255, 255, 0.8); padding: 2rem;">
+                <p>{{ 'dashboard.cancel_deletion_message'|trans }}</p>
+                <a class="btn btn-outline-dark btn-floating m-1 mt-4" href="/cancel-deletion">{{ 'dashboard.cancel_deletion_button'|trans }}</a>
+            </div>
         </div>
 
-        <div class="bottom-nav-bottom">
-            <a href="{{ path('user_home_pipe') }}" class="{{ current == 'user_home_pipe' ? 'active' }}">
-                <img src="{{ asset('build/icons/pipe_pic.png') }}" alt="Pipeline" class="nav-icon">
-                <span>{{ 'dashboard.nav.pipeline'|trans }}</span>
-            </a>
-            <a href="{{ path('user_home_pay') }}" class="{{ current == 'user_home_pay' ? 'active' }}">
-                <img src="{{ asset('build/icons/pay_pic.png') }}" alt="Payments" class="nav-icon">
-                <span>{{ 'dashboard.nav.payments'|trans }}</span>
-            </a>
-            <a href="{{ path('user_home') }}" class="{{ current == 'user_home' ? 'active' }}">
-                <img src="{{ asset('build/icons/home_pic.png') }}" alt="Home" class="nav-icon">
-                <span>{{ 'dashboard.nav.home'|trans }}</span>
-            </a>
-            <a href="{{ path('user_home_ref') }}" class="{{ current == 'user_home_ref' ? 'active' }}">
-                <img src="{{ asset('build/icons/ref_pic.png') }}" alt="Referral" class="nav-icon">
-                <span>{{ 'dashboard.nav.referral'|trans }}</span>
-            </a>
+    {% else %}
 
-            {# MENU TOGGLE #}
-            <a href="javascript:void(0)" id="menu-toggle">
-                <img id="menu-icon" src="{{ asset('build/icons/dash_mobile.png') }}" alt="Menu" class="nav-icon">
-                <span>Menu</span>
-            </a>
+        <div class="dashboard-container">
+{#             LEFT SIDEBAR#}
+            <aside class="sidebar-left">
+                {% include 'user/dashboard/_sidebar.html.twig' with {
+                    current: current
+                } %}
+            </aside>
+
+{#             MAIN COLUMN#}
+            <main class="main-content">
+                {% include 'user/dashboard/_stats.html.twig' %}
+                {% block dashboard_main %} page-specific content goes here {% endblock %}
+            </main>
+
+{#             RIGHT COLUMN#}
+            <aside class="sidebar-right">
+                {% include 'user/dashboard/_right.html.twig' %}
+            </aside>
         </div>
-    </nav>
 
+        <nav class="bottom-nav">
+            <div class="bottom-nav-top hidden">
+                <a href="{{ path('user_home_email') }}" class="{{ current == 'user_home_email' ? 'active' }}">
+                    <img src="{{ asset('build/icons/mail_pic.png') }}" alt="First Email" class="nav-icon">
+                    <span>{{ 'dashboard.nav.email_first'|trans }}</span>
+                </a>
+                <a href="{{ path('user_home_email_') }}" class="{{ current == 'user_home_email_' ? 'active' }}">
+                    <img src="{{ asset('build/icons/mail_1_pic.png') }}" alt="Second Email" class="nav-icon">
+                    <span>{{ 'dashboard.nav.email_second'|trans }}</span>
+                </a>
+                <a href="{{ path('user_home_phone') }}" class="{{ current == 'user_home_phone' ? 'active' }}">
+                    <img src="{{ asset('build/icons/phone_pic.png') }}" alt="First Phone" class="nav-icon">
+                    <span>{{ 'dashboard.nav.phone_first'|trans }}</span>
+                </a>
+                <a href="{{ path('user_home_phone_') }}" class="{{ current == 'user_home_phone_' ? 'active' }}">
+                    <img src="{{ asset('build/icons/phone_1_pic.png') }}" alt="Second Phone" class="nav-icon">
+                    <span>{{ 'dashboard.nav.phone_second'|trans }}</span>
+                </a>
+                <a href="{{ path('user_home_social') }}" class="{{ current == 'user_home_social' ? 'active' }}">
+                    <img src="{{ asset('build/icons/social_1_pic.png') }}" alt="Social" class="nav-icon">
+                    <span>{{ 'dashboard.nav.social'|trans }}</span>
+                </a>
+                <a href="{{ path('user_home_heir') }}" class="{{ current == 'user_home_heir' ? 'active' }}">
+                    <img src="{{ asset('build/icons/heir_1_pic.png') }}" alt="Digital Heir" class="nav-icon">
+                    <span>{{ 'dashboard.nav.heir'|trans }}</span>
+                </a>
+                <a href="{{ path('user_home_env') }}" class="{{ current == 'user_home_env' ? 'active' }}">
+                    <img src="{{ asset('build/icons/env_pic.png') }}" alt="Secure Envelope" class="nav-icon">
+                    <span>{{ 'dashboard.nav.envelope'|trans }}</span>
+                </a>
+            </div>
+
+            <div class="bottom-nav-bottom">
+                <a href="{{ path('user_home_pipe') }}" class="{{ current == 'user_home_pipe' ? 'active' }}">
+                    <img src="{{ asset('build/icons/pipe_pic.png') }}" alt="Pipeline" class="nav-icon">
+                    <span>{{ 'dashboard.nav.pipeline'|trans }}</span>
+                </a>
+                <a href="{{ path('user_home_pay') }}" class="{{ current == 'user_home_pay' ? 'active' }}">
+                    <img src="{{ asset('build/icons/pay_pic.png') }}" alt="Payments" class="nav-icon">
+                    <span>{{ 'dashboard.nav.payments'|trans }}</span>
+                </a>
+                <a href="{{ path('user_home') }}" class="{{ current == 'user_home' ? 'active' }}">
+                    <img src="{{ asset('build/icons/home_pic.png') }}" alt="Home" class="nav-icon">
+                    <span>{{ 'dashboard.nav.home'|trans }}</span>
+                </a>
+                <a href="{{ path('user_home_ref') }}" class="{{ current == 'user_home_ref' ? 'active' }}">
+                    <img src="{{ asset('build/icons/ref_pic.png') }}" alt="Referral" class="nav-icon">
+                    <span>{{ 'dashboard.nav.referral'|trans }}</span>
+                </a>
+
+{#                 MENU TOGGLE#}
+                <a href="javascript:void(0)" id="menu-toggle">
+                    <img id="menu-icon" src="{{ asset('build/icons/dash_mobile.png') }}" alt="Menu" class="nav-icon">
+                    <span>Menu</span>
+                </a>
+            </div>
+        </nav>
+    {% endif %}
 
 {% endblock %}

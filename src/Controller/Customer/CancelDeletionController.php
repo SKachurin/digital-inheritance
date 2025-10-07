@@ -22,6 +22,10 @@ class CancelDeletionController extends AbstractController
         /** @var Customer $customer */
         $customer = $this->getUser();
 
+        if (!$customer instanceof Customer) {
+            return $this->redirectToRoute('user_login');
+        }
+
         $this->deletionService->cancelDeletion($customer);
 
         $this->addFlash('success', $this->translator->trans(

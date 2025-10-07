@@ -97,7 +97,7 @@ form:
     okayPassword_repeat: 'Повторите OK пароль'
     beneficiary_lang:  'Выберите язык для вашего наследника'
     choose_type: 'Выберите подтверждённый контакт для 2FA'
-    choose_type_button: 'Choose this Type for 2FA'
+    choose_type_button: "Выбрать этот тип для 2FA"
 
   constraints:
     your_login: 'Пожалуйста, введите ваш логин.'
@@ -142,6 +142,7 @@ form:
       spanish: 'Испанский'
 
 Submit: 'Отправить'
+title_delete_account: "Вы выбираете тип контакта, через который получите подтверждение."
 delete_message_sent: 'Сообщение отправлено. Вам нужно подтвердить удаление, перейдя по ссылке в сообщении.'
 forgot_pass: 'Забыли пароль?'
 click_here: 'Нажмите здесь'

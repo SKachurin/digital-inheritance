@@ -29,7 +29,7 @@ class CustomerDeleteController extends AbstractController
         $customer = $this->getUser();
 
         if (!$customer instanceof Customer) {
-            throw new \UnexpectedValueException('You must be logged in to delete your account.');
+            return $this->redirectToRoute('user_login');
         }
 
 

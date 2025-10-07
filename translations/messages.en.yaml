@@ -142,7 +142,7 @@ form:
       spanish: 'Spanish'
 
 Submit: 'Submit'
-title_delete_account: 'You are selecting type of your contact to receive confirmation'
+title_delete_account: 'You are choosing the type of contact you’ll use to receive the confirmation.'
 delete_message_sent: 'Message sent. You need to confirm the deletion by clicking the link in the message.'
 forgot_pass: 'Forgot password?'
 click_here: 'Click here'
