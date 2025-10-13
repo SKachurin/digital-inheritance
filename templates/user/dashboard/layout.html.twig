@@ -32,7 +32,7 @@
 {% block content %}
     {% set current = app.request.attributes.get('_route') %}
 
-    {% if customerIsDeleted %}
+    {% if customerIsDeleted is defined and customerIsDeleted %}
 
         <div class="container">
             <h1 style="padding-top: 3em;">{{ 'header.dashboard'|trans }}</h1>

@@ -243,9 +243,17 @@ dashboard:
   ref:
     title: "Your Referral Status"
     intro: |
-      When a new customer registers using your referral link or QR code, you’ll earn 20% of all their payments — for life.  <br><br>
-      We save the referral code on their first visit and apply it when they register.  
-      Note: if someone registers from another device, we can’t track them as your referral — unless they later log in from the original device.
+      When a new customer registers using your referral link or QR code, you earn 20% of all their payments — for life.<br>
+      You also earn 5% from every payment made by the people they invite.<br><br>
+      
+      The referral code is saved on a visitor’s first visit and automatically applied when they register. <br>
+      Note: if someone registers from another device, we won’t be able to track them as your referral — unless they later log in from the original device.<br><br>
+      
+      The hold period is 1 month. This means that today you can withdraw the funds that were added to your balance one month ago.
+      Referral rewards are credited to your balance immediately after payment.<br><br>
+      
+      Payouts are currently processed manually. Please send your withdrawal request via the "Contact Us" page.
+
     total_invited: "Total People Invited"
     still_paid: "Still Active with Paid Status"
     your_balance: "Your Current Balance/Reward"

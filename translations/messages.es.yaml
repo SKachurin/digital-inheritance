@@ -243,9 +243,17 @@ dashboard:
   ref:
     title: "Tu estado de referidos"
     intro: |
-      Cuando un nuevo cliente se registre con tu enlace o código QR, ganarás el 20% de todos sus pagos — para siempre. <br><br>
-      Guardamos el código de referido en su primera visita y lo aplicamos cuando complete el registro.  
-      Nota: si la persona se registra desde otro dispositivo, no podremos reconocerla como tu referido — salvo que después inicie sesión desde el dispositivo original.
+      Cuando un nuevo cliente se registra utilizando tu enlace de referido o código QR, ganas el 20% de todos sus pagos — de por vida.<br>
+      También ganas el 5% de cada pago realizado por las personas que ellos inviten.<br><br>
+
+      El código de referido se guarda en la primera visita del usuario y se aplica automáticamente cuando se registra. <br>
+      Nota: si alguien se registra desde otro dispositivo, no podremos rastrearlo como tu referido — a menos que luego inicie sesión desde el dispositivo original.<br><br>
+
+      El período de retención es de 1 mes. Esto significa que hoy puedes retirar los fondos que se añadieron a tu saldo hace un mes.
+      Las recompensas por referidos se acreditan a tu saldo inmediatamente después del pago.<br><br>
+
+      Los pagos se procesan manualmente por el momento. Envía tu solicitud de retiro a través de la página "Contact Us".
+
     total_invited: "Personas invitadas"
     still_paid: "De ellos siguen con estado de pago"
     your_balance: "Tu saldo/recompensa actual"
