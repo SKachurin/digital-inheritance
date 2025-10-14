@@ -254,9 +254,13 @@ dashboard:
       
       Payouts are currently processed manually. Please send your withdrawal request via the "Contact Us" page.
 
-    total_invited: "Total People Invited"
+    total_invited_1st: "Total People Invited (1st lvl)"
+    total_invited_2nd: "Total People Invited (2nd lvl)"
     still_paid: "Still Active with Paid Status"
     your_balance: "Your Current Balance/Reward"
+    check_payout: "Check Payout"
+    check: "Check"
+    your_payout: "Your Current Payout"
     check_balance: "Check Balance"
     ref_link: "Your Referral Link"
     copy_link: "Copy Link"

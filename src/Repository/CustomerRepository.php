@@ -162,4 +162,15 @@ class CustomerRepository extends BaseRepository
             ->getQuery()
             ->getOneOrNullResult()['referralCode'] ?? null;
     }
+
+    public function countSecondLevelReferrals(Customer $customer): int
+    {
+        return (int) $this->createQueryBuilder('c2')
+            ->select('COUNT(c2.id)')
+            ->join('c2.invitedBy', 'c1')
+            ->where('c1.invitedBy = :customer')
+            ->setParameter('customer', $customer)
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
 }

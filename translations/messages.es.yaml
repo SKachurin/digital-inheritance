@@ -254,9 +254,13 @@ dashboard:
 
       Los pagos se procesan manualmente por el momento. Envía tu solicitud de retiro a través de la página "Contact Us".
 
-    total_invited: "Personas invitadas"
-    still_paid: "De ellos siguen con estado de pago"
-    your_balance: "Tu saldo/recompensa actual"
+    total_invited_1st: "Total de personas invitadas (1er nivel)"
+    total_invited_2st: "Total de personas invitadas (2º nivel)"
+    still_paid: "De ellos, continúan con estado de pago"
+    check_payout: "Consultar pago"
+    check: "Consultar"
+    your_payout: "Tu pago actual"
+    your_balance: "Tu saldo o recompensa actual"
     check_balance: "Consultar saldo"
     ref_link: "Tu enlace de referido"
     copy_link: "Copiar enlace"

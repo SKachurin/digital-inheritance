@@ -76,4 +76,22 @@ class TransactionRepository extends BaseRepository
             ->getQuery()
             ->getSingleScalarResult();
     }
+
+    public function getReferralPayout(Customer $customer): float
+    {
+        $dateThreshold = new \DateTimeImmutable('-30 days');
+
+        return (float) $this->createQueryBuilder('t')
+            ->select('COALESCE(SUM(t.amount), 0)')
+            ->where('t.customer = :customer')
+            ->andWhere('t.plan = :plan')
+            ->andWhere('t.status = :status')
+            ->andWhere('t.created_at <= :threshold')
+            ->setParameter('customer', $customer)
+            ->setParameter('plan', 'referral')
+            ->setParameter('status', 'bonus')
+            ->setParameter('threshold', $dateThreshold)
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
 }

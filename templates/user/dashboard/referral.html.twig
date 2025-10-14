@@ -20,7 +20,7 @@
             <div class="referral-stats">
                 <div class="stat-card">
                     <div class="stat-value">{{ customerReferralCount|default(0) }}</div>
-                    <div class="stat-label">{{ 'dashboard.ref.total_invited'|trans }}</div>
+                    <div class="stat-label">{{ 'dashboard.ref.total_invited_1st'|trans }}</div>
                 </div>
 
                 <div class="stat-card">
@@ -39,6 +39,30 @@
                     </a>
                 </div>
 
+
+
+                <div class="stat-card">
+                    <div class="stat-value">{{ currentPayout|default('Check') }}</div>
+                    <div class="stat-label">{{ 'dashboard.ref.your_payout'|trans }}</div>
+
+                    <a class="btn btn-outline-dark btn-floating m-1 mt-4"
+                       href="{{ path('user_home_ref', { currentPayout: 1 }) }}"
+                       role="button">
+                        <i>{{ 'dashboard.ref.check_payout'|trans }}</i>
+                    </a>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-value">{{ customerReferralCount_2nd|default('Check') }}</div>
+                    <div class="stat-label">{{ 'dashboard.ref.total_invited_2nd'|trans }}</div>
+
+                    <a class="btn btn-outline-dark btn-floating m-1 mt-4"
+                       href="{{ path('user_home_ref', { customerReferralCount_2nd: 1 }) }}"
+                       role="button">
+                        <i>{{ 'dashboard.ref.check'|trans }}</i>
+                    </a>
+                </div>
+
                 <div class="stat-card">
                     <div id='link' class="stat-value">
                         <input type="text" id="referral-link" class="form-control"
@@ -53,6 +77,8 @@
                         <i class="">{{ 'dashboard.ref.copy_link'|trans }}</i>
                     </a>
                 </div>
+
+
             </div>
         </div>
     </div>
