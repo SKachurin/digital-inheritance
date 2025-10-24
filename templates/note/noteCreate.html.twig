@@ -1,30 +1,27 @@
-{% extends './base.html.twig' %}
-{% block content %}
+{% extends '/user/dashboard/layout.html.twig' %}
+{% block dashboard_main %}
     <style>
         .form-container {
             padding-top: 4em;
         }
         .form-header {
-            margin-bottom: 1em; /* Add some space between the header and the form */
+            margin-bottom: 1em;
         }
         .button-group {
             display: flex;
             align-items: center;
-            margin-top: 0.5em; /* Adjust margin to align buttons properly */
+            margin-top: 0.5em;
         }
         .button-group a {
-            margin-left: 1em; /* Space between the buttons and the text area */
-        }
-        p {
-            margin-bottom: 2em; /* Add some space between the header and the form */
+            margin-left: 1em;
         }
         .divider {
             font-size: 1.5em;
             display: flex;
             align-items: center;
         }
-
-        .divider::before, .divider::after {
+        .divider::before,
+        .divider::after {
             flex: 1;
             content: '';
             padding: 1px;
@@ -36,77 +33,189 @@
             padding: 0.5rem;
             border: 1px solid #ced4da;
             border-radius: 6px;
-            /*background-color: #f1f3f5;*/
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            transition: background-color 0.3s ease;
             background: rgba(255, 255, 255, 0.9);
+            transition: background-color 0.3s ease;
         }
-
         #box:hover {
             background-color: #e9ecef;
         }
+
+        /* full-page overlay spinner */
+        #loading-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.7);
+            z-index: 9999;
+            justify-content: center;
+            align-items: center;
+        }
+
+        #loading-overlay .spinner {
+            border: 5px solid #ccc;
+            border-top: 5px solid #000;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
     </style>
-    <div class="container">
-        <h1 style="padding-top: 3em; font-size: 2rem;">{{ 'header.dashboard'|trans }}</h1>
 
-        <div class="row">
-            <div class="col-md-12">
-                <h1 class="form-header" style="padding-top: 2em;">{{ 'dashboard.create_your_secure_envelope'|trans }}</h1>
-                <!-- Introduction Text Spoiler (Default Open) -->
-                <div id="box">
-                    <div class="mb-3" style="padding: 2rem;">
-                        <p>{{ 'create_your_secure_envelope_text'|trans|raw }}</p>
-                    </div>
-                </div>
-                {{ form_start(form) }}
-                {% if decodedNote %}
-                    <div class="form-group">
-                        {{ form_label(form.customerTextAnswerOne) }}
-                        <div class="button-group">
-                            {{ form_widget(form.customerTextAnswerOne) }}
-                            <section class="mb-4">
-                                <a class="btn btn-outline-dark btn-floating m-1"
-                                   href="/note/{{ noteId }}/decrypt/customerTextAnswerOne" role="button"><i class="">decrypt</i></a>
-                            </section>
-                        </div>
-                    </div>
+    <div class="transactions-section">
+        <h2 style="padding-top: 2em;">{{ 'dashboard.create_your_secure_envelope'|trans }}</h2>
+        <p>{{ 'create_your_secure_envelope_text'|trans|raw }}</p>
 
-                    <div class="form-group">
-                        {{ form_label(form.customerTextAnswerTwo) }}
-                        <div class="button-group">
-                            {{ form_widget(form.customerTextAnswerTwo) }}
-                            <section class="mb-4">
-                                <a class="btn btn-outline-dark btn-floating m-1"
-                                   href="/note/{{ noteId }}/decrypt/customerTextAnswerTwo" role="button"><i class="">decrypt</i></a>
-                            </section>
-                        </div>
-                    </div>
-                {% endif %}
-                {{ form_row(form.customerText) }}
+        <div class="tooltip_text mb-4">{{ 'dashboard.create_your_secure_envelope_tip'|trans }}</div>
 
-                <div class="divider">{{ 'your_questions'|trans }}</div>
-                <p>{{ 'your_questions_explain'|trans }}</p>
-                {{ form_row(form.customerFirstQuestion) }}
-                {{ form_row(form.customerFirstQuestionAnswer) }}
-                {{ form_row(form.customerSecondQuestion) }}
-                {{ form_row(form.customerSecondQuestionAnswer) }}
-
-                {{ form_row(form._token) }}
-
-                <div class="divider">{{ 'heir_questions'|trans }}</div>
-                <p>{{ 'heir_questions_explain'|trans }}</p>
-                {{ form_end(form) }}
-            </div>
+        <!-- Toggle Encrypt in Browser (Default On) -->
+        <div class="form-check form-switch mb-4">
+            <input class="form-check-input" type="checkbox" id="encryptOfflineToggle" checked>
+            <label class="form-check-label" for="encryptOfflineToggle">
+                {{ 'dashboard.create_your_secure_envelope_switch'|trans|raw }}
+            </label>
         </div>
 
-        {% for label, messages in app.flashes %}
-            {% for message in messages %}
-                <div class="alert alert-{{ label }}">
-                    {{ message }}
+        {{ form_start(form) }}
+        {% if decodedNote %}
+            <div class="form-group">
+                {{ form_label(form.customerTextAnswerOne) }}
+                <div class="button-group">
+                    {{ form_widget(form.customerTextAnswerOne) }}
+                    <section class="mb-4">
+                        <a class="btn btn-outline-dark btn-floating m-1"
+                           href="/note/{{ noteId }}/decrypt/customerTextAnswerOne" role="button">
+                            decrypt
+                        </a>
+                    </section>
                 </div>
-            {% endfor %}
-        {% endfor %}
+            </div>
+
+            <div class="form-group">
+                {{ form_label(form.customerTextAnswerTwo) }}
+                <div class="button-group">
+                    {{ form_widget(form.customerTextAnswerTwo) }}
+                    <section class="mb-4">
+                        <a class="btn btn-outline-dark btn-floating m-1"
+                           href="/note/{{ noteId }}/decrypt/customerTextAnswerTwo" role="button">
+                            decrypt
+                        </a>
+                    </section>
+                </div>
+            </div>
+        {% endif %}
+
+        {{ form_row(form.customerText) }}
+
+        <div class="divider">{{ 'your_questions'|trans }}</div>
+        <p>{{ 'your_questions_explain'|trans }}</p>
+        {{ form_row(form.customerFirstQuestion) }}
+        {{ form_row(form.customerFirstQuestionAnswer) }}
+        {{ form_row(form.customerSecondQuestion) }}
+        {{ form_row(form.customerSecondQuestionAnswer) }}
+
+        {{ form_row(form._token) }}
+
+        <div class="divider">{{ 'heir_questions'|trans }}</div>
+        <p>{{ 'heir_questions_explain'|trans }}</p>
+
+        <script src="https://cdn.jsdelivr.net/npm/argon2-browser@1.18.0/dist/argon2-bundled.min.js"></script>
+        <script type="module">
+            async function deriveKey(answer, saltB64) {
+                const salt = saltB64
+                    ? Uint8Array.from(atob(saltB64), c => c.charCodeAt(0))
+                    : crypto.getRandomValues(new Uint8Array(16));
+                const ansBytes = new TextEncoder().encode(answer);
+                const res = await window.argon2.hash({
+                    pass: ansBytes,
+                    salt: salt,
+                    time: 3,
+                    mem: 65536,
+                    parallelism: 1,
+                    hashLen: 32,
+                    type: window.argon2.ArgonType.Argon2id,
+                    raw: true
+                });
+                return { key: new Uint8Array(res.hash), salt };
+            }
+
+            async function encryptText(plain, ansKey) {
+                const iv = crypto.getRandomValues(new Uint8Array(24)); // XChaCha20-style
+                const key = await crypto.subtle.importKey("raw", ansKey, { name: "AES-GCM" }, false, ["encrypt"]);
+                const ct = await crypto.subtle.encrypt(
+                    { name: "AES-GCM", iv: iv.slice(0, 12) },
+                    key,
+                    new TextEncoder().encode(plain)
+                );
+                return {
+                    cipher: btoa(String.fromCharCode(...new Uint8Array(ct))),
+                    iv: btoa(String.fromCharCode(...iv))
+                };
+            }
+
+            document.addEventListener("submit", async (e) => {
+                const offline = document.getElementById("encryptOfflineToggle").checked;
+                if (!offline) return; // let backend handle normally
+
+                const answerField = document.querySelector("#note_creation_customerFirstQuestionAnswer");
+                const textField = document.querySelector("#note_creation_customerText");
+                const overlay = document.getElementById("loading-overlay");
+
+                const answer = answerField?.value;
+                const plaintext = textField?.value;
+                if (!answer || !plaintext) return;
+
+                e.preventDefault();
+
+                // Show spinner
+                overlay.style.display = "flex";
+
+                try {
+                    const { key, salt } = await deriveKey(answer);
+                    const { cipher, iv } = await encryptText(plaintext, key);
+
+                    textField.value = JSON.stringify({
+                        c: cipher,
+                        s: btoa(String.fromCharCode(...salt)),
+                        iv: iv
+                    });
+
+                    const hiddenInput = document.createElement("input");
+                    hiddenInput.type = "hidden";
+                    hiddenInput.name = "frontend_encrypted";
+                    hiddenInput.value = "1";
+                    e.target.appendChild(hiddenInput);
+
+                    e.target.submit();
+                } finally {
+                    // Hide spinner if something fails
+                    overlay.style.display = "none";
+                }
+            });
+        </script>
+
+        {{ form_end(form) }}
     </div>
+
+    {% for label, messages in app.flashes %}
+        {% for message in messages %}
+            <div class="alert alert-{{ label }}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endfor %}
+
+    <!-- spinner overlay -->
+    <div id="loading-overlay">
+        <div class="spinner"></div>
+    </div>
+
 {% endblock %}
-
-

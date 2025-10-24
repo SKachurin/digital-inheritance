@@ -184,7 +184,14 @@ dashboard:
   edit_your_pipeline: 'Edit Your Pipeline'
   edit_your_pipeline_tip: 'Saving the Pipeline resets it. If you need more Actions, verify additional Contacts.'
   create_your_secure_envelope: 'Create Your Secure Envelope'
-  create_your_secure_envelope_tip: 'A text field that will be encrypted using answers to your secret questions.'
+  create_your_secure_envelope_tip: 'This text field will be encrypted using answers to your secret questions.'
+  create_your_secure_envelope_switch: |
+    Encrypt in browser 
+    (It takes a bit longer, and you’ll need to stay on the page until encryption is complete — but your Envelope gets sent even to our server already well encrypted.)
+  edit_your_secure_envelope_note: |
+    Please note: when you use the Edit Envelope function, decryption occurs on our server. 
+    This is necessary to control the number of decryption attempts and apply short delays to prevent brute-force attacks. If you prefer not to process decrypted text through our server, you can avoid it by deleting the current Envelope and creating a new one. 
+    We recommend this approach for extra security - even though our code is open source and you can verify that no decrypted data or passwords are ever stored.
   edit_your_secure_envelope: 'Edit Your Secure Envelope'
   edit_your_secure_envelope_tip: 'To edit, you must first decrypt it using answers to your secret questions.'
   delete_your_secure_envelope: 'Delete Your Secure Envelope'

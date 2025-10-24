@@ -11,6 +11,8 @@ class NoteCreateInputDto
     #[Assert\NotBlank]
     private Customer $customer;
 
+    private bool $frontendEncrypted = false;
+
     #[Assert\NotBlank]
     private ?string $customerText;
 
@@ -69,6 +71,15 @@ class NoteCreateInputDto
         $this->customerText = $customerText;
     }
 
+    public function isFrontendEncrypted(): bool
+    {
+        return $this->frontendEncrypted;
+    }
+
+    public function setFrontendEncrypted(bool $state): void
+    {
+        $this->frontendEncrypted = $state;
+    }
 
     public function getCustomer(): Customer
     {

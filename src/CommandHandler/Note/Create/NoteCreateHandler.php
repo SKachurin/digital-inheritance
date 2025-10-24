@@ -15,16 +15,16 @@ use Psr\Log\LoggerInterface;
 #[AsMessageHandler]
 class NoteCreateHandler
 {
-    private LoggerInterface $logger;
-    private ParameterBagInterface $params;
-    private EntityManagerInterface $entityManager;
-    private CryptoService $cryptoService;
+//    private ParameterBagInterface $params;
+//    private EntityManagerInterface $entityManager;
+//    private CryptoService $cryptoService;
+//    private LoggerInterface $logger;
 
     public function __construct(
-        ParameterBagInterface $params,
-        EntityManagerInterface $entityManager,
-        LoggerInterface $logger,
-        CryptoService $cryptoService
+        private ParameterBagInterface $params,
+        private EntityManagerInterface $entityManager,
+        private LoggerInterface $logger,
+        private CryptoService $cryptoService
     )
     {
         $this->params = $params;
@@ -87,54 +87,96 @@ class NoteCreateHandler
         $note->setBeneficiary($beneficiary);
         $cryptoService = null;
 
-        $personalString1 = $input->getCustomerFirstQuestionAnswer();
-        $personalString2 = $input->getCustomerSecondQuestionAnswer();
-        $personalString3 = $input->getBeneficiaryFirstQuestionAnswer();
-        $personalString4 = $input->getBeneficiarySecondQuestionAnswer();
+        $encryptIfNeeded = function (?string $personalString, callable $setter) use ($input) {
+            if (!$personalString) {
+                return;
+            }
 
-        if ($personalString1) {
-            $cryptoService = new CryptoService($this->params, $this->logger, $personalString1);
-            $note
-                ->setCustomerTextAnswerOne(
-                    $cryptoService->encryptData(
-                        $input->getCustomerText()
-                    )
-                )
-            ;
-        }
+            if ($input->isFrontendEncrypted()) {
+                $setter($input->getCustomerText());
+            } else {
+                $crypto = new CryptoService($this->params, $this->logger, $personalString);
+                $setter($crypto->encryptData($input->getCustomerText()));
+            }
+        };
 
-        if ($personalString2) {
-            $cryptoService = new CryptoService($this->params, $this->logger, $personalString2);
-            $note
-                ->setCustomerTextAnswerTwo(
-                    $cryptoService->encryptData(
-                        $input->getCustomerText()
-                    )
-                )
-            ;
-        }
+        $encryptIfNeeded($input->getCustomerFirstQuestionAnswer(), fn($v) => $note->setCustomerTextAnswerOne($v));
+        $encryptIfNeeded($input->getCustomerSecondQuestionAnswer(), fn($v) => $note->setCustomerTextAnswerTwo($v));
+        $encryptIfNeeded($input->getBeneficiaryFirstQuestionAnswer(), fn($v) => $note->setBeneficiaryTextAnswerOne($v));
+        $encryptIfNeeded($input->getBeneficiarySecondQuestionAnswer(), fn($v) => $note->setBeneficiaryTextAnswerTwo($v));
 
-        if ($personalString3) {
-            $cryptoService = new CryptoService($this->params, $this->logger, $personalString3);
-            $note
-                ->setBeneficiaryTextAnswerOne(
-                    $cryptoService->encryptData(
-                        $input->getCustomerText()
-                    )
-                )
-            ;
-        }
+//        $personalString1 = $input->getCustomerFirstQuestionAnswer();
+//        $personalString2 = $input->getCustomerSecondQuestionAnswer();
+//        $personalString3 = $input->getBeneficiaryFirstQuestionAnswer();
+//        $personalString4 = $input->getBeneficiarySecondQuestionAnswer();
 
-        if ($personalString4) {
-            $cryptoService = new CryptoService($this->params, $this->logger, $personalString4);
-            $note
-                ->setBeneficiaryTextAnswerTwo(
-                    $cryptoService->encryptData(
-                        $input->getCustomerText()
-                    )
-                )
-            ;
-        }
+//        if ($personalString1 && !$input->isFrontendEncrypted()) {
+//            $cryptoService = new CryptoService($this->params, $this->logger, $personalString1);
+//            $note
+//                ->setCustomerTextAnswerOne(
+//                    $cryptoService->encryptData(
+//                        $input->getCustomerText()
+//                    )
+//                )
+//            ;
+//        } elseif ($personalString1) {
+//            $note
+//                ->setCustomerTextAnswerOne(
+//                    $input->getCustomerText()
+//                )
+//            ;
+//        }
+//
+//        if ($personalString2 && !$input->isFrontendEncrypted()) {
+//            $cryptoService = new CryptoService($this->params, $this->logger, $personalString2);
+//            $note
+//                ->setCustomerTextAnswerTwo(
+//                    $cryptoService->encryptData(
+//                        $input->getCustomerText()
+//                    )
+//                )
+//            ;
+//        } elseif ($personalString2) {
+//            $note
+//                ->setCustomerTextAnswerTwo(
+//                    $input->getCustomerText()
+//                )
+//            ;
+//        }
+//
+//        if ($personalString3 && !$input->isFrontendEncrypted()) {
+//            $cryptoService = new CryptoService($this->params, $this->logger, $personalString3);
+//            $note
+//                ->setBeneficiaryTextAnswerOne(
+//                    $cryptoService->encryptData(
+//                        $input->getCustomerText()
+//                    )
+//                )
+//            ;
+//        } elseif ($personalString3) {
+//            $note
+//                ->setBeneficiaryTextAnswerOne(
+//                    $input->getCustomerText()
+//                )
+//            ;
+//        }
+//
+//        if ($personalString4 && !$input->isFrontendEncrypted()) {
+//            $cryptoService = new CryptoService($this->params, $this->logger, $personalString4);
+//            $note
+//                ->setBeneficiaryTextAnswerTwo(
+//                    $cryptoService->encryptData(
+//                        $input->getCustomerText()
+//                    )
+//                )
+//            ;
+//        } elseif ($personalString4) {
+//            $note
+//                ->setBeneficiaryTextAnswerTwo(
+//                    $input->getCustomerText()
+//                )
+//            ;
+//        }
 
         $this->entityManager->persist($note);
         $this->entityManager->flush();

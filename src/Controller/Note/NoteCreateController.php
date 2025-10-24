@@ -56,6 +56,9 @@ class NoteCreateController extends AbstractController
                 /** @var NoteCreateInputDto $customerNote */
                 $customerNote = $form->getData();
 
+                // Read the hidden field created by JS
+                $customerNote->setFrontendEncrypted((bool)$request->request->get('frontend_encrypted'));
+
                 $envelope = $this->commandBus->dispatch($customerNote);
 
                 $handledStamp = $envelope->last(HandledStamp::class);

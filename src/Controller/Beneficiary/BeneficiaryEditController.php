@@ -55,7 +55,8 @@ class BeneficiaryEditController extends AbstractController
         $note = $this->noteRepository->findOneBy(['beneficiary' => $beneficiary, 'customer' => $customer]);
 
         if (!$note) {
-            throw new AccessDeniedException('You do not have permission to edit this Heir.');
+            $this->addFlash('info', 'First add your Envelope');
+            return $this->redirectToRoute('user_home_heir');
         }
 
         $cryptoService = new CryptoService($this->params, $this->logger);

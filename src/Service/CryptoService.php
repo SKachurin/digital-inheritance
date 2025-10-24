@@ -31,34 +31,21 @@ class CryptoService
 
         $baseKey = $params->get('encryption_key');
         if (!is_string($baseKey)) {
-            throw new \InvalidArgumentException('Personal string must be a string.');
+            throw new \InvalidArgumentException('baseKey string must be a string.');
         }
 
-        if ($this->personalString === '') {
-            $this->personalString = $params->get('personal_string');
-//            $this->logger->info('NO STRING.',  ['$personalString' => $this->personalString]);
+        $this->personalString = $personalString ?: (string)$params->get('personal_string');
+        if (!is_string($this->personalString)) {
+            throw new \InvalidArgumentException('Personal string must be string.');
         }
 
-//        $this->logger->info('$baseKey.', ['$baseKey' => $baseKey]);
-//        $this->logger->info('$personalString.', ['$personalString' => $this->personalString]);
-
-
-        if (!is_string($personalString)) {
-            throw new \InvalidArgumentException('Personal string must be a string.');
-        }
-        $hashedPersonalString = hash('sha256',  $this->personalString, true);
-        $hashedBaseKey = hash('sha256',  $baseKey, true);
-
-
+        $hashedPersonalString = hash('sha256', $this->personalString, true);
+        $hashedBaseKey = hash('sha256', $baseKey, true);
         $finalKey = $hashedPersonalString ^ $hashedBaseKey; //xor
-//        $this->logger->info('$finalKey.', ['$finalKey' => $finalKey]);
 
         if (strlen($finalKey) !== 32) {
             throw new Exception('Combined key is not 32 bytes long');
         }
-//        error_log("Final Key (Hex): " . bin2hex($finalKey));
-//        error_log("Hashed Personal String: " . bin2hex($hashedPersonalString));
-//        error_log("Hashed baseKey String: " . bin2hex($hashedBaseKey));
 
         $this->key = $finalKey;
     }
@@ -79,9 +66,6 @@ class CryptoService
         // Encrypt the data
         $encrypted = sodium_crypto_secretbox($data, $nonce, $this->key);
 
-//        $this->logger->info(' encryptData Nonce length:', ['length' => strlen($nonce)]);
-//        $this->logger->info('encryptData once:', ['nonce' => bin2hex($nonce)]);
-
         // Combine nonce and encrypted data
         return base64_encode($nonce . $encrypted);
     }
@@ -89,27 +73,17 @@ class CryptoService
     /**
      * @throws SodiumException
      */
-    public function decryptData(?string $encryptedData): false | string
+    public function decryptData(?string $encryptedData): false|string
     {
-        if ($encryptedData === null) {
+        if ($encryptedData === null || $encryptedData === '') {
             return '';
         }
 
-        // Decode the base64 encoded data
         $decoded = base64_decode($encryptedData);
-//        $this->logger->info('Base64 Decoded Data:', ['decoded' => bin2hex($decoded)]);
 
         // Extract the nonce and encrypted message
         $nonce = substr($decoded, 0, SODIUM_CRYPTO_SECRETBOX_NONCEBYTES);
-//        $this->logger->info(' decryptData $nonce.', ['$nonce' => bin2hex($nonce)]);
-
         $ciphertext = substr($decoded, SODIUM_CRYPTO_SECRETBOX_NONCEBYTES);
-//        $this->logger->info('decryptData $ciphertext.', ['$ciphertext' => $ciphertext]);
-
-        // Decrypt the message
-//        return
-        $x = sodium_crypto_secretbox_open($ciphertext, $nonce, $this->key);
-//        $this->logger->info('decryptData $x.', ['$x' => $x]);
-        return $x;
+        return sodium_crypto_secretbox_open($ciphertext, $nonce, $this->key);
     }
 }

@@ -186,7 +186,15 @@ dashboard:
   edit_your_pipeline: 'Editar su Pipeline'
   edit_your_pipeline_tip: 'Guardar el Pipeline lo reinicia. Si necesita más Acciones, verifique más Contactos.'
   create_your_secure_envelope: 'Cree su Sobre Seguro'
-  create_your_secure_envelope_tip: 'Un campo de texto que será cifrado con las respuestas a sus preguntas secretas.'
+  create_your_secure_envelope_tip: "Este texto se cifrará utilizando las respuestas a tus preguntas secretas."
+  create_your_secure_envelope_switch: |
+    Cifrar en el navegador 
+    (Tarda un poco más y debes permanecer en la página hasta que el cifrado se complete, pero tu Sobre se envía a nuestro servidor ya cifrado.)
+  edit_your_secure_envelope_note: |
+    Ten en cuenta que al usar la función «Editar Sobre», el descifrado se realiza en nuestro servidor. 
+    Esto es necesario para controlar el número de intentos de descifrado y aplicar breves pausas para evitar ataques de fuerza bruta. 
+    Si prefieres no procesar el texto descifrado en nuestro servidor, puedes eliminar el Sobre actual y crear uno nuevo. 
+    Recomendamos este método como medida de seguridad adicional, aunque nuestro código es de código abierto y puedes comprobar que no se guardan datos descifrados ni contraseñas.
   edit_your_secure_envelope: 'Edite su Sobre Seguro'
   edit_your_secure_envelope_tip: 'Para editarlo, primero debe descifrarlo con las respuestas a sus preguntas secretas.'
   delete_your_secure_envelope: 'Eliminar su Sobre Seguro'

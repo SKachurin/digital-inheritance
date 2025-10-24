@@ -37,7 +37,8 @@ class CustomerHasPipelineListener
             'user_home_env', 'user_home_pipe',
             'pipeline_create', 'contact_create',
             'contact_edit', 'beneficiary_create',
-            'beneficiary_edit', 'customer_delete',
+            'beneficiary_edit', 'customer_delete', 'note_create',
+            'note_edit'
         ];
 
         if (!in_array($route, $targetRoutes, true)) {

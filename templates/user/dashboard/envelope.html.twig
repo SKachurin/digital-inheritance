@@ -16,7 +16,8 @@
 {#            {% include '/user/dashboard/_envelope_section.html.twig' %}#}
             {% if customerHasNote is defined and customerHasNote %}
                 <section class="mb-4">
-                    <div class="tooltip-box">{{ 'dashboard.edit_your_secure_envelope_tip'|trans }}</div>
+                    <div class="tooltip-box mb-4">{{ 'dashboard.edit_your_secure_envelope_tip'|trans }}</div>
+                    <div class="tooltip-box sidebar-note">{{ 'dashboard.edit_your_secure_envelope_note'|trans }}</div>
 
                     <a class="btn btn-outline-dark btn-floating m-1 mt-4" href="/note/{{ customerHasNote }}/edit" role="button">
                         <i class="">{{ 'dashboard.edit_your_secure_envelope'|trans }}</i>
