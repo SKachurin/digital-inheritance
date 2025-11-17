@@ -6,10 +6,7 @@ namespace App\Entity;
 
 use App\Entity\Traits\Timestamps;
 use App\Repository\NoteRepository;
-use Doctrine\Common\Collections\ArrayCollection;
-use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: NoteRepository::class)]
 #[ORM\HasLifecycleCallbacks]
@@ -29,8 +26,22 @@ class Note
     #[ORM\Column(type: 'text', nullable: true)]
     private ?string $customerTextAnswerOne = null;
 
+    // replica encrypted with KMS #2
+    #[ORM\Column(type: 'text', nullable: true)]
+    private ?string $customerTextAnswerOneKms2 = null;
+
+    // replica encrypted with KMS #3
+    #[ORM\Column(type: 'text', nullable: true)]
+    private ?string $customerTextAnswerOneKms3 = null;
+
     #[ORM\Column(type: 'text', nullable: true)]
     private ?string $customerTextAnswerTwo = null;
+
+    #[ORM\Column(type: 'text', nullable: true)]
+    private ?string $customerTextAnswerTwoKms2 = null;
+
+    #[ORM\Column(type: 'text', nullable: true)]
+    private ?string $customerTextAnswerTwoKms3 = null;
 
     #[ORM\ManyToOne(targetEntity: Beneficiary::class, inversedBy: 'notes')]
     #[ORM\JoinColumn(name: 'beneficiary_id', referencedColumnName: 'id', nullable: true, onDelete: 'SET NULL')]
@@ -40,7 +51,19 @@ class Note
     private ?string $beneficiaryTextAnswerOne = null;
 
     #[ORM\Column(type: 'text', nullable: true)]
+    private ?string $beneficiaryTextAnswerOneKms2 = null;
+
+    #[ORM\Column(type: 'text', nullable: true)]
+    private ?string $beneficiaryTextAnswerOneKms3 = null;
+
+    #[ORM\Column(type: 'text', nullable: true)]
     private ?string $beneficiaryTextAnswerTwo = null;
+
+    #[ORM\Column(type: 'text', nullable: true)]
+    private ?string $beneficiaryTextAnswerTwoKms2 = null;
+
+    #[ORM\Column(type: 'text', nullable: true)]
+    private ?string $beneficiaryTextAnswerTwoKms3 = null;
 
     #[ORM\Column(type: 'integer', nullable: true)]
     private ?int $attemptCount = null;
@@ -68,25 +91,63 @@ class Note
     {
         return $this->customerTextAnswerOne;
     }
-    public function setCustomerTextAnswerOne(?string $customerTextAnswerOne): self
+    public function setCustomerTextAnswerOne(?string $value): self
     {
-        $this->customerTextAnswerOne = $customerTextAnswerOne;
+        $this->customerTextAnswerOne = $value;
+        return $this;
+    }
+    public function getCustomerTextAnswerOneKms2(): ?string
+    {
+        return $this->customerTextAnswerOneKms2;
+    }
+    public function setCustomerTextAnswerOneKms2(?string $value): self
+    {
+        $this->customerTextAnswerOneKms2 = $value;
+        return $this;
+    }
+    public function getCustomerTextAnswerOneKms3(): ?string
+    {
+        return $this->customerTextAnswerOneKms3;
+    }
+
+    public function setCustomerTextAnswerOneKms3(?string $value): self
+    {
+        $this->customerTextAnswerOneKms3 = $value;
         return $this;
     }
     public function getCustomerTextAnswerTwo(): ?string
     {
         return $this->customerTextAnswerTwo;
     }
-    public function setCustomerTextAnswerTwo(?string $customerTextAnswerTwo): self
+    public function setCustomerTextAnswerTwo(?string $value): self
     {
-        $this->customerTextAnswerTwo = $customerTextAnswerTwo;
+        $this->customerTextAnswerTwo = $value;
+        return $this;
+    }
+    public function getCustomerTextAnswerTwoKms2(): ?string
+    {
+        return $this->customerTextAnswerTwoKms2;
+    }
+    public function setCustomerTextAnswerTwoKms2(?string $value): self
+    {
+        $this->customerTextAnswerTwoKms2 = $value;
+        return $this;
+    }
+    public function getCustomerTextAnswerTwoKms3(): ?string
+    {
+        return $this->customerTextAnswerTwoKms3;
+    }
+
+    public function setCustomerTextAnswerTwoKms3(?string $value): self
+    {
+        $this->customerTextAnswerTwoKms3 = $value;
         return $this;
     }
     public function getBeneficiary(): ?Beneficiary
     {
         return $this->beneficiary;
     }
-    public function setBeneficiary(Beneficiary $beneficiary): self
+    public function setBeneficiary(?Beneficiary $beneficiary): self
     {
         $this->beneficiary = $beneficiary;
         return $this;
@@ -95,18 +156,56 @@ class Note
     {
         return $this->beneficiaryTextAnswerOne;
     }
-    public function setBeneficiaryTextAnswerOne(string $beneficiaryTextAnswerOne): self
+    public function setBeneficiaryTextAnswerOne(?string $value): self
     {
-        $this->beneficiaryTextAnswerOne = $beneficiaryTextAnswerOne;
+        $this->beneficiaryTextAnswerOne = $value;
         return $this;
     }
+    public function getBeneficiaryTextAnswerOneKms2(): ?string
+    {
+        return $this->beneficiaryTextAnswerOneKms2;
+    }
+    public function setBeneficiaryTextAnswerOneKms2(?string $value): self
+    {
+        $this->beneficiaryTextAnswerOneKms2 = $value;
+        return $this;
+    }
+    public function getBeneficiaryTextAnswerOneKms3(): ?string
+    {
+        return $this->beneficiaryTextAnswerOneKms3;
+    }
+    public function setBeneficiaryTextAnswerOneKms3(?string $value): self
+    {
+        $this->beneficiaryTextAnswerOneKms3 = $value;
+        return $this;
+    }
+
     public function getBeneficiaryTextAnswerTwo(): ?string
     {
         return $this->beneficiaryTextAnswerTwo;
     }
-    public function setBeneficiaryTextAnswerTwo(string $beneficiaryTextAnswerTwo): self
+
+    public function setBeneficiaryTextAnswerTwo(?string $value): self
     {
-        $this->beneficiaryTextAnswerTwo = $beneficiaryTextAnswerTwo;
+        $this->beneficiaryTextAnswerTwo = $value;
+        return $this;
+    }
+    public function getBeneficiaryTextAnswerTwoKms2(): ?string
+    {
+        return $this->beneficiaryTextAnswerTwoKms2;
+    }
+    public function setBeneficiaryTextAnswerTwoKms2(?string $value): self
+    {
+        $this->beneficiaryTextAnswerTwoKms2 = $value;
+        return $this;
+    }
+    public function getBeneficiaryTextAnswerTwoKms3(): ?string
+    {
+        return $this->beneficiaryTextAnswerTwoKms3;
+    }
+    public function setBeneficiaryTextAnswerTwoKms3(?string $value): self
+    {
+        $this->beneficiaryTextAnswerTwoKms3 = $value;
         return $this;
     }
     public function getAttemptCount(): ?int

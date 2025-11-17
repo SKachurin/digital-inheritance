@@ -23,6 +23,9 @@ header:
   link_will_expire: 'Link to this page will expire in one week.'
   contact_us: 'Contact Us'
 
+overlay_encrypting: 'Encrypting your envelope…'
+overlay_wait: 'Please don’t close this tab. Your data is being encrypted locally.'
+show_all: 'Show all'
 form:
   attr:
     placeholder:
@@ -98,6 +101,16 @@ form:
     beneficiary_lang:  'Choose language for your Heir'
     choose_type: 'Select a verified contact for 2FA'
     choose_type_button: 'Choose this Type for 2FA'
+    text_encoded_customer_first_kms2: 'Text encoded with answer to your security question one and KMS 2'
+    text_encoded_customer_first_kms3: 'Text encoded with answer to your security question one and KMS 3'
+    text_encoded_customer_second_kms2: 'Text encoded with answer to your security question two and KMS 2'
+    text_encoded_customer_second_kms3: 'Text encoded with answer to your security question two and KMS 3'
+    text_encoded_beneficiary_first_kms2: "Text encoded with answer to your Heir's security question one and KMS 2"
+    text_encoded_beneficiary_first_kms3: "Text encoded with answer to your Heir's security question one and KMS 3"
+    text_encoded_beneficiary_second_kms2: "Text encoded with answer to your Heir's security question two and KMS 2"
+    text_encoded_beneficiary_second_kms3: "Text encoded with answer to your Heir's security question two and KMS 3"
+    your_text_kms2: 'Your Text form KMS 2'
+    your_text_kms3: 'Your Text from KMS 3'
 
   constraints:
     your_login: 'Please enter your login.'

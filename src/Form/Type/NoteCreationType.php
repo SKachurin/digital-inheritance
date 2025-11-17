@@ -109,20 +109,20 @@ class NoteCreationType extends AbstractType
         }
 
         if ($decodedNote) {
-            $builder->
-            add('customerTextAnswerOne', TextareaType::class, [
-                'label' => 'Customer Text Answer One',
-                'required' => false,
-                'constraints' => [
-                    new Length([
-                        'max' => 10000,
-                        'maxMessage' => 'Customer Text Answer One cannot be longer than {{ limit }} characters.',
-                    ]),
-                ],
-                'attr' => array(
-                    'placeholder' => $decodedNote //'This field is intended for encrypted data.'
-                )
-            ])
+            $builder
+                ->add('customerTextAnswerOne', TextareaType::class, [
+                    'label' => 'Customer Text Answer One',
+                    'required' => false,
+                    'constraints' => [
+                        new Length([
+                            'max' => 10000,
+                            'maxMessage' => 'Customer Text Answer One cannot be longer than {{ limit }} characters.',
+                        ]),
+                    ],
+                    'attr' => [
+                        'placeholder' => $decodedNote//'This field is intended for encrypted data.'
+                    ]
+                ])
                 ->add('customerTextAnswerTwo', TextareaType::class, [
                     'label' => 'Customer Text Answer Two',
                     'required' => false,
@@ -132,9 +132,9 @@ class NoteCreationType extends AbstractType
                             'maxMessage' => 'Customer Text Answer Two cannot be longer than {{ limit }} characters.',
                         ]),
                     ],
-                    'attr' => array(
+                    'attr' => [
                         'placeholder' => 'This field is intended for encrypted data.'
-                    )
+                    ]
                 ])
                 ->add('beneficiaryTextAnswerOne', TextareaType::class, [
                     'label' => 'Beneficiary Text Answer One',
@@ -145,9 +145,9 @@ class NoteCreationType extends AbstractType
                             'maxMessage' => 'Beneficiary Text Answer One cannot be longer than {{ limit }} characters.',
                         ]),
                     ],
-                    'attr' => array(
+                    'attr' => [
                         'placeholder' => 'This field is intended for encrypted data.'
-                    )
+                    ]
                 ])
                 ->add('beneficiaryTextAnswerTwo', TextareaType::class, [
                     'label' => 'Beneficiary Text Answer Two',
@@ -158,11 +158,49 @@ class NoteCreationType extends AbstractType
                             'maxMessage' => 'Beneficiary Text Answer Two cannot be longer than {{ limit }} characters.',
                         ]),
                     ],
-                    'attr' => array(
+                    'attr' => [
                         'placeholder' => 'This field is intended for encrypted data.'
-                    )
+                    ]
                 ]);
         }
+
+        /**
+         * Hidden, mapped fields to receive browser-encrypted replicas + flag.
+         * Names MUST match NoteCreateInputDto properties.
+         */
+        $hidden = fn() => [
+            'mapped' => true,
+            'required' => false,
+            'constraints' => [new Length(['max' => 20000])],
+        ];
+
+        $builder
+            ->add('frontendEncrypted', HiddenType::class, [
+                'mapped' => true,
+                'required' => false,
+                'empty_data' => '0',
+            ])
+
+            // a1 (customer first answer) – 3 replicas
+            ->add('customerTextAnswerOne', HiddenType::class, $hidden())
+            ->add('customerTextAnswerOneKms2', HiddenType::class, $hidden())
+            ->add('customerTextAnswerOneKms3', HiddenType::class, $hidden())
+
+            // a2 (customer second answer) – 3 replicas
+            ->add('customerTextAnswerTwo', HiddenType::class, $hidden())
+            ->add('customerTextAnswerTwoKms2', HiddenType::class, $hidden())
+            ->add('customerTextAnswerTwoKms3', HiddenType::class, $hidden())
+
+            // b1 (beneficiary first answer) – 3 replicas
+            ->add('beneficiaryTextAnswerOne', HiddenType::class, $hidden())
+            ->add('beneficiaryTextAnswerOneKms2', HiddenType::class, $hidden())
+            ->add('beneficiaryTextAnswerOneKms3', HiddenType::class, $hidden())
+
+            // b2 (beneficiary second answer) – 3 replicas
+            ->add('beneficiaryTextAnswerTwo', HiddenType::class, $hidden())
+            ->add('beneficiaryTextAnswerTwoKms2', HiddenType::class, $hidden())
+            ->add('beneficiaryTextAnswerTwoKms3', HiddenType::class, $hidden())
+        ;
 
         $builder->add('submit', SubmitType::class, [
             'label' => 'form.label.note_create',

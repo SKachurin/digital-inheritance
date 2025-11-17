@@ -33,40 +33,37 @@
             padding: 0.5rem;
             border: 1px solid #ced4da;
             border-radius: 6px;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-            background: rgba(255, 255, 255, 0.9);
-            transition: background-color 0.3s ease;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, .1);
+            background: rgba(255, 255, 255, .9);
+            transition: background-color .3s ease;
         }
         #box:hover {
             background-color: #e9ecef;
         }
 
-        /* full-page overlay spinner */
-        #loading-overlay {
-            display: none;
+        #encrypting-overlay {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(255, 255, 255, 0.7);
-            z-index: 9999;
+            inset: 0;
+            background: rgba(255, 255, 255, .9);
+            display: none;
             justify-content: center;
             align-items: center;
+            z-index: 9999;
         }
 
-        #loading-overlay .spinner {
-            border: 5px solid #ccc;
-            border-top: 5px solid #000;
+        .spinner {
+            border: 6px solid #ccc;
+            border-top: 6px solid #333;
             border-radius: 50%;
-            width: 50px;
-            height: 50px;
+            width: 60px;
+            height: 60px;
             animation: spin 1s linear infinite;
         }
 
         @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
+            100% {
+                transform: rotate(360deg);
+            }
         }
     </style>
 
@@ -78,41 +75,13 @@
 
         <!-- Toggle Encrypt in Browser (Default On) -->
         <div class="form-check form-switch mb-4">
-            <input class="form-check-input" type="checkbox" id="encryptOfflineToggle" checked>
-            <label class="form-check-label" for="encryptOfflineToggle">
+            <input class="form-check-input" type="checkbox" id="frontendEncrypted" checked>
+            <label class="form-check-label" for="frontendEncrypted">
                 {{ 'dashboard.create_your_secure_envelope_switch'|trans|raw }}
             </label>
         </div>
 
         {{ form_start(form) }}
-        {% if decodedNote %}
-            <div class="form-group">
-                {{ form_label(form.customerTextAnswerOne) }}
-                <div class="button-group">
-                    {{ form_widget(form.customerTextAnswerOne) }}
-                    <section class="mb-4">
-                        <a class="btn btn-outline-dark btn-floating m-1"
-                           href="/note/{{ noteId }}/decrypt/customerTextAnswerOne" role="button">
-                            decrypt
-                        </a>
-                    </section>
-                </div>
-            </div>
-
-            <div class="form-group">
-                {{ form_label(form.customerTextAnswerTwo) }}
-                <div class="button-group">
-                    {{ form_widget(form.customerTextAnswerTwo) }}
-                    <section class="mb-4">
-                        <a class="btn btn-outline-dark btn-floating m-1"
-                           href="/note/{{ noteId }}/decrypt/customerTextAnswerTwo" role="button">
-                            decrypt
-                        </a>
-                    </section>
-                </div>
-            </div>
-        {% endif %}
-
         {{ form_row(form.customerText) }}
 
         <div class="divider">{{ 'your_questions'|trans }}</div>
@@ -128,94 +97,241 @@
         <p>{{ 'heir_questions_explain'|trans }}</p>
 
         <script src="https://cdn.jsdelivr.net/npm/argon2-browser@1.18.0/dist/argon2-bundled.min.js"></script>
-        <script type="module">
-            async function deriveKey(answer, saltB64) {
-                const salt = saltB64
-                    ? Uint8Array.from(atob(saltB64), c => c.charCodeAt(0))
-                    : crypto.getRandomValues(new Uint8Array(16));
-                const ansBytes = new TextEncoder().encode(answer);
+        <script>
+            // Global crash reporter
+            window.onerror = function(msg, src, line, col, err) {
+                // alert('window.onerror: ' + msg + '\n' + (err && err.stack ? err.stack : (src+':'+line+':'+col)));
+            };
+
+            // const say = (m) => { console.log('[CreateNote]', m); alert(m); };
+
+            // Pull real IDs and full_names from server-rendered form (no guessing)
+            const IDS = {
+                note: "{{ form.customerText.vars.id }}",                    // e.g., note_creation_customerText
+                a1:   "{{ form.customerFirstQuestionAnswer.vars.id }}",     // base id; we’ll use _first/_second
+                a2:   "{{ form.customerSecondQuestionAnswer.vars.id }}",
+                b1:   "{{ form.beneficiaryFirstQuestionAnswer.vars.id }}",
+                b2:   "{{ form.beneficiarySecondQuestionAnswer.vars.id }}",
+            };
+
+            const NAMES = {
+                frontendEncrypted: "{{ form.frontendEncrypted.vars.full_name }}",
+
+                a1: [
+                    "{{ form.customerTextAnswerOne.vars.full_name }}",
+                    "{{ form.customerTextAnswerOneKms2.vars.full_name }}",
+                    "{{ form.customerTextAnswerOneKms3.vars.full_name }}",
+                ],
+                a2: [
+                    "{{ form.customerTextAnswerTwo.vars.full_name }}",
+                    "{{ form.customerTextAnswerTwoKms2.vars.full_name }}",
+                    "{{ form.customerTextAnswerTwoKms3.vars.full_name }}",
+                ],
+                b1: [
+                    "{{ form.beneficiaryTextAnswerOne.vars.full_name }}",
+                    "{{ form.beneficiaryTextAnswerOneKms2.vars.full_name }}",
+                    "{{ form.beneficiaryTextAnswerOneKms3.vars.full_name }}",
+                ],
+                b2: [
+                    "{{ form.beneficiaryTextAnswerTwo.vars.full_name }}",
+                    "{{ form.beneficiaryTextAnswerTwoKms2.vars.full_name }}",
+                    "{{ form.beneficiaryTextAnswerTwoKms3.vars.full_name }}",
+                ],
+            };
+
+            function featureChecks() {
+                const ok = !!(window.crypto && crypto.subtle);
+                // say('WebCrypto: ' + (ok ? 'OK' : 'MISSING'));
+                // say('HKDF supported? (deriveKey present): ' + (crypto.subtle && typeof crypto.subtle.deriveKey === 'function'));
+                // say('Argon2 present? ' + !!(window.argon2 && window.argon2.hash));
+            }
+
+            async function fetchAllTokens() {
+                // say('Fetching /api/note-tokens…');
+                const res = await fetch('/api/note-tokens', { credentials: 'same-origin' });
+                // say('Tokens response status: ' + res.status);
+                const data = await res.json();
+                // say('Tokens payload keys: ' + Object.keys(data).join(','));
+                if (!data?.tokens || data.tokens.length !== 3) throw new Error('invalid tokens payload');
+                // say('Got 3 tokens');
+                return data.tokens; // base64
+            }
+
+            async function deriveUserKey(answer) {
+                // say('Argon2 hashing… len=' + answer.length);
+                const salt = crypto.getRandomValues(new Uint8Array(16));
                 const res = await window.argon2.hash({
-                    pass: ansBytes,
-                    salt: salt,
-                    time: 3,
+                    pass: new TextEncoder().encode(answer),
+                    salt,
+                    time: 5,
                     mem: 65536,
                     parallelism: 1,
                     hashLen: 32,
                     type: window.argon2.ArgonType.Argon2id,
                     raw: true
                 });
-                return { key: new Uint8Array(res.hash), salt };
+                // say('Argon2 done');
+                return { userKey: new Uint8Array(res.hash), salt };
             }
 
-            async function encryptText(plain, ansKey) {
-                const iv = crypto.getRandomValues(new Uint8Array(24)); // XChaCha20-style
-                const key = await crypto.subtle.importKey("raw", ansKey, { name: "AES-GCM" }, false, ["encrypt"]);
+            async function aesGcmEncrypt(finalKey, plaintext) {
+                const iv = crypto.getRandomValues(new Uint8Array(12));
+                // say('AES-GCM encrypt…');
                 const ct = await crypto.subtle.encrypt(
-                    { name: "AES-GCM", iv: iv.slice(0, 12) },
-                    key,
-                    new TextEncoder().encode(plain)
+                    { name: 'AES-GCM', iv },
+                    finalKey,
+                    new TextEncoder().encode(plaintext)
                 );
+                // say('AES-GCM done');
                 return {
-                    cipher: btoa(String.fromCharCode(...new Uint8Array(ct))),
+                    c: btoa(String.fromCharCode(...new Uint8Array(ct))),
                     iv: btoa(String.fromCharCode(...iv))
                 };
             }
 
-            document.addEventListener("submit", async (e) => {
-                const offline = document.getElementById("encryptOfflineToggle").checked;
-                if (!offline) return; // let backend handle normally
+            const b64ToBytes = (b64) => {
+                // say('b64ToBytes len=' + b64.length);
+                return Uint8Array.from(atob(b64), c => c.charCodeAt(0));
+            };
 
-                const answerField = document.querySelector("#note_creation_customerFirstQuestionAnswer");
-                const textField = document.querySelector("#note_creation_customerText");
-                const overlay = document.getElementById("loading-overlay");
+            function setByFullName(form, fullName, value) {
+                // say('Setting field: ' + fullName + ' (len=' + String(value).length + ')');
+                let el = form.querySelector('[name="' + fullName.replace(/"/g, '\\"') + '"]');
+                if (!el) {
+                    el = document.createElement('input');
+                    el.type = 'hidden';
+                    el.name = fullName;
+                    form.appendChild(el);
+                    // say('Created hidden: ' + fullName);
+                }
+                el.value = value;
+            }
 
-                const answer = answerField?.value;
-                const plaintext = textField?.value;
-                if (!answer || !plaintext) return;
+            function readRepeated(baseId, mustMatch = true) {
+                const first  = document.querySelector('#' + baseId + '_first')?.value ?? '';
+                const second = document.querySelector('#' + baseId + '_second')?.value ?? '';
+                // say('Read ' + baseId + ': first_len=' + first.length + ' second_len=' + second.length);
+                if (!first) return '';
+                if (mustMatch && second && first !== second) {
+                    // alert('Answers do not match.');
+                    throw new Error(baseId + ': mismatch');
+                }
+                return first;
+            }
+
+            document.addEventListener('submit', async (e) => {
+                const form = e.target;
+                if (!(form instanceof HTMLFormElement)) return;
+
+                const frontendToggle = document.getElementById('frontendEncrypted'); // your checkbox id
+                const offline = frontendToggle && frontendToggle.checked;
+                // say('Frontend toggle checked? ' + !!offline);
+                if (!offline) return;
 
                 e.preventDefault();
 
-                // Show spinner
-                overlay.style.display = "flex";
+                const overlay = document.getElementById('encrypting-overlay');
+                if (overlay) {
+                    overlay.style.display = 'flex';
+                    // say('Overlay shown');
+                }
 
                 try {
-                    const { key, salt } = await deriveKey(answer);
-                    const { cipher, iv } = await encryptText(plaintext, key);
+                    featureChecks();
 
-                    textField.value = JSON.stringify({
-                        c: cipher,
-                        s: btoa(String.fromCharCode(...salt)),
-                        iv: iv
-                    });
+                    const note = document.querySelector('#' + IDS.note)?.value ?? '';
+                    // say('Note length: ' + note.length);
 
-                    const hiddenInput = document.createElement("input");
-                    hiddenInput.type = "hidden";
-                    hiddenInput.name = "frontend_encrypted";
-                    hiddenInput.value = "1";
-                    e.target.appendChild(hiddenInput);
+                    const a1 = readRepeated(IDS.a1);
+                    const a2 = readRepeated(IDS.a2, false);
+                    const b1 = readRepeated(IDS.b1);
+                    const b2 = readRepeated(IDS.b2, false);
 
-                    e.target.submit();
+                    if (!note || !a1 || !b1) {
+                        // say('Missing required note/a1/b1 -> submitting without FE encryption');
+                        if (overlay) overlay.style.display = 'none';
+                        form.submit();
+                        return;
+                    }
+
+                    const tokens = await fetchAllTokens();
+
+                    // Flag for backend
+                    setByFullName(form, NAMES.frontendEncrypted, '1');
+
+                    const answers = { a1, a2, b1, b2 };
+                    for (const [key, ans] of Object.entries(answers)) {
+                        if (!ans) {
+                            // say('Skip ' + key + ' (empty)');
+                            continue;
+                        }
+
+                        const { userKey, salt } = await deriveUserKey(ans);
+
+                        // Some engines expect algorithm as object on importKey for HKDF
+                        // say('Import HKDF IKM…');
+                        const hkdfKey = await crypto.subtle.importKey(
+                            'raw',
+                            userKey,
+                            { name: 'HKDF' },
+                            false,
+                            ['deriveKey', 'deriveBits']
+                        );
+                        // say('HKDF IKM imported');
+
+                        for (let i = 0; i < 3; i++) {
+                            // say(`Replica ${i+1} for ${key}`);
+                            const tokenBytes = b64ToBytes(tokens[i]);
+
+                            // say('HKDF deriveKey…');
+                            const finalKey = await crypto.subtle.deriveKey(
+                                { name: 'HKDF', hash: 'SHA-256', salt: tokenBytes, info: new Uint8Array([1]) },
+                                hkdfKey,
+                                { name: 'AES-GCM', length: 256 },
+                                false,
+                                ['encrypt']
+                            );
+                            // say('HKDF deriveKey done');
+
+                            const enc = await aesGcmEncrypt(finalKey, note);
+                            const payload = JSON.stringify({
+                                c: enc.c,
+                                iv: enc.iv,
+                                s: btoa(String.fromCharCode(...salt))
+                            });
+
+                            const fullName = NAMES[key][i];
+                            setByFullName(form, fullName, payload);
+                        }
+                    }
+
+                    // say('Submitting form now…');
+                    form.submit();
+                } catch (err) {
+                    console.error(err);
+                    // alert('Encrypt-on-submit failed: ' + (err && err.message ? err.message : err) + '\n' + (err && err.stack ? err.stack : 'no stack'));
+                    form.submit(); // fail open
                 } finally {
-                    // Hide spinner if something fails
-                    overlay.style.display = "none";
+                    // if (overlay) { overlay.style.display = 'none'; say('Overlay hidden'); }
                 }
             });
         </script>
+
 
         {{ form_end(form) }}
     </div>
 
     {% for label, messages in app.flashes %}
         {% for message in messages %}
-            <div class="alert alert-{{ label }}">
-                {{ message }}
-            </div>
+            <div class="alert alert-{{ label }}">{{ message }}</div>
         {% endfor %}
     {% endfor %}
 
-    <!-- spinner overlay -->
-    <div id="loading-overlay">
-        <div class="spinner"></div>
+    <div id="encrypting-overlay">
+        <div class="overlay-content" style="text-align:center;">
+            <h2>{{ 'overlay_encrypting'|trans }} </h2>
+            <p>{{ 'overlay_wait'|trans }} </p>
+            <div class="spinner"></div>
+        </div>
     </div>
-
 {% endblock %}

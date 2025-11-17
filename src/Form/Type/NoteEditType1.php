@@ -26,6 +26,22 @@ class NoteEditType1 extends AbstractType
                     'placeholder' => 'form.attr.placeholder.fail_decrypt',
                 ],
             ])
+            ->add('customerTextKMS2', TextareaType::class, [
+                'label' => 'form.label.your_text_kms2',
+                'required' => false,
+                'attr' => [
+                    'rows' => 10,
+                    'placeholder' => 'form.attr.placeholder.fail_decrypt',
+                ],
+            ])
+            ->add('customerTextKMS3', TextareaType::class, [
+                'label' => 'form.label.your_text_kms3',
+                'required' => false,
+                'attr' => [
+                    'rows' => 10,
+                    'placeholder' => 'form.attr.placeholder.fail_decrypt',
+                ],
+            ])
             ->add('customerFirstQuestion', TextType::class, [
                 'label' => 'form.label.customer_first_question',
                 'required' => false,

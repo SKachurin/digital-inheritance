@@ -9,7 +9,9 @@ class NoteEditOutputDto
 {
     #[Assert\NotBlank]
     private Customer $customer;
-    private ?string $customerText;
+    private ?string $customerText = null;
+    private ?string $customerTextKMS2 = null;
+    private ?string $customerTextKMS3 = null;
     private ?string $customerFirstQuestion = null;
     private ?string $customerFirstQuestionAnswer = null;
     private ?string $customerSecondQuestion = null;
@@ -61,6 +63,27 @@ class NoteEditOutputDto
         return $this;
     }
 
+    public function getCustomerTextKMS2(): ?string
+    {
+        return $this->customerTextKMS2;
+    }
+
+    public function setCustomerTextKMS2(?string $customerTextKMS2): self
+    {
+        $this->customerTextKMS2 = $customerTextKMS2;
+        return $this;
+    }
+
+    public function getCustomerTextKMS3(): ?string
+    {
+        return $this->customerTextKMS3;
+    }
+
+    public function setCustomerTextKMS3(?string $customerTextKMS3): self
+    {
+        $this->customerTextKMS3 = $customerTextKMS3;
+        return $this;
+    }
     public function getCustomerFirstQuestion(): ?string
     {
         return $this->customerFirstQuestion;

@@ -1,6 +1,9 @@
 {% extends '/user/dashboard/layout.html.twig' %}
 {% block dashboard_main %}
     <style>
+        textarea{
+            height: 5em !important;
+        }
         .form-container {
             padding-top: 4em;
         }
@@ -68,9 +71,66 @@
             0% { transform: rotate(0deg); }
             100% { transform: rotate(360deg); }
         }
+
+        #encrypted-block {
+            position: relative;
+            overflow: hidden;
+            transition: max-height 0.5s ease;
+        }
+
+        /* Height for 3.5 textareas (15em each → adjust if different) */
+        #encrypted-block.collapsed {
+            max-height: 22em; /* 3.5 × 5em + some padding */
+        }
+
+        #encrypted-block.expanded {
+            max-height: 2000px; /* enough for all fields */
+        }
+
+        #fade-overlay {
+            position: absolute;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            height: 4em;
+            background: linear-gradient(
+                    to bottom,
+                    rgba(255,255,255,0),
+                    rgba(255,255,255,1)
+            );
+            pointer-events: none;
+            transition: opacity 0.3s;
+        }
+
+        #encrypted-block.expanded #fade-overlay {
+            opacity: 0;
+        }
+
+        #show-all-btn {
+            margin-bottom: 2em
+        ;
+        }
     </style>
 
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const block = document.getElementById("encrypted-block");
+            const btn = document.getElementById("show-all-btn");
+
+            btn.addEventListener("click", () => {
+                block.classList.remove("collapsed");
+                block.classList.add("expanded");
+                btn.style.display = "none";
+            });
+        });
+    </script>
+
     <div class="transactions-section">
+        {# --------------------------------------------------------- #}
+        {# STEP 1: USER ENTERS ANSWER → BACKEND TRIES TO DECRYPT     #}
+        {# form = NoteEditType (readonly encrypted blobs + answers) #}
+        {# decodedNote = false                                       #}
+        {# --------------------------------------------------------- #}
         {% if not decodedNote %}
             <h2 style="padding-top: 2em;">{{ 'decrypt_first'|trans }}</h2>
             <p>{{ 'enter_answer'|trans }}</p>
@@ -79,9 +139,44 @@
                 <div class="alert alert-info">{{ customerCongrats }}</div>
             {% endif %}
 
-            {{ form(form) }}
+            {# Show the whole form (encrypted fields + question + answer inputs) #}
+            {{ form_start(form) }}
+
+            <div id="encrypted-block" class="collapsed">
+                <div class="encrypted-content">
+                    {{ form_row(form.customerTextAnswerOne) }}
+                    {{ form_row(form.customerTextAnswerOneKMS2) }}
+                    {{ form_row(form.customerTextAnswerOneKMS3) }}
+                    {{ form_row(form.customerTextAnswerTwo) }}
+                    {{ form_row(form.customerTextAnswerTwoKMS2) }}
+                    {{ form_row(form.customerTextAnswerTwoKMS3) }}
+
+                    {% if form.beneficiaryTextAnswerOne is defined %}
+                        {{ form_row(form.beneficiaryTextAnswerOne) }}
+                        {{ form_row(form.beneficiaryTextAnswerOneKMS2) }}
+                        {{ form_row(form.beneficiaryTextAnswerOneKMS3) }}
+                        {{ form_row(form.beneficiaryTextAnswerTwo) }}
+                        {{ form_row(form.beneficiaryTextAnswerTwoKMS2) }}
+                        {{ form_row(form.beneficiaryTextAnswerTwoKMS3) }}
+                    {% endif %}
+                </div>
+
+                <div id="fade-overlay"></div>
+            </div>
+
+            <button type="button" id="show-all-btn" class="btn btn-outline-dark btn">
+                {{ 'show_all'|trans }}
+            </button>
+
+            {{ form_end(form) }}
+
         {% endif %}
 
+        {# --------------------------------------------------------- #}
+        {# STEP 2: BACKEND SUCCESSFULLY DECRYPTED                    #}
+        {# form = NoteEditType1 (3 decrypted replicas + questions)   #}
+        {# decodedNote = true                                        #}
+        {# --------------------------------------------------------- #}
         {% if decodedNote %}
             <h2 style="padding-top: 2em;">{{ 'dashboard.edit_your_secure_envelope'|trans }}</h2>
             <p>{{ 'do_some_staff'|trans }}</p>
@@ -91,7 +186,11 @@
             {% endif %}
 
             {{ form_start(form) }}
+
+            {# 3 decrypted replicas from 3 KMS regions #}
             {{ form_row(form.customerText) }}
+            {{ form_row(form.customerTextKMS2) }}
+            {{ form_row(form.customerTextKMS3) }}
 
             <div class="alert alert-success" style="padding: 2em;">
                 {{ 'if_decoded_can_edit'|trans|nl2br }}
@@ -104,10 +203,17 @@
             {{ form_row(form.customerSecondQuestion) }}
             {{ form_row(form.customerSecondQuestionAnswer) }}
 
-            {{ form_row(form._token) }}
-
             <div class="divider">{{ 'heir_questions'|trans }}</div>
             <p>{{ 'heir_questions_explain'|trans }}</p>
+
+            {# Beneficiary block is optional, form type already handles presence #}
+            {% if form.beneficiaryFirstQuestion is defined %}
+                {{ form_row(form.beneficiaryFirstQuestion) }}
+                {{ form_row(form.beneficiaryFirstQuestionAnswer) }}
+                {{ form_row(form.beneficiarySecondQuestion) }}
+                {{ form_row(form.beneficiarySecondQuestionAnswer) }}
+            {% endif %}
+
             {{ form_end(form) }}
         {% endif %}
     </div>
@@ -120,7 +226,7 @@
         {% endfor %}
     {% endfor %}
 
-    <!-- spinner overlay -->
+    <!-- spinner overlay (not used now, reserved for future async flow) -->
     <div id="loading-overlay">
         <div class="spinner"></div>
     </div>

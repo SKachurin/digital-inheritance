@@ -36,6 +36,38 @@ class NoteEditType extends AbstractType
                     'readonly' => true
                 ]
             ])
+            ->add('customerTextAnswerOneKMS2', TextareaType::class, [
+                'label' => 'form.label.text_encoded_customer_first_kms2',
+                'required' => false,
+                'constraints' => [
+                    new Length([
+                        'max' => 10000,
+                        'maxMessage' => 'form.constraints.too_long_1000',
+                    ]),
+                ],
+                'attr' => [
+                    'placeholder' => 'form.attr.placeholder.for_encrypted_text',
+                    'rows' => 10,
+                    'style' => 'height: 15em',
+                    'readonly' => true
+                ]
+            ])
+            ->add('customerTextAnswerOneKMS3', TextareaType::class, [
+                'label' => 'form.label.text_encoded_customer_first_kms3',
+                'required' => false,
+                'constraints' => [
+                    new Length([
+                        'max' => 10000,
+                        'maxMessage' => 'form.constraints.too_long_1000',
+                    ]),
+                ],
+                'attr' => [
+                    'placeholder' => 'form.attr.placeholder.for_encrypted_text',
+                    'rows' => 10,
+                    'style' => 'height: 15em',
+                    'readonly' => true
+                ]
+            ])
             ->add('customerTextAnswerTwo', TextareaType::class, [
                 'label' => 'form.label.text_encoded_customer_second',
                 'required' => false,
@@ -51,11 +83,76 @@ class NoteEditType extends AbstractType
                     'style' => 'height: 15em',
                     'readonly' => true
                 ]
-            ]);
+            ])
+            ->add('customerTextAnswerTwoKMS2', TextareaType::class, [
+                'label' => 'form.label.text_encoded_customer_second_kms2',
+                'required' => false,
+                'constraints' => [
+                    new Length([
+                        'max' => 10000,
+                        'maxMessage' => 'form.constraints.too_long_1000',
+                    ]),
+                ],
+                'attr' => [
+                    'placeholder' => 'form.attr.placeholder.for_encrypted_text',
+                    'rows' => 10,
+                    'style' => 'height: 15em',
+                    'readonly' => true
+                ]
+            ])
+            ->add('customerTextAnswerTwoKMS3', TextareaType::class, [
+                'label' => 'form.label.text_encoded_customer_second_kms3',
+                'required' => false,
+                'constraints' => [
+                    new Length([
+                        'max' => 10000,
+                        'maxMessage' => 'form.constraints.too_long_1000',
+                    ]),
+                ],
+                'attr' => [
+                    'placeholder' => 'form.attr.placeholder.for_encrypted_text',
+                    'rows' => 10,
+                    'style' => 'height: 15em',
+                    'readonly' => true
+                ]
+            ])
+        ;
         if ($beneficiary) {
             $builder
                 ->add('beneficiaryTextAnswerOne', TextareaType::class, [
                     'label' => 'form.label.text_encoded_beneficiary_first',
+                    'required' => false,
+                    'constraints' => [
+                        new Length([
+                            'max' => 10000,
+                            'maxMessage' => 'beneficiary Text Answer One cannot be longer than {{ limit }} characters.',
+                        ]),
+                    ],
+                    'attr' => [
+                        'placeholder' => 'form.attr.placeholder.for_encrypted_text',
+                        'rows' => 10,
+                        'style' => 'height: 15em',
+                        'readonly' => true
+                    ]
+                ])
+                ->add('beneficiaryTextAnswerOneKMS2', TextareaType::class, [
+                    'label' => 'form.label.text_encoded_beneficiary_first_kms2',
+                    'required' => false,
+                    'constraints' => [
+                        new Length([
+                            'max' => 10000,
+                            'maxMessage' => 'beneficiary Text Answer One cannot be longer than {{ limit }} characters.',
+                        ]),
+                    ],
+                    'attr' => [
+                        'placeholder' => 'form.attr.placeholder.for_encrypted_text',
+                        'rows' => 10,
+                        'style' => 'height: 15em',
+                        'readonly' => true
+                    ]
+                ])
+                ->add('beneficiaryTextAnswerOneKMS3', TextareaType::class, [
+                    'label' => 'form.label.text_encoded_beneficiary_first_kms3',
                     'required' => false,
                     'constraints' => [
                         new Length([
@@ -85,7 +182,40 @@ class NoteEditType extends AbstractType
                         'style' => 'height: 15em',
                         'readonly' => true
                     ]
-                ]);
+                ])
+                ->add('beneficiaryTextAnswerTwoKMS2', TextareaType::class, [
+                    'label' => 'form.label.text_encoded_beneficiary_second_kms2',
+                    'required' => false,
+                    'constraints' => [
+                        new Length([
+                            'max' => 10000,
+                            'maxMessage' => 'form.constraints.too_long_1000',
+                        ]),
+                    ],
+                    'attr' => [
+                        'placeholder' => 'form.attr.placeholder.for_encrypted_text',
+                        'rows' => 10,
+                        'style' => 'height: 15em',
+                        'readonly' => true
+                    ]
+                ])
+                ->add('beneficiaryTextAnswerTwoKMS3', TextareaType::class, [
+                    'label' => 'form.label.text_encoded_beneficiary_second_kms3',
+                    'required' => false,
+                    'constraints' => [
+                        new Length([
+                            'max' => 10000,
+                            'maxMessage' => 'form.constraints.too_long_1000',
+                        ]),
+                    ],
+                    'attr' => [
+                        'placeholder' => 'form.attr.placeholder.for_encrypted_text',
+                        'rows' => 10,
+                        'style' => 'height: 15em',
+                        'readonly' => true
+                    ]
+                ])
+            ;
         }
         $builder
             ->add('customerFirstQuestion', TextType::class, [

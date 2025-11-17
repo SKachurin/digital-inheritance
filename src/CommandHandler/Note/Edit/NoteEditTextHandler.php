@@ -1,145 +1,83 @@
 <?php
 
-declare(strict_types=1);
-
 namespace App\CommandHandler\Note\Edit;
 
-use App\CommandHandler\Note\Create\NoteCreateInputDto;
 use App\Entity\Note;
 use App\Service\CryptoService;
 use Doctrine\ORM\EntityManagerInterface;
-use Exception;
-use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
-use Psr\Log\LoggerInterface;
 
 #[AsMessageHandler]
 class NoteEditTextHandler
 {
-    private LoggerInterface $logger;
-    private ParameterBagInterface $params;
-    private EntityManagerInterface $entityManager;
-    private CryptoService $cryptoService;
-
     public function __construct(
-        ParameterBagInterface $params,
-        EntityManagerInterface $entityManager,
-        LoggerInterface $logger,
-        CryptoService $cryptoService
-    )
+        private readonly EntityManagerInterface $em,
+        private readonly CryptoService $crypto
+    ) {}
+
+    public function __invoke(NoteEditInputDto $in): NoteEditOutputDto
     {
-        $this->params = $params;
-        $this->entityManager = $entityManager;
-        $this->logger = $logger;
-        $this->cryptoService = $cryptoService;
-    }
-
-    /**
-     * @throws Exception
-     */
-    public function __invoke(NoteEditTextInputDto $input): Note
-    {
-        $note = $input->getNote();
-        $customer = $note->getCustomer();
-
-        $customer
-            ->setCustomerFirstQuestion(
-                $this->cryptoService->encryptData(
-                    $input->getCustomerFirstQuestion()
-                )
-            )
-        ;
-        if ($input->getCustomerSecondQuestion()) {
-            $customer
-                ->setCustomerSecondQuestion(
-                    $this->cryptoService->encryptData(
-                        $input->getCustomerSecondQuestion()
-                    )
-                )
-            ;
+        /** @var Note $note */
+        $note = $this->em->getRepository(Note::class)->findOneBy(['customer' => $in->getCustomer()]);
+        if (!$note instanceof Note) {
+            throw new \UnexpectedValueException('Note not found for customer');
         }
 
-        $beneficiaries = $customer->getBeneficiary();
-        $beneficiary = $beneficiaries[0];
+        // choose which set to try: priority = Customer Q1 → Customer Q2 → Beneficiary Q1 → Beneficiary Q2
+        $answer = $in->getCustomerFirstQuestionAnswer()
+            ?? $in->getCustomerSecondQuestionAnswer()
+            ?? $in->getBeneficiaryFirstQuestionAnswer()
+            ?? $in->getBeneficiarySecondQuestionAnswer()
+            ?? '';
 
-        $beneficiary
-            ->setBeneficiaryFirstQuestion(
-                $this->cryptoService->encryptData(
-                    $input->getBeneficiaryFirstQuestion()
-                )
-            )
-        ;
-
-        if ($input->getCustomerSecondQuestion()) {
-            $beneficiary
-                ->setBeneficiarySecondQuestion(
-                    $this->cryptoService->encryptData(
-                        $input->getBeneficiarySecondQuestion()
-                    )
-                )
-            ;
+        if ($answer === '') {
+            throw new \InvalidArgumentException('Answer is required');
         }
 
-        $this->entityManager->persist($customer);
-        $this->entityManager->persist($beneficiary);
-//        $this->entityManager->flush();
+        // Map the selected answer to the corresponding 3 replicas in the entity:
+        $triples = [
+            'c1' => [$note->getCustomerTextAnswerOne(), $note->getCustomerTextAnswerOneKms2(), $note->getCustomerTextAnswerOneKms3()],
+            'c2' => [$note->getCustomerTextAnswerTwo(), $note->getCustomerTextAnswerTwoKms2(), $note->getCustomerTextAnswerTwoKms3()],
+            'b1' => [$note->getBeneficiaryTextAnswerOne(), $note->getBeneficiaryTextAnswerOneKms2(), $note->getBeneficiaryTextAnswerOneKms3()],
+            'b2' => [$note->getBeneficiaryTextAnswerTwo(), $note->getBeneficiaryTextAnswerTwoKms2(), $note->getBeneficiaryTextAnswerTwoKms3()],
+        ];
 
-        $note->setCustomer($customer);
-        $note->setBeneficiary($beneficiary);
-        $cryptoService = null;
+        $selected = null;
+        if ($in->getCustomerFirstQuestionAnswer())       $selected = $triples['c1'];
+        elseif ($in->getCustomerSecondQuestionAnswer())  $selected = $triples['c2'];
+        elseif ($in->getBeneficiaryFirstQuestionAnswer())$selected = $triples['b1'];
+        elseif ($in->getBeneficiarySecondQuestionAnswer()) $selected = $triples['b2'];
 
-        $personalString1 = $input->getCustomerFirstQuestionAnswer();
-        $personalString2 = $input->getCustomerSecondQuestionAnswer();
-        $personalString3 = $input->getBeneficiaryFirstQuestionAnswer();
-        $personalString4 = $input->getBeneficiarySecondQuestionAnswer();
-
-        if ($personalString1) {
-            $cryptoService = new CryptoService($this->params, $this->logger, $personalString1);
-            $note
-                ->setCustomerTextAnswerOne(
-                    $cryptoService->encryptData(
-                        $input->getCustomerText()
-                    )
-                )
-            ;
+        if ($selected === null) {
+            throw new \InvalidArgumentException('No matching ciphertext set for the provided answer');
         }
 
-        if ($personalString2) {
-            $cryptoService = new CryptoService($this->params, $this->logger, $personalString2);
-            $note
-                ->setCustomerTextAnswerTwo(
-                    $cryptoService->encryptData(
-                        $input->getCustomerText()
-                    )
-                )
-            ;
+        // Try 3 decrypts
+        $plain = $this->crypto->decryptEnvelopeReplicas($selected, $note->getCustomer()->getId(), $answer);
+
+        $out = new NoteEditOutputDto($in->getCustomer());
+
+        if ($plain === false || $plain === null) {
+            $out->setCustomerText(null);
+            $out->setCustomerTextKMS2(null);
+            $out->setCustomerTextKMS3(null);
+        } else {
+            // same decrypted text from any KMS replica
+            $out->setCustomerText($plain);
+            $out->setCustomerTextKMS2($plain);
+            $out->setCustomerTextKMS3($plain);
         }
 
-        if ($personalString3) {
-            $cryptoService = new CryptoService($this->params, $this->logger, $personalString3);
-            $note
-                ->setBeneficiaryTextAnswerOne(
-                    $cryptoService->encryptData(
-                        $input->getCustomerText()
-                    )
-                )
-            ;
-        }
+        // keep the questions/answers
+        $out->setCustomerFirstQuestion($in->getCustomerFirstQuestion());
+        $out->setCustomerSecondQuestion($in->getCustomerSecondQuestion());
+        $out->setBeneficiaryFirstQuestion($in->getBeneficiaryFirstQuestion());
+        $out->setBeneficiarySecondQuestion($in->getBeneficiarySecondQuestion());
+        $out->setCustomerFirstQuestionAnswer($in->getCustomerFirstQuestionAnswer());
+        $out->setCustomerSecondQuestionAnswer($in->getCustomerSecondQuestionAnswer());
+        $out->setBeneficiaryFirstQuestionAnswer($in->getBeneficiaryFirstQuestionAnswer());
+        $out->setBeneficiarySecondQuestionAnswer($in->getBeneficiarySecondQuestionAnswer());
 
-        if ($personalString4) {
-            $cryptoService = new CryptoService($this->params, $this->logger, $personalString4);
-            $note
-                ->setBeneficiaryTextAnswerTwo(
-                    $cryptoService->encryptData(
-                        $input->getCustomerText()
-                    )
-                )
-            ;
-        }
-
-        $this->entityManager->persist($note);
-        $this->entityManager->flush();
-
-        return $note;
+        return $out;
     }
 }

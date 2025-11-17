@@ -60,6 +60,8 @@ class NoteEditController extends AbstractController
 
         $dto
             ->setCustomerTextAnswerOne($note->getCustomerTextAnswerOne())
+            ->setCustomerTextAnswerOneKms2($note->getCustomerTextAnswerOneKms2())
+            ->setCustomerTextAnswerOneKms3($note->getCustomerTextAnswerOneKms3())
             ->setCustomerFirstQuestion(
                 $this->cryptoService->decryptData(
                     $noteCustomer->getCustomerFirstQuestion()
@@ -68,6 +70,8 @@ class NoteEditController extends AbstractController
         ;
         $dto
             ->setCustomerTextAnswerTwo($note->getCustomerTextAnswerTwo())
+            ->setCustomerTextAnswerTwoKms2($note->getCustomerTextAnswerTwoKms2())
+            ->setCustomerTextAnswerTwoKms3($note->getCustomerTextAnswerTwoKms3())
             ->setCustomerSecondQuestion(
                 $this->cryptoService->decryptData(
                     $noteCustomer->getCustomerSecondQuestion()
@@ -78,6 +82,8 @@ class NoteEditController extends AbstractController
         if ($note->getBeneficiary()) {
             $dto
                 ->setBeneficiaryTextAnswerOne($note->getBeneficiaryTextAnswerOne())
+                ->setBeneficiaryTextAnswerOneKms2($note->getBeneficiaryTextAnswerOneKms2())
+                ->setBeneficiaryTextAnswerOneKms3($note->getBeneficiaryTextAnswerOneKms3())
                 ->setBeneficiaryFirstQuestion(
                     $this->cryptoService->decryptData(
                         $note->getBeneficiary()->getBeneficiaryFirstQuestion()
@@ -86,6 +92,8 @@ class NoteEditController extends AbstractController
             ;
             $dto
                 ->setBeneficiaryTextAnswerTwo($note->getBeneficiaryTextAnswerTwo())
+                ->setBeneficiaryTextAnswerTwoKms2($note->getBeneficiaryTextAnswerTwoKms2())
+                ->setBeneficiaryTextAnswerTwoKms3($note->getBeneficiaryTextAnswerTwoKms3())
                 ->setBeneficiarySecondQuestion(
                     $this->cryptoService->decryptData(
                         $note->getBeneficiary()->getBeneficiarySecondQuestion()

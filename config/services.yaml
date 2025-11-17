@@ -10,6 +10,9 @@ parameters:
     telegram_url: '%env(TELEGRAM_URL)%'
     admin_tg: '%env(ADMIN_TG)%'
     admin_wa: '%env(ADMIN_WA)%'
+    TEST_KMS_KEY_1: '%env(TEST_KMS_KEY_1)%'
+    TEST_KMS_KEY_2: '%env(TEST_KMS_KEY_2)%'
+    TEST_KMS_KEY_3: '%env(TEST_KMS_KEY_3)%'
 
 services:
     # default configuration for services in *this* file

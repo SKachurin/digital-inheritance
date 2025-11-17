@@ -39,18 +39,26 @@ class NoteCreateInputDto
     private ?string $beneficiarySecondQuestionAnswer = null;
 
     #[Assert\Length(max: 10000)]
-    private ?string $customerTextAnswerOne;
+    private ?string $customerTextAnswerOne = null;
+    private ?string $customerTextAnswerOneKms2 = null;
+    private ?string $customerTextAnswerOneKms3 = null;
 
     #[Assert\Length(max: 10000)]
-    private ?string $customerTextAnswerTwo;
+    private ?string $customerTextAnswerTwo = null;
+    private ?string $customerTextAnswerTwoKms2 = null;
+    private ?string $customerTextAnswerTwoKms3 = null;
 
     private ?int $beneficiaryId;
 
     #[Assert\Length(max: 10000)]
-    private ?string $beneficiaryTextAnswerOne;
+    private ?string $beneficiaryTextAnswerOne = null;
+    private ?string $beneficiaryTextAnswerOneKms2 = null;
+    private ?string $beneficiaryTextAnswerOneKms3 = null;
 
     #[Assert\Length(max: 10000)]
-    private ?string $beneficiaryTextAnswerTwo;
+    private ?string $beneficiaryTextAnswerTwo = null;
+    private ?string $beneficiaryTextAnswerTwoKms2 = null;
+    private ?string $beneficiaryTextAnswerTwoKms3 = null;
 
     #[Assert\Callback]
     public function validate(ExecutionContextInterface $context, $payload): void
@@ -76,9 +84,10 @@ class NoteCreateInputDto
         return $this->frontendEncrypted;
     }
 
-    public function setFrontendEncrypted(bool $state): void
+    public function setFrontendEncrypted(bool|string|int|null $v): self
     {
-        $this->frontendEncrypted = $state;
+        $this->frontendEncrypted = ($v === true || $v === 1 || $v === '1');
+        return $this;
     }
 
     public function getCustomer(): Customer
@@ -125,6 +134,28 @@ class NoteCreateInputDto
         return $this;
     }
 
+    public function getCustomerTextAnswerOneKms2(): ?string
+    {
+        return $this->customerTextAnswerOneKms2;
+    }
+
+    public function setCustomerTextAnswerOneKms2(?string $customerTextAnswerOneKms2): self
+    {
+        $this->customerTextAnswerOneKms2 = $customerTextAnswerOneKms2;
+        return $this;
+    }
+
+    public function getCustomerTextAnswerOneKms3(): ?string
+    {
+        return $this->customerTextAnswerOneKms3;
+    }
+
+    public function setCustomerTextAnswerOneKms3(?string $customerTextAnswerOneKms3): self
+    {
+        $this->customerTextAnswerOneKms3 = $customerTextAnswerOneKms3;
+        return $this;
+    }
+
     public function getCustomerTextAnswerTwo(): ?string
     {
         return $this->customerTextAnswerTwo;
@@ -133,6 +164,28 @@ class NoteCreateInputDto
     public function setCustomerTextAnswerTwo(?string $customerTextAnswerTwo): self
     {
         $this->customerTextAnswerTwo = $customerTextAnswerTwo;
+        return $this;
+    }
+
+    public function getCustomerTextAnswerTwoKms2(): ?string
+    {
+        return $this->customerTextAnswerTwoKms2;
+    }
+
+    public function setCustomerTextAnswerTwoKms2(?string $customerTextAnswerTwoKms2): self
+    {
+        $this->customerTextAnswerTwoKms2 = $customerTextAnswerTwoKms2;
+        return $this;
+    }
+
+    public function getCustomerTextAnswerTwoKms3(): ?string
+    {
+        return $this->customerTextAnswerTwoKms3;
+    }
+
+    public function setCustomerTextAnswerTwoKms3(?string $customerTextAnswerTwoKms3): self
+    {
+        $this->customerTextAnswerTwoKms3 = $customerTextAnswerTwoKms3;
         return $this;
     }
 
@@ -158,6 +211,28 @@ class NoteCreateInputDto
         return $this;
     }
 
+    public function getBeneficiaryTextAnswerOneKms2(): ?string
+    {
+        return $this->beneficiaryTextAnswerOneKms2;
+    }
+
+    public function setBeneficiaryTextAnswerOneKms2(?string $beneficiaryTextAnswerOneKms2): self
+    {
+        $this->beneficiaryTextAnswerOneKms2 = $beneficiaryTextAnswerOneKms2;
+        return $this;
+    }
+
+    public function getBeneficiaryTextAnswerOneKms3(): ?string
+    {
+        return $this->beneficiaryTextAnswerOneKms3;
+    }
+
+    public function setBeneficiaryTextAnswerOneKms3(?string $beneficiaryTextAnswerOneKms3): self
+    {
+        $this->beneficiaryTextAnswerOneKms3 = $beneficiaryTextAnswerOneKms3;
+        return $this;
+    }
+
     public function getBeneficiaryTextAnswerTwo(): ?string
     {
         return $this->beneficiaryTextAnswerTwo;
@@ -166,6 +241,28 @@ class NoteCreateInputDto
     public function setBeneficiaryTextAnswerTwo(?string $beneficiaryTextAnswerTwo): self
     {
         $this->beneficiaryTextAnswerTwo = $beneficiaryTextAnswerTwo;
+        return $this;
+    }
+
+    public function getBeneficiaryTextAnswerTwoKms2(): ?string
+    {
+        return $this->beneficiaryTextAnswerTwoKms2;
+    }
+
+    public function setBeneficiaryTextAnswerTwoKms2(?string $beneficiaryTextAnswerTwoKms2): self
+    {
+        $this->beneficiaryTextAnswerTwoKms2 = $beneficiaryTextAnswerTwoKms2;
+        return $this;
+    }
+
+    public function getBeneficiaryTextAnswerTwoKms3(): ?string
+    {
+        return $this->beneficiaryTextAnswerTwoKms3;
+    }
+
+    public function setBeneficiaryTextAnswerTwoKms3(?string $beneficiaryTextAnswerTwoKms3): self
+    {
+        $this->beneficiaryTextAnswerTwoKms3 = $beneficiaryTextAnswerTwoKms3;
         return $this;
     }
 

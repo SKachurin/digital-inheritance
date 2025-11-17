@@ -1,78 +1,89 @@
 <?php
-
 declare(strict_types=1);
 
 namespace App\CommandHandler\Note\Edit;
 
 use App\Service\CryptoService;
-use Exception;
-use Psr\Log\LoggerInterface;
-use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
 #[AsMessageHandler]
 class NoteEditHandler
 {
-    private ParameterBagInterface $params;
-    private LoggerInterface $logger;
-
-
-    public function __construct(
-        ParameterBagInterface $params,
-        LoggerInterface $logger
-    )
+    public function __construct(private readonly CryptoService $crypto)
     {
-        $this->params = $params;
-        $this->logger = $logger;
     }
 
-    /**
-     * @throws Exception
-     */
     public function __invoke(NoteEditInputDto $input): NoteEditOutputDto
     {
-        $note = new NoteEditOutputDto($input->getCustomer());
-        $cryptoService = null;
-        $note->setCustomer($input->getCustomer());
+        $out = new NoteEditOutputDto($input->getCustomer());
+        $out->setCustomer($input->getCustomer());
 
-        $decryptedText = null;
+        $customerId = $input->getCustomer()->getId();
+        $decrypted = null;
 
-        if ($input->getCustomerFirstQuestionAnswer() !== null) {
-            $personalString = $input->getCustomerFirstQuestionAnswer();
-            $cryptoService = new CryptoService($this->params, $this->logger, $personalString);
-            $decryptedText = $cryptoService->decryptData($input->getCustomerTextAnswerOne());
+        // Try in this order: a1 → a2 → b1 → b2 (skip empty answers automatically)
+        $try = function (?string $answer, array $replicas) use ($customerId): ?string {
+            if (!$answer) {
+                return null; // skip if user didn’t provide this cryptex
+            }
+            $plain = $this->crypto->decryptEnvelopeReplicas($replicas, $customerId, $answer);
+            return $plain === false ? null : $plain;
+        };
+
+        // Build replica sets exactly as stored by the create flow
+        if ($decrypted === null) {
+            $decrypted = $try(
+                $input->getCustomerFirstQuestionAnswer(),
+                [
+                    $input->getCustomerTextAnswerOne(),
+                    $input->getCustomerTextAnswerOneKms2(),
+                    $input->getCustomerTextAnswerOneKms3(),
+                ]
+            );
         }
 
-        if ($decryptedText === null && $input->getCustomerSecondQuestionAnswer() !== null) {
-            $personalString = $input->getCustomerSecondQuestionAnswer();
-            $cryptoService = new CryptoService($this->params, $this->logger, $personalString);
-            $decryptedText = $cryptoService->decryptData($input->getCustomerTextAnswerTwo());
+        if ($decrypted === null) {
+            $decrypted = $try(
+                $input->getCustomerSecondQuestionAnswer(),
+                [
+                    $input->getCustomerTextAnswerTwo(),
+                    $input->getCustomerTextAnswerTwoKms2(),
+                    $input->getCustomerTextAnswerTwoKms3(),
+                ]
+            );
         }
 
-        if ($decryptedText === null && $input->getBeneficiaryFirstQuestionAnswer() !== null) {
-            $personalString = $input->getBeneficiaryFirstQuestionAnswer();
-            $cryptoService = new CryptoService($this->params, $this->logger, $personalString);
-            $decryptedText = $cryptoService->decryptData($input->getBeneficiaryTextAnswerOne());
+        if ($decrypted === null) {
+            $decrypted = $try(
+                $input->getBeneficiaryFirstQuestionAnswer(),
+                [
+                    $input->getBeneficiaryTextAnswerOne(),
+                    $input->getBeneficiaryTextAnswerOneKms2(),
+                    $input->getBeneficiaryTextAnswerOneKms3(),
+                ]
+            );
         }
 
-        if ($decryptedText === null && $input->getBeneficiarySecondQuestionAnswer() !== null) {
-            $personalString = $input->getBeneficiarySecondQuestionAnswer();
-            $cryptoService = new CryptoService($this->params, $this->logger, $personalString);
-            $decryptedText = $cryptoService->decryptData($input->getBeneficiaryTextAnswerTwo());
+        if ($decrypted === null) {
+            $decrypted = $try(
+                $input->getBeneficiarySecondQuestionAnswer(),
+                [
+                    $input->getBeneficiaryTextAnswerTwo(),
+                    $input->getBeneficiaryTextAnswerTwoKms2(),
+                    $input->getBeneficiaryTextAnswerTwoKms3(),
+                ]
+            );
         }
 
+        // If none succeeded, keep it null — your counter/lockout flow will handle it
+        $out->setCustomerText($decrypted);
 
-        if ($decryptedText === false) {
-           $decryptedText = null;
-        }
+        // Pass through questions (already decrypted server-side in the controller)
+        $out->setCustomerFirstQuestion($input->getCustomerFirstQuestion());
+        $out->setCustomerSecondQuestion($input->getCustomerSecondQuestion());
+        $out->setBeneficiaryFirstQuestion($input->getBeneficiaryFirstQuestion());
+        $out->setBeneficiarySecondQuestion($input->getBeneficiarySecondQuestion());
 
-        $note->setCustomerText($decryptedText);
-
-        $note->setCustomerFirstQuestion($input->getCustomerFirstQuestion());
-        $note->setCustomerSecondQuestion($input->getCustomerSecondQuestion());
-        $note->setBeneficiaryFirstQuestion($input->getBeneficiaryFirstQuestion());
-        $note->setBeneficiarySecondQuestion($input->getBeneficiarySecondQuestion());
-
-        return $note;
+        return $out;
     }
 }

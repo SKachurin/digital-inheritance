@@ -101,13 +101,18 @@ note_delete:
     controller: App\Controller\Note\NoteDeleteController::delete
 
 #?? Do I need it note_decrypt ??
-note_decrypt:
-    path:       /note/{noteId}/decrypt/{question}
-    controller: App\Controller\Note\NoteDecryptController::decrypt
-    requirements:
-        question: '\w+' # Regex to ensure the question parameter only contains word characters
-    defaults:
-        question: 'default' # Default value if question is not provided
+#note_decrypt:
+#    path:       /note/{noteId}/decrypt/{question}
+#    controller: App\Controller\Note\NoteDecryptController::decrypt
+#    requirements:
+#        question: '\w+' # Regex to ensure the question parameter only contains word characters
+#    defaults:
+#        question: 'default' # Default value if question is not provided
+
+api_note_token:
+    path:       /api/note-tokens
+    controller: App\Controller\Api\NoteTokenController
+    methods:    [GET]
 
 beneficiary_create:
     path:       /beneficiary/create
