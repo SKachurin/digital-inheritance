@@ -24,7 +24,7 @@ header:
   contact_us: 'Contact Us'
 
 overlay_encrypting: 'Encrypting your envelope…'
-overlay_wait: 'Please don’t close this tab. Your data is being encrypted locally.'
+overlay_wait: 'Please don’t close this tab. Your data is being encrypted in your browser.'
 show_all: 'Show all'
 form:
   attr:
@@ -162,7 +162,7 @@ click_here: 'Click here'
 restore_pass: 'Password Recovery'
 enter_email: "Please enter your first email(It's your login). Email have to be previously verified"
 create_your_secure_envelope_text: |
-  There are no limits to what you can enter here (though the field limit is 5000 characters). This could include crypto wallet credentials, online bank credentials, etc.
+  There are no limits to what you can enter here (though the field limit is 10000 characters). This could include crypto wallet credentials, online bank credentials, etc.
   This envelope will be encrypted with half of our security key and half of the hash from your answer to the secret questions.
   As we never save your answers, once encrypted, only you and God will have the knowledge required to decrypt this note.
   We will never save your answers again—all decryption will be done on the fly from the answers you provide when accessing the note.
@@ -662,7 +662,7 @@ about_page:
 note_creation:
   default_text: |
     Replace this text with your data:
-    There are no limits to what you can enter here (though the field limit is 5000 characters). This could include crypto wallet credentials, online bank credentials, etc.
+    There are no limits to what you can enter here (though the field limit is 10000 characters). This could include crypto wallet credentials, online bank credentials, etc.
     This envelope will be encrypted with half of our security key and half of the hash from your answer to the secret questions.
     Once encrypted, your answers will be deleted from our database, leaving only you and God with the knowledge required to decrypt this note.
     We will never save your answers again—all decryption will be done on the fly from the answers you provide when accessing the note.

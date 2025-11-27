@@ -24,7 +24,7 @@ header:
   contact_us: 'Contáctanos'
 
 overlay_encrypting: 'Cifrando tu sobre…'
-overlay_wait: 'Por favor, no cierres esta pestaña. Tus datos se están cifrando localmente.'
+overlay_wait: 'Por favor, no cierres esta pestaña. Tus datos se están cifrando en tu navegador.'
 show_all: 'Ver todo'
 form:
   attr:
@@ -162,7 +162,7 @@ click_here: 'Haga clic aquí'
 restore_pass: 'Recuperación de contraseña'
 enter_email: 'Por favor, introduzca su primer correo electrónico (es su usuario). El correo debe haber sido verificado previamente.'
 create_your_secure_envelope_text: |
-  No hay límites en lo que puede introducir aquí (aunque el campo tiene un límite de 5000 caracteres). Podría incluir credenciales de monederos de criptomonedas, bancos en línea, etc.
+  No hay límites en lo que puede introducir aquí (aunque el campo tiene un límite de 10000 caracteres). Podría incluir credenciales de monederos de criptomonedas, bancos en línea, etc.
   Este sobre se cifrará con la mitad de nuestra clave de seguridad y la mitad del hash derivado de sus respuestas a las preguntas secretas.
   Como nunca guardamos tus respuestas, una vez cifradas, solo tú y Dios tendrán el conocimiento necesario para descifrar esta nota.
   Nunca guardaremos sus respuestas: todo se descifrará al instante cada vez que proporcione las respuestas al acceder a la nota.
@@ -472,7 +472,7 @@ faq:
   q8: '¿Puedo almacenar varias notas o grandes cantidades de datos?'
   a8: |
     Actualmente, cada cuenta está limitada a una sola “nota” cifrada. 
-    Dicha nota puede contener hasta 5000 caracteres de texto, donde puedes incluir credenciales, instrucciones o mensajes. 
+    Dicha nota puede contener hasta 10000 caracteres de texto, donde puedes incluir credenciales, instrucciones o mensajes. 
     Si necesitas más notas, tendrás que crear cuentas adicionales.
 
   q9: '¿Qué sucede si olvido las respuestas a mis preguntas secretas o pierdo mi contraseña principal?'
@@ -685,7 +685,7 @@ about_page:
 note_creation:
   default_text: |
     Reemplace este texto con sus datos:
-    No hay límites en lo que puede ingresar aquí (aunque el campo tiene un límite de 5000 caracteres). Puede incluir credenciales de monederos de criptomonedas, credenciales bancarias en línea, etc.
+    No hay límites en lo que puede ingresar aquí (aunque el campo tiene un límite de 10000 caracteres). Puede incluir credenciales de monederos de criptomonedas, credenciales bancarias en línea, etc.
     Este sobre se cifrará con la mitad de nuestra clave de seguridad y la mitad del hash derivado de las respuestas a sus preguntas secretas.
     Una vez cifrado, sus respuestas se eliminarán de nuestra base de datos, dejando únicamente a usted y a Dios con el conocimiento necesario para descifrar la nota.
     Nunca guardaremos sus respuestas: todo el descifrado se realizará al instante cada vez que proporcione las respuestas al acceder a la nota.

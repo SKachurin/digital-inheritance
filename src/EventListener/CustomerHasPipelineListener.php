@@ -32,7 +32,7 @@ class CustomerHasPipelineListener
         $targetRoutes = [
             'user_home_pipe', 'user_home_pay',
             'user_home', 'user_home_1', 'user_home_ref',
-            'user_home_email', 'user_home_phone',
+            'user_home_email', 'user_home_email_', 'user_home_phone',
             'user_home_social', 'user_home_heir',
             'user_home_env', 'user_home_pipe',
             'pipeline_create', 'contact_create',

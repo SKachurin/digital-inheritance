@@ -98,224 +98,252 @@
 
         <script src="https://cdn.jsdelivr.net/npm/argon2-browser@1.18.0/dist/argon2-bundled.min.js"></script>
         <script>
-            // Global crash reporter
-            window.onerror = function(msg, src, line, col, err) {
-                // alert('window.onerror: ' + msg + '\n' + (err && err.stack ? err.stack : (src+':'+line+':'+col)));
-            };
-
-            // const say = (m) => { console.log('[CreateNote]', m); alert(m); };
-
-            // Pull real IDs and full_names from server-rendered form (no guessing)
-            const IDS = {
-                note: "{{ form.customerText.vars.id }}",                    // e.g., note_creation_customerText
-                a1:   "{{ form.customerFirstQuestionAnswer.vars.id }}",     // base id; we’ll use _first/_second
-                a2:   "{{ form.customerSecondQuestionAnswer.vars.id }}",
-                b1:   "{{ form.beneficiaryFirstQuestionAnswer.vars.id }}",
-                b2:   "{{ form.beneficiarySecondQuestionAnswer.vars.id }}",
-            };
-
-            const NAMES = {
-                frontendEncrypted: "{{ form.frontendEncrypted.vars.full_name }}",
-
-                a1: [
-                    "{{ form.customerTextAnswerOne.vars.full_name }}",
-                    "{{ form.customerTextAnswerOneKms2.vars.full_name }}",
-                    "{{ form.customerTextAnswerOneKms3.vars.full_name }}",
-                ],
-                a2: [
-                    "{{ form.customerTextAnswerTwo.vars.full_name }}",
-                    "{{ form.customerTextAnswerTwoKms2.vars.full_name }}",
-                    "{{ form.customerTextAnswerTwoKms3.vars.full_name }}",
-                ],
-                b1: [
-                    "{{ form.beneficiaryTextAnswerOne.vars.full_name }}",
-                    "{{ form.beneficiaryTextAnswerOneKms2.vars.full_name }}",
-                    "{{ form.beneficiaryTextAnswerOneKms3.vars.full_name }}",
-                ],
-                b2: [
-                    "{{ form.beneficiaryTextAnswerTwo.vars.full_name }}",
-                    "{{ form.beneficiaryTextAnswerTwoKms2.vars.full_name }}",
-                    "{{ form.beneficiaryTextAnswerTwoKms3.vars.full_name }}",
-                ],
-            };
-
-            function featureChecks() {
-                const ok = !!(window.crypto && crypto.subtle);
-                // say('WebCrypto: ' + (ok ? 'OK' : 'MISSING'));
-                // say('HKDF supported? (deriveKey present): ' + (crypto.subtle && typeof crypto.subtle.deriveKey === 'function'));
-                // say('Argon2 present? ' + !!(window.argon2 && window.argon2.hash));
+            async function sha256_b64_utf8(str) {
+                const data = new TextEncoder().encode(str);
+                const buf  = await crypto.subtle.digest('SHA-256', data);
+                return btoa(String.fromCharCode(...new Uint8Array(buf)));
             }
+        </script>
+        <script>
+            /** DEBUG SWITCH: set to false after you find the issue **/
+            const DEBUG_MODE = true;
 
-            async function fetchAllTokens() {
-                // say('Fetching /api/note-tokens…');
-                const res = await fetch('/api/note-tokens', { credentials: 'same-origin' });
-                // say('Tokens response status: ' + res.status);
-                const data = await res.json();
-                // say('Tokens payload keys: ' + Object.keys(data).join(','));
-                if (!data?.tokens || data.tokens.length !== 3) throw new Error('invalid tokens payload');
-                // say('Got 3 tokens');
-                return data.tokens; // base64
-            }
+            (function () {
+                // const say = (m) => { try { alert(m); } catch(e) {} console.log(m); };
+                // window.onerror = function(msg, src, line, col, err){
+                //     say('DBG ERR: ' + msg + ' @ ' + (src||'inline') + ':' + line + ':' + col + (err ? (' | ' + (err.stack||err)) : ''));
+                // };
+                //
+                // say('DBG#1 inline JS loaded');
 
-            async function deriveUserKey(answer) {
-                // say('Argon2 hashing… len=' + answer.length);
-                const salt = crypto.getRandomValues(new Uint8Array(16));
-                const res = await window.argon2.hash({
-                    pass: new TextEncoder().encode(answer),
-                    salt,
-                    time: 5,
-                    mem: 65536,
-                    parallelism: 1,
-                    hashLen: 32,
-                    type: window.argon2.ArgonType.Argon2id,
-                    raw: true
-                });
-                // say('Argon2 done');
-                return { userKey: new Uint8Array(res.hash), salt };
-            }
-
-            async function aesGcmEncrypt(finalKey, plaintext) {
-                const iv = crypto.getRandomValues(new Uint8Array(12));
-                // say('AES-GCM encrypt…');
-                const ct = await crypto.subtle.encrypt(
-                    { name: 'AES-GCM', iv },
-                    finalKey,
-                    new TextEncoder().encode(plaintext)
-                );
-                // say('AES-GCM done');
-                return {
-                    c: btoa(String.fromCharCode(...new Uint8Array(ct))),
-                    iv: btoa(String.fromCharCode(...iv))
-                };
-            }
-
-            const b64ToBytes = (b64) => {
-                // say('b64ToBytes len=' + b64.length);
-                return Uint8Array.from(atob(b64), c => c.charCodeAt(0));
-            };
-
-            function setByFullName(form, fullName, value) {
-                // say('Setting field: ' + fullName + ' (len=' + String(value).length + ')');
-                let el = form.querySelector('[name="' + fullName.replace(/"/g, '\\"') + '"]');
-                if (!el) {
-                    el = document.createElement('input');
-                    el.type = 'hidden';
-                    el.name = fullName;
-                    form.appendChild(el);
-                    // say('Created hidden: ' + fullName);
-                }
-                el.value = value;
-            }
-
-            function readRepeated(baseId, mustMatch = true) {
-                const first  = document.querySelector('#' + baseId + '_first')?.value ?? '';
-                const second = document.querySelector('#' + baseId + '_second')?.value ?? '';
-                // say('Read ' + baseId + ': first_len=' + first.length + ' second_len=' + second.length);
-                if (!first) return '';
-                if (mustMatch && second && first !== second) {
-                    // alert('Answers do not match.');
-                    throw new Error(baseId + ': mismatch');
-                }
-                return first;
-            }
-
-            document.addEventListener('submit', async (e) => {
-                const form = e.target;
-                if (!(form instanceof HTMLFormElement)) return;
-
-                const frontendToggle = document.getElementById('frontendEncrypted'); // your checkbox id
-                const offline = frontendToggle && frontendToggle.checked;
-                // say('Frontend toggle checked? ' + !!offline);
-                if (!offline) return;
-
-                e.preventDefault();
-
-                const overlay = document.getElementById('encrypting-overlay');
-                if (overlay) {
-                    overlay.style.display = 'flex';
-                    // say('Overlay shown');
+                if (document.readyState === 'loading') {
+                    document.addEventListener('DOMContentLoaded', boot);
+                } else {
+                    boot();
                 }
 
-                try {
-                    featureChecks();
+                function boot(){
+                    // say('DBG#2 DOM ready');
 
-                    const note = document.querySelector('#' + IDS.note)?.value ?? '';
-                    // say('Note length: ' + note.length);
+                    // ---- find form & critical nodes
+                    const formName = "{{ form.vars.name }}";
+                    const form = document.querySelector('form[name="{{ form.vars.name }}"]');
+                    // say('DBG#3 form found? ' + !!form + ' (name=' + formName + ')');
 
-                    const a1 = readRepeated(IDS.a1);
-                    const a2 = readRepeated(IDS.a2, false);
-                    const b1 = readRepeated(IDS.b1);
-                    const b2 = readRepeated(IDS.b2, false);
+                    const overlay = document.getElementById('encrypting-overlay');
+                    // say('DBG#4 overlay found? ' + !!overlay);
 
-                    if (!note || !a1 || !b1) {
-                        // say('Missing required note/a1/b1 -> submitting without FE encryption');
-                        if (overlay) overlay.style.display = 'none';
-                        form.submit();
-                        return;
+                    const toggle = document.getElementById('frontendEncrypted');
+                    // say('DBG#5 toggle found? ' + !!toggle + (toggle ? ' checked=' + toggle.checked : ''));
+
+                    if (!form) { say('DBG! no form node; abort'); return; }
+
+                    // ---- small helpers
+                    function b64FromBytes(bytes){ return btoa(String.fromCharCode(...bytes)); }
+                    async function genDEK(){
+                        const raw = crypto.getRandomValues(new Uint8Array(32));               // keep these for KMS wrap
+                        const key = await crypto.subtle.importKey('raw', raw, 'AES-GCM', false, ['encrypt','decrypt']); // non-extractable is fine
+                        return { key, raw };                                                   // no exportKey()
                     }
-
-                    const tokens = await fetchAllTokens();
-
-                    // Flag for backend
-                    setByFullName(form, NAMES.frontendEncrypted, '1');
-
-                    const answers = { a1, a2, b1, b2 };
-                    for (const [key, ans] of Object.entries(answers)) {
-                        if (!ans) {
-                            // say('Skip ' + key + ' (empty)');
-                            continue;
-                        }
-
-                        const { userKey, salt } = await deriveUserKey(ans);
-
-                        // Some engines expect algorithm as object on importKey for HKDF
-                        // say('Import HKDF IKM…');
-                        const hkdfKey = await crypto.subtle.importKey(
-                            'raw',
-                            userKey,
-                            { name: 'HKDF' },
-                            false,
-                            ['deriveKey', 'deriveBits']
-                        );
-                        // say('HKDF IKM imported');
-
-                        for (let i = 0; i < 3; i++) {
-                            // say(`Replica ${i+1} for ${key}`);
-                            const tokenBytes = b64ToBytes(tokens[i]);
-
-                            // say('HKDF deriveKey…');
-                            const finalKey = await crypto.subtle.deriveKey(
-                                { name: 'HKDF', hash: 'SHA-256', salt: tokenBytes, info: new Uint8Array([1]) },
-                                hkdfKey,
-                                { name: 'AES-GCM', length: 256 },
-                                false,
-                                ['encrypt']
-                            );
-                            // say('HKDF deriveKey done');
-
-                            const enc = await aesGcmEncrypt(finalKey, note);
-                            const payload = JSON.stringify({
-                                c: enc.c,
-                                iv: enc.iv,
-                                s: btoa(String.fromCharCode(...salt))
+                    async function aesGcmEncRaw(key, plaintext){
+                        const iv = crypto.getRandomValues(new Uint8Array(12));
+                        const enc = await crypto.subtle.encrypt({name:'AES-GCM', iv}, key, new TextEncoder().encode(plaintext));
+                        return { c_b64: b64FromBytes(new Uint8Array(enc)), iv_b64: b64FromBytes(iv) };
+                    }
+                    async function argonH(answer){
+                        const salt = crypto.getRandomValues(new Uint8Array(16));
+                        const r = await argon2.hash({
+                            pass: new TextEncoder().encode(answer),
+                            salt,
+                            time: 5, mem: 65536, parallelism: 1, hashLen: 32,
+                            type: argon2.ArgonType.Argon2id, raw: true
+                        });
+                        return { h: new Uint8Array(r.hash), salt };
+                    }
+                    async function wrapWithKMS(kmsId, dekRawB64, hB64, answer_fp) {
+                        try {
+                            const res = await fetch('/api/kms/wrap', {
+                                method: 'POST',
+                                headers: {'Content-Type': 'application/json'},
+                                credentials: 'same-origin',
+                                body: JSON.stringify({ kms: kmsId, dek_b64: dekRawB64, h_b64: hB64, answer_fp })
                             });
 
-                            const fullName = NAMES[key][i];
-                            setByFullName(form, fullName, payload);
+                            const j = await res.json().catch(() => null);
+
+                            // Any non-200 or missing w_b64 = "no replica for this KMS"
+                            if (!res.ok || !j || !j.w_b64) {
+                                console.warn('KMS wrap failed for KMS', kmsId, res.status, j);
+                                return null;
+                            }
+
+                            return j.w_b64;
+                        } catch (e) {
+                            console.warn('KMS wrap exception for KMS', kmsId, e);
+                            return null;
                         }
                     }
+                    function setHidden(name, val){
+                        let el = form.querySelector('[name="'+name.replace(/"/g,'\\"')+'"]');
+                        if (!el) { el = document.createElement('input'); el.type='hidden'; el.name=name; form.appendChild(el); }
+                        el.value = val;
+                        // say(`DBG#H set hidden "${name}" len=${String(val).length}`);
+                    }
 
-                    // say('Submitting form now…');
-                    form.submit();
-                } catch (err) {
-                    console.error(err);
-                    // alert('Encrypt-on-submit failed: ' + (err && err.message ? err.message : err) + '\n' + (err && err.stack ? err.stack : 'no stack'));
-                    form.submit(); // fail open
-                } finally {
-                    // if (overlay) { overlay.style.display = 'none'; say('Overlay hidden'); }
+                    // ---- attach submit
+                    form.addEventListener('submit', async function onSubmit(ev){
+                        // say('DBG#6 submit fired');
+
+                        try {
+                            if (!toggle) {
+                                // say('DBG#7 no toggle → proceed server path');
+                                return;
+                            }
+                            // say('DBG#8 toggle.checked=' + toggle.checked);
+                            if (!toggle.checked) {
+                                // say('DBG#9 FE encrypt OFF → normal submit');
+                                return;
+                            }
+
+                            if (DEBUG_MODE) {
+                                ev.preventDefault();
+                                // say('DBG#10 preventDefault (DEBUG_MODE)');
+                            }
+
+                            if (overlay) {
+                                overlay.style.display = 'flex';
+                                // say('DBG#11 overlay shown');
+                            }
+
+                            // ---- read fields
+                            const noteElId = "{{ form.customerText.vars.id }}";
+                            const a1Id     = "{{ form.customerFirstQuestionAnswer.vars.id }}_first";
+                            const a1rId    = "{{ form.customerFirstQuestionAnswer.vars.id }}_second";
+                            const a2Id     = "{{ form.customerSecondQuestionAnswer.vars.id }}_first";
+                            const b1Id     = "{{ form.beneficiaryFirstQuestionAnswer.vars.id }}_first";
+                            const b1rId    = "{{ form.beneficiaryFirstQuestionAnswer.vars.id }}_second";
+                            const b2Id     = "{{ form.beneficiarySecondQuestionAnswer.vars.id }}_first";
+
+                            const noteEl = document.getElementById(noteElId);
+                            const a1El   = document.getElementById(a1Id);
+                            const a1rEl  = document.getElementById(a1rId);
+                            const a2El   = document.getElementById(a2Id);
+                            const b1El   = document.getElementById(b1Id);
+                            const b1rEl  = document.getElementById(b1rId);
+                            const b2El   = document.getElementById(b2Id);
+
+                            // say(`DBG#12 fields present note=${!!noteEl} a1=${!!a1El} a1r=${!!a1rEl} a2=${!!a2El} b1=${!!b1El} b1r=${!!b1rEl} b2=${!!b2El}`);
+
+                            const note = noteEl ? noteEl.value : '';
+                            const a1   = a1El ? a1El.value : '';
+                            const a1r  = a1rEl ? a1rEl.value : '';
+                            const a2   = a2El ? a2El.value : '';
+                            const b1   = b1El ? b1El.value : '';
+                            const b1r  = b1rEl ? b1rEl.value : '';
+                            const b2   = b2El ? b2El.value : '';
+
+                            // say(`DBG#13 lengths note=${note.length} a1=${a1.length} a1r=${a1r.length} a2=${a2.length} b1=${b1.length} b1r=${b1r.length} b2=${b2.length}`);
+                            // say(`DBG#14 first10 note="${note.slice(0,10)}" a1="${a1.slice(0,10)}" b1="${b1.slice(0,10)}"`);
+
+                            if (a1 && a1r && a1 !== a1r) {
+                                // say('DBG! A1 mismatch');
+                                if (!DEBUG_MODE) return;
+                            }
+                            if (b1 && b1r && b1 !== b1r) {
+                                // say('DBG! B1 mismatch');
+                                if (!DEBUG_MODE) return;
+                            }
+
+                            if (!note || !a1 || !b1) {
+                                // say('DBG#15 missing required (note/a1/b1). Fallback to server submit.');
+                                if (overlay) overlay.style.display = 'none';
+                                if (DEBUG_MODE) { form.submit(); }
+                                return;
+                            }
+
+                            // ---- WebCrypto presence
+                            if (!crypto || !crypto.subtle) {
+                                // say('DBG! WebCrypto missing');
+                                return;
+                            }
+                            // say('DBG#16 WebCrypto OK');
+
+                            // ---- DEK + encrypt
+                            // say('DBG#17 genDEK start');
+                            const { key: dekKey, raw: dekRaw } = await genDEK();
+                            // say('DBG#18 DEK raw length=' + dekRaw.length);
+
+                            // say('DBG#19 AES-GCM encrypt start');
+                            const enc = await aesGcmEncRaw(dekKey, note);
+                            // say('DBG#20 enc.c_b64 len=' + enc.c_b64.length + ' iv_b64=' + enc.iv_b64);
+
+                            // ---- per-answer wrap
+                            const NAMES = {
+                                a1: ["{{ form.customerTextAnswerOne.vars.full_name }}","{{ form.customerTextAnswerOneKms2.vars.full_name }}","{{ form.customerTextAnswerOneKms3.vars.full_name }}"],
+                                a2: ["{{ form.customerTextAnswerTwo.vars.full_name }}","{{ form.customerTextAnswerTwoKms2.vars.full_name }}","{{ form.customerTextAnswerTwoKms3.vars.full_name }}"],
+                                b1: ["{{ form.beneficiaryTextAnswerOne.vars.full_name }}","{{ form.beneficiaryTextAnswerOneKms2.vars.full_name }}","{{ form.beneficiaryTextAnswerOneKms3.vars.full_name }}"],
+                                b2: ["{{ form.beneficiaryTextAnswerTwo.vars.full_name }}","{{ form.beneficiaryTextAnswerTwoKms2.vars.full_name }}","{{ form.beneficiaryTextAnswerTwoKms3.vars.full_name }}"],
+                            };
+                            const answers = { a1, a2, b1, b2 };
+
+                            // flag that FE encryption happened
+                            setHidden("{{ form.frontendEncrypted.vars.full_name }}", '1');
+
+                            const dekB64 = b64FromBytes(dekRaw);
+                            let anyWrapSucceeded = false; // track global success across all answers/KMS
+
+                            for (const [slot, val] of Object.entries(answers)) {
+                                if (!val) {
+                                    // say(`DBG#21 skip slot ${slot} (empty)`);
+                                    continue;
+                                }
+
+                                // say(`DBG#22 Argon2 start for ${slot}`);
+                                const { h, salt } = await argonH(val);
+                                const hB64 = b64FromBytes(h);
+                                const sB64 = b64FromBytes(salt);
+                                // say(`DBG#23 Argon2 ok ${slot}: h.len=${h.length} salt_b64=${sB64}`);
+
+                                for (let i = 0; i < 3; i++) {
+                                    const kmsId = i + 1;
+                                    const answer_fp = await sha256_b64_utf8(`${enc.c_b64}.${enc.iv_b64}.${sB64}`);
+                                    // say(`DBG#24 wrap start ${slot} KMS${kmsId}`);
+                                    const w_b64 = await wrapWithKMS(kmsId, dekB64, hB64, answer_fp);
+
+                                    // If this KMS didn't wrap, DO NOT create a JSON blob for it
+                                    if (!w_b64) {
+                                        // KMS for this replica is unavailable -> DB field should stay NULL
+                                        continue;
+                                    }
+
+                                    anyWrapSucceeded = true;
+
+                                    const payload   = JSON.stringify({ c: enc.c_b64, iv: enc.iv_b64, w: w_b64, s: sB64 });
+                                    const hiddenName = NAMES[slot][i];
+                                    setHidden(hiddenName, payload);
+                                    // say(`DBG#25 set payload ${slot}/KMS${kmsId} len=${payload.length} -> name="${hiddenName}"`);
+                                }
+                            }
+
+                            // say('DBG#26 done building payloads');
+                            // if (overlay) say('DBG#27 leaving overlay visible until submit');
+
+                            if (DEBUG_MODE) {
+                                // say('DBG#28 DEBUG submit now');
+                                form.submit();
+                            }
+                        } catch (ex) {
+                            alert('Encryption failed: ' + (ex && ex.message || ex));
+                            if (overlay) overlay.style.display = 'none';
+                            // DO NOT submit here. Investigate instead.
+                        }
+                    });
+
+                    // say('DBG#29 submit listener attached');
                 }
-            });
+            })();
         </script>
+
 
 
         {{ form_end(form) }}

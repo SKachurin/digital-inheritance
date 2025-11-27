@@ -40,45 +40,43 @@ class NoteCreateController extends AbstractController
             return $this->redirectToRoute('user_home_heir');
         }
 
-        if ($customer instanceof \App\Entity\Customer) {
+        $defaultText = $this->translator->trans('note_creation.default_text');
+        $note = new NoteCreateInputDto(
+            $customer,
+            $defaultText
+        );
 
-            $defaultText = $this->translator->trans('note_creation.default_text');
-            $note = new NoteCreateInputDto(
-                $customer,
-                $defaultText
-            );
+        $form = $this->createForm(NoteCreationType::class, $note, ['customerId' => $customer->getId(), 'decodedNote' => false]);
+        $form->handleRequest($request);
 
-            $form = $this->createForm(NoteCreationType::class, $note, ['customerId' => $customer->getId(),'decodedNote' => false]);
-            $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
 
-            if ($form->isSubmitted() && $form->isValid()) {
+            /** @var NoteCreateInputDto $customerNote */
+            $customerNote = $form->getData();
 
-                /** @var NoteCreateInputDto $customerNote */
-                $customerNote = $form->getData();
+            // Read the hidden field created by JS
+            $customerNote->setFrontendEncrypted($form->get('frontendEncrypted')->getData());
 
-                // Read the hidden field created by JS
-                $customerNote->setFrontendEncrypted((bool)$request->request->get('frontend_encrypted'));
+            $envelope = $this->commandBus->dispatch($customerNote);
 
-                $envelope = $this->commandBus->dispatch($customerNote);
+            $handledStamp = $envelope->last(HandledStamp::class);
 
-                $handledStamp = $envelope->last(HandledStamp::class);
-
-                if (!$handledStamp) {
-                    throw new UnprocessableEntityHttpException('500 internal error (CommandBus not responding).');
-                }
-
-                $this->addFlash('success', $this->translator->trans('errors.flash.envelope_is_processed'));
-
-                return $this->redirectToRoute('user_home');
-
+            if (!$handledStamp) {
+                throw new UnprocessableEntityHttpException('500 internal error (CommandBus not responding).');
             }
 
-            return $this->render('note/noteCreate.html.twig', [
-                'form' => $form,
-                'decodedNote' => false,
-            ]);
+            $this->addFlash('success', $this->translator->trans('errors.flash.envelope_is_processed'));
+
+            return $this->redirectToRoute('user_home');
 
         }
+
+        return $this->render('note/noteCreate.html.twig', [
+            'form' => $form,
+            'decodedNote' => false,
+        ]);
+
+
         return $this->render('dashboard.html.twig');
     }
 }

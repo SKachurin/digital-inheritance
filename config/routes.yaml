@@ -109,10 +109,15 @@ note_delete:
 #    defaults:
 #        question: 'default' # Default value if question is not provided
 
-api_note_token:
-    path:       /api/note-tokens
-    controller: App\Controller\Api\NoteTokenController
-    methods:    [GET]
+api_kms_wrap:
+    path: /api/kms/wrap
+    controller: App\Controller\Api\KMSWrapController
+    methods: [POST]
+
+#api_kms_health:
+#    path:       /api/kms-health
+#    controller: App\Controller\Api\KMSHealthController
+#    methods: [ GET ]
 
 beneficiary_create:
     path:       /beneficiary/create

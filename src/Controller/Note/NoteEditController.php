@@ -50,6 +50,11 @@ class NoteEditController extends AbstractController
             throw new \UnexpectedValueException('There is no note with id ' . $noteId);
         }
 
+        $customer = $this->getUser();
+        if (!$customer instanceof \App\Entity\Customer) {
+            return $this->redirectToRoute('user_login');
+        }
+
         $noteCustomer = $note->getCustomer();
 
         if ($noteCustomer !== $currentCustomer) {

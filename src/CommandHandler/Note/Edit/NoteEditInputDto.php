@@ -17,17 +17,17 @@ class NoteEditInputDto
     private ?string $beneficiaryTextAnswerTwo = null;
 
     // multi-replica (KMS2/KMS3) blobs for each of the four streams
-    private ?string $customerTextAnswerOneKMS2 = null;
-    private ?string $customerTextAnswerOneKMS3 = null;
+    private ?string $customerTextAnswerOneKms2 = null;
+    private ?string $customerTextAnswerOneKms3 = null;
 
-    private ?string $customerTextAnswerTwoKMS2 = null;
-    private ?string $customerTextAnswerTwoKMS3 = null;
+    private ?string $customerTextAnswerTwoKms2 = null;
+    private ?string $customerTextAnswerTwoKms3 = null;
 
-    private ?string $beneficiaryTextAnswerOneKMS2 = null;
-    private ?string $beneficiaryTextAnswerOneKMS3 = null;
+    private ?string $beneficiaryTextAnswerOneKms2 = null;
+    private ?string $beneficiaryTextAnswerOneKms3 = null;
 
-    private ?string $beneficiaryTextAnswerTwoKMS2 = null;
-    private ?string $beneficiaryTextAnswerTwoKMS3 = null;
+    private ?string $beneficiaryTextAnswerTwoKms2 = null;
+    private ?string $beneficiaryTextAnswerTwoKms3 = null;
 
     // --- questions + answers (unchanged) ---
     private ?string $customerFirstQuestion = null;
@@ -113,91 +113,91 @@ class NoteEditInputDto
     // ---------------------------
     // Encrypted blobs (replicas)
     // ---------------------------
-    public function getCustomerTextAnswerOneKMS2(): ?string
+    public function getCustomerTextAnswerOneKms2(): ?string
     {
-        return $this->customerTextAnswerOneKMS2;
+        return $this->customerTextAnswerOneKms2;
     }
 
-    public function setCustomerTextAnswerOneKMS2(?string $customerTextAnswerOneKMS2): self
+    public function setCustomerTextAnswerOneKms2(?string $customerTextAnswerOneKms2): self
     {
-        $this->customerTextAnswerOneKMS2 = $customerTextAnswerOneKMS2;
+        $this->customerTextAnswerOneKms2 = $customerTextAnswerOneKms2;
         return $this;
     }
 
-    public function getCustomerTextAnswerOneKMS3(): ?string
+    public function getCustomerTextAnswerOneKms3(): ?string
     {
-        return $this->customerTextAnswerOneKMS3;
+        return $this->customerTextAnswerOneKms3;
     }
 
-    public function setCustomerTextAnswerOneKMS3(?string $customerTextAnswerOneKMS3): self
+    public function setCustomerTextAnswerOneKms3(?string $customerTextAnswerOneKms3): self
     {
-        $this->customerTextAnswerOneKMS3 = $customerTextAnswerOneKMS3;
+        $this->customerTextAnswerOneKms3 = $customerTextAnswerOneKms3;
         return $this;
     }
 
-    public function getCustomerTextAnswerTwoKMS2(): ?string
+    public function getCustomerTextAnswerTwoKms2(): ?string
     {
-        return $this->customerTextAnswerTwoKMS2;
+        return $this->customerTextAnswerTwoKms2;
     }
 
-    public function setCustomerTextAnswerTwoKMS2(?string $customerTextAnswerTwoKMS2): self
+    public function setCustomerTextAnswerTwoKms2(?string $customerTextAnswerTwoKms2): self
     {
-        $this->customerTextAnswerTwoKMS2 = $customerTextAnswerTwoKMS2;
+        $this->customerTextAnswerTwoKms2 = $customerTextAnswerTwoKms2;
         return $this;
     }
 
-    public function getCustomerTextAnswerTwoKMS3(): ?string
+    public function getCustomerTextAnswerTwoKms3(): ?string
     {
-        return $this->customerTextAnswerTwoKMS3;
+        return $this->customerTextAnswerTwoKms3;
     }
 
-    public function setCustomerTextAnswerTwoKMS3(?string $customerTextAnswerTwoKMS3): self
+    public function setCustomerTextAnswerTwoKms3(?string $customerTextAnswerTwoKms3): self
     {
-        $this->customerTextAnswerTwoKMS3 = $customerTextAnswerTwoKMS3;
+        $this->customerTextAnswerTwoKms3 = $customerTextAnswerTwoKms3;
         return $this;
     }
 
-    public function getBeneficiaryTextAnswerOneKMS2(): ?string
+    public function getBeneficiaryTextAnswerOneKms2(): ?string
     {
-        return $this->beneficiaryTextAnswerOneKMS2;
+        return $this->beneficiaryTextAnswerOneKms2;
     }
 
-    public function setBeneficiaryTextAnswerOneKMS2(?string $beneficiaryTextAnswerOneKMS2): self
+    public function setBeneficiaryTextAnswerOneKms2(?string $beneficiaryTextAnswerOneKms2): self
     {
-        $this->beneficiaryTextAnswerOneKMS2 = $beneficiaryTextAnswerOneKMS2;
+        $this->beneficiaryTextAnswerOneKms2 = $beneficiaryTextAnswerOneKms2;
         return $this;
     }
 
-    public function getBeneficiaryTextAnswerOneKMS3(): ?string
+    public function getBeneficiaryTextAnswerOneKms3(): ?string
     {
-        return $this->beneficiaryTextAnswerOneKMS3;
+        return $this->beneficiaryTextAnswerOneKms3;
     }
 
-    public function setBeneficiaryTextAnswerOneKMS3(?string $beneficiaryTextAnswerOneKMS3): self
+    public function setBeneficiaryTextAnswerOneKms3(?string $beneficiaryTextAnswerOneKms3): self
     {
-        $this->beneficiaryTextAnswerOneKMS3 = $beneficiaryTextAnswerOneKMS3;
+        $this->beneficiaryTextAnswerOneKms3 = $beneficiaryTextAnswerOneKms3;
         return $this;
     }
 
-    public function getBeneficiaryTextAnswerTwoKMS2(): ?string
+    public function getBeneficiaryTextAnswerTwoKms2(): ?string
     {
-        return $this->beneficiaryTextAnswerTwoKMS2;
+        return $this->beneficiaryTextAnswerTwoKms2;
     }
 
-    public function setBeneficiaryTextAnswerTwoKMS2(?string $beneficiaryTextAnswerTwoKMS2): self
+    public function setBeneficiaryTextAnswerTwoKms2(?string $beneficiaryTextAnswerTwoKms2): self
     {
-        $this->beneficiaryTextAnswerTwoKMS2 = $beneficiaryTextAnswerTwoKMS2;
+        $this->beneficiaryTextAnswerTwoKms2 = $beneficiaryTextAnswerTwoKms2;
         return $this;
     }
 
-    public function getBeneficiaryTextAnswerTwoKMS3(): ?string
+    public function getBeneficiaryTextAnswerTwoKms3(): ?string
     {
-        return $this->beneficiaryTextAnswerTwoKMS3;
+        return $this->beneficiaryTextAnswerTwoKms3;
     }
 
-    public function setBeneficiaryTextAnswerTwoKMS3(?string $beneficiaryTextAnswerTwoKMS3): self
+    public function setBeneficiaryTextAnswerTwoKms3(?string $beneficiaryTextAnswerTwoKms3): self
     {
-        $this->beneficiaryTextAnswerTwoKMS3 = $beneficiaryTextAnswerTwoKMS3;
+        $this->beneficiaryTextAnswerTwoKms3 = $beneficiaryTextAnswerTwoKms3;
         return $this;
     }
 
