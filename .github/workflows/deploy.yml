@@ -56,6 +56,15 @@ jobs:
           export AWS_ACCESS_KEY_ID="${{secrets.AWS_ACCESS_KEY_ID}}";
           export AWS_SECRET_ACCESS_KEY="${{secrets.AWS_SECRET_ACCESS_KEY}}";
           export S3_BUCKET="${{secrets.S3_BUCKET}}";
+          export KMS_MODE="${{ secrets.KMS_MODE }}";
+          export API_HEALTHCHECK_IP_1="${{ secrets.API_HEALTHCHECK_IP_1 }}";
+          export API_HEALTHCHECK_IP_2="${{ secrets.API_HEALTHCHECK_IP_2 }}";
+          export API_HEALTHCHECK_CERT="${{ secrets.API_HEALTHCHECK_CERT }}";
+          export API_HEALTHCHECK_KEY="${{ secrets.API_HEALTHCHECK_KEY }}";
+          export API_HEALTHCHECK_CA="${{ secrets.API_HEALTHCHECK_CA }}";
+          export TEST_KMS_KEY_1="${{ secrets.TEST_KMS_KEY_1 }}";
+          export TEST_KMS_KEY_2="${{ secrets.TEST_KMS_KEY_2 }}";
+          export TEST_KMS_KEY_3="${{ secrets.TEST_KMS_KEY_3 }}";
           cd /var/www/;
           chmod +x deploy.sh;
           bash deploy.sh;

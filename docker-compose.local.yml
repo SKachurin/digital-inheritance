@@ -56,6 +56,10 @@ services:
       AWS_ACCESS_KEY_ID: "${AWS_ACCESS_KEY_ID}"
       AWS_SECRET_ACCESS_KEY: "${AWS_SECRET_ACCESS_KEY}"
       S3_BUCKET: "${S3_BUCKET}"
+      KMS_MODE: "${KMS_MODE}"
+      TEST_KMS_KEY_1: "${TEST_KMS_KEY_1}"
+      TEST_KMS_KEY_2: "${TEST_KMS_KEY_2}"
+      TEST_KMS_KEY_3: "${TEST_KMS_KEY_3}"
     extra_hosts:
       - "host.docker.internal:host-gateway"
     networks:

@@ -318,7 +318,13 @@
 
                                     anyWrapSucceeded = true;
 
-                                    const payload   = JSON.stringify({ c: enc.c_b64, iv: enc.iv_b64, w: w_b64, s: sB64 });
+                                    const payload = JSON.stringify({
+                                        kms_id: "kms" + kmsId,      // "kms1", "kms2", "kms3"
+                                        c: enc.c_b64,
+                                        iv: enc.iv_b64,
+                                        w: w_b64,
+                                        s: sB64
+                                    });
                                     const hiddenName = NAMES[slot][i];
                                     setHidden(hiddenName, payload);
                                     // say(`DBG#25 set payload ${slot}/KMS${kmsId} len=${payload.length} -> name="${hiddenName}"`);

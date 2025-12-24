@@ -23,6 +23,7 @@ class NoteEditOutputDto
     private string $customerCongrats = '';
     private ?int $attemptCount = null;
     private ?\DateTimeImmutable $lockoutUntil = null;
+    private ?int $rateLimitSeconds = null;
 
 
     public function __construct(Customer $customer)
@@ -191,5 +192,16 @@ class NoteEditOutputDto
     public function getLockoutUntil(): ?\DateTimeImmutable
     {
         return $this->lockoutUntil;
+    }
+
+    public function getRateLimitSeconds(): ?int
+    {
+        return $this->rateLimitSeconds;
+    }
+
+    public function setRateLimitSeconds(?int $rateLimitSeconds): self
+    {
+        $this->rateLimitSeconds = $rateLimitSeconds;
+        return $this;
     }
 }

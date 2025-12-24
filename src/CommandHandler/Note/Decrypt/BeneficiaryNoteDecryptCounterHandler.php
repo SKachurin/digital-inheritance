@@ -1,4 +1,5 @@
 <?php
+
 namespace App\CommandHandler\Note\Decrypt;
 
 use Doctrine\ORM\EntityManagerInterface;
@@ -23,18 +24,44 @@ class BeneficiaryNoteDecryptCounterHandler
     {
         $note = $inputDto->getNote();
 
-        $attemptCount = $note->getAttemptCount() ?? 0;
         $now = new \DateTimeImmutable();
-        $lockoutUntil = $note->getLockoutUntil();
+
+        // NEW: handle KMS 429
+        $rateLimitSeconds = $inputDto->getRateLimitSeconds();
+        if ($rateLimitSeconds !== null) {
+
+            $lockoutUntil = $now->add(new \DateInterval('PT' . $rateLimitSeconds . 'S'));
+            $note->setLockoutUntil($lockoutUntil);
+
+            $minutes = (int) ceil($rateLimitSeconds / 60);
+            $beneficiaryCongrats = sprintf(
+                'Too many decryption requests for this answer. Next attempt available in %d minutes.',
+                $minutes
+            );
+
+            $this->entityManager->persist($note);
+            $this->entityManager->flush();
+
+            $inputDto->setBeneficiaryCongrats($beneficiaryCongrats);
+            $inputDto->setAttemptCount($note->getAttemptCount());
+            $inputDto->setLockoutUntil($note->getLockoutUntil());
+
+            return $inputDto;
+        }
+
+        // OLD logic below – unchanged
+        $attemptCount  = $note->getAttemptCount() ?? 0;
+        $lockoutUntil  = $note->getLockoutUntil();
 
         if ($lockoutUntil && $now < $lockoutUntil) {
 
-            $interval = $now->diff($lockoutUntil);
+            $interval    = $now->diff($lockoutUntil);
             $minutesLeft = $interval->i + ($interval->h * 60);
             $beneficiaryCongrats = sprintf(
                 'You used all attempts. Next attempt available in %d minutes.',
                 $minutesLeft
             );
+
         } else {
 
             if ($inputDto->getCustomerText() == null) {
@@ -60,7 +87,6 @@ class BeneficiaryNoteDecryptCounterHandler
 
                 } else {
 
-                    // More than MAX_ATTEMPTS
                     $lockTime = ($attemptCount - $this->MAX_ATTEMPTS + 1) * $this->FIRST_LOCK_TIME;
                     $beneficiaryCongrats = sprintf(
                         'Too many attempts. Next attempt in %d minutes.',

@@ -1,66 +1,49 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Service;
 
-use Exception;
+use App\Service\Kms\KmsRateLimitedExceptionService;
+use App\Service\Kms\KmsUnwrapInterface;
+use Psr\Log\LoggerInterface;
 use Random\RandomException;
 use SodiumException;
 use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
-use Psr\Log\LoggerInterface;
 
-class CryptoService
+final class CryptoService
 {
     private string $key;
-    private LoggerInterface $logger;
+    private ?string $personalString = null;
 
-    private ?string $personalString;
-
-    /** @var array<string> */
-    private array $kmsKeys = [];
-
-    /**
-     * @throws Exception
-     */
     public function __construct(
-        ParameterBagInterface $params,
-        LoggerInterface $logger,
-        ?string $personalString = ''
-    )
-    {
-        $this->logger = $logger;
-        $this->personalString = $personalString;
-
-        // Load platform base key
-        $baseKey = $params->get('encryption_key');
-        if (!is_string($baseKey)) {
-            throw new \InvalidArgumentException('baseKey must be string');
+        private readonly ParameterBagInterface $params,
+        private readonly LoggerInterface $logger,
+        private readonly KmsUnwrapInterface $kmsUnwrap,
+        ?string $personalString = null
+    ) {
+        $baseKey = $this->params->get('encryption_key');
+        if (!is_string($baseKey) || $baseKey === '') {
+            throw new \InvalidArgumentException('encryption_key must be a non-empty string');
         }
 
-        // Load personal string (answer)
-        $this->personalString = $personalString ?: (string)$params->get('personal_string');
-        if (!is_string($this->personalString)) {
-            throw new \InvalidArgumentException('personal_string must be string');
+        $this->personalString = $personalString ?: (string) $this->params->get('personal_string');
+        if (!is_string($this->personalString) || $this->personalString === '') {
+            throw new \InvalidArgumentException('personal_string must be a non-empty string');
         }
 
-        // Legacy XOR key derivation
         $hashedPersonal = hash('sha256', $this->personalString, true);
         $hashedBase     = hash('sha256', $baseKey, true);
         $finalKey       = $hashedPersonal ^ $hashedBase;
 
         if (strlen($finalKey) !== 32) {
-            throw new Exception("Combined key is not 32 bytes long");
+            throw new \RuntimeException('Combined key is not 32 bytes long');
         }
 
         $this->key = $finalKey;
-
-        // Load mock KMS keys
-        $this->loadKmsKeys($params);
     }
 
-    /**
-     * @throws RandomException
-     * @throws SodiumException
-     */
+    /** @throws RandomException @throws SodiumException */
     public function encryptData(?string $data): ?string
     {
         if ($data === null) {
@@ -73,16 +56,17 @@ class CryptoService
         return base64_encode($nonce . $encrypted);
     }
 
-    /**
-     * @throws SodiumException
-     */
+    /** @throws SodiumException */
     public function decryptData(?string $encryptedData): false|string
     {
         if ($encryptedData === null || $encryptedData === '') {
             return '';
         }
 
-        $decoded = base64_decode($encryptedData);
+        $decoded = base64_decode($encryptedData, true);
+        if ($decoded === false || strlen($decoded) < SODIUM_CRYPTO_SECRETBOX_NONCEBYTES) {
+            return false;
+        }
 
         $nonce = substr($decoded, 0, SODIUM_CRYPTO_SECRETBOX_NONCEBYTES);
         $ciphertext = substr($decoded, SODIUM_CRYPTO_SECRETBOX_NONCEBYTES);
@@ -90,271 +74,132 @@ class CryptoService
         return sodium_crypto_secretbox_open($ciphertext, $nonce, $this->key);
     }
 
-    //  ENVELOPE MULTI-REPLICA DECRYPTION  (server-side)
-    public function decryptEnvelopeReplicas(array $encryptedSet, int $customerId, string $answer): false|string
+    /**
+     * @param array{0 $tripletJson :?string,1:?string,2:?string} $tripletJson encrypted JSON blobs from DB
+     * @return array{0:?string,1:?string,2:?string} plaintext per slot, null if not decrypted
+     * @throws KmsRateLimitedExceptionService|SodiumException
+     */
+    public function decryptEnvelopeTripletForUi(array $tripletJson, int $customerId, string $answer): array
     {
-        foreach ($encryptedSet as $i => $jsonBlob) {
-            if (!$jsonBlob) continue;
-            $obj = json_decode($jsonBlob, true);
-            if (!isset($obj['c'], $obj['iv'], $obj['w'], $obj['s'])) continue;
+        $result = [null, null, null];
 
-            $c  = base64_decode($obj['c']);
-            $iv = base64_decode($obj['iv']);
-            $w  = base64_decode($obj['w']);
-            $s  = base64_decode($obj['s']); // 16 bytes
+        // collect valid JSON objects by slot index (0/1/2)
+        $slots = [];
+        foreach ([0, 1, 2] as $i) {
+            $json = $tripletJson[$i] ?? null;
+            if (!is_string($json) || trim($json) === '') {
+                continue;
+            }
 
-            $c_b64 = $obj['c'];   // keep the base64 strings as-is
-            $iv_b64 = $obj['iv'];
-            $s_b64  = $obj['s'];  // base64 salt
+            $obj = json_decode($json, true);
+            if (!is_array($obj) || !isset($obj['c'], $obj['iv'], $obj['w'], $obj['s'])) {
+                continue;
+            }
+            if (!is_string($obj['c']) || !is_string($obj['iv']) || !is_string($obj['w']) || !is_string($obj['s'])) {
+                continue;
+            }
 
-            $answerFp = base64_encode(hash('sha256', $c_b64 . '.' . $iv_b64 . '.' . $s_b64, true));
-
-            // derive H' from typed answer + stored salt
-            $H = sodium_crypto_pwhash(
-                32,
-                $answer,
-                $s,
-                5,                 // opslimit
-                64 * 1024 * 1024,  // memlimit
-                SODIUM_CRYPTO_PWHASH_ALG_ARGON2ID13
-            );
-
-
-            $kmsId = ($i % 3) + 1; // slot 0→KMS1, 1→KMS2, 2→KMS3 (consistent with create)
-            $dek = $this->kmsUnwrap($customerId, $kmsId, $w, $H, $answerFp);
-            if ($dek === false) continue;
-
-            // decrypt AES-GCM (ciphertext includes tag at the end)
-            $TAG_LEN = 16;
-            $tag = substr($c, -$TAG_LEN);
-            $ct  = substr($c, 0, -$TAG_LEN);
-
-            $plain = openssl_decrypt($ct, 'aes-256-gcm', $dek, OPENSSL_RAW_DATA, $iv, $tag, '');
-            if ($plain !== false) return $plain;
+            $slots[$i] = $obj;
         }
-        return false;
+
+        if ($slots === []) {
+            return $result;
+        }
+
+        // reference (c/iv/s must match across replicas)
+        $first = reset($slots);
+        $c_b64  = (string) $first['c'];
+        $iv_b64 = (string) $first['iv'];
+        $s_b64  = (string) $first['s'];
+
+        $salt = base64_decode($s_b64, true);
+        if ($salt === false || strlen($salt) !== 16) {
+            return $result;
+        }
+
+        $answerFp = base64_encode(hash('sha256', $c_b64 . '.' . $iv_b64 . '.' . $s_b64, true));
+
+        $H = sodium_crypto_pwhash(
+            32,
+            $answer,
+            $salt,
+            5,
+            64 * 1024 * 1024,
+            SODIUM_CRYPTO_PWHASH_ALG_ARGON2ID13
+        );
+        $h_b64 = base64_encode($H);
+
+        $indexToKms = [0 => 'kms1', 1 => 'kms2', 2 => 'kms3'];
+
+        $replicas = [];
+        foreach ($slots as $i => $obj) {
+            $kmsId = $indexToKms[$i] ?? null;
+            if (!$kmsId) {
+                continue;
+            }
+            $replicas[] = [
+                'kms_id' => $kmsId,
+                'w_b64'  => (string) $obj['w'],
+            ];
+        }
+
+        if ($replicas === []) {
+            return $result;
+        }
+
+        // IMPORTANT: no unknown mapping; we only trust per-kms deks map
+        $deks = $this->kmsUnwrap->unwrapDeks($customerId, $h_b64, $answerFp, $replicas);
+
+        foreach ($slots as $i => $obj) {
+            $kmsId = $indexToKms[$i] ?? null;
+            if (!$kmsId) {
+                continue;
+            }
+
+            $dek = $deks[$kmsId] ?? null;
+            if (!is_string($dek) || strlen($dek) !== 32) {
+                continue; // this KMS failed or returned invalid key
+            }
+
+            $ct = base64_decode((string) $obj['c'], true);
+            $iv = base64_decode((string) $obj['iv'], true);
+            if ($ct === false || $iv === false) {
+                continue;
+            }
+
+            $plain = $this->decryptAesGcm($dek, $iv, $ct);
+            if ($plain !== false) {
+                $result[$i] = $plain;
+            }
+        }
+
+        return $result;
     }
 
-    //  ENVELOPE MULTI-REPLICA DECRYPTION  (per slot)
-    public function decryptEnvelopeReplicasPerSlot(
-        array $encryptedSet,
-        int $customerId,
-        string $answer
-    ): array {
-        $results = [];
+    private function decryptAesGcm(string $key32, string $iv12, string $ctWithTag): false|string
+    {
+        $TAG_LEN = 16;
+        if (strlen($ctWithTag) < $TAG_LEN) {
+            return false;
+        }
 
-        foreach ($encryptedSet as $i => $jsonBlob) {
-            if (!$jsonBlob) {
-                $results[$i] = null;
-                continue;
-            }
+        $tag        = substr($ctWithTag, -$TAG_LEN);
+        $ciphertext = substr($ctWithTag, 0, -$TAG_LEN);
 
-            $obj = json_decode($jsonBlob, true);
-            if (!isset($obj['c'], $obj['iv'], $obj['w'], $obj['s'])) {
-                $results[$i] = $jsonBlob;
-                continue;
-            }
-
-            $c  = base64_decode($obj['c']);
-            $iv = base64_decode($obj['iv']);
-            $w  = base64_decode($obj['w']);
-            $s  = base64_decode($obj['s']);
-
-            $c_b64 = $obj['c'];
-            $iv_b64 = $obj['iv'];
-            $s_b64  = $obj['s'];
-
-            $answerFp = base64_encode(
-                hash('sha256', $c_b64 . '.' . $iv_b64 . '.' . $s_b64, true)
-            );
-
-            $H = sodium_crypto_pwhash(
-                32,
-                $answer,
-                $s,
-                5,
-                64 * 1024 * 1024,
-                SODIUM_CRYPTO_PWHASH_ALG_ARGON2ID13
-            );
-
-            $kmsId = ($i % 3) + 1;
-
-            $dek = $this->kmsUnwrap($customerId, $kmsId, $w, $H, $answerFp);
-            if ($dek === false) {
-                // KMS missing / unwrap failed → keep encrypted JSON
-                $results[$i] = $jsonBlob;
-                continue;
-            }
-
-            $TAG_LEN = 16;
-            $tag = substr($c, -$TAG_LEN);
-            $ct  = substr($c, 0, -$TAG_LEN);
-
+        try {
             $plain = openssl_decrypt(
-                $ct,
+                $ciphertext,
                 'aes-256-gcm',
-                $dek,
+                $key32,
                 OPENSSL_RAW_DATA,
-                $iv,
+                $iv12,
                 $tag,
                 ''
             );
 
-            // if auth fails, still show ciphertext
-            $results[$i] = ($plain === false) ? $jsonBlob : $plain;
-        }
-
-        return $results;
-    }
-
-
-    //  INTERNAL SUPPORT FUNCTIONS
-    private function deriveUserKey(string $answer, string $salt16): string
-    {
-        // Align with browser: time=5, mem=64MiB, Argon2id, 32 bytes
-        $opslimit = 5;
-        $memlimit = 64 * 1024 * 1024; // bytes
-
-        return sodium_crypto_pwhash(
-            32,
-            $answer,
-            $salt16,
-            $opslimit,
-            $memlimit,
-            SODIUM_CRYPTO_PWHASH_ALG_ARGON2ID13
-        );
-    }
-
-    private function decryptAesGcm(string $key, string $iv, string $ct): false|string
-    {
-        try {
-            $TAG_LEN = 16; // 128-bit tag (WebCrypto default)
-
-            if (strlen($ct) < $TAG_LEN) {
-                return false;
-            }
-
-            $tag        = substr($ct, -$TAG_LEN);
-            $ciphertext = substr($ct, 0, -$TAG_LEN);
-
-            return openssl_decrypt(
-                $ciphertext,
-                'aes-256-gcm',
-                $key,
-                OPENSSL_RAW_DATA,
-                $iv,
-                $tag,
-                '' // no AAD
-            );
-        } catch (\Throwable $e) {
-            return false;
-        }
-    }
-
-    private function hkdfSha256(string $ikm, string $salt, string $info, int $len): string
-    {
-        return hash_hkdf('sha256', $ikm, $len, $info, $salt);
-    }
-
-
-    //  KMS TOKEN MOCK SYSTEM
-    private function loadKmsKeys(ParameterBagInterface $params): void
-    {
-        $this->kmsKeys = [
-            1 => (string) $params->get('TEST_KMS_KEY_1'),
-            2 => (string) $params->get('TEST_KMS_KEY_2'),
-            3 => (string) $params->get('TEST_KMS_KEY_3'),
-        ];
-    }
-
-    public function kmsWrap(
-        int $customerId,
-        int $kmsId,
-        string $dek,
-        string $H,
-        string $answerFp
-    ): string|false {
-        $kek = $this->getKekFor($kmsId);
-
-        // Disabled KMS → do NOT wrap at all
-        if ($kek === '') {
-            $this->logger->info(sprintf('KMS[%d] disabled, skipping wrap', $kmsId));
-            return false;
-        }
-
-        $kekPrime = hash_hkdf('sha256', $kek, 32, 'wrap-v2', $H);
-
-        $iv  = random_bytes(12);
-        $aad = $customerId . '|' . $answerFp;
-
-        $cipher = openssl_encrypt(
-            $dek,
-            'aes-256-gcm',
-            $kekPrime,
-            OPENSSL_RAW_DATA,
-            $iv,
-            $tag,
-            $aad
-        );
-
-        if ($cipher === false) {
-            $this->logger->error(sprintf('KMS[%d] wrap failed', $kmsId));
-            return false;
-        }
-
-        // Valid wrapped DEK (raw)
-        return $iv . $cipher . $tag;
-    }
-
-
-    public function kmsUnwrap(int $customerId, int $kmsId, string $wRaw, string $H, string $answerFp): false|string
-    {
-        $kek = $this->getKekFor($kmsId);
-
-        // disabled KMS
-        if ($kek === '') {
-//            $this->logger->info(sprintf('KMS[%d] disabled, skipping unwrap', $kmsId));
-            return false;
-        }
-
-        $kekPrime = hash_hkdf('sha256', $kek, 32, 'wrap-v2', $H);
-
-        $iv   = substr($wRaw, 0, 12);
-        $rest = substr($wRaw, 12);
-        $tag  = substr($rest, -16);
-        $ct   = substr($rest, 0, -16);
-
-        $aad = $customerId . '|' . $answerFp;
-
-        try {
-            $dek = openssl_decrypt(
-                $ct,
-                'aes-256-gcm',
-                $kekPrime,
-                OPENSSL_RAW_DATA,
-                $iv,
-                $tag,
-                $aad
-            );
-            return $dek === false ? false : $dek;
+            return $plain === false ? false : $plain;
         } catch (\Throwable) {
             return false;
         }
-    }
-
-    private function getKekFor(int $kmsId): string
-    {
-        if (!array_key_exists($kmsId, $this->kmsKeys)) {
-            throw new \InvalidArgumentException('bad kms id');
-        }
-
-        $k = (string) $this->kmsKeys[$kmsId];
-
-        // Disabled → empty string, kmsWrap decides what to do
-        if ($k === '') {
-            return '';
-        }
-
-        return hash('sha256', $k, true);
     }
 }

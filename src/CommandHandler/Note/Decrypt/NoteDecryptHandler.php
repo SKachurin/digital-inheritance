@@ -4,75 +4,110 @@ declare(strict_types=1);
 
 namespace App\CommandHandler\Note\Decrypt;
 
-use App\CommandHandler\Note\Create\NoteCreateInputDto;
-use App\Entity\Note;
 use App\Service\CryptoService;
-use Exception;
-use Psr\Log\LoggerInterface;
-use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
+use App\Service\Kms\KmsRateLimitedExceptionService;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
 #[AsMessageHandler]
-class NoteDecryptHandler  // TODO Looks like legacy to me
+final class NoteDecryptHandler
 {
-    private ParameterBagInterface $params;
-    private LoggerInterface $logger;
-
-
     public function __construct(
-        ParameterBagInterface $params,
-        LoggerInterface $logger
-    )
-    {
-        $this->params = $params;
-        $this->logger = $logger;
-    }
+        private readonly CryptoService $crypto
+    ) {}
 
-    /**
-     * @throws Exception
-     */
     public function __invoke(NoteDecryptInputDto $input): NoteDecryptOutputDto
     {
-        $note = new NoteDecryptOutputDto($input->getCustomer());
-        $cryptoService = null;
-        $note->setCustomer($input->getCustomer());
+        $out = new NoteDecryptOutputDto($input->getCustomer());
+        $out->setCustomer($input->getCustomer());
 
-        if ($input->getCustomerTextAnswerOne() !== null) {
-            $personalString = $input->getCustomerFirstQuestionAnswer();
-//            $personalStringDecrypted = $personalString;//$this->cryptoService->decryptData($personalString);
+        $customerId = (int) $input->getCustomer()->getId();
+        $rateLimitSeconds = null;
 
-            $cryptoService = new CryptoService($this->params, $this->logger, $personalString);
+        $attempts = [
+            [
+                'answer'  => $input->getCustomerFirstQuestionAnswer(),
+                'triplet' => [
+                    $input->getCustomerTextAnswerOne(),
+                    $input->getCustomerTextAnswerOneKms2(),
+                    $input->getCustomerTextAnswerOneKms3(),
+                ],
+            ],
+            [
+                'answer'  => $input->getCustomerSecondQuestionAnswer(),
+                'triplet' => [
+                    $input->getCustomerTextAnswerTwo(),
+                    $input->getCustomerTextAnswerTwoKms2(),
+                    $input->getCustomerTextAnswerTwoKms3(),
+                ],
+            ],
+        ];
 
-//            $this->logger->info('getCustomerTextAnswerOne() !== null)  decryptedText.', ['$input->getCustomerTextAnswerOne()' => $input->getCustomerTextAnswerOne()]);
+        $chosenTriplet   = null; // encrypted triplet used for display fallback
+        $chosenSlots     = null; // plaintext per slot [0..2]
+        $fallbackTriplet = null; // last-seen non-empty triplet from DB
 
-            $decryptedText = $cryptoService->decryptData($input->getCustomerTextAnswerOne());
+        foreach ($attempts as $attempt) {
+            $answer  = $attempt['answer'];
+            $triplet = $attempt['triplet'];
 
-            if ($decryptedText === false) {
-                // Handle decryption failure for Customer Text Answer One
-                throw new \RuntimeException('Decryption failed for CustomerTextAnswerOne.');
+            if (!array_filter($triplet)) {
+                continue;
             }
-            $note->setCustomerText($decryptedText);
+
+            $fallbackTriplet = $triplet;
+
+            if ($answer === null || $answer === '') {
+                continue;
+            }
+
+            try {
+                $slots = $this->crypto->decryptEnvelopeTripletForUi($triplet, $customerId, $answer);
+            } catch (KmsRateLimitedExceptionService $e) {
+                $rateLimitSeconds = $e->getRetryAfterSeconds();
+                break;
+            }
+
+            $answerHasSuccess = false;
+            foreach ([0, 1, 2] as $i) {
+                $plain = $slots[$i] ?? null;
+                if (is_string($plain) && $plain !== '') {
+                    $answerHasSuccess = true;
+                    // DO NOT break early from slot loop if you want — but here we only need success flag.
+                    // We keep full $slots anyway.
+                }
+            }
+
+            if ($answerHasSuccess) {
+                $chosenTriplet = $triplet;
+                $chosenSlots   = $slots;
+                break;
+            }
         }
 
-        if ($input->getCustomerTextAnswerTwo() !== null) {
-            $personalString = $input->getCustomerSecondQuestionAnswer();
-//            $personalStringDecrypted = $personalString; //$this->cryptoService->decryptData($personalString);
-
-//            $this->logger->info(' getCustomerTextAnswerTwo() !== null getCustomerTextAnswerTwo.', ['$personalString' => $personalString]);
-//            $this->logger->info('getCustomerTextAnswerTwo() !== null   decryptedText.', ['$input->getCustomerTextAnswerTwo()' => $input->getCustomerTextAnswerTwo()]);
-
-            $cryptoService = new CryptoService($this->params, $this->logger, $personalString);
-
-            $decryptedText = $cryptoService->decryptData($input->getCustomerTextAnswerTwo());
-
-            if ($decryptedText === false) {
-                // Handle decryption failure for Customer Text Answer One
-                throw new \RuntimeException('Decryption failed for CustomerTextAnswerTwo.');
-            }
-            $note->setCustomerText($decryptedText);
-
+        if ($rateLimitSeconds !== null) {
+            $out->setRateLimitSeconds($rateLimitSeconds);
         }
 
-        return $note;
+        $displayTriplet = $chosenTriplet ?? $fallbackTriplet ?? [null, null, null];
+
+        $v0 = $displayTriplet[0] ?? null;
+        $v1 = $displayTriplet[1] ?? null;
+        $v2 = $displayTriplet[2] ?? null;
+
+        $anySuccess = false;
+
+        if ($chosenSlots !== null) {
+            // overlay plaintext where available; keep fallback where not
+            if (is_string($chosenSlots[0] ?? null) && $chosenSlots[0] !== '') { $v0 = $chosenSlots[0]; $anySuccess = true; }
+            if (is_string($chosenSlots[1] ?? null) && $chosenSlots[1] !== '') { $v1 = $chosenSlots[1]; $anySuccess = true; }
+            if (is_string($chosenSlots[2] ?? null) && $chosenSlots[2] !== '') { $v2 = $chosenSlots[2]; $anySuccess = true; }
+        }
+
+        $out->setCustomerText($v0);
+        $out->setCustomerTextKMS2($v1);
+        $out->setCustomerTextKMS3($v2);
+        $out->setDecryptionSucceeded($anySuccess);
+
+        return $out;
     }
 }

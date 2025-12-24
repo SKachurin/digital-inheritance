@@ -10,9 +10,18 @@ parameters:
     telegram_url: '%env(TELEGRAM_URL)%'
     admin_tg: '%env(ADMIN_TG)%'
     admin_wa: '%env(ADMIN_WA)%'
+
+    # mock keys are still needed (at least for local/testing)
     TEST_KMS_KEY_1: '%env(TEST_KMS_KEY_1)%'
     TEST_KMS_KEY_2: '%env(TEST_KMS_KEY_2)%'
     TEST_KMS_KEY_3: '%env(TEST_KMS_KEY_3)%'
+
+    # mTLS client creds used by Symfony → gateway
+    API_HEALTHCHECK_CERT: '%env(API_HEALTHCHECK_CERT)%'
+    API_HEALTHCHECK_KEY: '%env(API_HEALTHCHECK_KEY)%'
+    API_HEALTHCHECK_CA: '%env(API_HEALTHCHECK_CA)%'
+    API_HEALTHCHECK_IP_1: '%env(API_HEALTHCHECK_IP_1)%'
+    API_HEALTHCHECK_IP_2: '%env(API_HEALTHCHECK_IP_2)%'
 
 services:
     # default configuration for services in *this* file
@@ -61,6 +70,7 @@ services:
     App\Service\CryptoService:
         arguments:
             $params: '@parameter_bag'
+            $kmsUnwrap: '@App\Service\Kms\KmsUnwrapInterface'
 
     App\Service\VerificationWhatsAppService:
         arguments:
@@ -151,3 +161,22 @@ services:
             $databaseUrl: '%env(resolve:DATABASE_URL)%'
             $s3Bucket: '%env(S3_BUCKET)%'
             $admin_tg: '%env(ADMIN_TG)%'
+
+    App\Controller\Api\KMSWrapController:
+        arguments:
+            $kmsMode: '%env(KMS_MODE)%'
+            $testKmsKey1B64: '%env(TEST_KMS_KEY_1)%'
+            $testKmsKey2B64: '%env(TEST_KMS_KEY_2)%'
+            $testKmsKey3B64: '%env(TEST_KMS_KEY_3)%'
+
+    App\Service\Kms\KmsUnwrapSelector:
+        arguments:
+            $kmsMode: '%env(KMS_MODE)%'
+
+    App\Service\Kms\KmsUnwrapInterface: '@App\Service\Kms\KmsUnwrapSelector'
+
+    App\Service\Kms\KmsMockService:
+        arguments:
+            $testKmsKey1B64: '%env(TEST_KMS_KEY_1)%'
+            $testKmsKey2B64: '%env(TEST_KMS_KEY_2)%'
+            $testKmsKey3B64: '%env(TEST_KMS_KEY_3)%'
