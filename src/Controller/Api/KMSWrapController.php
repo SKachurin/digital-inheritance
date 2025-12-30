@@ -6,10 +6,8 @@ namespace App\Controller\Api;
 
 use App\Entity\Customer;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 final class KMSWrapController extends AbstractController
 {
@@ -28,19 +26,27 @@ final class KMSWrapController extends AbstractController
             return $this->json(['error' => 'unauthorized'], 401);
         }
 
-
         $in = json_decode($req->getContent(), true);
         if (!is_array($in)) {
             return $this->json(['error' => 'bad_request'], 400);
         }
 
-        $kms      = (int)($in['kms'] ?? 0);
-        $dekB64   = (string)($in['dek_b64'] ?? '');
-        $hB64     = (string)($in['h_b64'] ?? '');
-        $answerFp = (string)($in['answer_fp'] ?? '');
+        // accept kms_id ("kms1"/"kms2"/"kms3")
+        $kmsId    = (string) ($in['kms_id'] ?? ''); 
+        $dekB64   = (string) ($in['dek_b64'] ?? '');
+        $hB64     = (string) ($in['h_b64'] ?? '');
+        $answerFp = (string) ($in['answer_fp'] ?? '');
 
+        // validate kms_id
+        if (!preg_match('/^kms[1-3]$/', $kmsId)) { 
+            return $this->json(['error' => 'bad_request'], 400);
+        }
 
-        if (!in_array($kms, [1,2,3], true) || $dekB64 === '' || $hB64 === '' || $answerFp === '') {
+        // ADDED: map kms_id -> number (1/2/3) to keep old logic working
+        $kms = (int) substr($kmsId, 3); // ADDED ("kms1" -> 1)
+
+        // remove old in_array check on undefined $kmsId-only flow
+        if ($dekB64 === '' || $hB64 === '' || $answerFp === '') { 
             return $this->json(['error' => 'bad_request'], 400);
         }
 
@@ -50,12 +56,10 @@ final class KMSWrapController extends AbstractController
         if ($dek === false || strlen($dek) !== 32) return $this->json(['error' => 'bad_dek'], 400);
         if ($h === false || strlen($h) !== 32)     return $this->json(['error' => 'bad_h'], 400);
 
-
         if (strtolower(trim($this->kmsMode)) === 'mock') {
-
             $wB64 = $this->wrapDekMock(
                 (int) $user->getId(),
-                $kms,
+                $kms,       // now defined again
                 $dek,
                 $h,
                 $answerFp
@@ -69,7 +73,14 @@ final class KMSWrapController extends AbstractController
         }
 
         // GATEWAY: mTLS wrap
-        $w = $this->gateway->wrapDek((int)$user->getId(), $kms, $dekB64, $hB64, $answerFp);
+        $w = $this->gateway->wrapDek(
+            (int) $user->getId(),
+            $kms,          // now defined again
+            $dekB64,
+            $hB64,
+            $answerFp
+        );
+
         if ($w === null) {
             return $this->json(['error' => 'kms_unavailable'], 503);
         }

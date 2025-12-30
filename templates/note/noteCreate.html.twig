@@ -166,7 +166,7 @@
                                 method: 'POST',
                                 headers: {'Content-Type': 'application/json'},
                                 credentials: 'same-origin',
-                                body: JSON.stringify({ kms: kmsId, dek_b64: dekRawB64, h_b64: hB64, answer_fp })
+                                body: JSON.stringify({ kms_id: "kms" + kmsId, dek_b64: dekRawB64, h_b64: hB64, answer_fp })
                             });
 
                             const j = await res.json().catch(() => null);
