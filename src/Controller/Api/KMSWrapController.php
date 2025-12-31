@@ -32,21 +32,18 @@ final class KMSWrapController extends AbstractController
         }
 
         // accept kms_id ("kms1"/"kms2"/"kms3")
-        $kmsId    = (string) ($in['kms_id'] ?? ''); 
+        $kmsId    = (string) ($in['kms_id'] ?? '');
         $dekB64   = (string) ($in['dek_b64'] ?? '');
         $hB64     = (string) ($in['h_b64'] ?? '');
         $answerFp = (string) ($in['answer_fp'] ?? '');
 
-        // validate kms_id
-        if (!preg_match('/^kms[1-3]$/', $kmsId)) { 
+        if (!preg_match('/^kms[1-3]$/', $kmsId)) {
             return $this->json(['error' => 'bad_request'], 400);
         }
 
-        // ADDED: map kms_id -> number (1/2/3) to keep old logic working
-        $kms = (int) substr($kmsId, 3); // ADDED ("kms1" -> 1)
+        $kms = (int) substr($kmsId, 3); // "kms1" -> 1
 
-        // remove old in_array check on undefined $kmsId-only flow
-        if ($dekB64 === '' || $hB64 === '' || $answerFp === '') { 
+        if ($dekB64 === '' || $hB64 === '' || $answerFp === '') {
             return $this->json(['error' => 'bad_request'], 400);
         }
 
@@ -59,7 +56,7 @@ final class KMSWrapController extends AbstractController
         if (strtolower(trim($this->kmsMode)) === 'mock') {
             $wB64 = $this->wrapDekMock(
                 (int) $user->getId(),
-                $kms,       // now defined again
+                $kms,
                 $dek,
                 $h,
                 $answerFp
@@ -72,10 +69,9 @@ final class KMSWrapController extends AbstractController
             return $this->json(['w_b64' => $wB64], 200);
         }
 
-        // GATEWAY: mTLS wrap
         $w = $this->gateway->wrapDek(
             (int) $user->getId(),
-            $kms,          // now defined again
+            $kms,
             $dekB64,
             $hB64,
             $answerFp
@@ -113,9 +109,6 @@ final class KMSWrapController extends AbstractController
         $testKeyB64 = $this->getTestKeyForKms($kms);
         $testKey = base64_decode($testKeyB64, true);
         if ($testKey === false || $testKey === '') return false;
-        if ($testKey === '') {
-            return false; // KMS down
-        }
 
         $kek = hash('sha256', $testKey, true);               // 32B
         $kekPrime = $this->hkdfSha256($kek, $h32, 'wrap-v2', 32);

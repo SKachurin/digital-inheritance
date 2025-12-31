@@ -97,7 +97,6 @@ class KmsGatewayService
             $deks_b64 = $body['deks_b64'] ?? null;
             if (!is_array($deks_b64)) {
                 $this->logger->error(sprintf('KMS unwrap missing/invalid deks_b64 from %s', $baseUrl));
-                // treat as no success; try next gateway
                 continue;
             }
 
@@ -106,7 +105,7 @@ class KmsGatewayService
                     continue;
                 }
                 if (!is_string($dekB64) || $dekB64 === '') {
-                    continue; // failure for this KMS
+                    continue;
                 }
 
                 $dek = base64_decode($dekB64, true);
@@ -118,7 +117,7 @@ class KmsGatewayService
                 $deksOut[$kmsId] = $dek;
             }
 
-            return $deksOut; // may be empty => none succeeded
+            return $deksOut;
         }
 
         return [];
@@ -208,22 +207,22 @@ class KmsGatewayService
      */
     public function wrapDek(int $userId, int $kmsNumber, string $dek_b64, string $h_b64, string $answerFp, array $replicasMeta = []): ?string
     {
-        // Resolve gateways from DB the same way unwrap does.
-        // For wrap you can resolve using ALL kms entries (or pick via alias),
-        // simplest: store a dedicated "wrap gateways" kms alias in DB, or reuse kms1/2/3 gateway ids.
-        // Minimal: build replicas array with single kms_id like "kms{$kmsNumber}" and resolve on it.
-        $replicas = [['kms_id' => 'kms' . $kmsNumber, 'w_b64' => 'x']]; // dummy w_b64 just to reuse resolver
+        $kmsId = 'kms' . $kmsNumber; // e.g. "kms1"
+
+        // Use resolver based on DB gateway_ids for this kmsId
+        $replicas = [['kms_id' => $kmsId, 'w_b64' => 'x']]; // dummy, just to reuse resolver
         $urls = $this->resolveGatewayUrlsForReplicas($replicas);
         if (!$urls) {
             return null;
         }
 
+        // gateway contract
         $payload = [
             'user_id'   => $userId,
-            'kms'       => $kmsNumber,
             'dek_b64'   => $dek_b64,
             'h_b64'     => $h_b64,
             'answer_fp' => $answerFp,
+            'kms_ids'   => [$kmsId],
         ];
 
         foreach ($urls as $baseUrl) {
@@ -242,18 +241,38 @@ class KmsGatewayService
                 continue;
             }
 
-            if ($response->getStatusCode() !== 200) {
-                $this->logger->error(sprintf('KMS wrap unexpected HTTP %d from %s', $response->getStatusCode(), $baseUrl));
+            $status = $response->getStatusCode();
+            if ($status !== 200) {
+                $this->logger->error(sprintf('KMS wrap unexpected HTTP %d from %s', $status, $baseUrl));
                 continue;
             }
 
             $body = json_decode($response->getContent(false), true);
-            if (!is_array($body) || !isset($body['w_b64']) || !is_string($body['w_b64']) || $body['w_b64'] === '') {
-                $this->logger->error(sprintf('KMS wrap invalid body from %s', $baseUrl));
+            if (!is_array($body)) {
+                $this->logger->error(sprintf('KMS wrap invalid JSON from %s', $baseUrl));
                 continue;
             }
 
-            return $body['w_b64'];
+            // new gateway response shape: { results: { kms1: { ok:true, w_b64:"..." } } }
+            if (isset($body['results']) && is_array($body['results'])) {
+                $r = $body['results'][$kmsId] ?? null;
+                if (is_array($r) && ($r['ok'] ?? false) === true) {
+                    $w = $r['w_b64'] ?? null;
+                    if (is_string($w) && $w !== '') {
+                        return $w;
+                    }
+                }
+
+                $this->logger->error(sprintf('KMS wrap missing/failed result for %s via %s', $kmsId, $baseUrl));
+                continue;
+            }
+
+            // Backward-compat: old response shape: { w_b64: "..." }
+            if (isset($body['w_b64']) && is_string($body['w_b64']) && $body['w_b64'] !== '') {
+                return $body['w_b64'];
+            }
+
+            $this->logger->error(sprintf('KMS wrap invalid body from %s', $baseUrl));
         }
 
         return null;
