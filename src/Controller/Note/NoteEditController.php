@@ -12,6 +12,7 @@ use App\Form\Type\NoteEditType;
 use App\Form\Type\NoteEditType1;
 use App\Repository\NoteRepository;
 use App\Service\CryptoService;
+use Doctrine\ORM\EntityManagerInterface;
 use Random\RandomException;
 use SodiumException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -20,7 +21,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Messenger\Stamp\HandledStamp;
-use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 class NoteEditController extends AbstractController
@@ -33,8 +33,7 @@ class NoteEditController extends AbstractController
         private readonly NoteEditCounterHandler $noteEditCounterHandler,
         private readonly EntityManagerInterface $entityManager,
         private readonly TranslatorInterface    $translator
-    )
-    {}
+    ) {}
 
     /**
      * @throws SodiumException|RandomException
@@ -55,33 +54,27 @@ class NoteEditController extends AbstractController
             return $this->redirectToRoute('user_login');
         }
 
-        $noteCustomer = $note->getCustomer();
-
-        if ($noteCustomer !== $currentCustomer) {
+        if ($note->getCustomer() !== $currentCustomer) {
             throw new \UnexpectedValueException('It is not your Envelope');
         }
 
-        $dto = new NoteEditInputDto($noteCustomer);
+        // -----------------------------
+        // STEP 1: decrypt attempt form
+        // -----------------------------
+        $dto = new NoteEditInputDto($note->getCustomer());
 
         $dto
             ->setCustomerTextAnswerOne($note->getCustomerTextAnswerOne())
             ->setCustomerTextAnswerOneKms2($note->getCustomerTextAnswerOneKms2())
             ->setCustomerTextAnswerOneKms3($note->getCustomerTextAnswerOneKms3())
-            ->setCustomerFirstQuestion(
-                $this->cryptoService->decryptData(
-                    $noteCustomer->getCustomerFirstQuestion()
-                )
-            )
+            ->setCustomerFirstQuestion($this->cryptoService->decryptData($customer->getCustomerFirstQuestion()))
         ;
+
         $dto
             ->setCustomerTextAnswerTwo($note->getCustomerTextAnswerTwo())
             ->setCustomerTextAnswerTwoKms2($note->getCustomerTextAnswerTwoKms2())
             ->setCustomerTextAnswerTwoKms3($note->getCustomerTextAnswerTwoKms3())
-            ->setCustomerSecondQuestion(
-                $this->cryptoService->decryptData(
-                    $noteCustomer->getCustomerSecondQuestion()
-                )
-            )
+            ->setCustomerSecondQuestion($this->cryptoService->decryptData($customer->getCustomerSecondQuestion()))
         ;
 
         if ($note->getBeneficiary()) {
@@ -89,64 +82,52 @@ class NoteEditController extends AbstractController
                 ->setBeneficiaryTextAnswerOne($note->getBeneficiaryTextAnswerOne())
                 ->setBeneficiaryTextAnswerOneKms2($note->getBeneficiaryTextAnswerOneKms2())
                 ->setBeneficiaryTextAnswerOneKms3($note->getBeneficiaryTextAnswerOneKms3())
-                ->setBeneficiaryFirstQuestion(
-                    $this->cryptoService->decryptData(
-                        $note->getBeneficiary()->getBeneficiaryFirstQuestion()
-                    )
-                )
+                ->setBeneficiaryFirstQuestion($this->cryptoService->decryptData($note->getBeneficiary()->getBeneficiaryFirstQuestion()))
             ;
+
             $dto
                 ->setBeneficiaryTextAnswerTwo($note->getBeneficiaryTextAnswerTwo())
                 ->setBeneficiaryTextAnswerTwoKms2($note->getBeneficiaryTextAnswerTwoKms2())
                 ->setBeneficiaryTextAnswerTwoKms3($note->getBeneficiaryTextAnswerTwoKms3())
-                ->setBeneficiarySecondQuestion(
-                    $this->cryptoService->decryptData(
-                        $note->getBeneficiary()->getBeneficiarySecondQuestion()
-                    )
-                )
+                ->setBeneficiarySecondQuestion($this->cryptoService->decryptData($note->getBeneficiary()->getBeneficiarySecondQuestion()))
             ;
         }
 
         $dto->setAttemptCount($note->getAttemptCount());
         $dto->setLockoutUntil($note->getLockoutUntil());
-        //TODO show Statuses for Note when first try
 
         $form = $this->createForm(NoteEditType::class, $dto, ['beneficiary' => $note->getBeneficiary()]);
-
         $form->handleRequest($request);
 
+        // ---- STEP 1 submit
         if ($form->isSubmitted() && $form->isValid()) {
-
             /** @var NoteEditInputDto $noteData */
             $noteData = $form->getData();
 
             $envelope = $this->commandBus->dispatch($noteData);
-
             $handledStamp = $envelope->last(HandledStamp::class);
 
             if (!$handledStamp) {
                 throw new UnprocessableEntityHttpException('500 internal error (CommandBus not responding).');
             }
 
+            /** @var NoteEditOutputDto $handledResult */
             $handledResult = $handledStamp->getResult();
 
-            // Dispatch to NoteEditCounterHandler to update attempts/lockouts:
+            // update attempts/lockouts
             $this->noteEditCounterHandler->__invoke($handledResult);
 
-
             if ($handledResult->getAttemptCount() != 0) {
-
                 $form1 = $this->createForm(NoteEditType::class, $dto, ['beneficiary' => $note->getBeneficiary()]);
-
             } else {
-
+                // IMPORTANT: Step2 form uses NoteEditOutputDto as data_class,
+                // so NoteEditOutputDto MUST have frontendEncrypted + 12 blob fields.
                 $form1 = $this->createForm(NoteEditType1::class, $handledResult, ['beneficiary' => $note->getBeneficiary()]);
                 $decodedNote = true;
             }
 
             $note->setAttemptCount($handledResult->getAttemptCount());
             $note->setLockoutUntil($handledResult->getLockoutUntil());
-
             $this->entityManager->persist($note);
             $this->entityManager->flush();
 
@@ -158,48 +139,67 @@ class NoteEditController extends AbstractController
             ]);
         }
 
+        // -----------------------------
+        // STEP 2: edit submit form
+        // -----------------------------
         if ($request->request->has('note_edit_type1')) {
-
             $noteEditOutputDto = new NoteEditOutputDto($currentCustomer);
 
             $form1 = $this->createForm(NoteEditType1::class, $noteEditOutputDto, ['beneficiary' => $note->getBeneficiary()]);
-
             $form1->handleRequest($request);
 
             if ($form1->isSubmitted() && $form1->isValid()) {
-
                 /** @var NoteEditOutputDto $data */
                 $data = $form1->getData();
 
-                $inputDto = new NoteEditTextInputDto($currentCustomer, $note);
-                $inputDto->setCustomerText($data->getCustomerText());
+                $inputDto = new NoteEditTextInputDto($currentCustomer, $note, $data->getCustomerText());
 
+                // frontend flag + blobs (must exist on NoteEditOutputDto)
+                $inputDto->setFrontendEncrypted($data->isFrontendEncrypted());
+
+                $inputDto->setCustomerTextAnswerOne($data->getCustomerTextAnswerOne());
+                $inputDto->setCustomerTextAnswerOneKms2($data->getCustomerTextAnswerOneKms2());
+                $inputDto->setCustomerTextAnswerOneKms3($data->getCustomerTextAnswerOneKms3());
+
+                $inputDto->setCustomerTextAnswerTwo($data->getCustomerTextAnswerTwo());
+                $inputDto->setCustomerTextAnswerTwoKms2($data->getCustomerTextAnswerTwoKms2());
+                $inputDto->setCustomerTextAnswerTwoKms3($data->getCustomerTextAnswerTwoKms3());
+
+                if ($note->getBeneficiary()) {
+                    $inputDto->setBeneficiaryTextAnswerOne($data->getBeneficiaryTextAnswerOne());
+                    $inputDto->setBeneficiaryTextAnswerOneKms2($data->getBeneficiaryTextAnswerOneKms2());
+                    $inputDto->setBeneficiaryTextAnswerOneKms3($data->getBeneficiaryTextAnswerOneKms3());
+
+                    $inputDto->setBeneficiaryTextAnswerTwo($data->getBeneficiaryTextAnswerTwo());
+                    $inputDto->setBeneficiaryTextAnswerTwoKms2($data->getBeneficiaryTextAnswerTwoKms2());
+                    $inputDto->setBeneficiaryTextAnswerTwoKms3($data->getBeneficiaryTextAnswerTwoKms3());
+                }
+
+                // questions + answers (plaintext)
                 $inputDto->setCustomerFirstQuestion($data->getCustomerFirstQuestion());
                 $inputDto->setCustomerFirstQuestionAnswer($data->getCustomerFirstQuestionAnswer());
+
                 $inputDto->setCustomerSecondQuestion($data->getCustomerSecondQuestion());
                 $inputDto->setCustomerSecondQuestionAnswer($data->getCustomerSecondQuestionAnswer());
 
-                if ($data->getBeneficiaryFirstQuestion()){
+                if ($note->getBeneficiary()) {
                     $inputDto->setBeneficiaryFirstQuestion($data->getBeneficiaryFirstQuestion());
                     $inputDto->setBeneficiaryFirstQuestionAnswer($data->getBeneficiaryFirstQuestionAnswer());
-                }
-               if ($data->getBeneficiarySecondQuestion()){
-                   $inputDto->setBeneficiarySecondQuestion($data->getBeneficiarySecondQuestion());
-                   $inputDto->setBeneficiarySecondQuestionAnswer($data->getBeneficiarySecondQuestionAnswer());
-               }
 
-                $this->noteEditTextHandler->__invoke($inputDto); // handler
+                    $inputDto->setBeneficiarySecondQuestion($data->getBeneficiarySecondQuestion());
+                    $inputDto->setBeneficiarySecondQuestionAnswer($data->getBeneficiarySecondQuestionAnswer());
+                }
+
+                $this->noteEditTextHandler->__invoke($inputDto);
 
                 $this->addFlash('success', $this->translator->trans('errors.flash.note_updated'));
-
                 return $this->redirectToRoute('user_home');
             }
-
         }
 
         return $this->render('note/noteEdit.html.twig', [
-            'form' => $form,
-            'decodedNote' => $decodedNote
+            'form' => $form->createView(),
+            'decodedNote' => $decodedNote,
         ]);
     }
 }

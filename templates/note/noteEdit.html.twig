@@ -1,9 +1,6 @@
 {% extends '/user/dashboard/layout.html.twig' %}
 {% block dashboard_main %}
     <style>
-        textarea{
-            height: 5em !important;
-        }
         .form-container {
             padding-top: 4em;
         }
@@ -44,41 +41,13 @@
             background-color: #e9ecef;
         }
 
-        /* full-page overlay spinner */
-        #loading-overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(255, 255, 255, 0.7);
-            z-index: 9999;
-            justify-content: center;
-            align-items: center;
-        }
-
-        #loading-overlay .spinner {
-            border: 5px solid #ccc;
-            border-top: 5px solid #000;
-            border-radius: 50%;
-            width: 50px;
-            height: 50px;
-            animation: spin 1s linear infinite;
-        }
-
-        @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-        }
-
+        /* STEP1: encrypted blob collapse UI */
         #encrypted-block {
             position: relative;
             overflow: hidden;
             transition: max-height 0.5s ease;
         }
 
-        /* Height for 3.5 textareas (15em each → adjust if different) */
         #encrypted-block.collapsed {
             max-height: 22em; /* 3.5 × 5em + some padding */
         }
@@ -93,11 +62,7 @@
             right: 0;
             bottom: 0;
             height: 4em;
-            background: linear-gradient(
-                    to bottom,
-                    rgba(255,255,255,0),
-                    rgba(255,255,255,1)
-            );
+            background: linear-gradient(to bottom, rgba(255, 255, 255, 0), rgba(255, 255, 255, 1));
             pointer-events: none;
             transition: opacity 0.3s;
         }
@@ -107,8 +72,39 @@
         }
 
         #show-all-btn {
-            margin-bottom: 2em
-        ;
+            margin-bottom: 2em;
+        }
+
+        /* STEP2: encrypting overlay */
+        /*#encrypting-overlay {*/
+        /*    position: fixed;*/
+        /*    inset: 0;*/
+        /*    background: rgba(255, 255, 255, .9);*/
+        /*    display: none;*/
+        /*    justify-content: center;*/
+        /*    align-items: center;*/
+        /*    z-index: 9999;*/
+        /*}*/
+
+        /*!* one spinner definition *!*/
+        /*.spinner-lg {*/
+        /*    border: 6px solid #ccc;*/
+        /*    border-top: 6px solid #333;*/
+        /*    border-radius: 50%;*/
+        /*    width: 60px;*/
+        /*    height: 60px;*/
+        /*    animation: spin 1s linear infinite;*/
+        /*}*/
+
+        /*@keyframes spin {*/
+        /*    100% {*/
+        /*        transform: rotate(360deg);*/
+        /*    }*/
+        /*}*/
+
+        /* STEP2: make “normal” textareas smaller without breaking STEP1 */
+        .note-edit-step2 textarea {
+            height: 5em;
         }
     </style>
 
@@ -116,6 +112,9 @@
         document.addEventListener("DOMContentLoaded", () => {
             const block = document.getElementById("encrypted-block");
             const btn = document.getElementById("show-all-btn");
+
+            // decodedNote=true branch has no button/block
+            if (!block || !btn) return;
 
             btn.addEventListener("click", () => {
                 block.classList.remove("collapsed");
@@ -126,9 +125,10 @@
     </script>
 
     <div class="transactions-section">
+
         {# --------------------------------------------------------- #}
         {# STEP 1: USER ENTERS ANSWER → BACKEND TRIES TO DECRYPT     #}
-        {# form = NoteEditType (readonly encrypted blobs + answers) #}
+        {# form = NoteEditType (readonly encrypted blobs + answers)  #}
         {# decodedNote = false                                       #}
         {# --------------------------------------------------------- #}
         {% if not decodedNote %}
@@ -139,7 +139,6 @@
                 <div class="alert alert-info">{{ customerCongrats }}</div>
             {% endif %}
 
-            {# Show the whole form (encrypted fields + question + answer inputs) #}
             {{ form_start(form) }}
 
             <div id="encrypted-block" class="collapsed">
@@ -164,70 +163,270 @@
                 <div id="fade-overlay"></div>
             </div>
 
-            <button type="button" id="show-all-btn" class="btn btn-outline-dark btn">
+            <button type="button" id="show-all-btn" class="btn btn-outline-dark">
                 {{ 'show_all'|trans }}
             </button>
 
             {{ form_end(form) }}
-
         {% endif %}
 
         {# --------------------------------------------------------- #}
         {# STEP 2: BACKEND SUCCESSFULLY DECRYPTED                    #}
-        {# form = NoteEditType1 (3 decrypted replicas + questions)   #}
+        {# form = NoteEditType1 (PLAINTEXT + hidden 12 blobs)        #}
         {# decodedNote = true                                        #}
         {# --------------------------------------------------------- #}
         {% if decodedNote %}
-            <h2 style="padding-top: 2em;">{{ 'dashboard.edit_your_secure_envelope'|trans }}</h2>
-            <p>{{ 'do_some_staff'|trans }}</p>
+            <div class="note-edit-step2">
+                <h2 style="padding-top: 2em;">{{ 'dashboard.edit_your_secure_envelope'|trans }}</h2>
+                <p>{{ 'do_some_staff'|trans }}</p>
 
-            {% if customerCongrats is defined and customerCongrats %}
-                <div class="alert alert-info">{{ customerCongrats }}</div>
-            {% endif %}
+                {% if customerCongrats is defined and customerCongrats %}
+                    <div class="alert alert-info">{{ customerCongrats }}</div>
+                {% endif %}
 
-            {{ form_start(form) }}
+                <!-- Toggle Encrypt in Browser (forced ON for now) -->
+                <div class="form-check form-switch mb-4">
+                    <input class="form-check-input" type="checkbox" id="frontendEncryptedSwitch" checked disabled>
+                    <label class="form-check-label" for="frontendEncryptedSwitch">
+                        {{ 'dashboard.create_your_secure_envelope_switch'|trans|raw }}
+                    </label>
+                </div>
 
-            {# 3 decrypted replicas from 3 KMS regions #}
-            {{ form_row(form.customerText) }}
-            {{ form_row(form.customerTextKMS2) }}
-            {{ form_row(form.customerTextKMS3) }}
+                {{ form_start(form) }}
 
-            <div class="alert alert-success" style="padding: 2em;">
-                {{ 'if_decoded_can_edit'|trans|nl2br }}
+                {{ form_row(form.customerText) }}
+                {{ form_row(form.customerTextKms2) }}
+                {{ form_row(form.customerTextKms3) }}
+
+                <div class="alert alert-success" style="padding: 2em;">
+                    {{ 'if_decoded_can_edit'|trans|nl2br }}
+                </div>
+
+{#                <div class="divider">{{ 'your_questions'|trans }}</div>#}
+{#                <p>{{ 'your_questions_explain'|trans }}</p>#}
+{#                {{ form_row(form.customerFirstQuestion) }}#}
+{#                {{ form_row(form.customerFirstQuestionAnswer) }}#}
+{#                {{ form_row(form.customerSecondQuestion) }}#}
+{#                {{ form_row(form.customerSecondQuestionAnswer) }}#}
+
+{#                <div class="divider">{{ 'heir_questions'|trans }}</div>#}
+{#                <p>{{ 'heir_questions_explain'|trans }}</p>#}
+
+{#                {% if form.beneficiaryFirstQuestion is defined %}#}
+{#                    {{ form_row(form.beneficiaryFirstQuestion) }}#}
+{#                    {{ form_row(form.beneficiaryFirstQuestionAnswer) }}#}
+{#                    {{ form_row(form.beneficiarySecondQuestion) }}#}
+{#                    {{ form_row(form.beneficiarySecondQuestionAnswer) }}#}
+{#                {% endif %}#}
+
+{#                #}{# IMPORTANT: hidden fields (frontendEncrypted + 12 blobs) must be in the form type #}
+{#                #}{# form_end will render the rest including token #}
+
+{#                <div id="encrypting-overlay">#}
+{#                    <div class="overlay-content" style="text-align:center;">#}
+{#                        <h2>{{ 'overlay_encrypting'|trans }}</h2>#}
+{#                        <p>{{ 'overlay_wait'|trans }}</p>#}
+{#                        <div class="spinner-lg"></div>#}
+{#                    </div>#}
+{#                </div>#}
+
+{#                <script src="https://cdn.jsdelivr.net/npm/argon2-browser@1.18.0/dist/argon2-bundled.min.js"></script>#}
+{#                <script>#}
+{#                    async function sha256_b64_utf8(str) {#}
+{#                        const data = new TextEncoder().encode(str);#}
+{#                        const buf = await crypto.subtle.digest('SHA-256', data);#}
+{#                        return btoa(String.fromCharCode(...new Uint8Array(buf)));#}
+{#                    }#}
+
+{#                    function b64FromBytes(bytes) {#}
+{#                        return btoa(String.fromCharCode(...bytes));#}
+{#                    }#}
+{#                </script>#}
+
+{#                <script>#}
+{#                    (function () {#}
+{#                        if (document.readyState === 'loading') {#}
+{#                            document.addEventListener('DOMContentLoaded', boot);#}
+{#                        } else {#}
+{#                            boot();#}
+{#                        }#}
+
+{#                        function boot() {#}
+{#                            const form = document.querySelector('form[name="{{ form.vars.name }}"]');#}
+{#                            const overlay = document.getElementById('encrypting-overlay');#}
+{#                            const toggle = document.getElementById('frontendEncryptedSwitch');#}
+{#                            if (!form) return;#}
+
+{#                            function setHidden(name, val) {#}
+{#                                const el = form.querySelector('[name="' + name.replace(/"/g, '\\"') + '"]');#}
+{#                                if (!el) return; // must exist (added by FormType)#}
+{#                                el.value = val;#}
+{#                            }#}
+
+{#                            async function genDEK() {#}
+{#                                const raw = crypto.getRandomValues(new Uint8Array(32));#}
+{#                                const key = await crypto.subtle.importKey('raw', raw, 'AES-GCM', false, ['encrypt', 'decrypt']);#}
+{#                                return {key, raw};#}
+{#                            }#}
+
+{#                            async function aesGcmEncRaw(key, plaintext) {#}
+{#                                const iv = crypto.getRandomValues(new Uint8Array(12));#}
+{#                                const enc = await crypto.subtle.encrypt({#}
+{#                                    name: 'AES-GCM',#}
+{#                                    iv#}
+{#                                }, key, new TextEncoder().encode(plaintext));#}
+{#                                return {c_b64: b64FromBytes(new Uint8Array(enc)), iv_b64: b64FromBytes(iv)};#}
+{#                            }#}
+
+{#                            async function argonH(answer) {#}
+{#                                const salt = crypto.getRandomValues(new Uint8Array(16));#}
+{#                                const r = await argon2.hash({#}
+{#                                    pass: new TextEncoder().encode(answer),#}
+{#                                    salt,#}
+{#                                    time: 5, mem: 65536, parallelism: 1, hashLen: 32,#}
+{#                                    type: argon2.ArgonType.Argon2id, raw: true#}
+{#                                });#}
+{#                                return {h: new Uint8Array(r.hash), salt};#}
+{#                            }#}
+
+{#                            async function wrapWithKMS(kmsId, dekRawB64, hB64, answer_fp) {#}
+{#                                try {#}
+{#                                    const res = await fetch('/api/kms/wrap', {#}
+{#                                        method: 'POST',#}
+{#                                        headers: {'Content-Type': 'application/json'},#}
+{#                                        credentials: 'same-origin',#}
+{#                                        body: JSON.stringify({#}
+{#                                            kms_id: "kms" + kmsId,#}
+{#                                            dek_b64: dekRawB64,#}
+{#                                            h_b64: hB64,#}
+{#                                            answer_fp#}
+{#                                        })#}
+{#                                    });#}
+
+{#                                    const j = await res.json().catch(() => null);#}
+
+{#                                    if (!res.ok || !j || !j.w_b64) {#}
+{#                                        console.warn('KMS wrap failed for', kmsId, res.status, j);#}
+{#                                        return null;#}
+{#                                    }#}
+
+{#                                    return j.w_b64;#}
+{#                                } catch (e) {#}
+{#                                    console.warn('KMS wrap exception for', kmsId, e);#}
+{#                                    return null;#}
+{#                                }#}
+{#                            }#}
+
+{#                            form.addEventListener('submit', async function (ev) {#}
+{#                                if (!toggle || !toggle.checked) {#}
+{#                                    return; // allow server-side fallback#}
+{#                                }#}
+
+{#                                ev.preventDefault();#}
+{#                                if (overlay) overlay.style.display = 'flex';#}
+
+{#                                try {#}
+{#                                    const noteEl = document.getElementById("{{ form.customerText.vars.id }}");#}
+{#                                    const note = noteEl ? noteEl.value : '';#}
+{#                                    if (!note) throw new Error('Your Text is empty');#}
+
+{#                                    // RepeatedType ids#}
+{#                                    const a1 = document.getElementById("{{ form.customerFirstQuestionAnswer.vars.id }}_first")?.value || '';#}
+{#                                    const a1r = document.getElementById("{{ form.customerFirstQuestionAnswer.vars.id }}_second")?.value || '';#}
+{#                                    const a2 = document.getElementById("{{ form.customerSecondQuestionAnswer.vars.id }}_first")?.value || '';#}
+{#                                    const a2r = document.getElementById("{{ form.customerSecondQuestionAnswer.vars.id }}_second")?.value || '';#}
+
+{#                                    {% if form.beneficiaryFirstQuestionAnswer is defined %}#}
+{#                                        const b1 = document.getElementById("{{ form.beneficiaryFirstQuestionAnswer.vars.id }}_first")?.value || '';#}
+{#                                        const b1r = document.getElementById("{{ form.beneficiaryFirstQuestionAnswer.vars.id }}_second")?.value || '';#}
+{#                                        const b2 = document.getElementById("{{ form.beneficiarySecondQuestionAnswer.vars.id }}_first")?.value || '';#}
+{#                                        const b2r = document.getElementById("{{ form.beneficiarySecondQuestionAnswer.vars.id }}_second")?.value || '';#}
+{#                                    {% else %}#}
+{#                                        const b1 = '';#}
+{#                                        const b1r = '';#}
+{#                                        const b2 = '';#}
+{#                                        const b2r = '';#}
+{#                                    {% endif %}#}
+
+{#                                    if (a1 && a1r && a1 !== a1r) throw new Error('Customer Q1 answers do not match');#}
+{#                                    if (a2 && a2r && a2 !== a2r) throw new Error('Customer Q2 answers do not match');#}
+{#                                    if (b1 && b1r && b1 !== b1r) throw new Error('Heir Q1 answers do not match');#}
+{#                                    if (b2 && b2r && b2 !== b2r) throw new Error('Heir Q2 answers do not match');#}
+
+{#                                    // Mark FE encryption ON#}
+{#                                    setHidden("{{ form.frontendEncrypted.vars.full_name }}", '1');#}
+
+{#                                    const {key: dekKey, raw: dekRaw} = await genDEK();#}
+{#                                    const enc = await aesGcmEncRaw(dekKey, note);#}
+{#                                    const dekB64 = b64FromBytes(dekRaw);#}
+
+{#                                    const NAMES = {#}
+{#                                        c1: ["{{ form.customerTextAnswerOne.vars.full_name }}", "{{ form.customerTextAnswerOneKms2.vars.full_name }}", "{{ form.customerTextAnswerOneKms3.vars.full_name }}"],#}
+{#                                        c2: ["{{ form.customerTextAnswerTwo.vars.full_name }}", "{{ form.customerTextAnswerTwoKms2.vars.full_name }}", "{{ form.customerTextAnswerTwoKms3.vars.full_name }}"],#}
+{#                                        {% if form.beneficiaryTextAnswerOne is defined %}#}
+{#                                        b1: ["{{ form.beneficiaryTextAnswerOne.vars.full_name }}", "{{ form.beneficiaryTextAnswerOneKms2.vars.full_name }}", "{{ form.beneficiaryTextAnswerOneKms3.vars.full_name }}"],#}
+{#                                        b2: ["{{ form.beneficiaryTextAnswerTwo.vars.full_name }}", "{{ form.beneficiaryTextAnswerTwoKms2.vars.full_name }}", "{{ form.beneficiaryTextAnswerTwoKms3.vars.full_name }}"],#}
+{#                                        {% endif %}#}
+{#                                    };#}
+
+{#                                    const answers = {#}
+{#                                        c1: a1,#}
+{#                                        c2: a2,#}
+{#                                        {% if form.beneficiaryTextAnswerOne is defined %}#}
+{#                                        b1: b1,#}
+{#                                        b2: b2,#}
+{#                                        {% endif %}#}
+{#                                    };#}
+
+{#                                    // clear old values (so KMS-down doesn't keep stale replicas)#}
+{#                                    for (const slot of Object.keys(NAMES)) {#}
+{#                                        for (const fname of NAMES[slot]) setHidden(fname, '');#}
+{#                                    }#}
+
+{#                                    for (const [slot, ans] of Object.entries(answers)) {#}
+{#                                        if (!ans) continue;#}
+
+{#                                        const {h, salt} = await argonH(ans);#}
+{#                                        const hB64 = b64FromBytes(h);#}
+{#                                        const sB64 = b64FromBytes(salt);#}
+
+{#                                        const answerFp = await sha256_b64_utf8(`${enc.c_b64}.${enc.iv_b64}.${sB64}`);#}
+
+{#                                        for (let i = 0; i < 3; i++) {#}
+{#                                            const kmsIdStr = 'kms' + (i + 1);#}
+{#                                            const w_b64 = await wrapWithKMS(kmsIdStr, dekB64, hB64, answerFp);#}
+{#                                            if (!w_b64) continue;#}
+
+{#                                            const payload = JSON.stringify({#}
+{#                                                kms_id: kmsIdStr,#}
+{#                                                c: enc.c_b64,#}
+{#                                                iv: enc.iv_b64,#}
+{#                                                w: w_b64,#}
+{#                                                s: sB64#}
+{#                                            });#}
+
+{#                                            setHidden(NAMES[slot][i], payload);#}
+{#                                        }#}
+{#                                    }#}
+
+{#                                    form.submit();#}
+{#                                } catch (e) {#}
+{#                                    if (overlay) overlay.style.display = 'none';#}
+{#                                    alert('Encryption failed: ' + (e && e.message ? e.message : e));#}
+{#                                }#}
+{#                            });#}
+{#                        }#}
+{#                    })();#}
+{#                </script>#}
+
+                {{ form_end(form) }}
             </div>
-
-            <div class="divider">{{ 'your_questions'|trans }}</div>
-            <p>{{ 'your_questions_explain'|trans }}</p>
-            {{ form_row(form.customerFirstQuestion) }}
-            {{ form_row(form.customerFirstQuestionAnswer) }}
-            {{ form_row(form.customerSecondQuestion) }}
-            {{ form_row(form.customerSecondQuestionAnswer) }}
-
-            <div class="divider">{{ 'heir_questions'|trans }}</div>
-            <p>{{ 'heir_questions_explain'|trans }}</p>
-
-            {# Beneficiary block is optional, form type already handles presence #}
-            {% if form.beneficiaryFirstQuestion is defined %}
-                {{ form_row(form.beneficiaryFirstQuestion) }}
-                {{ form_row(form.beneficiaryFirstQuestionAnswer) }}
-                {{ form_row(form.beneficiarySecondQuestion) }}
-                {{ form_row(form.beneficiarySecondQuestionAnswer) }}
-            {% endif %}
-
-            {{ form_end(form) }}
         {% endif %}
     </div>
 
     {% for label, messages in app.flashes %}
         {% for message in messages %}
-            <div class="alert alert-{{ label }}">
-                {{ message }}
-            </div>
+            <div class="alert alert-{{ label }}">{{ message }}</div>
         {% endfor %}
     {% endfor %}
-
-    <!-- spinner overlay (not used now, reserved for future async flow) -->
-    <div id="loading-overlay">
-        <div class="spinner"></div>
-    </div>
 {% endblock %}

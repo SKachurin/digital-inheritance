@@ -162,11 +162,13 @@ click_here: 'Click here'
 restore_pass: 'Password Recovery'
 enter_email: "Please enter your first email(It's your login). Email have to be previously verified"
 create_your_secure_envelope_text: |
-  There are no limits to what you can enter here (though the field limit is 10000 characters). This could include crypto wallet credentials, online bank credentials, etc.
-  This envelope will be encrypted with half of our security key and half of the hash from your answer to the secret questions.
-  As we never save your answers, once encrypted, only you and God will have the knowledge required to decrypt this note.
-  We will never save your answers again—all decryption will be done on the fly from the answers you provide when accessing the note.
+  There are no limits on what you can store here (aside from a 10,000-character field limit). You can include anything from crypto wallet seed phrases and online banking credentials to love letters, personal notes, or even a treasure map for your loved ones.
+  
+  This Envelope is encrypted using a combination of our security key and cryptographic material derived from your answers to secret questions. We never store your answers — only encrypted data is saved.
 
+  Raw text and answers never leave your device. In addition to secure HTTPS, we use a client-side encryption protocol: your note is encrypted in the browser with a random AES-256-GCM data key, which is then wrapped using a key derived from your answer via Argon2id and further protected by our KMS using HKDF and authenticated encryption. Even with full database access, recovering the note without the correct answer is cryptographically infeasible.
+  
+  Decryption is performed on the fly using the answers you provide when accessing the Envelope. No decrypted content or passwords are ever stored.
 
 dashboard:
   text: "Hey there! 🤗"
@@ -184,11 +186,13 @@ dashboard:
 
   more_security_spoiler: "More About Security"
   more_security_text: |
-    In our DataBase everything is encoded except for your first email address. So, if our data were ever to ‘leak’ (which is highly unlikely), all they’d get is your first email address.<br>
-    "The current implementation uses Sodium’s Secretbox with XSalsa20 for encryption and Poly1305 for authentication. This is a strong, secure, and widely trusted encryption method.
-    It follows best practices by using XSalsa20-Poly1305, a robust nonce-based authenticated encryption scheme."<br><br>
-    For encrypting your 'Envelope,' we combine a string from your answers with our secret. 
-    Since your answers are never stored anywhere, each time you edit the ‘Envelope,’ you’ll need to decrypt it first.
+    In our database, everything is encrypted except for your primary email address. So if our data were ever to leak (which is highly unlikely), the only readable information would be that email address.<br><br>
+
+    Contacts and account fields are encrypted at rest on our servers using libsodium (XSalsa20-Poly1305), a widely trusted and robust authenticated encryption scheme.
+    The Envelope uses a separate client-side encryption protocol (AES-256-GCM + Argon2id + HKDF + KMS wrapping), where encryption happens in your browser before any data is sent to our servers.<br><br>
+  
+    For encrypting your Envelope, we derive cryptographic material from your secret answers and combine it with our infrastructure keys.
+    Since your answers are never stored anywhere, you must decrypt the Envelope first each time you want to edit it.
 
   delete_account: 'Delete my account'
   delete_account_tip: 'In accordance with GDPR rules, you can delete all your data from this app.'
@@ -199,11 +203,11 @@ dashboard:
   create_your_secure_envelope: 'Create Your Secure Envelope'
   create_your_secure_envelope_tip: 'This text field will be encrypted using answers to your secret questions.'
   create_your_secure_envelope_switch: |
-    Encrypt in browser 
-    (It takes a bit longer, and you’ll need to stay on the page until encryption is complete — but your Envelope gets sent even to our server already well encrypted.)
+    Encrypt in browser. You’ll need to stay on the page until encryption is complete. This is the only available option
+    because this approach guarantees that our back end never has access to your unencrypted data.
   edit_your_secure_envelope_note: |
-    Please note: when you use the Edit Envelope function, decryption occurs on our server. 
-    This is necessary to control the number of decryption attempts and apply short delays to prevent brute-force attacks. If you prefer not to process decrypted text through our server, you can avoid it by deleting the current Envelope and creating a new one. 
+    Please note: when you use the Edit Envelope function, decryption processed on our server. 
+    This is necessary to control the number of decryption attempts and apply delays to prevent brute-force attacks. If you prefer not to process decrypted text through our server, you can avoid it by deleting the current Envelope and creating a new one. 
     We recommend this approach for extra security - even though our code is open source and you can verify that no decrypted data or passwords are ever stored.
   edit_your_secure_envelope: 'Edit Your Secure Envelope'
   edit_your_secure_envelope_tip: 'To edit, you must first decrypt it using answers to your secret questions.'
@@ -424,7 +428,7 @@ faq:
 
   q2: 'Is my data safe? How do you ensure the security of my information?'
   a2: |
-    Yes. All your data—along with the secret questions and your heir’s contact details—is encrypted before it’s stored. We use robust encryption methods (XSalsa20-Poly1305) that require correct secret answers to decrypt your note. We never save your security answers themselves; they exist only in your memory. Once encrypted, your sensitive details remain locked until someone provides the correct answers.
+    Yes. All your data—along with secret questions and your heir’s contact details—is encrypted before it’s stored. Contacts and account fields are encrypted at rest on our servers using libsodium (XSalsa20-Poly1305). The Envelope uses a separate client-side encryption scheme (AES-256-GCM + Argon2id + HKDF + KMS wrapping) and can only be decrypted with the correct secret answers. We never store your security answers or derived keys; they exist only in your memory. Once encrypted, your sensitive information remains locked until the correct answers are provided.
 
   q3: 'Do I need to provide legal documents like a death certificate?'
   a3: |
@@ -448,7 +452,7 @@ faq:
 
   q8: 'Can I store multiple notes or large amounts of data?'
   a8: |
-    Currently, each account is limited to one secure note (“envelope”). That note can contain up to 5,000 characters of text, which you can use to include any credentials, instructions, or messages you wish. If you want multiple notes, you’d need to register additional accounts.
+    Currently, each account is limited to one secure note (“envelope”). That note can contain up to 10,000 characters of text, which you can use to include any credentials, instructions, or messages you wish. If you want multiple notes, you’d need to register additional accounts.
 
   q9: 'What if I forget my security answers or lose my main password?'
   a9: |
@@ -479,11 +483,7 @@ faq:
 
   q13: "Why do we use terms like ‘under normal conditions’ and ‘virtually impossible’ to describe our security?"
   a13: |
-    When it comes to encryption, nothing is 100% unbreakable if someone had unlimited time and super-powerful computers. 
-    We use “under normal conditions” to mean that if you choose strong, secret answers, keep your devices secure, 
-    and we correctly use modern encryption methods (like XSalsa20-Poly1305), then cracking your data would require resources far beyond what is realistic. 
-    “Virtually impossible” simply conveys that, in everyday use, the chance of an attacker succeeding is so minuscule that it isn’t a real concern—even though,
-    in theory, no system is perfect.
+    When it comes to encryption, nothing is 100% unbreakable if an attacker had unlimited time and super-powerful computers. By “under normal conditions,” we mean that if you choose strong secret answers, keep your devices secure, and we correctly use modern encryption methods (such as XSalsa20-Poly1305 for data at rest and our client-side Envelope scheme using AES-256-GCM, Argon2id, HKDF, and KMS wrapping), then breaking your data would require resources far beyond what is realistically available. “Virtually impossible” reflects that, in everyday use, the likelihood of a successful attack is so small that it isn’t a practical concern—although, in theory, no system is perfect.
 
   q14: 'Could my Envelope be compromised if someone physically steals your servers or if there’s a data breach?'
   a14: |
@@ -494,11 +494,10 @@ faq:
 
   q15: 'What if a future quantum computer breaks current encryption methods?'
   a15: |
-    At present, XSalsa20-Poly1305 and similar ciphers remain extremely secure against classical computers. 
-    Quantum computing could change the cryptography landscape in the future, but for now, 
-    no publicly known quantum machine can feasibly break this encryption. If large-scale quantum decryption 
-    ever becomes feasible, we’ll adapt our cryptography accordingly and let our users know 
-    how to transition to quantum-resistant methods.
+    At present, modern encryption algorithms such as XSalsa20-Poly1305 and AES-256-GCM remain extremely secure against all known classical computers.
+    Large-scale quantum computing could change the cryptographic landscape in the future, but today no publicly known quantum machine can feasibly break these schemes.
+  
+    If quantum-resistant encryption ever becomes necessary in practice, we will adapt our cryptography accordingly.
    
 
 contact_page:
@@ -611,7 +610,7 @@ about_page:
   privacy_security:
     title: "Privacy & Security at Every Step"
     bullet1: "Encrypted Contacts: Your contact and heir details are encrypted before storage."
-    bullet2: "Encrypted Secret Answers: They never saved to the database. Only you and your heir can unlock the Envelope."
+    bullet2: "Encrypted Secret Answers: They are never saved to the database. Only you and your heir can unlock the Envelope."
     bullet3: "No Selling of Data: We do not watch you, track you, or sell your data to any third party."
     bullet4: "Independence from Big Tech: No death certificate or lengthy procedures required. Your data remains yours."
 
@@ -662,12 +661,13 @@ about_page:
 note_creation:
   default_text: |
     Replace this text with your data:
-    There are no limits to what you can enter here (though the field limit is 10000 characters). This could include crypto wallet credentials, online bank credentials, etc.
-    This envelope will be encrypted with half of our security key and half of the hash from your answer to the secret questions.
-    Once encrypted, your answers will be deleted from our database, leaving only you and God with the knowledge required to decrypt this note.
-    We will never save your answers again—all decryption will be done on the fly from the answers you provide when accessing the note.
+    
+    There are no limits on what you can store here (aside from a 10,000-character field limit). You can include anything from crypto wallet seed phrases and online banking credentials to love letters, personal notes, or even a treasure map for your loved ones.
 
+    This Envelope is encrypted using a combination of our security key and cryptographic material derived from your answers to secret questions. We never store your answers — only encrypted data is saved.
+
+    Raw text and answers never leave your device. In addition to secure HTTPS, we use a client-side encryption protocol: your note is encrypted in the browser with a random AES-256-GCM data key, which is then wrapped using a key derived from your answer via Argon2id and further protected by our KMS using HKDF and authenticated encryption. Even with full database access, recovering the note without the correct answer is cryptographically infeasible.
+
+    Decryption is performed on the fly using the answers you provide when accessing the Envelope. No decrypted content or passwords are ever stored.
 if_decoded_can_edit: |
-  If you succeeded in decrypting your text and you see the decoded text above, you can edit it right there.
-  You can also edit your secret questions right here. 
-  But don't forget to fill in all secret answers, as we need to encode this new version of your Envelope with every secret answer (and we never save them). 
+  If you successfully decrypted your text and can see it above, you can copy it (for example, into Notepad), delete the current Envelope, and create a new one with the updated text and questions. This is the cleanest and most secure way to edit an Envelope.

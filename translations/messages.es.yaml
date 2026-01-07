@@ -162,11 +162,13 @@ click_here: 'Haga clic aquí'
 restore_pass: 'Recuperación de contraseña'
 enter_email: 'Por favor, introduzca su primer correo electrónico (es su usuario). El correo debe haber sido verificado previamente.'
 create_your_secure_envelope_text: |
-  No hay límites en lo que puede introducir aquí (aunque el campo tiene un límite de 10000 caracteres). Podría incluir credenciales de monederos de criptomonedas, bancos en línea, etc.
-  Este sobre se cifrará con la mitad de nuestra clave de seguridad y la mitad del hash derivado de sus respuestas a las preguntas secretas.
-  Como nunca guardamos tus respuestas, una vez cifradas, solo tú y Dios tendrán el conocimiento necesario para descifrar esta nota.
-  Nunca guardaremos sus respuestas: todo se descifrará al instante cada vez que proporcione las respuestas al acceder a la nota.
+  No hay restricciones sobre lo que puedes almacenar aquí (salvo un límite de 10.000 caracteres). Puedes guardar desde frases semilla de carteras cripto y credenciales de banca online hasta cartas de amor, notas personales o incluso un mapa del tesoro para tus seres queridos.
 
+  El Sobre se cifra utilizando una combinación de nuestra clave de seguridad y material criptográfico derivado de tus respuestas a preguntas secretas. Nunca almacenamos tus respuestas: solo se guarda información cifrada.
+
+  El texto en claro y las respuestas nunca salen de tu dispositivo. Además de HTTPS seguro, utilizamos un protocolo de cifrado del lado del cliente: la nota se cifra en el navegador con una clave de datos aleatoria AES-256-GCM, que luego se protege mediante una clave derivada de tu respuesta usando Argon2id y se refuerza con nuestra KMS mediante HKDF y cifrado autenticado. Incluso con acceso completo a la base de datos, es criptográficamente inviable recuperar la nota sin la respuesta correcta.
+
+  El descifrado se realiza en tiempo real utilizando las respuestas que proporcionas al acceder al Sobre. Nunca se almacenan datos descifrados ni contraseñas.
 dashboard:
   text: "¡Hola! 🤗"
   introduction_text_spoiler: "Primero lo primero"
@@ -184,11 +186,13 @@ dashboard:
 
   more_security_spoiler: "Más Sobre Seguridad"
   more_security_text: |
-    Excepto tu primera dirección de correo electrónico. Entonces, si nuestros datos se ‘filtraran’ (lo cual es muy poco probable), lo único que obtendrían sería tu primera dirección de correo electrónico.<br>
-    "La implementación actual utiliza Secretbox de Sodium con XSalsa20 para encriptación y Poly1305 para autenticación. Es un método de encriptación fuerte, seguro y ampliamente confiable.
-    Sigue las mejores prácticas utilizando XSalsa20-Poly1305, un esquema de encriptación autenticado basado en nonce."<br><br>
-    Para encriptar tu 'Sobre', combinamos una cadena de tus respuestas con nuestro secreto.
-    Como tus respuestas nunca se almacenan en ningún lugar, cada vez que edites el 'Sobre', primero tendrás que descifrarlo.
+    En nuestra base de datos todo está cifrado, excepto tu dirección de correo electrónico principal. Por lo tanto, si nuestros datos llegaran a filtrarse alguna vez (lo cual es muy poco probable), la única información legible sería ese correo electrónico.<br><br>
+
+    Los contactos y los campos de la cuenta se cifran «en reposo» en nuestros servidores utilizando libsodium (XSalsa20-Poly1305), un esquema de cifrado autenticado sólido y ampliamente confiable.
+    El Sobre utiliza un protocolo de cifrado independiente del lado del cliente (AES-256-GCM + Argon2id + HKDF + envoltura mediante KMS), donde el cifrado se realiza en tu navegador antes de que cualquier dato se envíe a nuestros servidores.<br><br>
+  
+    Para cifrar el Sobre, derivamos material criptográfico a partir de tus respuestas secretas y lo combinamos con claves de nuestra infraestructura.
+    Dado que tus respuestas nunca se almacenan, debes descifrar el Sobre cada vez que quieras editarlo.
 
   delete_account: 'Eliminar mi cuenta'
   delete_account_tip: 'De acuerdo con las normas del RGPD, puedes eliminar todos tus datos de esta aplicación.'
@@ -201,8 +205,9 @@ dashboard:
   create_your_secure_envelope: 'Cree su Sobre Seguro'
   create_your_secure_envelope_tip: "Este texto se cifrará utilizando las respuestas a tus preguntas secretas."
   create_your_secure_envelope_switch: |
-    Cifrar en el navegador 
-    (Tarda un poco más y debes permanecer en la página hasta que el cifrado se complete, pero tu Sobre se envía a nuestro servidor ya cifrado.)
+    Cifrar en el navegador.
+    Debes permanecer en la página hasta que el proceso de cifrado finalice. Esta es la única opción disponible,
+    ya que este enfoque garantiza que nuestro backend nunca tenga acceso a tus datos sin cifrar.
   edit_your_secure_envelope_note: |
     Ten en cuenta que al usar la función «Editar Sobre», el descifrado se realiza en nuestro servidor. 
     Esto es necesario para controlar el número de intentos de descifrado y aplicar breves pausas para evitar ataques de fuerza bruta. 
@@ -432,10 +437,12 @@ faq:
 
   q2: '¿Están seguros mis datos? ¿Cómo garantizan la protección de mi información?'
   a2: |
-    Sí. Todos tus datos—incluyendo tus preguntas secretas y los datos de contacto de tu heredero—se cifran antes de almacenarlos. 
-    Utilizamos métodos de cifrado robustos (XSalsa20-Poly1305) que exigen las respuestas correctas a las preguntas secretas 
-    para poder descifrar tu nota. Nunca guardamos tus respuestas en texto plano; solo existen en tu memoria. 
-    Una vez cifrados, tus datos confidenciales permanecen bloqueados hasta que alguien proporcione las respuestas correctas.
+    Sí. Todos tus datos —incluidas las preguntas secretas y los datos de contacto de tu Heredero— se cifran antes de almacenarse.
+    Los contactos y los campos de la cuenta se cifran «en reposo» en nuestros servidores utilizando libsodium (XSalsa20-Poly1305).
+    El Sobre utiliza un esquema de cifrado independiente del lado del cliente (AES-256-GCM + Argon2id + HKDF + envoltura mediante KMS) y solo puede descifrarse proporcionando las respuestas secretas correctas.
+  
+    Nunca almacenamos tus respuestas de seguridad ni las claves derivadas; existen únicamente en tu memoria.
+    Una vez cifrada, tu información sensible permanece bloqueada hasta que se proporcionan las respuestas correctas.
 
   q3: '¿Necesito presentar documentos legales, como un certificado de defunción?'
   a3: |
@@ -506,7 +513,12 @@ faq:
 
   q13: "¿Por qué usamos expresiones como ‘en condiciones normales’ y ‘prácticamente imposible’ para describir nuestra seguridad?"
   a13: |
-    En el mundo de la encriptación, nada es 100% inquebrantable si alguien contara con tiempo ilimitado y recursos computacionales extraordinarios. Decimos “en condiciones normales” para indicar que, si eliges respuestas secretas fuertes, mantienes tus dispositivos seguros y nosotros aplicamos correctamente métodos de encriptación modernos (como XSalsa20-Poly1305), descifrar tus datos requeriría recursos muy superiores a lo que es realista. “Prácticamente imposible” se utiliza para señalar que, en el uso cotidiano, la probabilidad de un ataque exitoso es tan insignificante que no representa una amenaza, aunque en teoría ningún sistema sea perfecto.
+    Cuando se trata de cifrado, ningún sistema es 100% irrompible si un atacante dispusiera de tiempo ilimitado y ordenadores extremadamente potentes.
+    Con la expresión «en condiciones normales» nos referimos a que, si eliges respuestas secretas sólidas, mantienes tus dispositivos seguros
+    y utilizamos correctamente métodos de cifrado modernos (como XSalsa20-Poly1305 para los datos almacenados y el esquema del Sobre del lado del cliente basado en AES-256-GCM, Argon2id, HKDF y envoltura mediante KMS),
+    romper tus datos requeriría recursos muy por encima de lo que es realista.
+
+    «Prácticamente imposible» refleja que, en el uso cotidiano, la probabilidad de que un ataque tenga éxito es tan baja que no supone una preocupación real, aunque en teoría ningún sistema sea perfecto.
 
   q14: '¿Podría verse comprometido mi Sobre si alguien roba físicamente sus servidores o si ocurre una filtración de datos?'
   a14: >
@@ -518,13 +530,11 @@ faq:
     tu Sobre continuará seguro—sin importar lo que suceda con nuestro hardware.
 
   q15: '¿Qué ocurre si en el futuro una computadora cuántica logra romper los métodos de cifrado actuales?'
-  a15: >
-    A día de hoy, XSalsa20-Poly1305 y cifrados similares siguen siendo extremadamente seguros 
-    frente a computadoras clásicas. La computación cuántica podría cambiar el panorama de la criptografía, 
-    pero actualmente no existe ninguna máquina cuántica que pueda romper estos algoritmos de manera factible. 
-    Si en algún momento las computadoras cuánticas hicieran posible descifrar estos cifrados, 
-    adaptaremos nuestros métodos de cifrado y ayudaremos a nuestros usuarios a 
-    migrar a soluciones resistentes a la computación cuántica.
+  a15: |
+    En la actualidad, los algoritmos de cifrado modernos como XSalsa20-Poly1305 y AES-256-GCM siguen siendo extremadamente seguros frente a todos los ordenadores clásicos conocidos.
+    La computación cuántica a gran escala podría cambiar el panorama criptográfico en el futuro, pero hoy en día no existe ninguna máquina cuántica de conocimiento público capaz de romper estos esquemas de forma viable.
+  
+    Si en la práctica llegara a ser necesario adoptar cifrado resistente a la computación cuántica, adaptaremos nuestra criptografía en consecuencia.
 
 contact_page:
   title: 'Contáctanos'
@@ -685,12 +695,13 @@ about_page:
 note_creation:
   default_text: |
     Reemplace este texto con sus datos:
-    No hay límites en lo que puede ingresar aquí (aunque el campo tiene un límite de 10000 caracteres). Puede incluir credenciales de monederos de criptomonedas, credenciales bancarias en línea, etc.
-    Este sobre se cifrará con la mitad de nuestra clave de seguridad y la mitad del hash derivado de las respuestas a sus preguntas secretas.
-    Una vez cifrado, sus respuestas se eliminarán de nuestra base de datos, dejando únicamente a usted y a Dios con el conocimiento necesario para descifrar la nota.
-    Nunca guardaremos sus respuestas: todo el descifrado se realizará al instante cada vez que proporcione las respuestas al acceder a la nota.
+    
+    No hay restricciones sobre lo que puedes almacenar aquí (salvo un límite de 10.000 caracteres). Puedes guardar desde frases semilla de carteras cripto y credenciales de banca online hasta cartas de amor, notas personales o incluso un mapa del tesoro para tus seres queridos.
+    El Sobre se cifra utilizando una combinación de nuestra clave de seguridad y material criptográfico derivado de tus respuestas a preguntas secretas. Nunca almacenamos tus respuestas: solo se guarda información cifrada.
 
+    El texto en claro y las respuestas nunca salen de tu dispositivo. Además de HTTPS seguro, utilizamos un protocolo de cifrado del lado del cliente: la nota se cifra en el navegador con una clave de datos aleatoria AES-256-GCM, que luego se protege mediante una clave derivada de tu respuesta usando Argon2id y se refuerza con nuestra KMS mediante HKDF y cifrado autenticado. Incluso con acceso completo a la base de datos, es criptográficamente inviable recuperar la nota sin la respuesta correcta.
+
+    El descifrado se realiza en tiempo real utilizando las respuestas que proporcionas al acceder al Sobre. Nunca se almacenan datos descifrados ni contraseñas.
 if_decoded_can_edit: |
-  Si ha logrado descifrar su texto y ve la versión descifrada arriba, puede editarlo directamente aquí.
-  También puede editar sus preguntas secretas aquí mismo.
-  Pero no olvide volver a introducir todas las respuestas secretas, ya que necesitamos cifrar esta nueva versión de su Sobre con cada respuesta (y nunca las guardamos).
+  Si has conseguido descifrar el texto y lo ves arriba, puedes copiarlo (por ejemplo, en el Bloc de notas), eliminar el Sobre actual y crear uno nuevo con el texto y las preguntas actualizadas.
+  Esta es la forma más limpia y segura de editar el Sobre.

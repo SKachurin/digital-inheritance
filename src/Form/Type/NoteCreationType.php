@@ -40,9 +40,16 @@ class NoteCreationType extends AbstractType
             ->add('customerText', TextareaType::class, [
                 'label' => 'form.label.note',
                 'required' => false,
+                'constraints' => [
+                    new Length([
+                        'max' => 10000,
+                        'maxMessage' => 'Customer Text Answer One cannot be longer than {{ limit }} characters.',
+                    ]),
+                ],
                 'attr' => [
                     'rows' => 10,
                     'style' => 'height: 15em',
+                    'maxlength' => 10000,
                 ],
             ]);
 

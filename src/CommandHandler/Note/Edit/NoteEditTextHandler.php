@@ -4,151 +4,83 @@ declare(strict_types=1);
 
 namespace App\CommandHandler\Note\Edit;
 
+use App\Entity\Note;
 use App\Service\CryptoService;
-use App\Service\Kms\KmsRateLimitedExceptionService;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
 #[AsMessageHandler]
 final class NoteEditTextHandler
 {
     public function __construct(
-        private readonly CryptoService $crypto
+        private readonly EntityManagerInterface $em,
+        private readonly CryptoService $cryptoService,
     ) {}
 
-    public function __invoke(NoteEditInputDto $input): NoteEditOutputDto
+    public function __invoke(NoteEditTextInputDto $input): Note
     {
-        $out = new NoteEditOutputDto($input->getCustomer());
-        $out->setCustomer($input->getCustomer());
+        $note = $input->getNote();
+        $customer = $note->getCustomer();
 
-        $customerId = (int) $input->getCustomer()->getId();
-        $rateLimitSeconds = null;
+        // Encrypt questions (legacy CryptoService) – same as create handler
+        $customer->setCustomerFirstQuestion(
+            $this->cryptoService->encryptData($input->getCustomerFirstQuestion())
+        );
 
-        // Selected answer result (3 slots). We only fill these once we found an answer that works.
-        $selectedTriplet = null;   // original encrypted triplet
-        $selectedSlots   = null;   // decrypted per slot (strings or null/empty depending on your CryptoService)
-        $anySuccess      = false;
+        if ($input->getCustomerSecondQuestion()) {
+            $customer->setCustomerSecondQuestion(
+                $this->cryptoService->encryptData($input->getCustomerSecondQuestion())
+            );
+        } else {
+            $customer->setCustomerSecondQuestion(null);
+        }
 
-        $attempts = [
-            [
-                'answer'  => $input->getCustomerFirstQuestionAnswer(),
-                'triplet' => [
-                    $input->getCustomerTextAnswerOne(),
-                    $input->getCustomerTextAnswerOneKms2(),
-                    $input->getCustomerTextAnswerOneKms3(),
-                ],
-            ],
-            [
-                'answer'  => $input->getCustomerSecondQuestionAnswer(),
-                'triplet' => [
-                    $input->getCustomerTextAnswerTwo(),
-                    $input->getCustomerTextAnswerTwoKms2(),
-                    $input->getCustomerTextAnswerTwoKms3(),
-                ],
-            ],
-            [
-                'answer'  => $input->getBeneficiaryFirstQuestionAnswer(),
-                'triplet' => [
-                    $input->getBeneficiaryTextAnswerOne(),
-                    $input->getBeneficiaryTextAnswerOneKms2(),
-                    $input->getBeneficiaryTextAnswerOneKms3(),
-                ],
-            ],
-            [
-                'answer'  => $input->getBeneficiarySecondQuestionAnswer(),
-                'triplet' => [
-                    $input->getBeneficiaryTextAnswerTwo(),
-                    $input->getBeneficiaryTextAnswerTwoKms2(),
-                    $input->getBeneficiaryTextAnswerTwoKms3(),
-                ],
-            ],
-        ];
-
-        foreach ($attempts as $attempt) {
-            $answer  = $attempt['answer'];
-            $triplet = $attempt['triplet'];
-
-            if (!$answer || !array_filter($triplet)) {
-                continue;
-            }
-
-            try {
-                $slots = $this->crypto->decryptEnvelopeTripletForUi(
-                    $triplet,
-                    $customerId,
-                    $answer
+        $beneficiary = $note->getBeneficiary();
+        if ($beneficiary) {
+            if ($input->getBeneficiaryFirstQuestion()) {
+                $beneficiary->setBeneficiaryFirstQuestion(
+                    $this->cryptoService->encryptData($input->getBeneficiaryFirstQuestion())
                 );
-            } catch (KmsRateLimitedExceptionService $e) {
-                $rateLimitSeconds = $e->getRetryAfterSeconds();
-                break;
             }
 
-            // IMPORTANT: do NOT stop on first success inside the 3 slots.
-            // We only decide whether this ANSWER is acceptable after scanning all 3.
-            $answerHasSuccess = false;
-            foreach ($slots as $plain) {
-                if (is_string($plain) && $plain !== '') {
-                    $answerHasSuccess = true;
-                    break;
-                }
+            if ($input->getBeneficiarySecondQuestion()) {
+                $beneficiary->setBeneficiarySecondQuestion(
+                    $this->cryptoService->encryptData($input->getBeneficiarySecondQuestion())
+                );
+            } else {
+                $beneficiary->setBeneficiarySecondQuestion(null);
             }
-
-            if ($answerHasSuccess) {
-                // We accept THIS answer, and we keep all 3 slot results (so UI can show all three).
-                $selectedTriplet = $triplet;
-                $selectedSlots   = $slots;
-                $anySuccess      = true;
-                break; // stop trying other answers, but we already have all 3 slots for this answer
-            }
-
-            // if this answer had zero success -> try next answer
         }
 
-        if ($rateLimitSeconds !== null) {
-            $out->setRateLimitSeconds($rateLimitSeconds);
+        // Persist blobs EXACTLY like create flow.
+        // Convert "" -> null so missing KMS replicas stay NULL in DB.
+        $n = static fn(?string $v): ?string => (is_string($v) && trim($v) !== '') ? $v : null;
+
+        $note->setCustomerTextAnswerOne($n($input->getCustomerTextAnswerOne()));
+        $note->setCustomerTextAnswerOneKms2($n($input->getCustomerTextAnswerOneKms2()));
+        $note->setCustomerTextAnswerOneKms3($n($input->getCustomerTextAnswerOneKms3()));
+
+        $note->setCustomerTextAnswerTwo($n($input->getCustomerTextAnswerTwo()));
+        $note->setCustomerTextAnswerTwoKms2($n($input->getCustomerTextAnswerTwoKms2()));
+        $note->setCustomerTextAnswerTwoKms3($n($input->getCustomerTextAnswerTwoKms3()));
+
+        if ($beneficiary) {
+            $note->setBeneficiaryTextAnswerOne($n($input->getBeneficiaryTextAnswerOne()));
+            $note->setBeneficiaryTextAnswerOneKms2($n($input->getBeneficiaryTextAnswerOneKms2()));
+            $note->setBeneficiaryTextAnswerOneKms3($n($input->getBeneficiaryTextAnswerOneKms3()));
+
+            $note->setBeneficiaryTextAnswerTwo($n($input->getBeneficiaryTextAnswerTwo()));
+            $note->setBeneficiaryTextAnswerTwoKms2($n($input->getBeneficiaryTextAnswerTwoKms2()));
+            $note->setBeneficiaryTextAnswerTwoKms3($n($input->getBeneficiaryTextAnswerTwoKms3()));
         }
 
-        // Now map 3 outputs for UI.
-        // RULE:
-        // - if anySuccess: show plaintext per slot where decrypted, and fallback encrypted JSON (original triplet slot) where not
-        // - if no success: show fallbacks (or null) everywhere
-        if ($selectedTriplet === null) {
-            $selectedTriplet = [null, null, null];
+        $this->em->persist($customer);
+        if ($beneficiary) {
+            $this->em->persist($beneficiary);
         }
-        if ($selectedSlots === null) {
-            $selectedSlots = [null, null, null];
-        }
+        $this->em->persist($note);
+        $this->em->flush();
 
-        // Adjust these setters to your real OutputDto API:
-        // KMS1
-        $out->setCustomerText(
-            ($anySuccess && is_string($selectedSlots[0]) && $selectedSlots[0] !== '')
-                ? $selectedSlots[0]
-                : ($selectedTriplet[0] ?? null)
-        );
-
-        // KMS2
-        $out->setCustomerTextKms2(
-            ($anySuccess && is_string($selectedSlots[1]) && $selectedSlots[1] !== '')
-                ? $selectedSlots[1]
-                : ($selectedTriplet[1] ?? null)
-        );
-
-        // KMS3
-        $out->setCustomerTextKms3(
-            ($anySuccess && is_string($selectedSlots[2]) && $selectedSlots[2] !== '')
-                ? $selectedSlots[2]
-                : ($selectedTriplet[2] ?? null)
-        );
-
-        // Optional: if you have a boolean field, set it here.
-        // $out->setDecryptionSucceeded($anySuccess);
-
-        // questions are metadata, always pass through
-        $out->setCustomerFirstQuestion($input->getCustomerFirstQuestion());
-        $out->setCustomerSecondQuestion($input->getCustomerSecondQuestion());
-        $out->setBeneficiaryFirstQuestion($input->getBeneficiaryFirstQuestion());
-        $out->setBeneficiarySecondQuestion($input->getBeneficiarySecondQuestion());
-
-        return $out;
+        return $note;
     }
 }

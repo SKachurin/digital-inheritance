@@ -205,18 +205,24 @@ class KmsGatewayService
      * Wrap a DEK via gateway (mTLS).
      * Returns w_b64 or null if unavailable.
      */
-    public function wrapDek(int $userId, int $kmsNumber, string $dek_b64, string $h_b64, string $answerFp, array $replicasMeta = []): ?string
-    {
-        $kmsId = 'kms' . $kmsNumber; // e.g. "kms1"
-
-        // Use resolver based on DB gateway_ids for this kmsId
-        $replicas = [['kms_id' => $kmsId, 'w_b64' => 'x']]; // dummy, just to reuse resolver
+    public function wrapDek(
+        int $userId,
+        int $kmsNumber,
+        string $dek_b64,
+        string $h_b64,
+        string $answerFp,
+        array $replicasMeta = []
+    ): ?string {
+        // Resolve gateways from DB the same way unwrap does.
+        $replicas = [['kms_id' => 'kms' . $kmsNumber, 'w_b64' => 'x']]; // dummy
         $urls = $this->resolveGatewayUrlsForReplicas($replicas);
         if (!$urls) {
             return null;
         }
 
-        // gateway contract
+        $kmsId = 'kms' . $kmsNumber; // ADDED: "kms1" etc.
+
+        // gateway expects kms_ids array
         $payload = [
             'user_id'   => $userId,
             'dek_b64'   => $dek_b64,
@@ -241,9 +247,8 @@ class KmsGatewayService
                 continue;
             }
 
-            $status = $response->getStatusCode();
-            if ($status !== 200) {
-                $this->logger->error(sprintf('KMS wrap unexpected HTTP %d from %s', $status, $baseUrl));
+            if ($response->getStatusCode() !== 200) {
+                $this->logger->error(sprintf('KMS wrap unexpected HTTP %d from %s', $response->getStatusCode(), $baseUrl));
                 continue;
             }
 
@@ -253,26 +258,20 @@ class KmsGatewayService
                 continue;
             }
 
-            // new gateway response shape: { results: { kms1: { ok:true, w_b64:"..." } } }
-            if (isset($body['results']) && is_array($body['results'])) {
-                $r = $body['results'][$kmsId] ?? null;
-                if (is_array($r) && ($r['ok'] ?? false) === true) {
-                    $w = $r['w_b64'] ?? null;
-                    if (is_string($w) && $w !== '') {
-                        return $w;
-                    }
-                }
-
-                $this->logger->error(sprintf('KMS wrap missing/failed result for %s via %s', $kmsId, $baseUrl));
+            // CHANGED: response is results map
+            $results = $body['results'] ?? null;
+            if (!is_array($results)) {
+                $this->logger->error(sprintf('KMS wrap missing results from %s', $baseUrl));
                 continue;
             }
 
-            // Backward-compat: old response shape: { w_b64: "..." }
-            if (isset($body['w_b64']) && is_string($body['w_b64']) && $body['w_b64'] !== '') {
-                return $body['w_b64'];
+            $entry = $results[$kmsId] ?? null;
+            if (!is_array($entry) || !($entry['ok'] ?? false) || !is_string($entry['w_b64'] ?? null) || $entry['w_b64'] === '') {
+                $this->logger->error(sprintf('KMS wrap no success for %s via %s', $kmsId, $baseUrl));
+                continue;
             }
 
-            $this->logger->error(sprintf('KMS wrap invalid body from %s', $baseUrl));
+            return $entry['w_b64'];
         }
 
         return null;

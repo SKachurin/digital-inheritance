@@ -69,13 +69,13 @@
 
     <div class="transactions-section">
         <h2 style="padding-top: 2em;">{{ 'dashboard.create_your_secure_envelope'|trans }}</h2>
-        <p>{{ 'create_your_secure_envelope_text'|trans|raw }}</p>
+        <p>{{ 'create_your_secure_envelope_text'|trans |nl2br }}</p>
 
-        <div class="tooltip_text mb-4">{{ 'dashboard.create_your_secure_envelope_tip'|trans }}</div>
+{#        <div class="tooltip_text mb-4">{{ 'dashboard.create_your_secure_envelope_tip'|trans }}</div>#}
 
         <!-- Toggle Encrypt in Browser (Default On) -->
         <div class="form-check form-switch mb-4">
-            <input class="form-check-input" type="checkbox" id="frontendEncrypted" checked>
+            <input class="form-check-input" type="checkbox" id="frontendEncrypted" checked disabled>
             <label class="form-check-label" for="frontendEncrypted">
                 {{ 'dashboard.create_your_secure_envelope_switch'|trans|raw }}
             </label>

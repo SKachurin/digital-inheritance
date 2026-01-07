@@ -32,7 +32,7 @@ class NoteEditType extends AbstractType
                 'attr' => [
                     'placeholder' => 'form.attr.placeholder.for_encrypted_text',
                     'rows' => 10,
-                    'style' => 'height: 15em',
+                    'style' => 'height: 5em',
                     'readonly' => true
                 ]
             ])
@@ -48,7 +48,7 @@ class NoteEditType extends AbstractType
                 'attr' => [
                     'placeholder' => 'form.attr.placeholder.for_encrypted_text',
                     'rows' => 10,
-                    'style' => 'height: 15em',
+                    'style' => 'height: 5em',
                     'readonly' => true
                 ]
             ])
@@ -64,7 +64,7 @@ class NoteEditType extends AbstractType
                 'attr' => [
                     'placeholder' => 'form.attr.placeholder.for_encrypted_text',
                     'rows' => 10,
-                    'style' => 'height: 15em',
+                    'style' => 'height: 5em',
                     'readonly' => true
                 ]
             ])
@@ -80,7 +80,7 @@ class NoteEditType extends AbstractType
                 'attr' => [
                     'placeholder' => 'form.attr.placeholder.for_encrypted_text',
                     'rows' => 10,
-                    'style' => 'height: 15em',
+                    'style' => 'height: 5em',
                     'readonly' => true
                 ]
             ])
@@ -96,7 +96,7 @@ class NoteEditType extends AbstractType
                 'attr' => [
                     'placeholder' => 'form.attr.placeholder.for_encrypted_text',
                     'rows' => 10,
-                    'style' => 'height: 15em',
+                    'style' => 'height: 5em',
                     'readonly' => true
                 ]
             ])
@@ -112,7 +112,7 @@ class NoteEditType extends AbstractType
                 'attr' => [
                     'placeholder' => 'form.attr.placeholder.for_encrypted_text',
                     'rows' => 10,
-                    'style' => 'height: 15em',
+                    'style' => 'height: 5em',
                     'readonly' => true
                 ]
             ])
@@ -131,7 +131,7 @@ class NoteEditType extends AbstractType
                     'attr' => [
                         'placeholder' => 'form.attr.placeholder.for_encrypted_text',
                         'rows' => 10,
-                        'style' => 'height: 15em',
+                        'style' => 'height: 5em',
                         'readonly' => true
                     ]
                 ])
@@ -147,7 +147,7 @@ class NoteEditType extends AbstractType
                     'attr' => [
                         'placeholder' => 'form.attr.placeholder.for_encrypted_text',
                         'rows' => 10,
-                        'style' => 'height: 15em',
+                        'style' => 'height: 5em',
                         'readonly' => true
                     ]
                 ])
@@ -163,7 +163,7 @@ class NoteEditType extends AbstractType
                     'attr' => [
                         'placeholder' => 'form.attr.placeholder.for_encrypted_text',
                         'rows' => 10,
-                        'style' => 'height: 15em',
+                        'style' => 'height: 5em',
                         'readonly' => true
                     ]
                 ])
@@ -179,7 +179,7 @@ class NoteEditType extends AbstractType
                     'attr' => [
                         'placeholder' => 'form.attr.placeholder.for_encrypted_text',
                         'rows' => 10,
-                        'style' => 'height: 15em',
+                        'style' => 'height: 5em',
                         'readonly' => true
                     ]
                 ])
@@ -195,7 +195,7 @@ class NoteEditType extends AbstractType
                     'attr' => [
                         'placeholder' => 'form.attr.placeholder.for_encrypted_text',
                         'rows' => 10,
-                        'style' => 'height: 15em',
+                        'style' => 'height: 5em',
                         'readonly' => true
                     ]
                 ])
@@ -211,7 +211,7 @@ class NoteEditType extends AbstractType
                     'attr' => [
                         'placeholder' => 'form.attr.placeholder.for_encrypted_text',
                         'rows' => 10,
-                        'style' => 'height: 15em',
+                        'style' => 'height: 5em',
                         'readonly' => true
                     ]
                 ])
