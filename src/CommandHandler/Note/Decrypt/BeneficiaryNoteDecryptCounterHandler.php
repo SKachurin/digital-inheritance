@@ -5,6 +5,7 @@ namespace App\CommandHandler\Note\Decrypt;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 #[AsMessageHandler]
 class BeneficiaryNoteDecryptCounterHandler
@@ -14,7 +15,8 @@ class BeneficiaryNoteDecryptCounterHandler
 
     public function __construct(
         private LoggerInterface $logger,
-        private EntityManagerInterface $entityManager
+        private EntityManagerInterface $entityManager,
+        private TranslatorInterface $translator
     ) {}
 
     /**
@@ -34,10 +36,9 @@ class BeneficiaryNoteDecryptCounterHandler
             $note->setLockoutUntil($lockoutUntil);
 
             $minutes = (int) ceil($rateLimitSeconds / 60);
-            $beneficiaryCongrats = sprintf(
-                'Too many decryption requests for this answer. Next attempt available in %d minutes.',
-                $minutes
-            );
+            $beneficiaryCongrats = $this->translator->trans('errors.note.decrypt.kms_rate_limited', [
+                '%minutes%' => $minutes,
+            ]);
 
             $this->entityManager->persist($note);
             $this->entityManager->flush();
@@ -55,12 +56,11 @@ class BeneficiaryNoteDecryptCounterHandler
 
         if ($lockoutUntil && $now < $lockoutUntil) {
 
-            $interval    = $now->diff($lockoutUntil);
-            $minutesLeft = $interval->i + ($interval->h * 60);
-            $beneficiaryCongrats = sprintf(
-                'You used all attempts. Next attempt available in %d minutes.',
-                $minutesLeft
-            );
+            $minutesLeft = (int) ceil(($lockoutUntil->getTimestamp() - $now->getTimestamp()) / 60);
+
+            $beneficiaryCongrats = $this->translator->trans('errors.note.decrypt.locked_out', [
+                '%minutes%' => $minutesLeft,
+            ]);
 
         } else {
 
@@ -71,27 +71,24 @@ class BeneficiaryNoteDecryptCounterHandler
 
                 if ($attemptCount < $this->MAX_ATTEMPTS) {
 
-                    $beneficiaryCongrats = sprintf(
-                        'Wrong password. Used %d of %d attempts.',
-                        $attemptCount,
-                        $this->MAX_ATTEMPTS
-                    );
+                    $beneficiaryCongrats = $this->translator->trans('errors.note.decrypt.wrong_answer_attempts', [
+                        '%used%' => $attemptCount,
+                        '%max%'  => $this->MAX_ATTEMPTS,
+                    ]);
                 } elseif ($attemptCount == $this->MAX_ATTEMPTS) {
 
-                    $beneficiaryCongrats = sprintf(
-                        'Wrong password. Used all attempts. Next attempt available after %d minutes.',
-                        $this->FIRST_LOCK_TIME
-                    );
+                    $beneficiaryCongrats = $this->translator->trans('errors.note.decrypt.wrong_answer_locked', [
+                        '%minutes%' => $this->FIRST_LOCK_TIME,
+                    ]);
                     $lockoutUntil = $now->add(new \DateInterval('PT' . $this->FIRST_LOCK_TIME . 'M'));
                     $note->setLockoutUntil($lockoutUntil);
 
                 } else {
 
                     $lockTime = ($attemptCount - $this->MAX_ATTEMPTS + 1) * $this->FIRST_LOCK_TIME;
-                    $beneficiaryCongrats = sprintf(
-                        'Too many attempts. Next attempt in %d minutes.',
-                        $lockTime
-                    );
+                    $beneficiaryCongrats = $this->translator->trans('errors.note.decrypt.too_many_attempts', [
+                        '%minutes%' => $lockTime,
+                    ]);
                     $lockoutUntil = $now->add(new \DateInterval('PT' . $lockTime . 'M'));
                     $note->setLockoutUntil($lockoutUntil);
                 }
@@ -99,7 +96,7 @@ class BeneficiaryNoteDecryptCounterHandler
                 // SUCCESS – reset attempts
                 $note->setAttemptCount(0);
                 $note->setLockoutUntil(null);
-                $beneficiaryCongrats = 'If you can read your text, you did everything right!';
+                $beneficiaryCongrats = $this->translator->trans('errors.note.decrypt.success');
             }
         }
 

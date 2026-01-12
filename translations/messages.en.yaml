@@ -42,8 +42,8 @@ form:
     beneficiary_second_email: "Heir's Second Email (optional)"
     customer_full_name: 'Your name so the Heir can recognize you (optional)'
     beneficiary_full_name: "Heir's Full Name (optional)"
-    customer_country_code: 'Your Country Code (optional)'
-    beneficiary_country_code: "Heir's Country Code (optional)"
+    customer_country_code: 'Your country code (required if we use a phone number)'
+    beneficiary_country_code: "Your heir's country code (required if we use a phone number)"
     customer_first_phone: 'First Phone Number (optional)'
     beneficiary_first_phone: "Heir's First Phone Number (optional)"
     customer_second_phone: 'Second Phone Number (optional)'
@@ -358,6 +358,13 @@ errors:
   note:
     edit:
       second_question_answer_required: 'Answer to the second question is required if you have text of the question.'
+    decrypt:
+      kms_rate_limited: 'Too many decryption requests for this answer. Next attempt available in %minutes% minutes.'
+      locked_out: 'You used all attempts. Next attempt available in %minutes% minutes.'
+      wrong_password_attempts: 'Wrong password. Used %used% of %max% attempts.'
+      wrong_password_locked: 'Wrong password. You have used all attempts. Next attempt available after %minutes% minutes.'
+      too_many_attempts: 'Too many attempts. Next attempt available in %minutes% minutes.'
+      success: 'If you can read your text, you did everything right!'
   flash:
     captcha: 'Please complete the reCAPTCHA.'
     captcha_fail: 'reCAPTCHA validation failed. Please try again.'

@@ -7,6 +7,7 @@ use Doctrine\ORM\EntityManagerInterface;
 use Exception;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
 #[AsMessageHandler]
 class NoteEditCounterHandler
@@ -16,6 +17,7 @@ class NoteEditCounterHandler
 
     public function __construct(
         private LoggerInterface $logger,
+        private TranslatorInterface $translator,
         private EntityManagerInterface $entityManager
     ) {}
 
@@ -41,10 +43,9 @@ class NoteEditCounterHandler
             $note->setLockoutUntil($lockoutUntil);
 
             $minutes = (int) ceil($rateLimitSeconds / 60);
-            $customerCongrats = sprintf(
-                'Too many decryption requests for this answer. Next attempt will be available in %d minutes.',
-                $minutes
-            );
+            $customerCongrats = $this->translator->trans('errors.note.decrypt.kms_rate_limited', [
+                '%minutes%' => $minutes,
+            ]);
 
             $this->entityManager->persist($note);
             $this->entityManager->flush();
@@ -61,29 +62,37 @@ class NoteEditCounterHandler
         $lockoutUntil = $note->getLockoutUntil();
 
         if ($lockoutUntil && $now < $lockoutUntil) {
-            $interval    = $now->diff($lockoutUntil);
-            $minutesLeft = $interval->i + ($interval->h * 60);
+            $minutesLeft = (int) ceil(($lockoutUntil->getTimestamp() - $now->getTimestamp()) / 60);
 
-            $customerCongrats = 'You used all attempts. Next attempt will be available in ' . $minutesLeft . ' minutes.';
+            $customerCongrats = $this->translator->trans('errors.note.decrypt.locked_out', [
+                '%minutes%' => $minutesLeft,
+            ]);
         } else {
             if ($input->getCustomerText() == null) {
                 $attemptCount++;
                 $note->setAttemptCount($attemptCount);
 
                 if ($attemptCount < $this->MAX_ATTEMPTS) {
-                    $customerCongrats = 'Wrong password. Used ' . $attemptCount . ' of ' . $this->MAX_ATTEMPTS . ' attempts.';
+                    $customerCongrats = $this->translator->trans('errors.note.decrypt.wrong_answer_attempts', [
+                        '%used%' => $attemptCount,
+                        '%max%'  => $this->MAX_ATTEMPTS,
+                    ]);
                 } elseif ($attemptCount == $this->MAX_ATTEMPTS) {
-                    $customerCongrats = 'Wrong password. Used all attempts. Next attempt will be available after ' . $this->FIRST_LOCK_TIME . ' minutes.';
+                    $customerCongrats = $this->translator->trans('errors.note.decrypt.wrong_answer_locked', [
+                        '%minutes%' => $this->FIRST_LOCK_TIME,
+                    ]);
                     $note->setLockoutUntil($now->add(new \DateInterval('PT' . $this->FIRST_LOCK_TIME . 'M')));
                 } else {
                     $lockTime = ($attemptCount - $this->MAX_ATTEMPTS + 1) * $this->FIRST_LOCK_TIME;
-                    $customerCongrats = 'Wrong password. Used more than ' . $this->MAX_ATTEMPTS . ' attempts. Next attempt in ' . $lockTime . ' minutes.';
+                    $customerCongrats = $this->translator->trans('errors.note.decrypt.too_many_attempts', [
+                        '%minutes%' => $lockTime,
+                    ]);
                     $note->setLockoutUntil($now->add(new \DateInterval('PT' . $lockTime . 'M')));
                 }
             } else {
                 $note->setAttemptCount(0);
                 $note->setLockoutUntil(null);
-                $customerCongrats = 'If you can read your text, you did everything right!';
+                $customerCongrats = $this->translator->trans('errors.note.decrypt.success');
             }
         }
 
