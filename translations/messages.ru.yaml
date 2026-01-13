@@ -291,6 +291,15 @@ dashboard:
     check_balance: "Проверить баланс"
     ref_link: "Ваша реферальная ссылка"
     copy_link: "Скопировать ссылку"
+    your_qr: "Ваш Ref QR"
+  kms_status:
+    title: "Статус KMS"
+    empty: "Данных KMS пока нет."
+    real_label: "Сервис управления ключами %value%"
+    placeholder_label: "Заглушка KMS %value%"
+    last_check: "Последняя проверка: %date%"
+    last_check_never: "Последняя проверка: никогда"
+    last_check_placeholder: "Последняя проверка: —"
 
 decrypt_your_secure_envelope: 'Расшифруйте ваш секретный конверт'
 decrypt_first: 'Чтобы редактировать ваш секретный конверт, пожалуйста, сначала расшифруйте его.'

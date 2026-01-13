@@ -5,58 +5,108 @@ declare(strict_types=1);
 namespace App\Service\Api;
 
 use Psr\Log\LoggerInterface;
+use Symfony\Component\DependencyInjection\ParameterBag\ParameterBagInterface;
 use Symfony\Contracts\HttpClient\HttpClientInterface;
 
 final class KmsHealthCheckService
 {
+    private string $certPath;
+    private string $keyPath;
+    private string $caPath;
+
     public function __construct(
+        private readonly ParameterBagInterface $params,
         private readonly HttpClientInterface $httpClient,
         private readonly LoggerInterface $logger,
+    ) {
+        $this->certPath = (string) $this->params->get('API_HEALTHCHECK_CERT');
+        $this->keyPath  = (string) $this->params->get('API_HEALTHCHECK_KEY');
+        $this->caPath   = (string) $this->params->get('API_HEALTHCHECK_CA');
+    }
 
-        // inject these via parameters/env
-        private readonly string $mtlsCertPath,
-        private readonly string $mtlsKeyPath,
-        private readonly string $mtlsCaPath,
-        /** @var array<string,string> gatewayId => baseUrl */
-        private readonly array $gatewayBaseUrls,
-        private readonly float $timeoutSeconds = 5.0,
-    ) {}
-
-    public function fetchStatusesForGatewayId(string $gatewayId): ?array
+    /**
+     * @return array<string,string>|null Map kms_id => ok|fail|timeout
+     */
+    public function fetchStatusesForGatewayId(string $gatewayId, int $timeoutSeconds = 5): ?array
     {
-        $base = $this->gatewayBaseUrls[$gatewayId] ?? null;
-        if (!$base) {
+        $baseUrl = $this->resolveEnvUrl($gatewayId);
+        if ($baseUrl === '') {
             return null;
         }
 
         try {
-            $response = $this->httpClient->request('GET', rtrim($base, '/') . '/kms/health/check', [
-                'timeout' => $this->timeoutSeconds,
-                'local_cert' => $this->mtlsCertPath,
-                'local_pk'   => $this->mtlsKeyPath,
-                'cafile'     => $this->mtlsCaPath,
+            $response = $this->httpClient->request('GET', $baseUrl . '/kms/health/check', [
+                'cafile'     => $this->caPath,
+                'local_cert' => $this->certPath,
+                'local_pk'   => $this->keyPath,
+
                 'verify_peer' => true,
                 'verify_host' => true,
+                'timeout'     => $timeoutSeconds,
             ]);
-
-            $code = $response->getStatusCode();
-
-            // Treat 429/5xx/etc as "no update" (or "fail all" if you prefer)
-            if ($code === 429 || $code < 200 || $code >= 300) {
-                return null;
-            }
-
-            $data = $response->toArray(false);
-            $statuses = $data['statuses'] ?? null;
-
-            return is_array($statuses) ? $statuses : null;
         } catch (\Throwable $e) {
-            $this->logger->error('KMS healthcheck exception', [
-                'gatewayId' => $gatewayId,
-                'exception' => $e->getMessage(),
-            ]);
+            $this->logger->error(sprintf('KMS healthcheck HTTP error via %s (%s): %s', $baseUrl, $gatewayId, $e->getMessage()));
             return null;
         }
+
+        $code = $response->getStatusCode();
+
+        // Your current policy: anything except success = fail (caller decides how to store)
+        // Here: return null so caller can retry and then mark fail if still null.
+        if ($code !== 200) {
+            return null;
+        }
+
+        $body = json_decode($response->getContent(false), true);
+        if (!is_array($body)) {
+            $this->logger->error(sprintf('KMS healthcheck invalid JSON from %s', $baseUrl));
+            return null;
+        }
+
+        $statuses = $body['statuses'] ?? null;
+        if (!is_array($statuses)) {
+            $this->logger->error(sprintf('KMS healthcheck missing/invalid statuses from %s', $baseUrl));
+            return null;
+        }
+
+        // sanitize: keep only string values
+        $out = [];
+        foreach ($statuses as $kmsId => $status) {
+            if (!is_string($kmsId) || $kmsId === '') {
+                continue;
+            }
+            if (!is_string($status) || $status === '') {
+                continue;
+            }
+            $out[$kmsId] = $status;
+        }
+
+        return $out;
     }
 
+    private function resolveEnvUrl(string $envKey): string
+    {
+        $url = '';
+        try {
+            $v = $this->params->get($envKey);
+            if (is_string($v)) {
+                $url = $v;
+            }
+        } catch (\Throwable) {}
+
+        if ($url === '') {
+            $url = (string) (getenv($envKey) ?: ($_ENV[$envKey] ?? ''));
+        }
+
+        $url = trim($url);
+        if ($url === '') {
+            return '';
+        }
+
+        if (str_starts_with($url, 'http://')) {
+            $url = 'https://' . substr($url, 7);
+        }
+
+        return rtrim($url, '/');
+    }
 }

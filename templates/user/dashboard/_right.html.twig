@@ -9,35 +9,45 @@
 </div>
 
 <div class="sidebar-card">
-    <h3>KMS Status</h3>
+    <h3>{{ 'dashboard.kms_status.title'|trans }}</h3>
 
     {% if kms_statuses is not defined or kms_statuses is empty %}
-        <p class="muted">No KMS data yet.</p>
+        <p class="muted">{{ 'dashboard.kms_status.empty'|trans }}</p>
     {% else %}
         {% for kms in kms_statuses %}
-            {% set dotClass =
-                (not kms.used) ? 'dot-unused'
-                : (kms.last_health is same as(true)) ? 'dot-ok'
-                : 'dot-bad'
+
+            {% set icon =
+                (kms.placeholder ?? false) or (kms.check_date is null)
+                ? '🔘'
+                : (kms.last_health is same as(true))
+                ? '🟢'
+                : '🔴'
             %}
 
             <div class="activity-item">
-                <div class="activity-icon">
-                    <span class="status-dot {{ dotClass }}"></span>
-                </div>
+                <div class="activity-icon">{{ icon }}</div>
 
                 <div class="activity-content">
-                    <p>{{ kms.alias }}</p>
+                    <p>  {{ kms.alias_key|trans({ '%value%': kms.alias_value }) }}</p>
 
-                    {% if kms.check_date %}
+                    {% if kms.placeholder ?? false %}
                         <span class="activity-time">
-                            Last check: {{ kms.check_date|date('Y-m-d H:i') }}
+                            {{ 'dashboard.kms_status.last_check_placeholder'|trans }}
+                        </span>
+                    {% elseif kms.check_date %}
+                        <span class="activity-time">
+                            {{ 'dashboard.kms_status.last_check'|trans({
+                                '%date%': kms.check_date|date('Y-m-d H:i')
+                            }) }}
                         </span>
                     {% else %}
-                        <span class="activity-time">Last check: never</span>
+                        <span class="activity-time">
+                            {{ 'dashboard.kms_status.last_check_never'|trans }}
+                        </span>
                     {% endif %}
                 </div>
             </div>
+
         {% endfor %}
     {% endif %}
 </div>

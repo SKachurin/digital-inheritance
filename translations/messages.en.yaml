@@ -289,6 +289,14 @@ dashboard:
     ref_link: "Your Referral Link"
     copy_link: "Copy Link"
     your_qr: "Your Ref QR"
+  kms_status:
+    title: "KMS Status"
+    empty: "No KMS data yet."
+    real_label: "Key Management Service %value%"
+    placeholder_label: "KMS Placeholder %value%"
+    last_check: "Last check: %date%"
+    last_check_never: "Last check: never"
+    last_check_placeholder: "Last check: —"
 
 decrypt_your_secure_envelope: 'Decrypt Your Secure Envelope'
 decrypt_first: 'To edit your secure envelope, please decrypt it first.'

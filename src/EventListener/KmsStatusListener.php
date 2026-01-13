@@ -54,10 +54,25 @@ final class KmsStatusListener
         $items = [];
         foreach ($usedKms as $kms) {
             $items[] = [
-                'alias' => $kms->getAlias(),
-                'last_health' => $kms->getLastHealth(), // bool|null
-                'check_date' => $kms->getCheckDate(),   // ?\DateTimeImmutable
+                'alias_key'   => 'dashboard.kms_status.real_label',
+                'alias_value' => $kms->getAlias(), // e.g. "kms1"
+                'last_health' => $kms->getLastHealth(),
+                'check_date'  => $kms->getCheckDate(),
+                'placeholder' => false,
             ];
+        }
+
+        // Add placeholders until we have 3 rows
+        $slot = count($items) + 1;
+        while (count($items) < 3) {
+            $items[] = [
+                'alias_key'   => 'dashboard.kms_status.placeholder_label',
+                'alias_value' => $slot, // 2, 3, ...
+                'last_health' => null,
+                'check_date'  => null,
+                'placeholder' => true,
+            ];
+            $slot++;
         }
 
         $this->twig->addGlobal('kms_statuses', $items);

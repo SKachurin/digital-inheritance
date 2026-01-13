@@ -290,7 +290,15 @@ dashboard:
     check_balance: "Consultar saldo"
     ref_link: "Tu enlace de referido"
     copy_link: "Copiar enlace"
-
+    your_qr: "Tu Ref QR"
+  kms_status:
+    title: "Estado de KMS"
+    empty: "Todavía no hay datos de KMS."
+    real_label: "Servicio de Gestión de Claves %value%"
+    placeholder_label: "Marcador KMS %value%"
+    last_check: "Última comprobación: %date%"
+    last_check_never: "Última comprobación: nunca"
+    last_check_placeholder: "Última comprobación: —"
 
 decrypt_your_secure_envelope: 'Descifre su Sobre Seguro'
 decrypt_first: 'Para editar su sobre seguro, primero descífrelo.'
