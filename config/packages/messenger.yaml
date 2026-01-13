@@ -46,6 +46,8 @@ framework:
             'App\Message\ReferralBonusMessage': async
             'App\Message\CronBatchMessage': batch
             'App\Message\DeleteMarkedAccountsMessage': batch
+            'App\Message\MarkExpiredAsNotPaidMessage': batch
+            'App\Message\KmsHealthCheckMessage': batch
 
         failure_transport: failed
 

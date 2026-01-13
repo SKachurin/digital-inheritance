@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Service\Kms;
+namespace App\Service\Api;
 
 use App\Repository\KmsRepository;
 use Psr\Log\LoggerInterface;

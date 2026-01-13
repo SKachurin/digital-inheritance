@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace App\Service\Kms;
+namespace App\Service\Api;
 
 final class KmsMockService implements KmsUnwrapInterface
 {

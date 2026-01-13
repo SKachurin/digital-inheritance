@@ -4,8 +4,8 @@ declare(strict_types=1);
 
 namespace App\Service;
 
-use App\Service\Kms\KmsRateLimitedExceptionService;
-use App\Service\Kms\KmsUnwrapInterface;
+use App\Service\Api\KmsRateLimitedExceptionService;
+use App\Service\Api\KmsUnwrapInterface;
 use Psr\Log\LoggerInterface;
 use Random\RandomException;
 use SodiumException;

@@ -1,0 +1,65 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\EventListener;
+
+use App\Entity\Customer;
+use App\Repository\KmsRepository;
+use Symfony\Component\HttpKernel\Event\RequestEvent;
+use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+use Twig\Environment;
+
+final class KmsStatusListener
+{
+    public function __construct(
+        private readonly TokenStorageInterface $tokenStorage,
+        private readonly KmsRepository $kmsRepository,
+        private readonly Environment $twig,
+    ) {}
+
+    public function onKernelRequest(RequestEvent $event): void
+    {
+        $request = $event->getRequest();
+        $route = $request->attributes->get('_route');
+
+        $targetRoutes = [
+            'user_home', 'user_home_1', 'user_home_ref',
+            'user_home_email', 'user_home_email_', 'user_home_phone',
+            'user_home_social', 'user_home_heir',
+            'user_home_env', 'user_home_pipe',
+            'pipeline_create', 'contact_create',
+            'contact_edit', 'beneficiary_create',
+            'beneficiary_edit', 'customer_delete',
+            'user_home_phone_'
+        ];
+
+        if (!in_array($route, $targetRoutes, true)) {
+            return;
+        }
+
+        $token = $this->tokenStorage->getToken();
+
+        if ($token === null) {
+            return;
+        }
+
+        $customer = $token?->getUser();
+        if (!$customer instanceof Customer) {
+            return;
+        }
+
+        $usedKms = $this->kmsRepository->findUsedByCustomer($customer);
+
+        $items = [];
+        foreach ($usedKms as $kms) {
+            $items[] = [
+                'alias' => $kms->getAlias(),
+                'last_health' => $kms->getLastHealth(), // bool|null
+                'check_date' => $kms->getCheckDate(),   // ?\DateTimeImmutable
+            ];
+        }
+
+        $this->twig->addGlobal('kms_statuses', $items);
+    }
+}

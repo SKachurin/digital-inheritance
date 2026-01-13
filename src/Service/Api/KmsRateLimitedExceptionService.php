@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Service\Kms;
+namespace App\Service\Api;
 
 class KmsRateLimitedExceptionService extends \RuntimeException
 {

@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace App\CommandHandler\Note\Decrypt;
 
 use App\Service\CryptoService;
-use App\Service\Kms\KmsRateLimitedExceptionService;
+use App\Service\Api\KmsRateLimitedExceptionService;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
 #[AsMessageHandler]

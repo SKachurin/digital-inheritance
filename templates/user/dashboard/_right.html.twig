@@ -9,27 +9,35 @@
 </div>
 
 <div class="sidebar-card">
-    <h3>Recent Activity</h3>
+    <h3>KMS Status</h3>
 
-    <div class="activity-item">
-        <div class="activity-icon">👤</div>
-        <div class="activity-content">
-            <p>New beneficiary added</p>
-            <span class="activity-time">2 hours ago</span>
-        </div>
-    </div>
-    <div class="activity-item">
-        <div class="activity-icon">💳</div>
-        <div class="activity-content">
-            <p>Invoice paid successfully</p>
-            <span class="activity-time">1 day ago</span>
-        </div>
-    </div>
-    <div class="activity-item">
-        <div class="activity-icon">⚙️</div>
-        <div class="activity-content">
-            <p>Security settings updated</p>
-            <span class="activity-time">2 days ago</span>
-        </div>
-    </div>
+    {% if kms_statuses is not defined or kms_statuses is empty %}
+        <p class="muted">No KMS data yet.</p>
+    {% else %}
+        {% for kms in kms_statuses %}
+            {% set dotClass =
+                (not kms.used) ? 'dot-unused'
+                : (kms.last_health is same as(true)) ? 'dot-ok'
+                : 'dot-bad'
+            %}
+
+            <div class="activity-item">
+                <div class="activity-icon">
+                    <span class="status-dot {{ dotClass }}"></span>
+                </div>
+
+                <div class="activity-content">
+                    <p>{{ kms.alias }}</p>
+
+                    {% if kms.check_date %}
+                        <span class="activity-time">
+                            Last check: {{ kms.check_date|date('Y-m-d H:i') }}
+                        </span>
+                    {% else %}
+                        <span class="activity-time">Last check: never</span>
+                    {% endif %}
+                </div>
+            </div>
+        {% endfor %}
+    {% endif %}
 </div>

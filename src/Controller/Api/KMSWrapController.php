@@ -12,11 +12,11 @@ use Symfony\Component\HttpFoundation\Request;
 final class KMSWrapController extends AbstractController
 {
     public function __construct(
-        private readonly string $kmsMode,
-        private readonly string $testKmsKey1B64,
-        private readonly string $testKmsKey2B64,
-        private readonly string $testKmsKey3B64,
-        private readonly \App\Service\Kms\KmsGatewayService $gateway,
+        private readonly string                             $kmsMode,
+        private readonly string                             $testKmsKey1B64,
+        private readonly string                             $testKmsKey2B64,
+        private readonly string                             $testKmsKey3B64,
+        private readonly \App\Service\Api\KmsGatewayService $gateway,
     ) {}
 
     public function __invoke(Request $req): JsonResponse

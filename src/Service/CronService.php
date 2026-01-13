@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Service;
 
 use App\Message\DeleteMarkedAccountsMessage;
+use App\Message\KmsHealthCheckMessage;
 use App\Message\MarkExpiredAsNotPaidMessage;
 use App\Repository\CustomerRepository;
 use App\Queue\CronBatchProducer;
@@ -77,6 +78,10 @@ class CronService
             $this->backupDatabaseService->run();
         }
 
+        // Run once between 04:00–04:10
+        if ($hour === 4 && $minute <= 10) {
+            $this->bus->dispatch(new KmsHealthCheckMessage());
+        }
     }
 
 }
