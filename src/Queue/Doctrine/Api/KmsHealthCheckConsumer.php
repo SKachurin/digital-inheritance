@@ -9,6 +9,7 @@ use App\Repository\KmsRepository;
 use App\Service\Api\KmsHealthCheckService;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
+use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 
 #[AsMessageHandler]
 final class KmsHealthCheckConsumer
@@ -61,9 +62,11 @@ final class KmsHealthCheckConsumer
             // Success -> update each row by alias
             foreach ($rowsForGateway as $kms) {
                 $alias = $kms->getAlias();
-                $status = $statuses[$alias] ?? null;
+                if (!array_key_exists($alias, $statuses)) {
+                    continue;
+                }
 
-                $kms->setLastHealth($status === 'ok'); // missing/timeout/fail => false
+                $kms->setLastHealth($statuses[$alias] === 'up');
                 $kms->setCheckDate($now);
             }
         }
@@ -72,7 +75,7 @@ final class KmsHealthCheckConsumer
     }
 
     /**
-     * @return array<string,string>|null  Map alias => "ok|fail|timeout"
+     * @return array<string,string>|null Map alias => "up|down"
      */
     private function fetchWithRetry(string $gatewayId, int $attempts): ?array
     {

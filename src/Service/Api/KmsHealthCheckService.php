@@ -25,7 +25,7 @@ final class KmsHealthCheckService
     }
 
     /**
-     * @return array<string,string>|null Map kms_id => ok|fail|timeout
+     * @return array<string,string>|null Map kms_id => up|down
      */
     public function fetchStatusesForGatewayId(string $gatewayId, int $timeoutSeconds = 5): ?array
     {
@@ -36,24 +36,24 @@ final class KmsHealthCheckService
 
         try {
             $response = $this->httpClient->request('GET', $baseUrl . '/kms/health/check', [
-                'cafile'     => $this->caPath,
-                'local_cert' => $this->certPath,
-                'local_pk'   => $this->keyPath,
-
+                'cafile'      => $this->caPath,
+                'local_cert'  => $this->certPath,
+                'local_pk'    => $this->keyPath,
                 'verify_peer' => true,
                 'verify_host' => true,
                 'timeout'     => $timeoutSeconds,
             ]);
         } catch (\Throwable $e) {
-            $this->logger->error(sprintf('KMS healthcheck HTTP error via %s (%s): %s', $baseUrl, $gatewayId, $e->getMessage()));
+            $this->logger->error(sprintf(
+                'KMS healthcheck HTTP error via %s (%s): %s',
+                $baseUrl,
+                $gatewayId,
+                $e->getMessage()
+            ));
             return null;
         }
 
-        $code = $response->getStatusCode();
-
-        // Your current policy: anything except success = fail (caller decides how to store)
-        // Here: return null so caller can retry and then mark fail if still null.
-        if ($code !== 200) {
+        if ($response->getStatusCode() !== 200) {
             return null;
         }
 
@@ -69,7 +69,6 @@ final class KmsHealthCheckService
             return null;
         }
 
-        // sanitize: keep only string values
         $out = [];
         foreach ($statuses as $kmsId => $status) {
             if (!is_string($kmsId) || $kmsId === '') {
@@ -78,7 +77,14 @@ final class KmsHealthCheckService
             if (!is_string($status) || $status === '') {
                 continue;
             }
-            $out[$kmsId] = $status;
+
+            $s = strtolower(trim($status));
+            if ($s !== 'up' && $s !== 'down') {
+                // ignore unknown values so they don't poison DB logic
+                continue;
+            }
+
+            $out[$kmsId] = $s;
         }
 
         return $out;

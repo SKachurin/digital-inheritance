@@ -41,7 +41,7 @@ class CustomerPipelineStatusListener
             'pipeline_create', 'contact_create',
             'contact_edit', 'beneficiary_create',
             'beneficiary_edit', 'customer_delete',
-            'user_home_phone_'
+            'user_home_phone_', 'note_edit'
         ];
 
         if (!in_array($route, $targetRoutes, true)) {
