@@ -324,6 +324,11 @@ h2 {
     display: none;
 }
 
+select.form-select,
+select.form-select option {
+    font-family: "Segoe UI Emoji", "Apple Color Emoji", "Noto Color Emoji", system-ui, sans-serif;
+}
+
 /* =========================
    RESPONSIVE DASHBOARD
    ========================= */

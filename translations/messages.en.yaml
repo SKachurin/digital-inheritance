@@ -197,7 +197,19 @@ dashboard:
   delete_account: 'Delete my account'
   delete_account_tip: 'In accordance with GDPR rules, you can delete all your data from this app.'
   create_your_pipeline: 'Create Your Pipeline'
-  create_your_pipeline_tip: 'A sequence of Actions the system will take to check on you. Saving the Pipeline resets it.'
+  create_your_pipeline_tip: |
+    A Pipeline is a sequence of actions the system uses to periodically check if you're okay. 
+    <br><br>
+    Actions become available for each contact you have verified, and you can combine these actions to build a Pipeline.<br>
+    Example of a one-step Pipeline: <br>
+    You set the actions: "If I am not online on Telegram for 1 day, send me a WhatsApp message and wait 1 hour for my reply."<br>
+    If you are not online on Telegram for a day, the system will send you a WhatsApp message and wait for 1 hour to receive your OK password (which can be hidden inside any text in your reply).
+    <br><br>
+    If you respond in time with the correct password, the system resets and waits for the next cycle.<br>
+    If you do not respond in time or the password is incorrect, the Pipeline ends.<br>
+    When the Pipeline ends, the system generates dynamic links that allow your Heir to try to decrypt your Envelope and sends them to all the contacts you provided for your Heir.
+    <br><br>
+    Note: Editing/Saving the Pipeline resets it. (It will start from the beginning)
   edit_your_pipeline: 'Edit Your Pipeline'
   edit_your_pipeline_tip: 'Saving the Pipeline resets it. If you need more Actions, verify additional Contacts.'
   create_your_secure_envelope: 'Create Your Secure Envelope'
@@ -290,6 +302,11 @@ dashboard:
     copy_link: "Copy Link"
     your_qr: "Your Ref QR"
   kms_status:
+    note: |
+      These are the status indicators for the Key Management Systems that encrypt your Envelope.
+      Currently, only one system is active.
+      In the full setup, there will be three providers.
+      If two of them are red, we recommend editing the Envelope so it can be re-encrypted using three healthy instances.
     title: "KMS Status"
     empty: "No KMS data yet."
     real_label: "Key Management Service %value%"
@@ -297,6 +314,16 @@ dashboard:
     last_check: "Last check: %date%"
     last_check_never: "Last check: never"
     last_check_placeholder: "Last check: —"
+  next:
+    title: "What's Next"
+    step1: "1. Add your contacts (emails, phones, Telegram)"
+    step2: "2. Verify each contact (Edit → Send verification code)"
+    step3: "3. Add your beneficiary (nickname, contacts, language)"
+    step4: "4. Create your secure envelope"
+    step5: "5. Configure the pipeline (choose how the system checks in on you)"
+    step6: "6. Reminder: when the pipeline ends, the system will release the data to your heir"
+    step7: "7. The free trial lasts 3 days. After that, the system will stop checking in on you if you are not on a paid plan"
+    step8: "8. Consider joining our referral program"
 
 decrypt_your_secure_envelope: 'Decrypt Your Secure Envelope'
 decrypt_first: 'To edit your secure envelope, please decrypt it first.'
@@ -401,6 +428,8 @@ errors:
     pipeline_created: 'Your Pipeline is created.'
     pipeline_saved: 'Your Pipeline has been saved.'
     cancel_delete_success: 'The deletion process has been canceled. Your account and data remain intact.'
+    login_required: 'You must be logged in as a customer to perform this action.'
+    no_permission: 'You do not have permission to to perform this action.'
 
 messages:
   verification: 'Thank you for registering! 🔐 Please verify your phone by clicking on the following link: '

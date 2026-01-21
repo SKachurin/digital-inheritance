@@ -199,7 +199,19 @@ dashboard:
   make_a_payment: 'Realice un Pago'
   make_a_payment_tip: "Si este botón está en rojo, significa que el Pipeline no verificará tu estado en línea ni enviará un mensaje a tu heredero."
   create_your_pipeline: 'Cree su Pipeline'
-  create_your_pipeline_tip: 'Una secuencia de Acciones que el sistema tomará para verificar su estado. Guardar el Pipeline lo reinicia.'
+  create_your_pipeline_tip: |
+    Un Pipeline es una secuencia de acciones que el sistema utiliza para comprobar periódicamente si estás bien.
+    <br><br>
+    Las acciones se habilitan para cada contacto que hayas verificado, y puedes combinarlas para crear un Pipeline.<br>
+    Ejemplo de un Pipeline de un solo paso: <br>
+    Configuras la acción: "Si no estoy en línea en Telegram durante 1 día, envíame un mensaje por WhatsApp y espera 1 hora mi respuesta."
+    Si no estás en línea en Telegram durante un día, el sistema te enviará un mensaje por WhatsApp y esperará 1 hora para recibir tu contraseña OK (que puede estar oculta dentro de cualquier texto de tu respuesta).
+    <br><br>
+    Si respondes a tiempo con la contraseña correcta, el sistema se reinicia y espera el siguiente ciclo.<br>
+    Si no respondes a tiempo o la contraseña es incorrecta, el Pipeline finaliza.<br>
+    Cuando el Pipeline finaliza, el sistema genera enlaces dinámicos que permiten a tu Heredero intentar descifrar tu Sobre y los envía a todos los contactos que hayas proporcionado para tu Heredero.
+    <br><br>
+    Nota: Editar o guardar el Pipeline lo reinicia (comienza desde el principio).
   edit_your_pipeline: 'Editar su Pipeline'
   edit_your_pipeline_tip: 'Guardar el Pipeline lo reinicia. Si necesita más Acciones, verifique más Contactos.'
   create_your_secure_envelope: 'Cree su Sobre Seguro'
@@ -292,6 +304,13 @@ dashboard:
     copy_link: "Copiar enlace"
     your_qr: "Tu Ref QR"
   kms_status:
+    note: |
+      Estos son los indicadores de estado de los Sistemas de Gestión de Claves
+      que cifran tu Sobre.
+      Actualmente, solo un sistema está activo.
+      En la configuración completa, habrá tres proveedores.
+      Si dos de ellos aparecen en rojo, recomendamos editar el Sobre
+      para que pueda ser cifrado de nuevo utilizando tres instancias saludables.
     title: "Estado de KMS"
     empty: "Todavía no hay datos de KMS."
     real_label: "Servicio de Gestión de Claves %value%"
@@ -299,6 +318,16 @@ dashboard:
     last_check: "Última comprobación: %date%"
     last_check_never: "Última comprobación: nunca"
     last_check_placeholder: "Última comprobación: —"
+  next:
+    title: "¿Qué sigue?"
+    step1: "1. Añade tus contactos (correo electrónico, teléfono, Telegram)"
+    step2: "2. Verifica cada contacto (Editar → Enviar código de verificación)"
+    step3: "3. Añade a tu beneficiario (apodo, contactos, idioma)"
+    step4: "4. Crea tu sobre seguro"
+    step5: "5. Configura el pipeline (elige cómo el sistema comprobará tu estado)"
+    step6: "6. Recordatorio: cuando el pipeline finalice, el sistema liberará los datos a tu heredero"
+    step7: "7. El período de prueba gratuito dura 3 días. Después, el sistema dejará de comprobar tu estado si no tienes un plan de pago"
+    step8: "8. Considera unirte a nuestro programa de referidos"
 
 decrypt_your_secure_envelope: 'Descifre su Sobre Seguro'
 decrypt_first: 'Para editar su sobre seguro, primero descífrelo.'
@@ -396,6 +425,8 @@ errors:
     pipeline_created: 'Su proceso (Pipeline) ha sido creado.'
     pipeline_saved: 'Su proceso (Pipeline) ha sido guardado.'
     cancel_delete_success: 'El proceso de eliminación ha sido cancelado. Tu cuenta y datos se han conservado.'
+    login_required: "Debes iniciar sesión como cliente para realizar esta acción."
+    no_permission: "No tienes permiso para realizar esta acción."
 
 messages:
   verification: '¡Gracias por registrarte! 🔐 Por favor, verifica tu teléfono haciendo clic en el siguiente enlace: '

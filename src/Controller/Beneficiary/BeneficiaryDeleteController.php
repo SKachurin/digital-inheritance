@@ -9,7 +9,6 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Messenger\MessageBusInterface;
-use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 class BeneficiaryDeleteController extends AbstractController
@@ -36,19 +35,22 @@ class BeneficiaryDeleteController extends AbstractController
         $customer = $this->getUser();
 
         if (!$customer instanceof Customer) {
-            throw new AccessDeniedException('You must be logged in to delete a note.');
+            $this->addFlash('warning', $this->translator->trans('errors.flash.login_required'));
+            return $this->redirectToRoute('user_login');
         }
 
         $note = $this->noteRepository->findOneBy(['beneficiary' => $beneficiaryId, 'customer' => $customer]);
 
         if (!$note) {
-            throw new AccessDeniedException('You do not have permission to delete this Heir.');
+            $this->addFlash('warning', $this->translator->trans('errors.flash.no_permission'));
+            return $this->redirectToRoute('404');
         }
 
         // CSRF Protection
         $submittedToken = $request->request->get('_token');
         if (!$this->isCsrfTokenValid('delete_beneficiary', $submittedToken)) {
-            throw new AccessDeniedException('Invalid CSRF token.');
+            $this->addFlash('warning', $this->translator->trans('errors.flash.no_permission'));
+            return $this->redirectToRoute('404');
         }
 
         $inputDto = new BeneficiaryDeleteInputDto($customer, $beneficiaryId);

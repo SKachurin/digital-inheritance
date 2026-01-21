@@ -1,15 +1,6 @@
 <div class="sidebar-card">
-    <h3>What's Next</h3>
-    <ul class="quick-actions">
-        <li><a href="#">Add Beneficiary</a></li>
-        <li><a href="#">Create Invoice</a></li>
-        <li><a href="#">View Reports</a></li>
-        <li><a href="#">Download Statements</a></li>
-    </ul>
-</div>
-
-<div class="sidebar-card">
     <h3>{{ 'dashboard.kms_status.title'|trans }}</h3>
+    <div class="callout callout-info"> {{ 'dashboard.kms_status.note'|trans }} </div>
 
     {% if kms_statuses is not defined or kms_statuses is empty %}
         <p class="muted">{{ 'dashboard.kms_status.empty'|trans }}</p>
@@ -51,3 +42,54 @@
         {% endfor %}
     {% endif %}
 </div>
+
+<div class="sidebar-card">
+    <h3>{{ 'dashboard.next.title'|trans }}</h3>
+    <ul class="quick-actions">
+        <li><a href="#">{{ 'dashboard.next.step1'|trans }}</a></li>
+        <li><a href="#">{{ 'dashboard.next.step2'|trans }}</a></li>
+        <li><a href="#">{{ 'dashboard.next.step3'|trans }}</a></li>
+        <li><a href="#">{{ 'dashboard.next.step4'|trans }}</a></li>
+        <li><a href="#">{{ 'dashboard.next.step5'|trans }}</a></li>
+        <li><a href="#">{{ 'dashboard.next.step6'|trans }}</a></li>
+        <li><a href="#">{{ 'dashboard.next.step7'|trans }}</a></li>
+        <li><a href="#">{{ 'dashboard.next.step8'|trans }}</a></li>
+    </ul>
+</div>
+
+<style>
+    .card-title-row{
+        display:flex;
+        align-items:center;
+        justify-content:space-between;
+        gap:12px;
+    }
+
+    .info-dot{
+        width:22px;height:22px;
+        display:inline-flex;
+        align-items:center;
+        justify-content:center;
+        border-radius:999px;
+        font-weight:700;
+        font-size:13px;
+        background:#eef6ff;
+        color:#2b6cb0;
+        border:1px solid rgba(43,108,176,.25);
+        user-select:none;
+    }
+
+    .callout{
+        margin: 10px 0 14px;
+        padding: 12px 12px;
+        border-radius: 10px;
+        font-size: 13px;
+        line-height: 1.45;
+    }
+
+    .callout-info{
+        background: rgba(49,130,206,.08);
+        border: 1px solid rgba(49,130,206,.18);
+        border-left: 4px solid rgba(49,130,206,.55);
+    }
+</style>

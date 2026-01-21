@@ -15,9 +15,14 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Validator\Constraints\NotBlank;
 use Symfony\Component\Validator\Constraints\Regex;
+use App\Service\Phone\CountryCallingCodeProvider;
 
 class ContactCreateType extends AbstractType
 {
+    public function __construct(
+        private readonly CountryCallingCodeProvider $countryCallingCodes,
+    ) {}
+
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $type = $options['type'];
@@ -33,13 +38,26 @@ class ContactCreateType extends AbstractType
             ])
         ;
         if ($type === 'phone') {
+            $choices = $this->countryCallingCodes->getChoices();
             $builder
-                ->add('countryCode', TextareaType::class, [
+//                ->add('countryCode', TextareaType::class, [
+//                    'label' => 'countryCode',
+//                    'required' => false,   // true if it's a phone !!
+//                    'attr' => [
+////                        'readonly' => true
+//                    ]
+//                ])
+                ->add('countryCode', ChoiceType::class, [
                     'label' => 'countryCode',
-                    'required' => false,   // true if it's a phone !!
-                    'attr' => [
-//                        'readonly' => true
-                    ]
+                    'required' => true,
+                    'choices' => $choices,
+                    'placeholder' => 'Select country code',
+                    'choice_translation_domain' => false,
+                    'constraints' => [
+                        new NotBlank([
+                            'message' => 'form.constraints.not_blank',
+                        ]),
+                    ],
                 ])
             ;
         }
