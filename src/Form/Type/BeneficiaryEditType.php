@@ -3,6 +3,7 @@
 namespace App\Form\Type;
 
 use App\CommandHandler\Beneficiary\Edit\BeneficiaryEditInputDto;
+use App\Service\Phone\CountryCallingCodeProvider;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -16,6 +17,10 @@ use Symfony\Component\Validator\Constraints\NotBlank;
 
 class BeneficiaryEditType extends AbstractType
 {
+    public function __construct(
+        private readonly CountryCallingCodeProvider $countryCallingCodes,
+    ) {}
+
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
@@ -74,10 +79,13 @@ class BeneficiaryEditType extends AbstractType
                     ]),
                 ],
             ])
-
-            ->add('beneficiaryCountryCode', TextType::class, [
+            ->add('beneficiaryCountryCode', ChoiceType::class, [
                 'label' => 'form.label.beneficiary_country_code',
                 'help' => 'form.help.beneficiary_country_code',
+                'required' => true,
+                'choices' => $this->countryCallingCodes->getChoices(),
+                'placeholder' => 'Select country code',
+                'choice_translation_domain' => false,
             ])
             ->add('beneficiaryFirstPhone', TextType::class, [
                 'label' => 'form.label.beneficiary_first_phone',

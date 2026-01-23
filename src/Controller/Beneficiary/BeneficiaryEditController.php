@@ -25,8 +25,8 @@ class BeneficiaryEditController extends AbstractController
         private NoteRepository        $noteRepository,
         private BeneficiaryRepository $beneficiaryRepository,
         private ContactRepository     $contactRepository,
+        private CryptoService         $cryptoService,
         private LoggerInterface       $logger,
-        private ParameterBagInterface $params,
         private TranslatorInterface   $translator
     )
     {
@@ -59,7 +59,6 @@ class BeneficiaryEditController extends AbstractController
             return $this->redirectToRoute('user_home_heir');
         }
 
-        $cryptoService = new CryptoService($this->params, $this->logger);
         $beneficiaryEmails = $this->contactRepository->findBy([
             'beneficiary' => $beneficiary,
             'contactTypeEnum' => 'email'
@@ -75,25 +74,25 @@ class BeneficiaryEditController extends AbstractController
         $beneficiaryData->setBeneficiaryName($beneficiary->getBeneficiaryName());
 
         $beneficiaryData->setBeneficiaryFullName(
-            $cryptoService->decryptData($beneficiary->getBeneficiaryFullName())
+            $this->cryptoService->decryptData($beneficiary->getBeneficiaryFullName())
         );
 
         $beneficiaryData->setCustomerFullName(
-            $cryptoService->decryptData(
+            $this->cryptoService->decryptData(
                 $beneficiary->getCustomer()->getCustomerFullName()
             )
         )->setBeneficiaryLang($beneficiary->getBeneficiaryLang());
 
         if (isset($beneficiaryEmails[0])) {
             $beneficiaryData->setBeneficiaryEmail(
-                $cryptoService->decryptData(
+                $this->cryptoService->decryptData(
                     $beneficiaryEmails[0]->getValue()
                 )
             );
         }
         if (isset($beneficiaryEmails[1])) {
             $beneficiaryData->setBeneficiarySecondEmail(
-                $cryptoService->decryptData(
+                $this->cryptoService->decryptData(
                     $beneficiaryEmails[1]->getValue()
                 )
             );
@@ -104,7 +103,7 @@ class BeneficiaryEditController extends AbstractController
                 $beneficiaryPhones[0]->getCountryCode()
             );
             $beneficiaryData->setBeneficiaryFirstPhone(
-                $cryptoService->decryptData(
+                $this->cryptoService->decryptData(
                     $beneficiaryPhones[0]->getValue()
                 )
             );
@@ -112,7 +111,7 @@ class BeneficiaryEditController extends AbstractController
 
         if (isset($beneficiaryPhones[1])) {
             $beneficiaryData->setBeneficiarySecondPhone(
-                $cryptoService->decryptData(
+                $this->cryptoService->decryptData(
                     $beneficiaryPhones[1]->getValue()
                 )
             );
