@@ -109,7 +109,7 @@ form:
     text_encoded_beneficiary_first_kms3: "Text encoded with answer to your Heir's security question one and KMS 3"
     text_encoded_beneficiary_second_kms2: "Text encoded with answer to your Heir's security question two and KMS 2"
     text_encoded_beneficiary_second_kms3: "Text encoded with answer to your Heir's security question two and KMS 3"
-    your_text_kms2: 'Your Text form KMS 2'
+    your_text_kms2: 'Your Text from KMS 2'
     your_text_kms3: 'Your Text from KMS 3'
 
   constraints:
@@ -120,7 +120,7 @@ form:
   help:
     customer_name: 'This field will be used to address you in our communications.'
     beneficiary_name: 'This field is for your reference—to remember who this person is.'
-    customer_email: 'This will be your ID in our system. We will encrypt it with our best algorithm.'
+    customer_email: 'This will be your ID in our system.'
     beneficiary_email: "This will be your Heir's ID in our system. We will use this email if/when it comes to delivering your envelope."
     customer_second_email: 'This field will be used to email you if you use it in the Pipeline constructor. It will also be encrypted.'
     beneficiary_second_email: 'This field will be used as a CC email for your Heir.'
@@ -363,7 +363,7 @@ social_check: 'If I was online in Telegram more than the selected time interval 
 social_send: 'Sent to Telegram'
 messenger_send: 'Send message via Messenger and wait'
 messenger_send_2: 'Send message via Messenger (second number) and wait'
-email_send: 'Send email and wait and wait'
+email_send: 'Send email and wait'
 email_send_2: 'Send to secondary email and wait'
 _for_: 'for'
 text_add_action_button: 'You can add another form and include one of the existing actions with a different interval, for example.'
@@ -429,7 +429,7 @@ errors:
     pipeline_saved: 'Your Pipeline has been saved.'
     cancel_delete_success: 'The deletion process has been canceled. Your account and data remain intact.'
     login_required: 'You must be logged in as a customer to perform this action.'
-    no_permission: 'You do not have permission to to perform this action.'
+    no_permission: 'You do not have permission to perform this action.'
 
 messages:
   verification: 'Thank you for registering! 🔐 Please verify your phone by clicking on the following link: '
@@ -516,7 +516,7 @@ faq:
 
   q12: 'Is there really a 0% chance that someone unauthorized can access my Envelope?'
   a12: |
-    Yes—under normal conditions, it is virtually impossible for an unauthorized person 
+    Yes — under normal conditions, it is virtually impossible for an unauthorized person 
     to decrypt your data. We never store your secret answers, and only the specific 
     contacts you designate will even receive a link to your Envelope. Without the correct 
     answers to your questions, no one (not even us) can unlock your note. 
@@ -527,7 +527,7 @@ faq:
 
   q13: "Why do we use terms like ‘under normal conditions’ and ‘virtually impossible’ to describe our security?"
   a13: |
-    When it comes to encryption, nothing is 100% unbreakable if an attacker had unlimited time and super-powerful computers. By “under normal conditions,” we mean that if you choose strong secret answers, keep your devices secure, and we correctly use modern encryption methods (such as XSalsa20-Poly1305 for data at rest and our client-side Envelope scheme using AES-256-GCM, Argon2id, HKDF, and KMS wrapping), then breaking your data would require resources far beyond what is realistically available. “Virtually impossible” reflects that, in everyday use, the likelihood of a successful attack is so small that it isn’t a practical concern—although, in theory, no system is perfect.
+    When it comes to encryption, nothing is 100% unbreakable if an attacker had unlimited time and super-powerful computers. By “under normal conditions,” we mean that if you choose strong secret answers, keep your devices secure, and we correctly use modern encryption methods (such as XSalsa20-Poly1305 for data at rest and our client-side Envelope scheme using AES-256-GCM, Argon2id, HKDF, and KMS wrapping), then breaking your data would require resources far beyond what is realistically available. “Virtually impossible” reflects that, in everyday use, the likelihood of a successful attack is so small that it isn’t a practical concern — although, in theory, no system is perfect.
 
   q14: 'Could my Envelope be compromised if someone physically steals your servers or if there’s a data breach?'
   a14: |

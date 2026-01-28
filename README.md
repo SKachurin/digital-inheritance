@@ -1,119 +1,370 @@
-# The Digital Heir
+# The Digital Heir —  README
 
-[Link to prototype](https://thedigitalheir.com)
-
-## Introducing “The Digital Heir” Service
-Our service provides a seamless, secure, and discreet way to ensure your most valuable digital assets and sensitive information are passed on to the right person, exactly when they need it—without ever revealing any details until the time is right.
+Prototype: https://thedigitalheir.com  
+Repository: https://github.com/SKachurin/digital-inheritance
 
 ---
 
-## Why Choose Our Service?
+## 0) The problem this project solves
 
-1. **Complete Confidentiality**
-    - No one will know you even have an inheritance or its amount.
-    - No one will know who you have designated as your heir.
-    - Your chosen heir themselves won’t know you’ve left anything for them, unless the time comes for them to access it.
+The core problem addressed by this project is how to safely use
+**weak, human-memorable secrets** to protect **extremely sensitive information**
+— without trusting any single system, company, or person.
 
-2. **Independent of Local Laws**
-    - We operate purely on a digital basis, independent of any regional or national legal procedures.
-    - There is no need for official death certificates or complicated paperwork.
-    - The process is solely between you and our service.
+Human secrets are inherently low-entropy and vulnerable to guessing.
+At the same time, the information they protect (credentials, private keys,
+instructions, personal data) may be critical and irreversible if leaked.
 
-3. **Small Monthly Fee, Total Peace of Mind**
-    - Your small monthly subscription guarantees constant coverage and monitoring.
-    - If something happens to you, the service automatically handles the delivery process to your designated contact(s).
+The Digital Heir approaches this problem using:
+- a zero-knowledge design,
+- strict separation of cryptographic responsibilities across independent systems,
+- online brute-force resistance via rate-limited key unwrapping,
+- and the elimination of single points of technical or coercive failure.
 
-4. **Secure Encrypted Notes**
-    - You create one encrypted note (or “secret envelope”) per account.
-    - This note contains the sensitive data you want to pass on: passwords, addresses, private keys, login credentials—anything you choose.
-    - It is stored securely on our servers in encrypted form, unreadable to anyone without the correct answers.
+This architecture is then applied to a practical real-world scenario:
+the controlled transfer of sensitive information when its owner becomes unavailable.
 
-5. **Unlock via Personalized Questions**
-    - You decide on up to four secret questions whose answers only you (and potentially your heir) know.
-    - We give your heir two attempts (or multiple attempts, as you configure) to answer any one of these questions correctly (but preventing brute force of the password).
-    - A correct answer decrypts the note; if the answer is wrong, the note remains locked.
+The Digital Heir lets a user create a single **Envelope** (an *encrypted note*) that is released to designated contacts if an inactivity-based **Pipeline** ends; the Envelope can only be unlocked by providing correct secret answers.
 
 ---
 
-## How “The Digital Heir” Works
+## 1) Terminology (consistent naming)
 
-1. **Automated Life Status Checks**
-    - We periodically check your activity on selected social media platforms, send you WhatsApp messages, or email you to confirm you’re still active.
-    - These checks happen at custom intervals that you set.
-
-2. **Escalation Pipeline**
-    - If you do not respond to the initial check within a designated timeframe, the system escalates to the next step.
-    - You define the sequence of reminders—e.g., wait 24 hours, send a WhatsApp; if no response after another 8 hours, send an email; and so on.
-    - If all attempts fail, the system automatically sends a secure link to your chosen heir(s).
-
-3. **Release of the Encrypted Message**
-    - Once the heir receives the secure link, they must answer the personalized questions you created.
-    - Only if they answer correctly will your note be decrypted and revealed to them.
-    - If they answer incorrectly, the information remains securely locked.
-
-4. **No Heir Notification Needed**
-    - You don’t have to inform anyone in advance.
-    - Your heir can remain completely unaware until they receive the link—if it ever comes to that.
+- **Envelope** (primary UI term): the encrypted note stored on our servers.
+- **Answer**: user-provided secret that gates access to Envelope decryption.
+- **Slot**: one answer “route” (up to 4 logical answers: A1, A2, B1, B2).
+- **KMS**: Key Management System is an integrated solution for generating cryptographic keys. We are using 3 different KMS vendors for encrypt/decrypt each Envelope.
+- **Replica**: one KMS instance/provider used to wrap the same DEK (up to 3 replicas per slot).
+- **Triplet**: the 3 replicas (kms1/kms2/kms3) for a given slot.
 
 ---
 
-## Privacy & Security at Every Step
+## 2) Threat model & guarantees
 
-- **Encrypted Contacts**  
-  Your contact details, along with those of your potential heirs, are encrypted before being stored on our servers. No one can access them without the proper keys.
+### What we protect against
+**If the database leaks:**
+- All user fields are encrypted at rest (libsodium secretbox).
+- Envelope data is stored as encrypted blobs; plaintext is not stored.
+- Secret **answers are never stored** (not even hashed).
 
-- **Encrypted Secret Answers**  
-  The answers to your security questions never leave your head in readable form. Once the message is encrypted, they are just deleted. We never save your security questions in our database.  
-  Only you and your designated heir (who must guess the correct answers) can unlock your secret envelope.
+**If the app server is compromised (read access):**
+- Encrypted-at-rest fields remain protected without the platform secrets.
+- Envelope blobs remain protected without correct answers + KMS unwrap.
 
-- **No Selling of Data**  
-  We do not watch you, track you, or sell your data to any third party. Your information and privacy remain strictly protected.
+**Online brute-force attempts against answers:**
+- Unwrap is rate-limited at the KMS Gateway layer (per: `user_id + answer_fp`).
+- Additional attempt counters/lockouts are enforced at the Symfony app layer (per Envelope).
 
-- **Independence from “Big Tech”**  
-  Unlike large providers like Google or Apple, we do not require a death certificate or engage in lengthy corporate processes. Your data remains fully under your control, with no additional barriers.
-
----
-
-## Setting Up Your Inheritance Pipeline
-
-1. **Create Your Account**
-    - Register with minimal personal information.
-    - Pay the small monthly fee for continuous coverage.
-
-2. **Enter Your Contacts**
-    - Provide your own contact details (email, phone, messenger, social media) for life-status checks.
-    - Optionally add multiple contact methods to minimize false triggers.
-
-3. **Draft Your Encrypted Note**
-    - Write down the message or credentials you want to pass on.
-    - Set a personal security question and answer to encrypt the note.
-
-4. **Add Your Heir(s)**
-    - Input your heir’s contact details (email, phone, messenger, social media).
-    - Create up to four unique questions (with corresponding answers) that only they would know.
-
-5. **Design Your Notification Pipeline**
-    - Specify the order and timing of checks and reminders (e.g., if no social media login for 7 days, then send an email; if no response in 24 hours, send a WhatsApp, etc.).
-    - Once all attempts fail, the system will deliver a secure link to your heir.
+### What we do NOT protect against
+- **Weak answers** (guessable secrets reduce security).
+  - The system is designed around secrets that are easy for the intended recipient
+    to remember, but hard for anyone else to guess.  
+    The goal is not cryptographic strength of the answer itself, but *contextual exclusivity*.  
+    For example: “The place where we spent our honeymoon.”  
+    Such answers are:
+    - trivial for the intended person,
+    - meaningless to outsiders,
+    - and protected against online guessing by strict rate limits and lockouts.
+- **Compromised client device/browser** (keylogger/malware defeats client secrecy).
+- **Compromised email/WhatsApp/Telegram account** (can impact Pipeline messaging).
+- **User error**: if answers are forgotten, Envelope become permanently inaccessible.
 
 ---
 
-## Who Can Benefit?
+## 3) Data stored & encryption at rest (server-side)
 
-- Anyone holding digital assets such as cryptocurrency wallets, online banking credentials, or confidential files.
-- Individuals who want full control of who knows about their inheritance plans and when they learn about it.
-- People seeking an easy, private alternative to traditional estate planning.
+### General account/contact data encryption
+General app data (contacts, names, phones, questions, etc.) is encrypted server-side at rest in DB using:
 
-Whether you are deeply invested in digital currencies or simply want to secure passwords and sensitive notes for future generations, our “The Digital Heir” service ensures that your most precious information remains safe and is delivered to the right person when the time comes—without disclosing anything prematurely.
+- **libsodium `crypto_secretbox` (XSalsa20-Poly1305)**
+
+The symmetric key is derived in `CryptoService` from two environment secrets:
+- `encryption_key` (env)
+- `personal_string` (env)
+
+Derivation (current design):
+- Both are SHA-256’d
+- Then XOR’d into a 32-byte key
+
+### Which fields are plaintext
+To operate the service, at least one identifier must remain readable:
+- **Primary email** is stored in plaintext (used as login / routing / account lookup).
+  Everything else is intended to be encrypted at rest.
 
 ---
 
-## Take Control of Your Digital Legacy
+## 4) Envelope cryptography (DEK + KMS wrapping)
 
-Join our “The Digital Heir” project today and gain peace of mind knowing your digital assets and vital information are securely stored, confidentially protected, and ready to be passed on to the people you trust—only if and when they truly need it.
+Envelope encryption is **hybrid**:
+- The note is encrypted under a random **DEK** (AES-256-GCM).
+- The DEK is then wrapped using:
+   - **Argon2id(answer → H)**, and
+   - **KMS KEK** combined via **HKDF** to produce the wrapping key.
 
-## License
-This project is licensed under the Creative Commons Attribution-NonCommercial 4.0 International License (CC BY-NC 4.0).  
-You are free to view, copy, and adapt the code for non-commercial purposes, but you **may not use it commercially**.
+There can be:
+- up to **4 slots** (answers)
+- up to **3 KMS replicas** per slot  
+  Max stored blobs: **4 × 3 = 12**.
 
-For more details, please see the [LICENSE](./LICENSE) file.
+### 4.1 Encrypt flow (creation)
+
+#### Data Encryption Key (DEK) — 32 random bytes
+- **Where**: browser (canonical design)
+- **Why**: the only key that encrypts the note.
+
+#### Note encryption
+- Generate:
+   - `DEK` (32B random)
+   - `IV` (12B random)
+- Compute:
+   - `C = AES-256-GCM(DEK, Note, IV)` (includes tag)
+
+#### For each provided answer (slot)
+Let answer be `A`:
+- Generate `Salt` (16B random)
+- Compute:
+   - `H = Argon2id(A, Salt, t=5, m=64MiB, p=1) → 32B`
+
+Define fingerprint binding this slot to this ciphertext:
+- `answer_fp = SHA-256( b64(C) || "." || b64(IV) || "." || b64(Salt) )`
+
+#### KMS wrap (per replica)
+For each replica KMS (kms1/kms2/kms3):
+
+- KMS holds long-term secret `KEK` (never leaves KMS/HSM boundary conceptually)
+- Derive wrapping key:
+   - `KEK′ = HKDF-SHA256(KEK, salt=H, info="wrap-v2")`
+
+Wrap DEK:
+- `W = AES-256-GCM(KEK′, DEK, IV_wrap; AAD = user_id || answer_fp)`
+- Stored format:
+   - `W = IV_wrap || CT_wrap || TAG_wrap` (base64)
+
+**Non-deterministic**: new `IV_wrap` each time.
+
+### 4.2 What the DB stores (per slot per replica)
+
+For each slot (answer) and each replica (kms1/kms2/kms3), the DB stores the JSON blob containing:
+
+- `c` : base64 ciphertext of the note
+- `iv`: base64 IV used for note encryption
+- `w` : base64 wrapped DEK
+- `s` : base64 Argon2 salt
+
+That is the `{c, iv, w, s}` blob.  
+Up to **12 blobs** total for one Envelope.
+
+### 4.3 What is never stored
+- Secret answers (A1/A2/B1/B2) are never stored.
+- Derived `H` is never stored.
+- The DEK is not stored in plaintext; it is stored only as wrapped `W`.
+
+---
+
+## 5) Decrypt flow (unlock)
+Envelope decryption is a multi-stage process designed to prevent both
+offline and online brute-force attacks, even when answers are low entropy.
+
+The process intentionally separates responsibilities across independent systems.
+
+### 5.1 Inputs
+To attempt decryption, the user (or heir) provides:
+- a candidate answer (human-memorable secret),
+- the encrypted Envelope blobs `{c, iv, w, s}`,
+- and the system context (`user_id`, slot metadata).
+
+The answer itself is never stored.
+
+### 5.2 Deriving the unwrap key material
+For a given slot:
+1) The server recomputes:
+- `H = Argon2id(answer, s)`
+  (memory-hard, slow by design)
+2) A fingerprint is recomputed:
+- `answer_fp = SHA-256(b64(c) || "." || b64(iv) || "." || b64(s))`
+This binds the answer attempt to a **specific ciphertext** and prevents reuse.
+
+### 5.3 KMS unwrap via gateway (online, rate-limited)
+The server does **not** unwrap the DEK locally.
+
+Instead, it calls the **KMS Gateway API**:
+- Endpoint: `POST /kms/unwrap`
+- Transport: **mutual TLS**
+- Payload includes: `user_id`, `h_b64`, `answer_fp`, and `replicas[] = { kms_id, w_b64 }`
+
+#### Gateway protections
+At the gateway level:
+- Requests are authenticated using **mTLS**
+- Source IPs are restricted (API ↔ KMS allowlist)
+  - Each unwrap attempt is rate-limited using Redis:   
+    key = lock:unwrap:{user_id}:{answer_fp}   
+    TTL = fixed window + jitter
+
+If the same `(user_id + answer_fp)` is retried too soon:
+- the gateway responds with **HTTP 429**
+- includes `retry_after_seconds`
+- no unwrap is attempted
+
+The system fails **closed**:
+- Redis errors → unwrap denied
+- malformed responses → unwrap denied
+- no partial success escalation
+
+### 5.4 Multi-gateway and multi-KMS behavior
+API exist in multiple instances per each set of 3 KMS.
+
+For each unwrap attempt:
+- gateway URLs are resolved dynamically from DB + environment
+
+From the response:
+- only DEKs with valid length (32 bytes) are accepted
+- malformed or empty DEKs are discarded
+
+If no DEK is successfully unwrapped:
+- the attempt fails
+- no information is leaked about which replica failed
+
+### 5.5 Final decryption (current implementation)
+Once a valid DEK is obtained:
+- The server performs:   
+  plaintext = AES-256-GCM(DEK, iv, c)
+
+Plaintext is:
+- held only in memory,
+- never persisted,
+- never logged,
+- never cached.
+
+The plaintext is returned to the user for display or editing
+and discarded immediately afterward.
+
+> This server-side decrypt is intentional and allows the system
+> to enforce attempt limits, lockouts, and timing guarantees centrally.
+
+### 5.6 Security outcome
+An attacker attempting to guess answers must:
+- interact with the live system,
+- respect rate limits,
+- wait enforced delays,
+- and cannot test guesses offline.
+
+The cost of guessing grows linearly with time, not compute.
+
+### 5.7 Operational isolation and coercion resistance
+
+The KMS Gateway and API components are deployed using credentials
+that are not associated with any real individual.
+
+Once deployment is completed:
+- SSH access keys are destroyed,
+- no interactive access remains,
+- and operational control is limited to automated runtime behavior.
+
+As a result:
+- no person can modify unwrap behavior post-deployment,
+- no operator can selectively bypass rate limits,
+- and no coercion of staff or founders can grant access to user data.
+
+This is a deliberate design choice:
+the system is structured so that there is no technical authority
+capable of revealing Envelope contents, even under pressure.
+
+---
+
+## 6) Rate limiting & lockouts (high-level)
+
+Rate limiting is enforced primarily at unwrap:
+- Typical response: HTTP `429` with `retry_after_seconds`
+- Key scope: `user_id + answer_fp`
+
+The Symfony app additionally maintains:
+- per-note attempt counters (`attemptCount`)
+- lockout timers (`lockoutUntil`)
+- user-facing messaging for retry timing
+
+These two layers are complementary:
+- Gateway throttles cryptographic unwrap attempts.
+- App controls UX and longer lockout policy.
+
+---
+
+## 7) KMS replicas & health status
+
+The system is designed for **3 replicas** (`kms1`, `kms2`, `kms3`) to reduce dependence on a single provider.
+- Current statuses for each KMS used to encrypt Envelope displayed on Customer dashboard.
+- If some replicas are down, re-encrypting the Envelope can restore redundancy (as only healthy replicas will be used).
+- In the future we`re going to message Customer if 2 of 3 replicas are down.
+
+---
+
+## 8) KMS Health Gateway API (mTLS)
+
+A dedicated mTLS gateway provides wrap/unwrap and health probing.
+
+### Endpoints
+- `POST /kms/wrap`  
+  Wrap DEK using `user_id`, `dek_b64`, `h_b64`, `answer_fp`  
+  Returns per-KMS results `{ kms_id: { ok, w_b64? } }`
+
+- `POST /kms/unwrap`  
+  Unwrap using `user_id`, `h_b64`, `answer_fp`, and provided replicas `{kms_id, w_b64}`  
+  Returns per-KMS `{ ok }` and `deks_b64` map
+
+- `GET /kms/health/check`  
+  Performs real echo probe (wrap+unwrap) and returns status per KMS
+
+### Security
+- mTLS required (`mutualTLS`)
+- IP allowlist may be used (gateway-side)
+- Rate limiting on unwrap (429)
+
+---
+
+## 9) Open-source verification & key code paths
+
+This project is open source to allow independent verification of the claims above.
+
+Suggested audit targets:
+- `CryptoService`
+   - server-side libsodium encryption for general fields
+   - Envelope triplet decrypt helpers (unwrap + AES-GCM decrypt)
+
+- Note decrypt/edit handlers (server-side plaintext flow):
+   - `NoteDecryptHandler`
+   - `BeneficiaryNoteDecryptHandler`
+   - `NoteEditHandler`
+   - `NoteEditTextHandler`
+
+- KMS gateway client + exception mapping:
+   - client that calls `/kms/wrap` and `/kms/unwrap`
+   - rate-limit exception mapping (`retry_after_seconds`)
+
+---
+
+## 10) Technical FAQ (short)
+
+**Q: If the DB leaks, can an attacker brute-force answers offline?**  
+They can attempt offline guessing against Argon2id-derived `H`, but unwrap still requires KMS `KEK`. Without KMS compromise, the attacker cannot validate guesses by unwrapping the DEK. (Online guessing is rate-limited.)
+
+**Q: Why store questions at all?**  
+Questions are stored **encrypted** so the UI can show prompts to the user/heir. Answers are never stored.
+
+**Q: Why does the server ever see plaintext during decrypt?**  
+Current implementation trades “pure client-side decrypt” for stronger centralized enforcement of attempt limits and lockouts.   
+Plaintext is intended to be memory-only and never stored.
+
+## 11) Referral program
+
+The Digital Heir includes a built-in referral program.
+
+- **Lifetime commission:**: earn **20% of all payments** made by customers who register via your referral link or QR code (recurring, for as long as they stay subscribed).
+- **Second-level commission:** earn an additional **5% from payments** made by people invited by your referrals.
+- **Attribution:**: the referral code is saved on a visitor’s first visit and applied automatically at registration. Cross-device registrations may not be attributed unless the user later logs in from the original device.
+- **Rewards & withdrawals:** rewards are credited immediately after payment, but withdrawals follow a 1-month hold period (you can withdraw rewards earned at least one month ago).
+- **Payouts:** currently manual — request a withdrawal via the Contact Us page.
+
+---
+
+## Out of scope for this README (kept on website)
+- Marketing pages, pricing and general FAQs
+- End-user onboarding walkthrough

@@ -120,7 +120,7 @@ form:
   help:
     customer_name: 'Este campo se utilizará para dirigirnos a usted en nuestras comunicaciones.'
     beneficiary_name: 'Este campo es para su referencia, para recordar quién es esta persona.'
-    customer_email: 'Este será su identificador en nuestro sistema. Lo ciframos con nuestro mejor algoritmo.'
+    customer_email: 'Este será su identificador en nuestro sistema.'
     beneficiary_email: 'Este será el identificador de su heredero en nuestro sistema. Utilizaremos este correo si/cuando sea necesario entregar su sobre.'
     customer_second_email: 'Este campo puede utilizarse para enviarle correos en el Pipeline. También se cifrará.'
     beneficiary_second_email: 'Este campo se utilizará como copia (CC) para su heredero.'
