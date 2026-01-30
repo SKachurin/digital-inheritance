@@ -62,8 +62,6 @@ form:
     beneficiary_second_question_answer_repeat: 'Repita la respuesta'
     customer_social_app: 'Aplicación de Telegram para rastrear su actividad. Esta función minimiza la interacción con nuestro servicio.'
     customer_social_app_link: 'Enlace a su perfil de Telegram (nombre de usuario, número de teléfono o enlace)'
-    customer_okay_password: ' ????????? Se utilizará para verificar si se encuentra bien. Elija algo cotidiano (como "El día ha sido estupendo") para que parezca un mensaje normal a cualquiera que lo vea.'
-    customer_okay_password_repeat: ' ????????? Repita la Okay Password'
     password: 'Una contraseña normal para iniciar sesión en nuestro servicio. Si la pierde o se filtra, otros aún no podrán ver sus notas sin sus respuestas secretas.'
     password_repeat: 'Repita la contraseña'
     contact_edit: 'Editar contacto'
@@ -186,13 +184,13 @@ dashboard:
 
   more_security_spoiler: "Más Sobre Seguridad"
   more_security_text: |
-    En nuestra base de datos todo está cifrado, excepto tu dirección de correo electrónico principal. Por lo tanto, si nuestros datos llegaran a filtrarse alguna vez (lo cual es muy poco probable), la única información legible sería ese correo electrónico.<br><br>
+    En nuestra base de datos, todo está cifrado excepto tu dirección de correo electrónico principal. Incluso en caso de una filtración completa de la base de datos, el único campo legible sería ese correo electrónico.
 
-    Los contactos y los campos de la cuenta se cifran «en reposo» en nuestros servidores utilizando libsodium (XSalsa20-Poly1305), un esquema de cifrado autenticado sólido y ampliamente confiable.
-    El Sobre utiliza un protocolo de cifrado independiente del lado del cliente (AES-256-GCM + Argon2id + HKDF + envoltura mediante KMS), donde el cifrado se realiza en tu navegador antes de que cualquier dato se envíe a nuestros servidores.<br><br>
+    Los contactos y los campos de la cuenta se cifran en reposo en nuestros servidores utilizando libsodium (XSalsa20-Poly1305), un esquema de cifrado autenticado ampliamente reconocido y fiable.
+    El Sobre utiliza un protocolo de cifrado independiente en el lado del cliente (AES-256-GCM + Argon2id + HKDF + envoltura mediante KMS), en el que el cifrado se realiza en tu navegador antes de que cualquier dato se envíe a nuestros servidores.
   
-    Para cifrar el Sobre, derivamos material criptográfico a partir de tus respuestas secretas y lo combinamos con claves de nuestra infraestructura.
-    Dado que tus respuestas nunca se almacenan, debes descifrar el Sobre cada vez que quieras editarlo.
+    Para cifrar el Sobre, el material criptográfico se deriva de tus respuestas secretas y se combina con claves mantenidas por la infraestructura mediante un proceso de envoltura en varias etapas.
+    Dado que tus respuestas nunca se almacenan en ningún lugar, el Sobre debe descifrarse cada vez antes de ser editado — esto garantiza que nunca se persistan datos en texto plano ni material de recuperación.
 
   delete_account: 'Eliminar mi cuenta'
   delete_account_tip: 'De acuerdo con las normas del RGPD, puedes eliminar todos tus datos de esta aplicación.'
@@ -351,9 +349,19 @@ confirm_delete_beneficiary: '¿Está seguro de que desea eliminar a su heredero?
 
 your_questions: 'Preguntas secretas para cifrar su Sobre'
 your_questions_explain: |
-  A continuación se muestran las preguntas secretas para proteger sus datos confidenciales. Cuando envíe este formulario, ciframos el texto del campo "Texto para su Sobre" con todas las respuestas que haya proporcionado.
-  Incluso las preguntas mismas se cifrarán (pero con nuestra propia criptografía).
-  Nunca guardaremos sus respuestas. Si las olvida, perderá toda su información.
+  Estas preguntas protegen tus datos sensibles.
+  Tu Sobre se cifrará utilizando las respuestas que proporciones.
+
+  Nunca almacenamos tus respuestas, ni siquiera en forma cifrada.
+  Si las olvidas, los datos no podrán recuperarse.
+
+  Tu respuesta no tiene que ser compleja.
+  Debe ser evidente para la persona adecuada, pero no tener sentido para nadie más.
+
+  Ejemplo: «El lugar donde pasamos nuestra luna de miel».
+
+  Todos los intentos de adivinar las respuestas son lentos, están supervisados y estrictamente limitados.
+  Si olvidas estas respuestas, el descifrado será imposible.
 
 text_pipeline_your_actions: 'Ahora tiene estas acciones para crear su pipeline personalizado:'
 pipeline_create_help: |
@@ -552,12 +560,9 @@ faq:
 
   q13: "¿Por qué usamos expresiones como ‘en condiciones normales’ y ‘prácticamente imposible’ para describir nuestra seguridad?"
   a13: |
-    Cuando se trata de cifrado, ningún sistema es 100% irrompible si un atacante dispusiera de tiempo ilimitado y ordenadores extremadamente potentes.
-    Con la expresión «en condiciones normales» nos referimos a que, si eliges respuestas secretas sólidas, mantienes tus dispositivos seguros
-    y utilizamos correctamente métodos de cifrado modernos (como XSalsa20-Poly1305 para los datos almacenados y el esquema del Sobre del lado del cliente basado en AES-256-GCM, Argon2id, HKDF y envoltura mediante KMS),
-    romper tus datos requeriría recursos muy por encima de lo que es realista.
-
-    «Prácticamente imposible» refleja que, en el uso cotidiano, la probabilidad de que un ataque tenga éxito es tan baja que no supone una preocupación real, aunque en teoría ningún sistema sea perfecto.
+    Cuando se trata de cifrado, nada es 100% irrompible si un atacante dispone de tiempo ilimitado y ordenadores extremadamente potentes.
+    Por «condiciones normales» entendemos que, si eliges respuestas secretas razonables y mantienes tus dispositivos seguros, romper tu Sobre en nuestra plataforma requeriría recursos muy por encima de lo que es realista.
+    La expresión «prácticamente imposible» refleja que, en el uso cotidiano, la probabilidad de un ataque exitoso es tan baja que no supone una preocupación práctica, aunque, en teoría, ningún sistema es perfecto.
 
   q14: '¿Podría verse comprometido mi Sobre si alguien roba físicamente sus servidores o si ocurre una filtración de datos?'
   a14: >
@@ -568,13 +573,16 @@ faq:
     Mientras tus preguntas y respuestas de seguridad permanezcan solo en tu memoria (y en la de tu heredero), 
     tu Sobre continuará seguro—sin importar lo que suceda con nuestro hardware.
 
-  q15: '¿Qué ocurre si en el futuro una computadora cuántica logra romper los métodos de cifrado actuales?'
+  q15: "¿Qué ocurre si el sistema es hackeado, si hay presión o una obligación legal?"
   a15: |
-    En la actualidad, los algoritmos de cifrado modernos como XSalsa20-Poly1305 y AES-256-GCM siguen siendo extremadamente seguros frente a todos los ordenadores clásicos conocidos.
-    La computación cuántica a gran escala podría cambiar el panorama criptográfico en el futuro, pero hoy en día no existe ninguna máquina cuántica de conocimiento público capaz de romper estos esquemas de forma viable.
-  
-    Si en la práctica llegara a ser necesario adoptar cifrado resistente a la computación cuántica, adaptaremos nuestra criptografía en consecuencia.
+    El sistema está diseñado de tal forma que ningún operador ni fundador puede desbloquear los Sobres de los usuarios, incluso bajo presión.
 
+  q16: "¿Qué pasa si en el futuro los ordenadores cuánticos rompen los métodos de cifrado actuales?"
+  a16: |
+    En la actualidad, los algoritmos de cifrado modernos como XSalsa20-Poly1305 y AES-256-GCM siguen siendo extremadamente seguros frente a todos los ordenadores clásicos conocidos.
+    La computación cuántica a gran escala podría cambiar el panorama criptográfico en el futuro, pero hoy en día no existe ninguna máquina cuántica conocida públicamente capaz de romper estos esquemas de forma viable.
+
+    Si en algún momento el cifrado resistente a la computación cuántica resulta necesario en la práctica, adaptaremos nuestra criptografía en consecuencia.
 contact_page:
   title: 'Contáctanos'
   info_1_title: "¿Tienes una idea?"
@@ -623,6 +631,7 @@ about_page:
       Nuestro servicio ofrece una forma segura, discreta y sin complicaciones para asegurarte de que tus activos digitales más valiosos
       y tu información confidencial sean transmitidos a la persona correcta en el momento adecuado, sin revelar ningún detalle antes de tiempo.
 
+      En esencia, The Digital Heir resuelve el problema de proteger información extremadamente sensible utilizando secretos débiles pero fáciles de recordar para las personas, sin necesidad de confiar en un único sistema u operador.
   why_choose:
     title: "¿Por qué elegir nuestro servicio?"
 
@@ -685,7 +694,7 @@ about_page:
     bullet1: "Contactos cifrados: tus contactos y detalles de herederos se almacenan cifrados."
     bullet2: "Respuestas secretas cifradas: nunca se guardan en la base de datos. Solo tú y tu heredero pueden desbloquear el Sobre."
     bullet3: "No vendemos tus datos: no te rastreamos ni compartimos información con terceros."
-    bullet4: "Independencia de las grandes corporaciones: sin certificados de defunción ni largos trámites legales. Tus datos te pertenecen."
+    bullet4: "Independencia de las grandes tecnológicas y ausencia de terceros de confianza: el sistema no depende de documentos legales, aprobaciones manuales ni de decisiones humanas para liberar los datos. Tus datos siguen siendo tuyos."
 
   pipeline:
     title: "Configurando tu pipeline de herencia"

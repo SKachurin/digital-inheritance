@@ -30,7 +30,7 @@ The Digital Heir lets a user create a single **Envelope** (an *encrypted note*) 
 
 ## 1) Terminology (consistent naming)
 
-- **Envelope** (primary UI term): the encrypted note stored on our servers.
+- **Envelope**: the encrypted note stored on our servers.
 - **Answer**: user-provided secret that gates access to Envelope decryption.
 - **Slot**: one answer “route” (up to 4 logical answers: A1, A2, B1, B2).
 - **KMS**: Key Management System is an integrated solution for generating cryptographic keys. We are using 3 different KMS vendors for encrypt/decrypt each Envelope.

@@ -62,8 +62,6 @@ form:
     beneficiary_second_question_answer_repeat: 'Repeat the Answer'
     customer_social_app: 'Telegram App for tracking your activity. This feature minimizes interaction with our service.'
     customer_social_app_link: 'Link to your Telegram profile (username, phone number, or link)'
-    customer_okay_password: ' ????????? This will be used to check if you are okay. Pick something mundane (like "great" of "GoodLuck") so it seems normal to anyone who might see this interaction.'
-    customer_okay_password_repeat: ' ????? Repeat the Okay Password'
     password: 'A regular password for logging into our service. If you lose it or it gets leaked, others will still not be able to see your notes without your secret answers.'
     password_repeat: 'Repeat Password'
     contact_edit: 'Edit Contact'
@@ -186,13 +184,13 @@ dashboard:
 
   more_security_spoiler: "More About Security"
   more_security_text: |
-    In our database, everything is encrypted except for your primary email address. So if our data were ever to leak (which is highly unlikely), the only readable information would be that email address.<br><br>
+    In our database, everything is encrypted except for your primary email address. Even in the event of a full database leak, the only readable field would be that email address.
 
     Contacts and account fields are encrypted at rest on our servers using libsodium (XSalsa20-Poly1305), a widely trusted and robust authenticated encryption scheme.
     The Envelope uses a separate client-side encryption protocol (AES-256-GCM + Argon2id + HKDF + KMS wrapping), where encryption happens in your browser before any data is sent to our servers.<br><br>
-  
-    For encrypting your Envelope, we derive cryptographic material from your secret answers and combine it with our infrastructure keys.
-    Since your answers are never stored anywhere, you must decrypt the Envelope first each time you want to edit it.
+
+    For encrypting your Envelope, cryptographic material is derived from your secret answers and combined with infrastructure-held keys via a multi-stage wrapping process.
+    Since your answers are never stored anywhere, the Envelope must be decrypted each time before editing — this ensures no plaintext or recovery material is ever persisted.
 
   delete_account: 'Delete my account'
   delete_account_tip: 'In accordance with GDPR rules, you can delete all your data from this app.'
@@ -348,9 +346,18 @@ confirm_delete_beneficiary: 'Are you sure you want to delete your Heir?'
 
 your_questions: 'Secret Questions to encrypt your Envelope'
 your_questions_explain: |
-  Below are the Secret Questions to protect your sensitive data. When you submit this form, we are going to encrypt your text from the field "Text for your Envelope" with all the answers you provided.
-  Even the questions themselves are going to be encrypted (but with our own cryptography).
-  We will never save your answers. If you forget this answer, you will lose all your data.
+  These questions protect your sensitive data.
+  Your Envelope will be encrypted using the answers you provide.
+  
+  We never store your answers — not even in encrypted form.
+  If you forget them, the data cannot be recovered.
+  
+  Your answer doesn’t need to be complex.
+  It should be obvious to the right person, but meaningless to anyone else.
+
+  Example: “The place where we spent our honeymoon.”
+  
+  All attempts to guess answers are slow, monitored, and strictly limited.If you forget these answers, decryption will be impossible.
 
 text_pipeline_your_actions: 'Now you have these actions to build your custom pipeline:'
 pipeline_create_help: |
@@ -527,7 +534,9 @@ faq:
 
   q13: "Why do we use terms like ‘under normal conditions’ and ‘virtually impossible’ to describe our security?"
   a13: |
-    When it comes to encryption, nothing is 100% unbreakable if an attacker had unlimited time and super-powerful computers. By “under normal conditions,” we mean that if you choose strong secret answers, keep your devices secure, and we correctly use modern encryption methods (such as XSalsa20-Poly1305 for data at rest and our client-side Envelope scheme using AES-256-GCM, Argon2id, HKDF, and KMS wrapping), then breaking your data would require resources far beyond what is realistically available. “Virtually impossible” reflects that, in everyday use, the likelihood of a successful attack is so small that it isn’t a practical concern — although, in theory, no system is perfect.
+    When it comes to encryption, nothing is 100% unbreakable if an attacker had unlimited time and super-powerful computers. 
+    By “under normal conditions,” we mean that if you choose normal secret answers, keep your devices secure, then breaking your Envelope on our platform would require resources far beyond what is realistically available. 
+    “Virtually impossible” reflects that, in everyday use, the likelihood of a successful attack is so small that it isn’t a practical concern — although, in theory, no system is perfect.
 
   q14: 'Could my Envelope be compromised if someone physically steals your servers or if there’s a data breach?'
   a14: |
@@ -536,8 +545,11 @@ faq:
     practical way to unlock it. As long as your secret questions and answers remain known only to you 
     (and eventually your heir), your Envelope stays secure—regardless of what happens to our hardware.
 
-  q15: 'What if a future quantum computer breaks current encryption methods?'
-  a15: |
+  q15: What if you are hacked, pressured, or legally forced?
+  a15: The system is designed so that no operator or founder can unlock user Envelopes, even under pressure.
+
+  q16: 'What if a future quantum computer breaks current encryption methods?'
+  a16: |
     At present, modern encryption algorithms such as XSalsa20-Poly1305 and AES-256-GCM remain extremely secure against all known classical computers.
     Large-scale quantum computing could change the cryptographic landscape in the future, but today no publicly known quantum machine can feasibly break these schemes.
   
@@ -593,6 +605,8 @@ about_page:
       Our service provides a seamless, secure, and discreet way to ensure your most valuable digital assets and 
       sensitive information are passed on to the right person, exactly when they need it—without ever revealing 
       any details until the time is right.
+      
+      At its core, The Digital Heir solves the problem of protecting extremely sensitive information using weak, human-memorable secrets — without requiring trust in any single system or operator.
 
   why_choose:
     title: "Why Choose Our Service?"
@@ -656,7 +670,7 @@ about_page:
     bullet1: "Encrypted Contacts: Your contact and heir details are encrypted before storage."
     bullet2: "Encrypted Secret Answers: They are never saved to the database. Only you and your heir can unlock the Envelope."
     bullet3: "No Selling of Data: We do not watch you, track you, or sell your data to any third party."
-    bullet4: "Independence from Big Tech: No death certificate or lengthy procedures required. Your data remains yours."
+    bullet4: "Independence from Big Tech: No Trusted Third Party: The system does not rely on legal documents, manual approvals, or human discretion to release data. Your data remains yours."
 
   pipeline:
     title: "Setting Up Your Inheritance Pipeline"
