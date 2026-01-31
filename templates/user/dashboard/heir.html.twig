@@ -16,18 +16,35 @@
 {#            {% include '/user/dashboard/_heir_section.html.twig' %}#}
             {% if customerHasBeneficiary is defined and customerHasBeneficiary %}
                 <section class="mb-4">
-                    <div class="tooltip-box">{{ 'dashboard.edit_your_heir_tip'|trans }}</div>
+{#                    <div class="tooltip-box">{{ 'dashboard.edit_your_heir_tip'|trans }}</div> </br>#}
 
-                    <a class="btn btn-outline-dark btn-floating m-1 mt-4" href="/beneficiary/{{ customerHasBeneficiary }}/edit" role="button">
-                        <i class="">{{ 'dashboard.edit_your_heir'|trans }}</i>
-                    </a>
+{#                    <a class="btn btn-outline-dark btn-floating m-1 mt-4" href="/beneficiary/{{ customerHasBeneficiary }}/edit" role="button">#}
+{#                        <i class="">{{ 'dashboard.edit_your_heir'|trans }}</i>#}
+{#                    </a>#}
 
-                    <form action="{{ path('beneficiary_delete', {'beneficiaryId': customerHasBeneficiary}) }}" method="post" style="display:inline-block; margin: 0; padding: 0; background: transparent;" onsubmit="return confirm('{{ 'confirm_delete_beneficiary'|trans }}');">
-                        <input type="hidden" name="_token" value="{{ csrf_token('delete_beneficiary') }}">
-                        <button type="submit" class="btn btn-outline-danger btn-floating m-1 mt-4">
-                            <i class="">{{ 'dashboard.delete_your_beneficiary'|trans }}</i>
-                        </button>
-                    </form>
+{#                    <form action="{{ path('beneficiary_delete', {'beneficiaryId': customerHasBeneficiary}) }}" method="post" style="display:inline-block; margin: 0; padding: 0; background: transparent;" onsubmit="return confirm('{{ 'confirm_delete_beneficiary'|trans }}');">#}
+{#                        <input type="hidden" name="_token" value="{{ csrf_token('delete_beneficiary') }}">#}
+{#                        <button type="submit" class="btn btn-outline-danger btn-floating m-1 mt-4">#}
+{#                            <i class="">{{ 'dashboard.delete_your_beneficiary'|trans }}</i>#}
+{#                        </button>#}
+{#                    </form>#}
+                    <div class="tooltip-box mb-4">{{ 'dashboard.edit_your_heir_tip'|trans }}</div>
+
+                    <div class="action-row">
+                        <a class="btn btn-outline-dark btn-floating" href="/beneficiary/{{ customerHasBeneficiary }}/edit" role="button">
+                            <span class="btn-label">{{ 'dashboard.edit_your_heir'|trans }}</span>
+                        </a>
+
+                        <form action="{{ path('beneficiary_delete', {'beneficiaryId': customerHasBeneficiary}) }}"
+                              method="post"
+                              class="action-form"
+                              onsubmit="return confirm('{{ 'confirm_delete_beneficiary'|trans }}');">
+                            <input type="hidden" name="_token" value="{{ csrf_token('delete_beneficiary') }}">
+                            <button type="submit" class="btn btn-outline-danger btn-floating">
+                                <span class="btn-label">{{ 'dashboard.delete_your_beneficiary'|trans }}</span>
+                            </button>
+                        </form>
+                    </div>
                 </section>
                 {#                <p>explanation</p>#}
             {% endif %}

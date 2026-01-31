@@ -329,6 +329,49 @@ select.form-select option {
     font-family: "Segoe UI Emoji", "Apple Color Emoji", "Noto Color Emoji", system-ui, sans-serif;
 }
 
+/* ===== Action row base (desktop + mobile) ===== */
+.transaction-card .action-row{
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    margin-top: 12px;
+    align-items: stretch;
+}
+
+.transaction-card .action-form{
+    margin: 0 !important;
+    padding: 0 !important;
+    display: block !important;
+    background: transparent !important;
+    box-shadow: none !important;
+}
+
+.transaction-card .action-row > a.btn,
+.transaction-card .action-row > .action-form > button.btn{
+    width: 100%;
+    min-height: 56px;
+    padding: 12px 14px;
+
+    margin: 0 !important;          /* kills bootstrap m-1/mt-4 if any remain */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    text-align: center;
+    white-space: normal;
+    line-height: 1.15;
+
+    border-radius: 10px;
+    box-sizing: border-box;
+}
+
+/* consistent wrap (2-line feel) */
+.transaction-card .btn-label{
+    display: block;
+    max-width: 12ch;
+    margin: 0 auto;
+}
+
 /* =========================
    RESPONSIVE DASHBOARD
    ========================= */
@@ -353,18 +396,17 @@ select.form-select option {
 /* Mobile view  */
 @media (max-width: 991px) {
 
+    /* ========== Layout ========== */
+
     .sidebar-left {
         display: none;
+        position: static;
+        max-height: none;
     }
 
     .dashboard-container {
         grid-template-columns: 1fr;
         margin-top: 9.5em;
-    }
-
-    .sidebar-left {
-        position: static;
-        max-height: none;
     }
 
     .stats-container {
@@ -373,34 +415,25 @@ select.form-select option {
         margin-right: 150px;
     }
 
-    .stat-value {
-        font-size: 38px;
-    }
-    .stat-label {
-        font-size: 28px;
-    }
-
-    /* Right sidebar content moves under main */
     .sidebar-right {
         display: block;
         margin-top: 20px;
     }
 
-    /* Bottom nav: icons + labels */
-    .bottom-nav a {
-        font-size: 14px;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
+    /* ========== Stats typography ========== */
+
+    .stat-value {
+        font-size: 38px;
     }
 
-    .bottom-nav a i {
-        font-size: 20px;
-        margin-bottom: 4px;
+    .stat-label {
+        font-size: 28px;
     }
+
+    /* ========== Cards ========== */
 
     .sidebar-card {
-        /*background: white;*/
+        /* background: white; */
         background: rgba(255, 255, 255, 0.8);
         border-radius: 12px;
         padding: 20px;
@@ -414,6 +447,8 @@ select.form-select option {
         padding-bottom: 10px;
         border-bottom: 1px solid #e2e8f0;
     }
+
+    /* ========== Activity / quick actions typography ========== */
 
     .quick-actions a {
         font-size: 27px;
@@ -436,12 +471,18 @@ select.form-select option {
         color: #718096;
     }
 
+    /* ========== Bottom nav (merged) ========== */
+
     .bottom-nav {
         position: fixed;
         bottom: 0;
         left: 0;
         width: 100%;
+        z-index: 9999;
+
         display: flex;
+
+        /* variant A */
         flex-wrap: wrap;
         justify-content: space-around;
         align-items: center;
@@ -449,23 +490,40 @@ select.form-select option {
         box-shadow: 0 -4px 10px rgba(0, 0, 0, 0.05);
         border-top: 1px solid #e2e8f0;
         padding: 0.6rem 0;
-        z-index: 9999;
         backdrop-filter: blur(10px);
+
+        /* variant B (two-line) */
+        flex-direction: column;
+        background: #fff;
     }
 
     .bottom-nav a {
+        text-decoration: none;
+
+        display: flex;
+        flex-direction: column;
+        align-items: center;
         flex: 1 1 16%;
         text-align: center;
         font-size: 1.75rem;
         color: #2d3748;
-        text-decoration: none;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
         justify-content: center;
         gap: 0.3rem;
         padding: 0.4rem 0;
         transition: color 0.2s ease, transform 0.2s ease;
+    }
+
+    .bottom-nav a i {
+        /* from the "icons + labels" block */
+        font-size: 20px;
+        margin-bottom: 4px;
+    }
+
+    .bottom-nav svg,
+    .bottom-nav i {
+        /* from the later block (conflicts with 20px above) */
+        font-size: 1.5rem;
+        line-height: 1;
     }
 
     .bottom-nav a:hover {
@@ -478,28 +536,17 @@ select.form-select option {
         font-weight: 600;
     }
 
-    .bottom-nav svg,
-    .bottom-nav i {
-        font-size: 1.5rem;
-        line-height: 1;
+    .bottom-nav a,
+    .bottom-nav a:visited,
+    .bottom-nav a:active {
+        color: #2d3748 !important;
     }
 
-
-
-
-    /* Two-line bottom nav */
-    .bottom-nav {
-        display: flex;
-        flex-direction: column;
-        background: #fff;
-        border-top: 1px solid #e2e8f0;
-        position: fixed;
-        bottom: 0;
-        left: 0;
-        width: 100%;
-        z-index: 9999;
-        box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.05);
+    .bottom-nav a.active {
+        color: #4a6cf7 !important;
     }
+
+    /* Two-line bottom nav pieces */
 
     .bottom-nav-top {
         display: flex;
@@ -534,32 +581,176 @@ select.form-select option {
         width: 100%;
     }
 
-    .bottom-nav a,
-    .bottom-nav a:visited,
-    .bottom-nav a:active {
-        color: #2d3748 !important; /* dark gray, same as other labels */
+    .transaction-card section.mb-4 {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        align-items: stretch;
     }
 
-    .bottom-nav a:hover {
-        color: #4a6cf7; /* same hover blue as other icons */
+    .transaction-card section.mb-4 > a.btn,
+    .transaction-card section.mb-4 > form,
+    .transaction-card section.mb-4 > form > button.btn {
+        width: 100%;
     }
 
-    .bottom-nav a.active {
-        color: #4a6cf7 !important; /* for the active page */
+    /* kill bootstrap margins that make wrapping worse */
+    .transaction-card section.mb-4 > a.btn,
+    .transaction-card section.mb-4 > form > button.btn {
+        margin: 0 !important;
     }
 
-    .status-dot{
-        display:inline-block;
-        width:10px;
-        height:10px;
-        border-radius:50%;
+    .transaction-card section.mb-4 > form {
+        display: block !important;
+        margin: 0 !important;
+        padding: 0 !important;
+    }
+
+    /* ========== Status dots ========== */
+
+    .callout.callout-info {
+        font-size: 1.5rem !important;
+        line-height: 1.5;
+    }
+
+    .status-dot {
+        display: inline-block;
+        width: 10px;
+        height: 10px;
+        border-radius: 50%;
         box-shadow: 0 0 0 2px rgba(0,0,0,0.05);
     }
 
-    .dot-unused{ background:#bdbdbd; }
-    .dot-ok{ background:#21c55d; }
-    .dot-bad{ background:#ef4444; }
+    .dot-unused { background: #bdbdbd; }
+    .dot-ok     { background: #21c55d; }
+    .dot-bad    { background: #ef4444; }
 
-    .muted{ opacity:0.7; }
+    .muted { opacity: 0.7; }
 
+
+    /* Buttons row under the text (clean layout) */
+    .transaction-card section.mb-4{
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    /* Two buttons in one line, equal width */
+    .transaction-card section.mb-4 .action-row{
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+        margin-top: 1em;
+    }
+
+    /* Make form behave like a normal grid item */
+    .transaction-card section.mb-4 .action-form{
+        margin: 0;
+        padding: 0;
+        background: transparent;
+        box-shadow: none;
+    }
+
+    /* Buttons: identical sizing + nice padding */
+    .transaction-card section.mb-4 .action-row > a.btn,
+    .transaction-card section.mb-4 .action-row > .action-form > button.btn{
+        width: 100%;
+        min-height: 56px;
+        padding: 10px 12px;
+        margin: 0 !important;       /* kills m-1 / mt-4 leftovers */
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        border-radius: 10px;
+        white-space: normal;        /* allow wrapping */
+        line-height: 1.15;
+    }
+
+    /* Force consistent “two-line feel” even if the text is short */
+    .transaction-card section.mb-4 .btn-label{
+        display: block;
+        max-width: 12ch;            /* forces wrap like: "Delete Your" / "Heir" */
+        margin: 0 auto;
+    }
+
+    .tooltip-box.sidebar-note,
+    .callout.callout-info {
+        font-size: 0.65em;
+    }
+
+    /* make the two buttons really fill the 2 grid columns */
+    .action-row{
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 12px;
+        padding: 0;               /* ensure no inner padding */
+        margin-top: 12px;
+    }
+
+    .action-row > a.btn,
+    .action-row > form{
+        margin: 0 !important;
+        padding: 0 !important;
+        min-width: 0;             /* prevent weird overflow sizing */
+    }
+
+    .action-row > a.btn,
+    .action-row > form > button.btn{
+        width: 100% !important;   /* force full cell width */
+        display: flex !important; /* override inline-block */
+        justify-content: center;
+        align-items: center;
+        box-sizing: border-box;
+    }
+
+    .action-row > a.btn,
+    .action-row > form > button.btn{
+        min-height: 56px;
+    }
+
+    .transaction-card section.mb-4 .action-row{
+        display: grid !important;
+        grid-template-columns: 1fr 1fr !important;
+        gap: 12px !important;
+        margin-top: 12px !important;
+        align-items: stretch !important;
+    }
+
+    .transaction-card section.mb-4 .action-form{
+        margin: 0 !important;
+        padding: 0 !important;
+        display: block !important;
+        background: transparent !important;
+        box-shadow: none !important;
+    }
+
+    .transaction-card section.mb-4 .action-row > a.btn,
+    .transaction-card section.mb-4 .action-row > .action-form > button.btn{
+        width: 100% !important;
+        min-width: 0 !important;
+        min-height: 56px !important;
+
+        margin: 0 !important;
+        padding: 12px 14px !important;
+
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+
+        text-align: center !important;
+        white-space: normal !important;
+        line-height: 1.15 !important;
+
+        border-radius: 10px !important;
+        box-sizing: border-box !important;
+        margin-left: 2em !important;
+    }
+
+    /* force “2-line look” even if text is short */
+    .transaction-card section.mb-4 .btn-label{
+        display: block !important;
+        max-width: 12ch !important;  /* tweak 10–14ch */
+        margin: 0 auto !important;
+    }
 }

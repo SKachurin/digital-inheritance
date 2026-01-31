@@ -6,7 +6,19 @@ framework:
     csrf_protection: true
 
     # Note that the session will be started ONLY if you read or write from it.
-    session: true
+    session:
+        enabled: true
+
+        # 15 minutes inactivity => session considered expired server-side
+        gc_maxlifetime: 900
+
+        # cookie dies when browser closes (optional but common for security)
+        cookie_lifetime: 0
+
+        # good hygiene
+        cookie_secure: auto
+        cookie_samesite: lax
+        cookie_httponly: true
 
     #esi: true
     #fragments: true
