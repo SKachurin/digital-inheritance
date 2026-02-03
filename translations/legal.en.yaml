@@ -145,3 +145,20 @@ privacy_page:
     For privacy inquiries, contact us at:
     Email: support@thedigitalheir.com  
     Website: https://thedigitalheir.com/contact_us
+
+checkout_page:
+  og_title: '“The Digital Heir" | Checkout'
+  title: 'Checkout'
+  description: 'Checkout page on “The Digital Heir"'
+  month: 'Months:'
+  intro: |
+    If you appreciate the idea behind "The Digital Heir", enjoy the service, and want to support it's growth, consider choosing a <b>Premium monthly subscription</b>. Your support helps us continue improving and expanding the platform!
+
+  standard: 'Standard'
+  premium: 'Premium'
+  desc_standard: 'Monthly subscription to TheDigitalHeir service'
+  desc_premium: 'If you love the service and want to support its development, subscribe to the Premium plan.'
+  price_standard: '$5.00/month'
+  price_premium: '$25.00/month'
+  buy_standard: 'Buy Standard'
+  buy_premium: 'Buy Premium'

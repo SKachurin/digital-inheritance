@@ -145,3 +145,20 @@ privacy_page:
     Para consultas sobre privacidad, contáctanos en:
     Correo electrónico: support@thedigitalheir.com  
     Sitio web: https://thedigitalheir.com/contact_us
+
+checkout_page:
+  og_title: '“The Digital Heir" | Pago'
+  title: 'Pago'
+  description: 'Página de pago en “The Digital Heir”'
+  month: 'Meses:'
+  intro: |
+    Si aprecias la idea de <b>“The Digital Heir”</b>, disfrutas del servicio y quieres apoyar su crecimiento, considera suscribirte al <b>plan Premium mensual</b>. Tu apoyo nos ayuda a seguir mejorando y expandiendo la plataforma.
+
+  standard: 'Estándar'
+  premium: 'Premium'
+  desc_standard: 'Suscripción mensual al servicio The Digital Heir'
+  desc_premium: 'Si te encanta el servicio y quieres apoyar su desarrollo, suscríbete al plan Premium.'
+  price_standard: '$5.00/mes'
+  price_premium: '$25.00/mes'
+  buy_standard: 'Comprar Estándar'
+  buy_premium: 'Comprar Premium'
