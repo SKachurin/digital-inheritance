@@ -4,6 +4,7 @@ namespace App\Controller\Beneficiary;
 
 use App\CommandHandler\Beneficiary\Delete\BeneficiaryDeleteInputDto;
 use App\Entity\Customer;
+use App\Repository\BeneficiaryRepository;
 use App\Repository\NoteRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -14,51 +15,55 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 class BeneficiaryDeleteController extends AbstractController
 {
     public function __construct(
-        private MessageBusInterface $commandBus,
-        private NoteRepository      $noteRepository,
-        private TranslatorInterface $translator
-    )
-    {
-    }
+        private MessageBusInterface    $commandBus,
+        private NoteRepository         $noteRepository,
+        private TranslatorInterface    $translator,
+        private BeneficiaryRepository  $beneficiaryRepository,
+    ) {}
 
-    /**
-     * @param int     $beneficiaryId
-     * @param Request $request
-     *
-     * @return Response
-     */
     public function delete(int $beneficiaryId, Request $request): Response
     {
-        $this->denyAccessUnlessGranted('ROLE_USER');
 
-        /** @var Customer|null $customer */
-        $customer = $this->getUser();
+        $currentCustomer = $this->getUser();
 
-        if (!$customer instanceof Customer) {
+        if (!$currentCustomer instanceof Customer) {
             $this->addFlash('warning', $this->translator->trans('errors.flash.login_required'));
             return $this->redirectToRoute('user_login');
         }
 
-        $note = $this->noteRepository->findOneBy(['beneficiary' => $beneficiaryId, 'customer' => $customer]);
-
-        if (!$note) {
-            $this->addFlash('warning', $this->translator->trans('errors.flash.no_permission'));
-            return $this->redirectToRoute('404');
-        }
-
-        // CSRF Protection
+        // CSRF Protection (better to include the id in the token)
         $submittedToken = $request->request->get('_token');
-        if (!$this->isCsrfTokenValid('delete_beneficiary', $submittedToken)) {
+        if (!$this->isCsrfTokenValid('delete_beneficiary_'.$beneficiaryId, $submittedToken)) {
             $this->addFlash('warning', $this->translator->trans('errors.flash.no_permission'));
             return $this->redirectToRoute('404');
         }
 
-        $inputDto = new BeneficiaryDeleteInputDto($customer, $beneficiaryId);
+        // REAL permission check: beneficiary must belong to this customer
+        $beneficiary = $this->beneficiaryRepository->findOneBy([
+            'id' => $beneficiaryId,
+            'customer' => $currentCustomer,
+        ]);
 
+        if (!$beneficiary) {
+            $this->addFlash('warning', $this->translator->trans('errors.flash.no_permission'));
+            return $this->redirectToRoute('404');
+        }
+
+        // Block deletion if envelopes exist
+        $notesCount = $this->noteRepository->count([
+            'beneficiary' => $beneficiary,
+            'customer' => $currentCustomer,
+        ]);
+
+        if ($notesCount > 0) {
+            $this->addFlash('warning', $this->translator->trans('errors.flash.heir_has_envelopes'));
+            return $this->redirectToRoute('user_home'); // or heirs list page
+        }
+
+        $inputDto = new BeneficiaryDeleteInputDto($currentCustomer, $beneficiaryId);
         $this->commandBus->dispatch($inputDto);
 
         $this->addFlash('success', $this->translator->trans('errors.flash.heir_deleted'));
-
         return $this->redirectToRoute('user_home');
     }
 }

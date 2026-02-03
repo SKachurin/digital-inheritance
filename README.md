@@ -362,9 +362,3 @@ The Digital Heir includes a built-in referral program.
 - **Attribution:**: the referral code is saved on a visitor’s first visit and applied automatically at registration. Cross-device registrations may not be attributed unless the user later logs in from the original device.
 - **Rewards & withdrawals:** rewards are credited immediately after payment, but withdrawals follow a 1-month hold period (you can withdraw rewards earned at least one month ago).
 - **Payouts:** currently manual — request a withdrawal via the Contact Us page.
-
----
-
-## Out of scope for this README (kept on website)
-- Marketing pages, pricing and general FAQs
-- End-user onboarding walkthrough

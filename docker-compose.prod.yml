@@ -81,7 +81,7 @@ services:
       - /var/lib/mysql-data:/var/lib/mysql:rw
       - ./docker/mysql/my.cnf:/etc/mysql/conf.d/my.cnf:ro
     ports:
-      - "13000:3306"
+      - "127.0.0.1:13000:3306"
     networks:
       - digital_network
 
