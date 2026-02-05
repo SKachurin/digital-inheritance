@@ -38,7 +38,7 @@ class CustomerPipelineStatusListener
             'user_home_email', 'user_home_email_', 'user_home_phone',
             'user_home_social', 'user_home_heir',
             'user_home_env', 'user_home_pipe',
-            'pipeline_create', 'contact_create',
+            'pipeline_create', 'pipeline_edit', 'contact_create',
             'contact_edit', 'beneficiary_create',
             'beneficiary_edit', 'customer_delete',
             'user_home_phone_', 'note_edit'
@@ -83,12 +83,16 @@ class CustomerPipelineStatusListener
 
         // fallback — fresh check
         $pipelineId = $this->pipelineRepository->customerHasPipeline($customer);
-        $hasPipeline = $pipelineId !== null;
+//        $hasPipeline = $pipelineId !== null;
+        $pipelineId = $pipelineId ? : 0;
 
-        $this->twig->addGlobal('customerHasPipeline', $hasPipeline);
-        $this->twig->addGlobal('customerPipelineId', $pipelineId);
+        $this->twig->addGlobal('customerHasPipeline', $pipelineId);
 
-        $this->cookieToSet = sprintf('%d:%s:%d', $hasPipeline ? 1 : 0, $now->format(DATE_ATOM), $customerId);
+        $this->cookieToSet = sprintf(
+            '%d:%s:%d',
+            $pipelineId ? : 0,
+            $now->format(DATE_ATOM),
+            $customerId);
     }
 
     public function onKernelResponse(ResponseEvent $event): void

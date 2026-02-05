@@ -30,12 +30,11 @@ class CustomerHasPipelineListener
         $route = $request->attributes->get('_route');
 
         $targetRoutes = [
-            'user_home_pipe', 'user_home_pay',
-            'user_home', 'user_home_1', 'user_home_ref',
+            'user_home_pay', 'user_home', 'user_home_1', 'user_home_ref',
             'user_home_email', 'user_home_email_', 'user_home_phone',
             'user_home_social', 'user_home_heir',
             'user_home_env', 'user_home_pipe',
-            'pipeline_create', 'contact_create',
+            'pipeline_create','pipeline_edit', 'contact_create',
             'contact_edit', 'beneficiary_create',
             'beneficiary_edit', 'customer_delete', 'note_create',
             'note_edit', 'user_home_phone_'
@@ -85,13 +84,16 @@ class CustomerHasPipelineListener
         }
 
         // Fallback: calculate fresh
-        $hasPipeline = $this->pipelineRepository->customerHasPipeline($customer) !== null;
-        $this->twig->addGlobal('customerHasPipeline', $hasPipeline);
+        $pipelineId = $this->pipelineRepository->customerHasPipeline($customer);
+//        $hasPipeline = $pipelineId !== null;
+        $pipelineId = $pipelineId ? : 0;
+
+        $this->twig->addGlobal('customerHasPipeline', $pipelineId);
 
         // Save cookie for later requests
         $this->cookieToSet = sprintf(
             '%d:%s:%d',
-            $hasPipeline ? 1 : 0,
+            $pipelineId ? : 0,
             $now->format(DATE_ATOM),
             $customerId
         );

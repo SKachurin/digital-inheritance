@@ -28,7 +28,7 @@ final class KmsStatusListener
             'user_home_email', 'user_home_email_', 'user_home_phone',
             'user_home_social', 'user_home_heir',
             'user_home_env', 'user_home_pipe',
-            'pipeline_create', 'contact_create',
+            'pipeline_create', 'pipeline_edit', 'contact_create',
             'contact_edit', 'beneficiary_create',
             'beneficiary_edit', 'customer_delete',
             'user_home_phone_', 'note_edit'

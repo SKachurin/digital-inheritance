@@ -44,7 +44,7 @@ final class SessionIdleTimeoutSubscriber implements EventSubscriberInterface
             'user_home_social', 'user_home_heir',
             'user_home_env', 'user_home_pipe',
             'pipeline_create', 'contact_create',
-            'contact_edit', 'beneficiary_create',
+            'contact_edit', 'pipeline_edit', 'beneficiary_create',
             'beneficiary_edit', 'customer_delete',
             'user_home_ref', 'note_create',
             'note_edit'
