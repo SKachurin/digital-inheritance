@@ -437,6 +437,7 @@ errors:
     cancel_delete_success: 'The deletion process has been canceled. Your account and data remain intact.'
     login_required: 'You must be logged in as a customer to perform this action.'
     no_permission: 'You do not have permission to perform this action.'
+    heir_has_envelopes: 'To delete Heir you need to delete connected Envelope first or just Edit data of your Heir'
 
 messages:
   verification: 'Thank you for registering! 🔐 Please verify your phone by clicking on the following link: '

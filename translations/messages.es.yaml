@@ -435,6 +435,7 @@ errors:
     cancel_delete_success: 'El proceso de eliminación ha sido cancelado. Tu cuenta y datos se han conservado.'
     login_required: "Debes iniciar sesión como cliente para realizar esta acción."
     no_permission: "No tienes permiso para realizar esta acción."
+    heir_has_envelopes: 'Para eliminar al heredero, primero debes eliminar el sobre asociado o simplemente editar heredero datos.'
 
 messages:
   verification: '¡Gracias por registrarte! 🔐 Por favor, verifica tu teléfono haciendo clic en el siguiente enlace: '

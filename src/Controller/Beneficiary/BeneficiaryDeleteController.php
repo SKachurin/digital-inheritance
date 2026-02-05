@@ -57,7 +57,7 @@ class BeneficiaryDeleteController extends AbstractController
 
         if ($notesCount > 0) {
             $this->addFlash('warning', $this->translator->trans('errors.flash.heir_has_envelopes'));
-            return $this->redirectToRoute('user_home'); // or heirs list page
+            return $this->redirectToRoute('user_home_env'); // or heirs list page
         }
 
         $inputDto = new BeneficiaryDeleteInputDto($currentCustomer, $beneficiaryId);

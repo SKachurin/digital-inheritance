@@ -86,6 +86,7 @@ class CustomerPipelineStatusListener
         $hasPipeline = $pipelineId !== null;
 
         $this->twig->addGlobal('customerHasPipeline', $hasPipeline);
+        $this->twig->addGlobal('customerPipelineId', $pipelineId);
 
         $this->cookieToSet = sprintf('%d:%s:%d', $hasPipeline ? 1 : 0, $now->format(DATE_ATOM), $customerId);
     }

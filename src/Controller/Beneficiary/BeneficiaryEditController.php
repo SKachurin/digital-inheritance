@@ -52,11 +52,14 @@ class BeneficiaryEditController extends AbstractController
         }
 
         // Verify that the beneficiary belongs to the customer
-        $note = $this->noteRepository->findOneBy(['beneficiary' => $beneficiary, 'customer' => $customer]);
+        $beneficiary = $this->beneficiaryRepository->findOneBy([
+            'id' => $beneficiaryId,
+            'customer' => $customer,
+        ]);
 
-        if (!$note) {
-            $this->addFlash('info', 'First add your Envelope');
-            return $this->redirectToRoute('user_home_heir');
+        if (!$beneficiary) {
+            $this->addFlash('warning', $this->translator->trans('errors.flash.no_permission'));
+            return $this->redirectToRoute('404');
         }
 
         $beneficiaryEmails = $this->contactRepository->findBy([

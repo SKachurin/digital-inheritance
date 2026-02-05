@@ -58,7 +58,7 @@
             <p style="margin-bottom: 1em !important; margin-top: 1em !important;">{{ 'heir_questions_edit'|trans }}</p>
             {% if customerHasNote is defined and customerHasNote %}
                 <section class="mb-4">
-                    <a class="btn btn-outline-dark btn-floating m-1 mt-4" href="/note/{{ customerHasNote }}/edit" role="button">
+                    <a class="btn btn-outline-dark btn-floating m-1 mt-4" href="{{ path('user_home_env') }}" role="button">
                         <i class="">{{ 'dashboard.edit_your_secure_envelope'|trans }}</i>
                     </a>
                 </section>
