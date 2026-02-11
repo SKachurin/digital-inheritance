@@ -179,6 +179,9 @@
     </div>
 {% endblock %}
 
+{% if app.request.cookies.get('essential_cookie_accepted') != 'true' %}
+    {% include 'partials/cookie_modal.html.twig' %}
+{% endif %}
 
 <style>
 
@@ -1075,6 +1078,11 @@
                 document.body.classList.remove("menu-open");
             }
         });
+    });
+
+    document.getElementById('accept-cookies-btn').addEventListener('click', function() {
+        document.cookie = "essential_cookie_accepted=true; path=/; max-age=31536000; SameSite=Lax";
+        location.reload();
     });
 </script>
 </body>

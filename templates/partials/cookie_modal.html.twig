@@ -1,0 +1,84 @@
+<div id="cookie-overlay">
+    <div id="cookie-modal">
+        <h2>{{ 'cookie.title'|trans }}</h2>
+
+        <p>{{ 'cookie.p_1'|trans }}</p>
+
+        <p>{{ 'cookie.p_2'|trans }}</p>
+
+        <ul>
+            <li>{{ 'cookie.ul_1'|trans }}</li>
+            <li>{{ 'cookie.ul_2'|trans }}</li>
+            <li>{{ 'cookie.ul_3'|trans }}</li>
+            <li>{{ 'cookie.ul_4'|trans }}</li>
+        </ul>
+
+        <p>{{ 'cookie.p_3'|trans }}</p>
+
+        <button id="accept-cookies-btn">
+            {{ 'cookie.button'|trans }}
+        </button>
+    </div>
+</div>
+
+
+
+<style>
+    h2,ul{
+        margin-left: 3em
+    }
+
+    h2 {
+        margin-left: 2em
+    }
+
+    #cookie-overlay {
+        position: fixed;
+        inset: 0;
+        background: rgba(0, 0, 0, 0.65);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 9999;
+    }
+
+    #cookie-modal {
+        background: #ffffff;
+        padding: 32px;
+        max-width: 500px;
+        border-radius: 12px;
+        box-shadow: 0 20px 50px rgba(0,0,0,0.2);
+        text-align: left;
+    }
+
+    #cookie-modal h2 {
+        margin-top: 0;
+    }
+
+    #cookie-modal ul {
+        padding-left: 20px;
+    }
+
+    #accept-cookies-btn {
+        margin-top: 20px;
+        width: 100%;
+        padding: 12px;
+        background: #111;
+        color: #fff;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-weight: 600;
+    }
+
+    #accept-cookies-btn:hover {
+        background: #333;
+    }
+</style>
+
+<script>
+    document.getElementById('accept-cookies-btn').addEventListener('click', function () {
+        document.cookie = "essential_cookie_accepted=true; path=/; max-age=31536000; SameSite=Lax";
+        location.reload();
+    });
+</script>

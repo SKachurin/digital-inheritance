@@ -741,6 +741,17 @@ about_page:
       e información vital están almacenados de manera segura, protegidos con total confidencialidad y listos para ser transmitidos 
       a las personas en quienes confías, solo cuando realmente lo necesiten.
 
+cookie:
+  title: "Esta aplicación requiere cookies"
+  p_1: "Esta aplicación no puede funcionar sin cookies esenciales."
+  p_2: "Utilizamos cookies para:"
+  p_3: "No utilizamos cookies publicitarias ni de seguimiento. Si no está de acuerdo, por favor abandone la aplicación."
+  ul_1: "Guardar su preferencia de idioma"
+  ul_2: "Conservar el seguimiento de referidos"
+  ul_3: "Aplicar cierre automático por inactividad"
+  ul_4: "Garantizar la seguridad y la integridad del sistema"
+  button: "Acepto el uso de cookies esenciales"
+
 note_creation:
   default_text: |
     Reemplace este texto con sus datos:

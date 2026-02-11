@@ -717,6 +717,17 @@ about_page:
       and vital information are securely stored, confidentially protected, and ready to be passed on to
       the people you trust—only if and when they truly need it.
 
+cookie:
+  title: "This Application Requires Cookies"
+  p_1: "This application cannot function without essential cookies."
+  p_2: "We use cookies to:"
+  p_3: "We do not use advertising or tracking cookies. If you do not agree, please leave this application."
+  ul_1: "Store your language preference"
+  ul_2: "Preserve referral tracking"
+  ul_3: "Enforce automatic security timeouts when inactive"
+  ul_4: "Ensure core security and system integrity"
+  button: "I Agree to Use Essential Cookies"
+
 note_creation:
   default_text: |
     Replace this text with your data:

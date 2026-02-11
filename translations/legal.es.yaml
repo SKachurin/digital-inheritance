@@ -87,7 +87,7 @@ privacy_page:
   og_title: '“The Digital Heir” | Política de Privacidad'
   title: 'Política de Privacidad'
   description: 'Página de Política de Privacidad de “The Digital Heir”'
-  date: 'Última actualización: 13 de octubre de 2025'
+  date: 'Última actualización: 11 de febrero de 2026'
   intro: |
     The Digital Heir respeta tu privacidad y se compromete a proteger tus datos personales. Esta Política de Privacidad explica cómo recopilamos, usamos y protegemos tu información cuando utilizas nuestra plataforma.
 
@@ -111,9 +111,13 @@ privacy_page:
   3_text_3: 'Entregar información cifrada a los herederos designados si se confirma la inactividad.'
   3_text_5: 'Responder a solicitudes de soporte y garantizar el cumplimiento de obligaciones legales.'
 
-  4_title: '4. Cookies'
-  4_text: |
-    Usamos únicamente cookies esenciales para la autenticación y la gestión de la sesión. Puedes deshabilitarlas en tu navegador, pero algunas funciones podrían no operar correctamente.
+  4_title: "4. Cookies"
+  4_text: "Utilizamos únicamente cookies esenciales para autenticación, seguridad y gestión de la sesión del usuario."
+  4_ul_1: "Sesión de inicio de sesión segura y autenticación"
+  4_ul_2: "Protección contra CSRF y ataques similares"
+  4_ul_3: "Guardar la preferencia de idioma"
+  4_ul_4: "Seguimiento de referidos (si llega mediante un enlace de referido)"
+  4_text_2: "Puede desactivar las cookies en su navegador, pero algunas funciones pueden no funcionar correctamente o la aplicación puede no funcionar."
 
   5_title: '5. Seguridad de los datos'
   5_text: |
@@ -145,6 +149,16 @@ privacy_page:
     Para consultas sobre privacidad, contáctanos en:
     Correo electrónico: support@thedigitalheir.com  
     Sitio web: https://thedigitalheir.com/contact_us
+
+  legal:
+    cookies_title: "Cookies"
+    cookies_p_1: "Esta aplicación utiliza únicamente cookies esenciales necesarias para la seguridad y el funcionamiento básico."
+    cookies_p_2: "No utilizamos cookies publicitarias, analíticas ni de seguimiento."
+    cookies_ul_1: "Seguridad de sesión y autenticación"
+    cookies_ul_2: "Almacenamiento de preferencia de idioma"
+    cookies_ul_3: "Funcionalidad de seguimiento de referidos"
+    cookies_ul_4: "Protección automática por inactividad"
+    cookies_p_3: "Las cookies son necesarias para el funcionamiento de la aplicación. Si no está de acuerdo, debe dejar de utilizar el servicio."
 
 checkout_page:
   og_title: '“The Digital Heir" | Pago'
