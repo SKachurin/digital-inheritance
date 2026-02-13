@@ -3,7 +3,7 @@
 Prototype: https://thedigitalheir.com  
 Repository: https://github.com/SKachurin/digital-inheritance
 
-Video about service:
+Video about the service:
 
 [![Video about service](https://markdown-videos-api.jorgenkh.no/url?url=https%3A%2F%2Fwww.youtube.com%2Fwatch%3Fv%3D5_o8S4dfc1M%26utm_source%3Dgithub)](https://www.youtube.com/watch?v=5_o8S4dfc1M&utm_source=github)
 ---

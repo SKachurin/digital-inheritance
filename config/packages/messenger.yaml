@@ -48,6 +48,7 @@ framework:
             'App\Message\DeleteMarkedAccountsMessage': batch
             'App\Message\MarkExpiredAsNotPaidMessage': batch
             'App\Message\KmsHealthCheckMessage': batch
+            'App\Message\SendContactVerificationMessage': async
 
         failure_transport: failed
 

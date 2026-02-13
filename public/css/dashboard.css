@@ -753,4 +753,9 @@ select.form-select option {
         max-width: 12ch !important;  /* tweak 10–14ch */
         margin: 0 auto !important;
     }
+
+    :root { --bottom-nav-h: 220px; } /* tune to your nav height */
+    footer.bg-dark {
+        margin-bottom: var(--bottom-nav-h) !important;
+    }
 }

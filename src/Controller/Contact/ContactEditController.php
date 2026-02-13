@@ -6,14 +6,10 @@ namespace App\Controller\Contact;
 
 use App\CommandHandler\Contact\Edit\ContactEditInputDto;
 use App\Entity\Contact;
-//use App\Form\Type\ContactDecryptType;
 use App\Entity\Customer;
 use App\Form\Type\ContactEditType;
 use App\Repository\ContactRepository;
 use App\Service\CryptoService;
-use App\Service\VerificationEmailService;
-use App\Service\VerificationWhatsAppService;
-use App\Service\VerificationSocialService;
 use Random\RandomException;
 use SodiumException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -24,6 +20,7 @@ use Symfony\Component\Mailer\Exception\TransportExceptionInterface;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Messenger\Stamp\HandledStamp;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use App\Message\SendContactVerificationMessage;
 
 class ContactEditController extends AbstractController
 {
@@ -31,9 +28,6 @@ class ContactEditController extends AbstractController
         private ContactRepository            $repository,
         private MessageBusInterface          $commandBus,
         private CryptoService                $cryptoService,
-        private VerificationEmailService     $verificationEmailService,
-        private VerificationWhatsAppService  $verificationWhatsAppService,
-        private VerificationSocialService    $verificationSocialService,
         private readonly TranslatorInterface $translator
     )
     {
@@ -97,28 +91,9 @@ class ContactEditController extends AbstractController
 
             if ($form->has('resend_verification') && $form->get('resend_verification')->isClicked()) {
 
-                switch ($contact->getContactTypeEnum()) {
-                    case 'email':
-                        $this->verificationEmailService->sendVerificationEmail($contact, $message);
-                        $this->addFlash('info', $this->translator->trans('errors.flash.email_sent'));
-                        break;
+                $this->commandBus->dispatch(new SendContactVerificationMessage($contact->getId()));
 
-                    case 'phone':
-                        $this->verificationWhatsAppService->sendVerificationWhatsApp($contact, $message);
-                        $this->addFlash('info', $this->translator->trans('errors.flash.phone_sent'));
-                        break;
-
-                    case 'social':
-                        try {
-                            $this->verificationSocialService->sendVerificationSocial($contact, $message);
-                            $this->addFlash('info', $this->translator->trans('errors.flash.social_sent'));
-                        } catch (\Exception $e) {
-                            //TODO monitoring
-                            //'Error: ' . $e->getMessage()';
-                            $this->addFlash('danger', $this->translator->trans('errors.flash.fail_to_sent') );
-                        }
-                        break;
-                }
+                $this->addFlash('info', $this->translator->trans('errors.flash.verification_sent', [], 'messages', $lang));
 
                 return $this->redirectToRoute('user_home');
             }
