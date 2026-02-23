@@ -4,69 +4,67 @@ declare(strict_types=1);
 
 namespace App\Queue\Doctrine\Api;
 
-use App\Message\KmsHealthCheckMessage;
 use App\Repository\KmsRepository;
 use App\Service\Api\KmsHealthCheckService;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\Messenger\Attribute\AsMessageHandler;
-use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 
-#[AsMessageHandler]
 final class KmsHealthCheckConsumer
 {
     public function __construct(
+        private readonly EntityManagerInterface $em,
         private readonly KmsRepository $kmsRepository,
         private readonly KmsHealthCheckService $healthCheckService,
-        private readonly EntityManagerInterface $em,
     ) {}
 
-    public function __invoke(KmsHealthCheckMessage $message): void
+    public function __invoke(): void
     {
         $kmsRows = $this->kmsRepository->findAll();
         if ($kmsRows === []) {
             return;
         }
 
-        // gatewayId => list<Kms>
-        $byGateway = [];
-        foreach ($kmsRows as $kms) {
-            $gatewayIds = $kms->getGatewayIds();
-
-            // Current model: 1 gateway per KMS row (stored as JSON array for future flexibility)
-            $gatewayId = $gatewayIds[0] ?? null;
-            if (!is_string($gatewayId) || $gatewayId === '') {
-                continue;
-            }
-
-            $byGateway[$gatewayId][] = $kms;
-        }
-
-        if ($byGateway === []) {
-            return;
-        }
-
         $now = new \DateTimeImmutable();
 
-        foreach ($byGateway as $gatewayId => $rowsForGateway) {
-            $statuses = $this->fetchWithRetry($gatewayId, 2); // 2 attempts total
+        // Cache gatewayId => statuses (so we don't spam the same gateway N times)
+        /** @var array<string, array<string, string>|null> $gatewayCache */
+        $gatewayCache = [];
 
-            // If gateway did not return valid statuses -> mark all as unhealthy (your rule)
-            if ($statuses === null) {
-                foreach ($rowsForGateway as $kms) {
-                    $kms->setLastHealth(false);
-                    $kms->setCheckDate($now);
-                }
-                continue;
-            }
+        foreach ($kmsRows as $kms) {
+            $alias = $kms->getAlias();              // "kms1", "kms2", ...
+            $gatewayIds = $kms->getGatewayIds();    // ["API_HEALTHCHECK_IP_1", "API_HEALTHCHECK_IP_2", ...]
 
-            // Success -> update each row by alias
-            foreach ($rowsForGateway as $kms) {
-                $alias = $kms->getAlias();
-                if (!array_key_exists($alias, $statuses)) {
+            $matched = false;
+
+            foreach ($gatewayIds as $gatewayId) {
+                if (!is_string($gatewayId) || $gatewayId === '') {
                     continue;
                 }
 
-                $kms->setLastHealth($statuses[$alias] === 'up');
+                if (!array_key_exists($gatewayId, $gatewayCache)) {
+                    // 2 attempts total (same as your current code)
+                    $gatewayCache[$gatewayId] = $this->fetchWithRetry($gatewayId, 2);
+                }
+
+                $statuses = $gatewayCache[$gatewayId];
+
+                // gateway failed or invalid JSON
+                if ($statuses === null) {
+                    continue;
+                }
+
+                // gateway returned statuses, and includes our alias
+                if (array_key_exists($alias, $statuses)) {
+                    $kms->setLastHealth($statuses[$alias] === 'up');
+                    $kms->setCheckDate($now);
+                    $matched = true;
+                    break;
+                }
+            }
+
+            // If we couldn't match this KMS to any gateway response:
+            // fail closed (unhealthy) and stamp check_date so UI doesn't show stale data.
+            if (!$matched) {
+                $kms->setLastHealth(false);
                 $kms->setCheckDate($now);
             }
         }
@@ -75,7 +73,7 @@ final class KmsHealthCheckConsumer
     }
 
     /**
-     * @return array<string,string>|null Map alias => "up|down"
+     * @return array<string, string>|null Map kms alias => "up|down"
      */
     private function fetchWithRetry(string $gatewayId, int $attempts): ?array
     {
@@ -85,7 +83,6 @@ final class KmsHealthCheckConsumer
                 return $statuses;
             }
         }
-
         return null;
     }
 }
