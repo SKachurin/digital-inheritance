@@ -72,13 +72,13 @@ class BeneficiaryNoteDecryptCounterHandler
 
                 if ($attemptCount < $this->MAX_ATTEMPTS) {
 
-                    $beneficiaryCongrats = $this->translator->trans('errors.note.decrypt.wrong_answer_attempts', [
+                    $beneficiaryCongrats = $this->translator->trans('errors.note.decrypt.wrong_password_attempts', [
                         '%used%' => $attemptCount,
                         '%max%'  => $this->MAX_ATTEMPTS,
                     ]);
                 } elseif ($attemptCount == $this->MAX_ATTEMPTS) {
 
-                    $beneficiaryCongrats = $this->translator->trans('errors.note.decrypt.wrong_answer_locked', [
+                    $beneficiaryCongrats = $this->translator->trans('errors.note.decrypt.wrong_password_locked', [
                         '%minutes%' => $this->FIRST_LOCK_TIME,
                     ]);
                     $lockoutUntil = $now->add(new \DateInterval('PT' . $this->FIRST_LOCK_TIME . 'M'));

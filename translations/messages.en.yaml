@@ -325,7 +325,7 @@ dashboard:
 
 decrypt_your_secure_envelope: 'Decrypt Your Secure Envelope'
 decrypt_first: 'To edit your secure envelope, please decrypt it first.'
-enter_answer: 'Enter your answer to one of the questions below and click the button.'
+enter_answer: 'Enter your answer to one of the questions below and click the button. The system will attempt to decrypt the Envelope using the first answer you have filled in.'
 do_some_staff: 'Now you can proceed.'
 
 contact_can_edit: 'You can edit the contact'

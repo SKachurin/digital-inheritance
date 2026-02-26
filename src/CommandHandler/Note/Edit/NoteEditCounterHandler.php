@@ -74,12 +74,12 @@ class NoteEditCounterHandler
                 $note->setAttemptCount($attemptCount);
 
                 if ($attemptCount < $this->MAX_ATTEMPTS) {
-                    $customerCongrats = $this->translator->trans('errors.note.decrypt.wrong_answer_attempts', [
+                    $customerCongrats = $this->translator->trans('errors.note.decrypt.wrong_password_attempts', [
                         '%used%' => $attemptCount,
                         '%max%'  => $this->MAX_ATTEMPTS,
                     ]);
                 } elseif ($attemptCount == $this->MAX_ATTEMPTS) {
-                    $customerCongrats = $this->translator->trans('errors.note.decrypt.wrong_answer_locked', [
+                    $customerCongrats = $this->translator->trans('errors.note.decrypt.wrong_password_locked', [
                         '%minutes%' => $this->FIRST_LOCK_TIME,
                     ]);
                     $note->setLockoutUntil($now->add(new \DateInterval('PT' . $this->FIRST_LOCK_TIME . 'M')));

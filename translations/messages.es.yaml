@@ -329,7 +329,7 @@ dashboard:
 
 decrypt_your_secure_envelope: 'Descifre su Sobre Seguro'
 decrypt_first: 'Para editar su sobre seguro, primero descífrelo.'
-enter_answer: 'Ingrese su respuesta a una de las preguntas siguientes y haga clic en el botón.'
+enter_answer: 'Introduce tu respuesta a una de las preguntas siguientes y haz clic en el botón. El sistema intentará descifrar el Sobre utilizando la primera respuesta que hayas completado.'
 do_some_staff: 'Ahora puede continuar.'
 contact_can_edit: 'Puede editar el contacto'
 contact_edit: 'Editar contacto'
