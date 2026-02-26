@@ -21,7 +21,9 @@ final class NoteEditHandler
         $out->setCustomer($input->getCustomer());
 
         $customerId = (int) $input->getCustomer()->getId();
+
         $rateLimitSeconds = null;
+        $decryptionSucceeded = false;
 
         $attempts = [
             [
@@ -58,42 +60,52 @@ final class NoteEditHandler
             ],
         ];
 
-        $chosenTriplet   = null; // encrypted json triplet we display against
+        // What we display against / overlay
+        $chosenTriplet   = null; // encrypted json triplet we display against (attempted triplet)
         $chosenSlots     = null; // plaintext overlay [0..2] (nulls where not decrypted)
-        $fallbackTriplet = null; // last-seen triplet that exists in DB (encrypted-only fallback)
+        $fallbackTriplet = null; // first-seen triplet that exists in DB (encrypted-only fallback)
+
+        // 1) Pick the first FILLED answer (strict priority order).
+        $selectedAnswer = null;
+        $selectedTriplet = null;
 
         foreach ($attempts as $attempt) {
-            $answer  = $attempt['answer'];
-            $triplet = $attempt['triplet'];
-
-            // skip if triplet has no DB data
-            if (!array_filter($triplet)) {
-                continue;
-            }
-
-            // always keep “current triplet” as fallback candidate
-            $fallbackTriplet = $triplet;
-
-            // no answer => cannot decrypt this triplet, but it's still a valid fallback
+            $answer = $attempt['answer'];
             if ($answer === null || $answer === '') {
                 continue;
             }
 
-            try {
-                // returns [0=>?plain, 1=>?plain, 2=>?plain]
-                $slots = $this->crypto->decryptEnvelopeTripletForUi($triplet, $customerId, $answer);
-            } catch (KmsRateLimitedExceptionService $e) {
-                $rateLimitSeconds = $e->getRetryAfterSeconds();
-                // stop trying other answers – API already told us to wait
+            $selectedAnswer  = $answer;
+            $selectedTriplet = $attempt['triplet'];
+            break;
+        }
+
+        // 2) Choose fallback triplet for display (first triplet that exists in DB).
+        foreach ($attempts as $attempt) {
+            if (array_filter($attempt['triplet'])) {
+                $fallbackTriplet = $attempt['triplet'];
                 break;
             }
+        }
 
-            $anyPlain = ($slots[0] !== null) || ($slots[1] !== null) || ($slots[2] !== null);
+        // 3) Attempt decrypt ONCE (only for the selected answer).
+        if ($selectedAnswer !== null && $selectedTriplet !== null) {
+            // Prefer showing the attempted triplet (even if decrypt fails)
+            $chosenTriplet = $selectedTriplet;
 
-            if ($anyPlain) {
-                $chosenTriplet = $triplet;
-                $chosenSlots   = $slots;
-                break;
+            try {
+                // returns [0=>?plain, 1=>?plain, 2=>?plain]
+                $slots = $this->crypto->decryptEnvelopeTripletForUi($selectedTriplet, $customerId, $selectedAnswer);
+
+                $anyPlain = !empty($slots[0]) || !empty($slots[1]) || !empty($slots[2]);
+
+                if ($anyPlain) {
+                    $chosenSlots = $slots;
+                    $decryptionSucceeded = true;
+                }
+            } catch (KmsRateLimitedExceptionService $e) {
+                $rateLimitSeconds = $e->getRetryAfterSeconds();
+            } catch (\SodiumException $e) {
             }
         }
 
@@ -114,6 +126,9 @@ final class NoteEditHandler
         $out->setCustomerText($v0);
         $out->setCustomerTextKMS2($v1);
         $out->setCustomerTextKMS3($v2);
+
+        // This is the only success signal the counter should use
+        $out->setDecryptionSucceeded($decryptionSucceeded);
 
         if ($rateLimitSeconds !== null) {
             $out->setRateLimitSeconds($rateLimitSeconds);

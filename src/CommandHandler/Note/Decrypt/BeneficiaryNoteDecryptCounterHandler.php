@@ -64,7 +64,8 @@ class BeneficiaryNoteDecryptCounterHandler
 
         } else {
 
-            if ($inputDto->getCustomerText() == null) {
+//            if ($inputDto->getCustomerText() == null) {
+            if (!$inputDto->isDecryptionSucceeded()) {
 
                 $attemptCount++;
                 $note->setAttemptCount($attemptCount);

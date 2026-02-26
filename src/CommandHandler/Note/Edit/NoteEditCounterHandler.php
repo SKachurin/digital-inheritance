@@ -68,7 +68,8 @@ class NoteEditCounterHandler
                 '%minutes%' => $minutesLeft,
             ]);
         } else {
-            if ($input->getCustomerText() == null) {
+//            if ($input->getCustomerText() == null) {
+            if (!$input->isDecryptionSucceeded()) {
                 $attemptCount++;
                 $note->setAttemptCount($attemptCount);
 

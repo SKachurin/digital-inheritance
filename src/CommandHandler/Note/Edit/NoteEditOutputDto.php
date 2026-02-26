@@ -51,6 +51,8 @@ class NoteEditOutputDto
     private ?string $beneficiaryTextAnswerTwoKms2 = null;
     private ?string $beneficiaryTextAnswerTwoKms3 = null;
 
+    private bool $decryptionSucceeded = false;
+
     public function __construct(Customer $customer)
     {
         $this->customer = $customer;
@@ -374,6 +376,17 @@ class NoteEditOutputDto
     public function setCustomerTextKms3(?string $v): self
     {
         $this->customerTextKms3 = $v;
+        return $this;
+    }
+
+    public function isDecryptionSucceeded(): bool
+    {
+        return $this->decryptionSucceeded;
+    }
+
+    public function setDecryptionSucceeded(bool $v): self
+    {
+        $this->decryptionSucceeded = $v;
         return $this;
     }
 }
