@@ -4,15 +4,18 @@ declare(strict_types=1);
 
 namespace App\CommandHandler\Note\Edit;
 
+use App\Entity\Note;
 use App\Service\CryptoService;
 use App\Service\Api\KmsRateLimitedExceptionService;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
+use Doctrine\ORM\EntityManagerInterface;
 
 #[AsMessageHandler]
 final class NoteEditHandler
 {
     public function __construct(
-        private readonly CryptoService $crypto
+        private readonly CryptoService $crypto,
+        private readonly EntityManagerInterface $entityManager
     ) {}
 
     public function __invoke(NoteEditInputDto $input): NoteEditOutputDto
@@ -20,7 +23,31 @@ final class NoteEditHandler
         $out = new NoteEditOutputDto($input->getCustomer());
         $out->setCustomer($input->getCustomer());
 
-        $customerId = (int) $input->getCustomer()->getId();
+        $customerId = (int)$input->getCustomer()->getId();
+
+        // if locked out, do NOT attempt any decrypt at all.
+        /** @var Note|null $note */
+        $note = $this->entityManager->getRepository(Note::class)
+            ->findOneBy(['customer' => $input->getCustomer()]);
+
+        if ($note instanceof Note) {
+            $lockoutUntil = $note->getLockoutUntil();
+            $now = new \DateTimeImmutable();
+
+            if ($lockoutUntil instanceof \DateTimeInterface && $now < $lockoutUntil) {
+                // Keep output predictable: nothing decrypted, no KMS calls, just expose state.
+                $out->setCustomerText(null);
+                $out->setCustomerTextKMS2(null);
+                $out->setCustomerTextKMS3(null);
+                $out->setDecryptionSucceeded(false);
+
+                // Optional, but useful if your Twig reads these:
+                $out->setAttemptCount($note->getAttemptCount() ?? 0);
+                $out->setLockoutUntil($lockoutUntil);
+
+                return $out;
+            }
+        }
 
         $rateLimitSeconds = null;
         $decryptionSucceeded = false;
@@ -97,7 +124,10 @@ final class NoteEditHandler
                 // returns [0=>?plain, 1=>?plain, 2=>?plain]
                 $slots = $this->crypto->decryptEnvelopeTripletForUi($selectedTriplet, $customerId, $selectedAnswer);
 
-                $anyPlain = !empty($slots[0]) || !empty($slots[1]) || !empty($slots[2]);
+                $anyPlain =
+                    (is_string($slots[0] ?? null) && $slots[0] !== '') ||
+                    (is_string($slots[1] ?? null) && $slots[1] !== '') ||
+                    (is_string($slots[2] ?? null) && $slots[2] !== '');
 
                 if ($anyPlain) {
                     $chosenSlots = $slots;

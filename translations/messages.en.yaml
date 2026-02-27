@@ -216,8 +216,8 @@ dashboard:
     Encrypt in browser. You’ll need to stay on the page until encryption is complete. This is the only available option
     because this approach guarantees that our back end never has access to your unencrypted data.
   edit_your_secure_envelope_note: |
-    Please note: when you use the Edit Envelope function, decryption processed on our server. 
-    This is necessary to control the number of decryption attempts and apply delays to prevent brute-force attacks. If you prefer not to process decrypted text through our server, you can avoid it by deleting the current Envelope and creating a new one. 
+    Please note: when you use the Edit Envelope function, decryption is processed on our server.
+    This is necessary to limit decryption attempts and add delays to prevent brute-force attacks. If you prefer not to process decrypted text through our server, you can avoid it by deleting the current Envelope and creating a new one. 
     We recommend this approach for extra security - even though our code is open source and you can verify that no decrypted data or passwords are ever stored.
   edit_your_secure_envelope: 'Edit Your Secure Envelope'
   edit_your_secure_envelope_tip: 'To edit, you must first decrypt it using answers to your secret questions.'
@@ -236,7 +236,7 @@ dashboard:
   verify_edit_your_phone: 'Verify/Edit Phone Number'
   verify_edit_your_phone_tip: 'We can verify your phone number via WhatsApp only. Verifying your contact creates an Action for use in your Pipeline.'
   add_your_second_phone: 'Add a Second Phone Number if it connected to WhatsApp'
-  add_your_second_phone_tip: "We’ll verify your numbers via WhatsApp message. Please use a number that’s connected to WhatsApp.. The more Actions you'll have to build your Pipeline."
+  add_your_second_phone_tip: "We’ll verify your numbers via WhatsApp message. Please use a number that’s connected to WhatsApp. The more Actions you'll have to build your Pipeline."
   add_your_phone: 'Add a Phone Number'
   add_your_phone_tip: "We’ll verify your numbers via WhatsApp message. Please use a number that’s connected to WhatsApp."
   edit_your_phone: 'Edit Phone Number'
@@ -326,7 +326,7 @@ dashboard:
 decrypt_your_secure_envelope: 'Decrypt Your Secure Envelope'
 decrypt_first: 'To edit your secure envelope, please decrypt it first.'
 enter_answer: 'Enter your answer to one of the questions below and click the button. The system will attempt to decrypt the Envelope using the first answer you have filled in.'
-do_some_staff: 'Now you can proceed.'
+do_some_staff: 'You can continue.'
 
 contact_can_edit: 'You can edit the contact'
 contact_edit: 'Edit Contact'
@@ -357,7 +357,7 @@ your_questions_explain: |
 
   Example: “The place where we spent our honeymoon.”
   
-  All attempts to guess answers are slow, monitored, and strictly limited.If you forget these answers, decryption will be impossible.
+  All attempts to guess answers are slow, monitored, and strictly limited. If you forget these answers, decryption will be impossible.
 
 text_pipeline_your_actions: 'Now you have these actions to build your custom pipeline:'
 pipeline_create_help: |
@@ -380,8 +380,8 @@ okayPassword_edit: 'Edit Okay Password'
 heir_contacts: 'Heir Contacts'
 heir_questions: 'Secret Questions for Your Heir'
 heir_contacts_explain: 'We will use these contacts to send an invitation to decrypt your envelope when your pipeline reaches its end.'
-heir_questions_explain: 'We will encode your envelope with the answers to these questions. If your Heir guesses either of them correctly, the envelope will be decoded.'
-heir_questions_edit: 'You can edit your secret questions and answers in Edit Envelope in DashBoard ... Or here is the button below'
+heir_questions_explain: 'We will encrypt your Envelope using the answers to these questions. If your Heir correctly answers any one of them, the Envelope can be decrypted.'
+heir_questions_edit: 'You can edit your secret questions and answers in “Edit Envelope” on the Dashboard… or use the button below.'
 
 not_set: 'Not Set'
 TEST_1_min: 'TEST 1 min'
@@ -396,7 +396,7 @@ TEST_10_min: 'TEST 10 min'
 
 errors:
   reg:
-    email_verification_required: "Your need to verify your email address first. Link for verification active only 1 hour"
+    email_verification_required: "You need to verify your email address first. The verification link is active for 1 hour."
   note:
     edit:
       second_question_answer_required: 'Answer to the second question is required if you have text of the question.'
@@ -424,13 +424,13 @@ errors:
     social_verified: 'Your Social has been verified.'
     social_verified_already: 'Your social contact has already been verified.'
     fail_to_sent: 'Failed to resend the verification link. Please try again in a few minutes.'
-    pass_recovery_sent: "If an account with that email exists, a password reset link has been sent to it's verified emails."
+    pass_recovery_sent: "If an account with that email exists, a password reset link has been sent to the verified email address on that account."
     pass_bad_link: 'This password reset link is invalid or has expired.'
     pass_reset: 'Your password has been reset successfully.'
     registration_is_processed: "Your registration is in progress. You’ll receive a confirmation email once it’s complete. After verifying your email, you can log in."
     envelope_is_processed: 'Your Envelope is being processed.'
     envelope_deleted: 'Your Envelope has been successfully deleted.'
-    verify_contact: "Verify at least one Contact (it's better be Telegram/Social)."
+    verify_contact: "Verify at least one contact (Telegram/Social is recommended)."
     note_updated: 'Your Envelope has been updated.'
     pipeline_created: 'Your Pipeline is created.'
     pipeline_saved: 'Your Pipeline has been saved.'

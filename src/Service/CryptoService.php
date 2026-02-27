@@ -156,18 +156,48 @@ final class CryptoService
                 continue;
             }
 
-            $dek = $deks[$kmsId] ?? null;
-            if (!is_string($dek) || strlen($dek) !== 32) {
-                continue; // this KMS failed or returned invalid key
-            }
-
-            $ct = base64_decode((string) $obj['c'], true);
-            $iv = base64_decode((string) $obj['iv'], true);
-            if ($ct === false || $iv === false) {
+            $innerBlob = $deks[$kmsId] ?? null;
+            if (!is_string($innerBlob)) {
                 continue;
             }
 
-            $plain = $this->decryptAesGcm($dek, $iv, $ct);
+            // Handle if KMS returns base64 instead of raw bytes
+            if (preg_match('/^[A-Za-z0-9+\/=]+$/', $innerBlob) && strlen($innerBlob) > 60) {
+                $decoded = base64_decode($innerBlob, true);
+                if ($decoded !== false) {
+                    $innerBlob = $decoded;
+                }
+            }
+
+            if (strlen($innerBlob) < (12 + 16 + 32)) { // 60 bytes minimum
+                continue;
+            }
+
+            // Same info string format as JS
+            $info = 'inner-wrap-v1|u=' . $customerId . '|fp=' . $answerFp;
+            $wrapKey = hash_hkdf('sha256', $H, 32, $info, '');
+
+            // Extract components
+            $ivInner = substr($innerBlob, 0, 12);
+            $tag = substr($innerBlob, -16);
+            $ciphertext = substr($innerBlob, 12, -16);
+
+            // Same AAD format as JS
+            $aad = 'u=' . $customerId . '|fp=' . $answerFp;
+            $dek = openssl_decrypt($ciphertext, 'aes-256-gcm', $wrapKey, OPENSSL_RAW_DATA, $ivInner, $tag, $aad);
+
+            if ($dek === false || strlen($dek) !== 32) {
+                continue;
+            }
+
+            // Now use the real DEK to decrypt the note
+            $ct = base64_decode((string) $obj['c'], true);
+            $ivNote = base64_decode((string) $obj['iv'], true);
+            if ($ct === false || $ivNote === false) {
+                continue;
+            }
+
+            $plain = $this->decryptAesGcm($dek, $ivNote, $ct);
             if ($plain !== false) {
                 $result[$i] = $plain;
             }
