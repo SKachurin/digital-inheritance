@@ -8,7 +8,7 @@ use App\Service\CryptoService;
 use App\Service\Api\KmsRateLimitedExceptionService;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 
-#[AsMessageHandler]
+// #[AsMessageHandler]
 final class NoteDecryptHandler
 {
     // not used
