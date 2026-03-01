@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace App\Service\Api;
 
 use App\Repository\KmsRepository;
@@ -25,10 +27,10 @@ class KmsGatewayService
     }
 
     /**
-     * @return array<string,string> map kms_id => binary 32B DEK
+     * @return array<string,string> map kms_id => raw INNER blob bytes (variable length)
      * @throws KmsRateLimitedExceptionService
      */
-    public function unwrapDeks(int $userId, string $h_b64, string $answerFp, array $replicas): array
+    public function unwrapInners(int $userId, string $h_b64, string $answerFp, array $replicas): array
     {
         $urls = $this->resolveGatewayUrlsForReplicas($replicas);
         if (!$urls) {
@@ -46,11 +48,9 @@ class KmsGatewayService
             try {
                 $response = $this->httpClient->request('POST', $baseUrl . '/kms/unwrap', [
                     'json' => $payload,
-
-                    'cafile'     => $this->caPath,
-                    'local_cert' => $this->certPath,
-                    'local_pk'   => $this->keyPath,
-
+                    'cafile'      => $this->caPath,
+                    'local_cert'  => $this->certPath,
+                    'local_pk'    => $this->keyPath,
                     'verify_peer' => true,
                     'verify_host' => true,
                     'timeout'     => 10,
@@ -61,9 +61,9 @@ class KmsGatewayService
             }
 
             $status = $response->getStatusCode();
+            $raw = $response->getContent(false);
 
             if ($status === 429) {
-                $raw = $response->getContent(false);
                 $body = json_decode($raw, true) ?: [];
 
                 $retryAfter = 0;
@@ -85,54 +85,99 @@ class KmsGatewayService
                 continue;
             }
 
-            $body = json_decode($response->getContent(false), true);
+
+            $body = json_decode($raw, true);
             if (!is_array($body)) {
                 $this->logger->error(sprintf('KMS unwrap invalid JSON from %s', $baseUrl));
                 continue;
             }
 
-            $deksOut = [];
+            $innersOut = [];
 
-            // contract: deks_b64 required; empty string means failure
-            $deks_b64 = $body['deks_b64'] ?? null;
-            if (!is_array($deks_b64)) {
+            $inners_b64 = $body['deks_b64'] ?? null; // keep gateway field name as-is
+            if (!is_array($inners_b64)) {
                 $this->logger->error(sprintf('KMS unwrap missing/invalid deks_b64 from %s', $baseUrl));
                 continue;
             }
 
-            foreach ($deks_b64 as $kmsId => $dekB64) {
-                if (!is_string($kmsId) || $kmsId === '') {
-                    continue;
-                }
-                if (!is_string($dekB64) || $dekB64 === '') {
+            foreach ($inners_b64 as $kmsId => $innerB64) {
+                if (!is_string($kmsId) || $kmsId === '') continue;
+                if (!is_string($innerB64) || $innerB64 === '') continue;
+
+                $inner = base64_decode($innerB64, true);
+                if ($inner === false || $inner === '') {
+                    $this->logger->error(sprintf('KMS unwrap malformed INNER for %s via %s', $kmsId, $baseUrl));
                     continue;
                 }
 
-                $dek = base64_decode($dekB64, true);
-                if ($dek === false || strlen($dek) !== 32) {
-                    $this->logger->error(sprintf('KMS unwrap malformed DEK for %s via %s', $kmsId, $baseUrl));
-                    continue;
-                }
-
-                $deksOut[$kmsId] = $dek;
+                $innersOut[$kmsId] = $inner;
             }
 
-            return $deksOut;
+            return $innersOut;
         }
 
         return [];
     }
 
-    /**
-     * Backward convenience: first success DEK or null.
-     * @throws KmsRateLimitedExceptionService
-     */
-    public function unwrapDek(int $userId, string $h_b64, string $answerFp, array $replicas): ?string
-    {
-        $deks = $this->unwrapDeks($userId, $h_b64, $answerFp, $replicas);
-        foreach ($deks as $dek) {
-            return $dek;
+    public function wrapInner(
+        int $userId,
+        int $kmsNumber,
+        string $inner_b64,
+        string $h_b64,
+        string $answerFp
+    ): ?string {
+        $kmsId = 'kms' . $kmsNumber;
+
+        $urls = $this->resolveGatewayUrlsForReplicas([
+            ['kms_id' => $kmsId, 'w_b64' => 'x'] // just to resolve URLs; or create a dedicated resolver
+        ]);
+        if (!$urls) {
+            return null;
         }
+
+        $payload = [
+            'user_id'   => $userId,
+            'kms_id'    => $kmsId,
+            'inner_b64' => $inner_b64,
+            'h_b64'     => $h_b64,
+            'answer_fp' => $answerFp,
+        ];
+
+        foreach ($urls as $baseUrl) {
+            try {
+                $resp = $this->httpClient->request('POST', $baseUrl . '/kms/wrap', [
+                    'json'        => $payload,
+                    'cafile'      => $this->caPath,
+                    'local_cert'  => $this->certPath,
+                    'local_pk'    => $this->keyPath,
+                    'verify_peer' => true,
+                    'verify_host' => true,
+                    'timeout'     => 10,
+                ]);
+            } catch (\Throwable $e) {
+                $this->logger->error(sprintf('KMS wrap HTTP error via %s: %s', $baseUrl, $e->getMessage()));
+                continue;
+            }
+
+            $status = $resp->getStatusCode();
+            $raw    = $resp->getContent(false);
+
+            if ($status !== 200) {
+                $this->logger->error('KMS wrap unexpected HTTP', ['status' => $status, 'baseUrl' => $baseUrl, 'raw' => $raw]);
+                continue;
+            }
+
+            $body = json_decode($raw, true);
+            $wB64 = is_array($body) ? ($body['w_b64'] ?? null) : null;
+
+            if (!is_string($wB64) || $wB64 === '') {
+                $this->logger->error('KMS wrap missing w_b64', ['baseUrl' => $baseUrl, 'body' => $body]);
+                continue;
+            }
+
+            return $wB64;
+        }
+
         return null;
     }
 
@@ -201,43 +246,36 @@ class KmsGatewayService
         return rtrim($url, '/');
     }
 
-    /**
-     * Wrap a DEK via gateway (mTLS).
-     * Returns w_b64 or null if unavailable.
-     */
-    public function wrapDek(
+    public function wrapPayloadsViaGateway(
         int $userId,
-        int $kmsNumber,
-        string $dek_b64,
+        string $payload_b64,   // this is INNER encoded as base64
         string $h_b64,
         string $answerFp,
-        array $replicasMeta = []
-    ): ?string {
-        // Resolve gateways from DB the same way unwrap does.
-        $replicas = [['kms_id' => 'kms' . $kmsNumber, 'w_b64' => 'x']]; // dummy
-        $urls = $this->resolveGatewayUrlsForReplicas($replicas);
+        array $kmsIds          // ['kms1','kms3']
+    ): array {
+        $urls = $this->resolveGatewayUrlsForReplicas(array_map(
+            static fn(string $id) => ['kms_id' => $id, 'w_b64' => 'x'],
+            $kmsIds
+        ));
         if (!$urls) {
-            return null;
+            throw new \RuntimeException('No KMS gateway URLs resolved.');
         }
 
-        $kmsId = 'kms' . $kmsNumber; // ADDED: "kms1" etc.
-
-        // gateway expects kms_ids array
         $payload = [
             'user_id'   => $userId,
-            'dek_b64'   => $dek_b64,
+            'dek_b64'   => $payload_b64,     // CONTRACT UNCHANGED (dek_b64), SEMANTICS CHANGED (INNER)
             'h_b64'     => $h_b64,
             'answer_fp' => $answerFp,
-            'kms_ids'   => [$kmsId],
+            'kms_ids'   => array_values($kmsIds),
         ];
 
         foreach ($urls as $baseUrl) {
             try {
-                $response = $this->httpClient->request('POST', $baseUrl . '/kms/wrap', [
-                    'json' => $payload,
-                    'cafile'     => $this->caPath,
-                    'local_cert' => $this->certPath,
-                    'local_pk'   => $this->keyPath,
+                $resp = $this->httpClient->request('POST', $baseUrl . '/kms/wrap', [
+                    'json'        => $payload,
+                    'cafile'      => $this->caPath,
+                    'local_cert'  => $this->certPath,
+                    'local_pk'    => $this->keyPath,
                     'verify_peer' => true,
                     'verify_host' => true,
                     'timeout'     => 10,
@@ -247,33 +285,35 @@ class KmsGatewayService
                 continue;
             }
 
-            if ($response->getStatusCode() !== 200) {
-                $this->logger->error(sprintf('KMS wrap unexpected HTTP %d from %s', $response->getStatusCode(), $baseUrl));
+            $status = $resp->getStatusCode();
+            $raw    = $resp->getContent(false);
+
+            if ($status !== 200) {
+                $this->logger->error('KMS wrap unexpected HTTP', ['status'=>$status,'baseUrl'=>$baseUrl,'raw'=>$raw]);
                 continue;
             }
 
-            $body = json_decode($response->getContent(false), true);
-            if (!is_array($body)) {
-                $this->logger->error(sprintf('KMS wrap invalid JSON from %s', $baseUrl));
-                continue;
-            }
+            $body = json_decode($raw, true);
+            $results = is_array($body) ? ($body['results'] ?? null) : null;
 
-            // CHANGED: response is results map
-            $results = $body['results'] ?? null;
             if (!is_array($results)) {
-                $this->logger->error(sprintf('KMS wrap missing results from %s', $baseUrl));
+                $this->logger->error('KMS wrap missing results', ['baseUrl'=>$baseUrl,'body'=>$body]);
                 continue;
             }
 
-            $entry = $results[$kmsId] ?? null;
-            if (!is_array($entry) || !($entry['ok'] ?? false) || !is_string($entry['w_b64'] ?? null) || $entry['w_b64'] === '') {
-                $this->logger->error(sprintf('KMS wrap no success for %s via %s', $kmsId, $baseUrl));
-                continue;
+            $out = [];
+            foreach ($results as $kmsId => $r) {
+                if (!is_array($r)) continue;
+                if (($r['ok'] ?? false) !== true) continue;
+                $w = $r['w_b64'] ?? null;
+                if (is_string($w) && $w !== '') {
+                    $out[$kmsId] = $w;
+                }
             }
 
-            return $entry['w_b64'];
+            return $out;
         }
 
-        return null;
+        return [];
     }
 }

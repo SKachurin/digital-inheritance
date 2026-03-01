@@ -7,16 +7,19 @@ namespace App\Service\Api;
 interface KmsUnwrapInterface
 {
     /**
-     * Convenience: return first successful DEK (binary 32 bytes) or null.
-     * @throws KmsRateLimitedExceptionService
-     */
-    public function unwrapDek(int $userId, string $h_b64, string $answerFp, array $replicas): ?string;
-
-    /**
-     * Return DEKs per kms_id (binary 32 bytes), e.g. ['kms1' => <32B>, 'kms3' => <32B>].
-     * Missing key means that KMS failed or returned empty.
+     * Convenience: return first successful INNER blob (raw bytes) or null.
+     * This is NOT necessarily 32 bytes anymore.
      *
      * @throws KmsRateLimitedExceptionService
      */
-    public function unwrapDeks(int $userId, string $h_b64, string $answerFp, array $replicas): array;
+    public function unwrapInner(int $userId, string $h_b64, string $answerFp, array $replicas): ?string;
+
+    /**
+     * Return INNER blobs per kms_id (raw bytes), e.g. ['kms1' => <blob>, 'kms3' => <blob>].
+     * Missing key means that KMS failed or returned empty.
+     *
+     * @return array<string,string>
+     * @throws KmsRateLimitedExceptionService
+     */
+    public function unwrapInners(int $userId, string $h_b64, string $answerFp, array $replicas): array;
 }

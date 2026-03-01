@@ -166,21 +166,24 @@ services:
             $s3Bucket: '%env(S3_BUCKET)%'
             $admin_tg: '%env(ADMIN_TG)%'
 
-    App\Controller\Api\KMSWrapController:
-        arguments:
-            $kmsMode: '%env(KMS_MODE)%'
-            $testKmsKey1B64: '%env(TEST_KMS_KEY_1)%'
-            $testKmsKey2B64: '%env(TEST_KMS_KEY_2)%'
-            $testKmsKey3B64: '%env(TEST_KMS_KEY_3)%'
+    App\Service\Api\KmsUnwrapInterface:
+        alias: App\Service\Api\KmsUnwrapSelector
+        public: false
+
+    App\Service\Api\KmsWrapInterface:
+         alias: App\Service\Api\KmsWrapSelector
+         public: false
 
     App\Service\Api\KmsUnwrapSelector:
-        arguments:
+         arguments:
             $kmsMode: '%env(KMS_MODE)%'
 
-    App\Service\Api\KmsUnwrapInterface: '@App\Service\Api\KmsUnwrapSelector'
+    App\Service\Api\KmsWrapSelector:
+         arguments:
+            $kmsMode: '%env(KMS_MODE)%'
 
     App\Service\Api\KmsMockService:
-        arguments:
+         arguments:
             $testKmsKey1B64: '%env(TEST_KMS_KEY_1)%'
             $testKmsKey2B64: '%env(TEST_KMS_KEY_2)%'
             $testKmsKey3B64: '%env(TEST_KMS_KEY_3)%'

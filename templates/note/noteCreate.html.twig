@@ -105,284 +105,289 @@
             }
         </script>
         <script>
-            /** DEBUG SWITCH: set to false after you find the issue **/
-            const DEBUG_MODE = true;
+            (() => {
+                const CFG = Object.freeze({
+                    debug: false,                // only affects console logging
+                    wrapEndpoint: '/api/kms/wrap',
+                    maxReplicas: 3,
+                    argon: { time: 5, mem: 65536, parallelism: 1, hashLen: 32 },
+                });
 
-            (function () {
-                // const say = (m) => { try { alert(m); } catch(e) {} console.log(m); };
-                // window.onerror = function(msg, src, line, col, err){
-                //     say('DBG ERR: ' + msg + ' @ ' + (src||'inline') + ':' + line + ':' + col + (err ? (' | ' + (err.stack||err)) : ''));
-                // };
-                //
-                // say('DBG#1 inline JS loaded');
+                const log = (...a) => CFG.debug && console.log('[FE-ENC]', ...a);
 
-                if (document.readyState === 'loading') {
-                    document.addEventListener('DOMContentLoaded', boot);
-                } else {
-                    boot();
+                // ---------- utils ----------
+                const te = new TextEncoder();
+
+                function qs(sel, root = document) { return root.querySelector(sel); }
+                function byId(id) { return document.getElementById(id); }
+
+                function bytesToB64(bytes) {
+                    // safe chunking (avoids call stack overflow)
+                    let bin = '';
+                    const chunk = 0x8000;
+                    for (let i = 0; i < bytes.length; i += chunk) {
+                        bin += String.fromCharCode(...bytes.subarray(i, i + chunk));
+                    }
+                    return btoa(bin);
                 }
 
-                function boot(){
-                    // say('DBG#2 DOM ready');
+                function b64ToBytes(b64) {
+                    const bin = atob(b64);
+                    const out = new Uint8Array(bin.length);
+                    for (let i = 0; i < bin.length; i++) out[i] = bin.charCodeAt(i);
+                    return out;
+                }
 
-                    // ---- find form & critical nodes
-                    const formName = "{{ form.vars.name }}";
-                    const form = document.querySelector('form[name="{{ form.vars.name }}"]');
-                    // say('DBG#3 form found? ' + !!form + ' (name=' + formName + ')');
+                async function sha256b64(str) {
+                    const buf = await crypto.subtle.digest('SHA-256', te.encode(str));
+                    return bytesToB64(new Uint8Array(buf));
+                }
 
-                    const overlay = document.getElementById('encrypting-overlay');
-                    // say('DBG#4 overlay found? ' + !!overlay);
-
-                    const toggle = document.getElementById('frontendEncrypted');
-                    // say('DBG#5 toggle found? ' + !!toggle + (toggle ? ' checked=' + toggle.checked : ''));
-
-                    if (!form) { say('DBG! no form node; abort'); return; }
-
-                    // ---- small helpers
-                    function b64FromBytes(bytes){ return btoa(String.fromCharCode(...bytes)); }
-                    async function genDEK(){
-                        const raw = crypto.getRandomValues(new Uint8Array(32));               // keep these for KMS wrap
-                        const key = await crypto.subtle.importKey('raw', raw, 'AES-GCM', false, ['encrypt','decrypt']); // non-extractable is fine
-                        return { key, raw };                                                   // no exportKey()
+                function setHidden(form, name, value) {
+                    let el = qs(`[name="${CSS.escape(name)}"]`, form);
+                    if (!el) {
+                        el = document.createElement('input');
+                        el.type = 'hidden';
+                        el.name = name;
+                        form.appendChild(el);
                     }
-                    async function aesGcmEncRaw(key, plaintext){
-                        const iv = crypto.getRandomValues(new Uint8Array(12));
-                        const enc = await crypto.subtle.encrypt({name:'AES-GCM', iv}, key, new TextEncoder().encode(plaintext));
-                        return { c_b64: b64FromBytes(new Uint8Array(enc)), iv_b64: b64FromBytes(iv) };
-                    }
-                    async function argonH(answer){
-                        const salt = crypto.getRandomValues(new Uint8Array(16));
-                        const r = await argon2.hash({
-                            pass: new TextEncoder().encode(answer),
-                            salt,
-                            time: 5, mem: 65536, parallelism: 1, hashLen: 32,
-                            type: argon2.ArgonType.Argon2id, raw: true
+                    el.value = value;
+                }
+
+                function showOverlay(overlay, on) {
+                    if (!overlay) return;
+                    overlay.style.display = on ? 'flex' : 'none';
+                }
+
+                // ---------- crypto primitives ----------
+                async function genDek() {
+                    const raw = crypto.getRandomValues(new Uint8Array(32));
+                    const key = await crypto.subtle.importKey('raw', raw, 'AES-GCM', false, ['encrypt', 'decrypt']);
+                    return { raw, key };
+                }
+
+                async function aesGcmEncryptToB64(key, plaintext) {
+                    const iv = crypto.getRandomValues(new Uint8Array(12));
+                    const ct = await crypto.subtle.encrypt({ name: 'AES-GCM', iv }, key, te.encode(plaintext));
+                    return {
+                        c_b64: bytesToB64(new Uint8Array(ct)),
+                        iv_b64: bytesToB64(iv),
+                    };
+                }
+
+                async function argon2H(answer) {
+                    const salt = crypto.getRandomValues(new Uint8Array(16));
+                    const r = await argon2.hash({
+                        pass: te.encode(answer),
+                        salt,
+                        time: CFG.argon.time,
+                        mem: CFG.argon.mem,
+                        parallelism: CFG.argon.parallelism,
+                        hashLen: CFG.argon.hashLen,
+                        type: argon2.ArgonType.Argon2id,
+                        raw: true,
+                    });
+                    return { h: new Uint8Array(r.hash), salt };
+                }
+
+                async function hkdfAesGcmKeyFromH(hBytes, infoStr) {
+                    const hkdfKey = await crypto.subtle.importKey('raw', hBytes, 'HKDF', false, ['deriveKey']);
+                    return crypto.subtle.deriveKey(
+                        {
+                            name: 'HKDF',
+                            hash: 'SHA-256',
+                            salt: new Uint8Array([]),
+                            info: te.encode(infoStr),
+                        },
+                        hkdfKey,
+                        { name: 'AES-GCM', length: 256 },
+                        false,
+                        ['encrypt']
+                    );
+                }
+
+                async function innerWrapDek(dekRaw, wrapKey, userId, answerFp) {
+                    const ivInner = crypto.getRandomValues(new Uint8Array(12));
+                    const aad = te.encode(`u=${userId}|fp=${answerFp}`);
+                    const ct = await crypto.subtle.encrypt(
+                        { name: 'AES-GCM', iv: ivInner, additionalData: aad },
+                        wrapKey,
+                        dekRaw
+                    );
+
+                    const ctBytes = new Uint8Array(ct);
+                    const blob = new Uint8Array(ivInner.length + ctBytes.length);
+                    blob.set(ivInner, 0);
+                    blob.set(ctBytes, ivInner.length);
+                    return bytesToB64(blob);
+                }
+
+                // ---------- network ----------
+                async function wrapWithKMS(kmsId, innerB64, hB64, answer_fp) {
+                    try {
+                        const res = await fetch('/api/kms/wrap', {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            credentials: 'same-origin',
+                            body: JSON.stringify({
+                                kms_id: "kms" + kmsId,
+                                inner_b64: innerB64,
+                                h_b64: hB64,
+                                answer_fp
+                            })
                         });
-                        return { h: new Uint8Array(r.hash), salt };
-                    }
-                    async function wrapWithKMS(kmsId, dekRawB64, hB64, answer_fp) {
-                        try {
-                            const res = await fetch('/api/kms/wrap', {
-                                method: 'POST',
-                                headers: {'Content-Type': 'application/json'},
-                                credentials: 'same-origin',
-                                body: JSON.stringify({ kms_id: "kms" + kmsId, dek_b64: dekRawB64, h_b64: hB64, answer_fp })
-                            });
 
-                            const j = await res.json().catch(() => null);
+                        const j = await res.json().catch(() => null);
 
-                            // Any non-200 or missing w_b64 = "no replica for this KMS"
-                            if (!res.ok || !j || !j.w_b64) {
-                                console.warn('KMS wrap failed for KMS', kmsId, res.status, j);
-                                return null;
-                            }
-
-                            return j.w_b64;
-                        } catch (e) {
-                            console.warn('KMS wrap exception for KMS', kmsId, e);
+                        if (!res.ok || !j || !j.w_b64) {
+                            console.warn('KMS wrap failed for KMS', kmsId, res.status, j);
                             return null;
                         }
+
+                        return j.w_b64;
+                    } catch (e) {
+                        console.warn('KMS wrap exception for KMS', kmsId, e);
+                        return null;
                     }
-                    function setHidden(name, val){
-                        let el = form.querySelector('[name="'+name.replace(/"/g,'\\"')+'"]');
-                        if (!el) { el = document.createElement('input'); el.type='hidden'; el.name=name; form.appendChild(el); }
-                        el.value = val;
-                        // say(`DBG#H set hidden "${name}" len=${String(val).length}`);
+                }
+
+                // ---------- orchestration ----------
+                function readValues(ids) {
+                    const get = (id) => (byId(id)?.value ?? '').trim();
+                    return Object.fromEntries(Object.entries(ids).map(([k, id]) => [k, get(id)]));
+                }
+
+                function validateDoubleEntry(value, repeat, label) {
+                    if (value && repeat && value !== repeat) {
+                        throw new Error(`${label} mismatch`);
+                    }
+                }
+
+                async function buildAllPayloads({ userId, note, answers, namesBySlot, enc, dekRaw }) {
+                    const results = []; // { hiddenName, payloadJson }
+                    let any = false;
+
+                    for (const [slot, answer] of Object.entries(answers)) {
+                        if (!answer) continue;
+
+                        const { h, salt } = await argon2H(answer);
+                        const hB64 = bytesToB64(h);
+                        const sB64 = bytesToB64(salt);
+
+                        const answerFp = await sha256b64(`${enc.c_b64}.${enc.iv_b64}.${sB64}`);
+                        const infoStr = `inner-wrap-v1|u=${userId}|fp=${answerFp}`;
+
+                        const wrapKey = await hkdfAesGcmKeyFromH(h, infoStr);
+                        const innerB64 = await innerWrapDek(dekRaw, wrapKey, userId, answerFp);
+
+                        // try each replica; only add payloads for successful wraps
+                        for (let kmsId = 1; kmsId <= CFG.maxReplicas; kmsId++) {
+                            const w_b64 = await wrapWithKMS(kmsId, innerB64, hB64, answerFp);
+                            if (!w_b64) continue;
+
+                            any = true;
+
+                            const payload = JSON.stringify({
+                                kms_id: `kms${kmsId}`,
+                                c: enc.c_b64,
+                                iv: enc.iv_b64,
+                                w: w_b64,
+                                s: sB64,
+                            });
+
+                            const hiddenName = namesBySlot[slot][kmsId - 1];
+                            results.push({ hiddenName, payload });
+                        }
                     }
 
-                    // ---- attach submit
-                    form.addEventListener('submit', async function onSubmit(ev){
-                        // say('DBG#6 submit fired');
+                    return { anySucceeded: any, payloads: results };
+                }
+
+                function init() {
+                    const form = qs('form[name="{{ form.vars.name }}"]');
+                    if (!form) return;
+
+                    const overlay = byId('encrypting-overlay');
+                    const toggle = byId('frontendEncrypted');
+
+                    // map ids (Twig)
+                    const IDS = {
+                        note: "{{ form.customerText.vars.id }}",
+                        a1: "{{ form.customerFirstQuestionAnswer.vars.id }}_first",
+                        a1r:"{{ form.customerFirstQuestionAnswer.vars.id }}_second",
+                        a2: "{{ form.customerSecondQuestionAnswer.vars.id }}_first",
+                        b1: "{{ form.beneficiaryFirstQuestionAnswer.vars.id }}_first",
+                        b1r:"{{ form.beneficiaryFirstQuestionAnswer.vars.id }}_second",
+                        b2: "{{ form.beneficiarySecondQuestionAnswer.vars.id }}_first",
+                    };
+
+                    const NAMES = {
+                        a1: ["{{ form.customerTextAnswerOne.vars.full_name }}","{{ form.customerTextAnswerOneKms2.vars.full_name }}","{{ form.customerTextAnswerOneKms3.vars.full_name }}"],
+                        a2: ["{{ form.customerTextAnswerTwo.vars.full_name }}","{{ form.customerTextAnswerTwoKms2.vars.full_name }}","{{ form.customerTextAnswerTwoKms3.vars.full_name }}"],
+                        b1: ["{{ form.beneficiaryTextAnswerOne.vars.full_name }}","{{ form.beneficiaryTextAnswerOneKms2.vars.full_name }}","{{ form.beneficiaryTextAnswerOneKms3.vars.full_name }}"],
+                        b2: ["{{ form.beneficiaryTextAnswerTwo.vars.full_name }}","{{ form.beneficiaryTextAnswerTwoKms2.vars.full_name }}","{{ form.beneficiaryTextAnswerTwoKms3.vars.full_name }}"],
+                    };
+
+                    const userId = {{ app.user.id }};
+
+                    form.addEventListener('submit', async (ev) => {
+                        // if toggle missing or off -> normal submit
+                        if (!toggle || !toggle.checked) return;
+
+                        ev.preventDefault();
+                        showOverlay(overlay, true);
 
                         try {
-                            if (!toggle) {
-                                // say('DBG#7 no toggle → proceed server path');
-                                return;
-                            }
-                            // say('DBG#8 toggle.checked=' + toggle.checked);
-                            if (!toggle.checked) {
-                                // say('DBG#9 FE encrypt OFF → normal submit');
-                                return;
-                            }
+                            if (!crypto?.subtle) throw new Error('WebCrypto not available');
 
-                            if (DEBUG_MODE) {
-                                ev.preventDefault();
-                                // say('DBG#10 preventDefault (DEBUG_MODE)');
+                            const v = readValues(IDS);
+                            validateDoubleEntry(v.a1, v.a1r, 'Customer answer #1');
+                            validateDoubleEntry(v.b1, v.b1r, 'Heir answer #1');
+
+                            if (!v.note || !v.a1 || !v.b1) {
+                                throw new Error('Missing required fields');
                             }
 
-                            if (overlay) {
-                                overlay.style.display = 'flex';
-                                // say('DBG#11 overlay shown');
+                            const { key: dekKey, raw: dekRaw } = await genDek();
+                            const enc = await aesGcmEncryptToB64(dekKey, v.note);
+
+                            // mark FE encryption
+                            setHidden(form, "{{ form.frontendEncrypted.vars.full_name }}", '1');
+
+                            const answers = { a1: v.a1, a2: v.a2, b1: v.b1, b2: v.b2 };
+                            const { anySucceeded, payloads } = await buildAllPayloads({
+                                userId, note: v.note, answers, namesBySlot: NAMES, enc, dekRaw
+                            });
+
+                            if (!anySucceeded) {
+                                throw new Error('KMS wrap failed for all replicas (nothing saved)');
                             }
 
-                            // ---- read fields
-                            const noteElId = "{{ form.customerText.vars.id }}";
-                            const a1Id     = "{{ form.customerFirstQuestionAnswer.vars.id }}_first";
-                            const a1rId    = "{{ form.customerFirstQuestionAnswer.vars.id }}_second";
-                            const a2Id     = "{{ form.customerSecondQuestionAnswer.vars.id }}_first";
-                            const b1Id     = "{{ form.beneficiaryFirstQuestionAnswer.vars.id }}_first";
-                            const b1rId    = "{{ form.beneficiaryFirstQuestionAnswer.vars.id }}_second";
-                            const b2Id     = "{{ form.beneficiarySecondQuestionAnswer.vars.id }}_first";
-
-                            const noteEl = document.getElementById(noteElId);
-                            const a1El   = document.getElementById(a1Id);
-                            const a1rEl  = document.getElementById(a1rId);
-                            const a2El   = document.getElementById(a2Id);
-                            const b1El   = document.getElementById(b1Id);
-                            const b1rEl  = document.getElementById(b1rId);
-                            const b2El   = document.getElementById(b2Id);
-
-                            // say(`DBG#12 fields present note=${!!noteEl} a1=${!!a1El} a1r=${!!a1rEl} a2=${!!a2El} b1=${!!b1El} b1r=${!!b1rEl} b2=${!!b2El}`);
-
-                            const note = noteEl ? noteEl.value : '';
-                            const a1   = a1El ? a1El.value : '';
-                            const a1r  = a1rEl ? a1rEl.value : '';
-                            const a2   = a2El ? a2El.value : '';
-                            const b1   = b1El ? b1El.value : '';
-                            const b1r  = b1rEl ? b1rEl.value : '';
-                            const b2   = b2El ? b2El.value : '';
-
-                            // say(`DBG#13 lengths note=${note.length} a1=${a1.length} a1r=${a1r.length} a2=${a2.length} b1=${b1.length} b1r=${b1r.length} b2=${b2.length}`);
-                            // say(`DBG#14 first10 note="${note.slice(0,10)}" a1="${a1.slice(0,10)}" b1="${b1.slice(0,10)}"`);
-
-                            if (a1 && a1r && a1 !== a1r) {
-                                // say('DBG! A1 mismatch');
-                                if (!DEBUG_MODE) return;
-                            }
-                            if (b1 && b1r && b1 !== b1r) {
-                                // say('DBG! B1 mismatch');
-                                if (!DEBUG_MODE) return;
+                            for (const p of payloads) {
+                                setHidden(form, p.hiddenName, p.payload);
                             }
 
-                            if (!note || !a1 || !b1) {
-                                // say('DBG#15 missing required (note/a1/b1). Fallback to server submit.');
-                                if (overlay) overlay.style.display = 'none';
-                                if (DEBUG_MODE) { form.submit(); }
-                                return;
-                            }
+                            // optional: clear plaintext before submit (so browser doesn’t keep it)
+                            // byId(IDS.note).value = '';
+                            // byId(IDS.a1).value = '';
+                            // byId(IDS.a1r).value = '';
+                            // byId(IDS.b1).value = '';
+                            // byId(IDS.b1r).value = '';
 
-                            // ---- WebCrypto presence
-                            if (!crypto || !crypto.subtle) {
-                                // say('DBG! WebCrypto missing');
-                                return;
-                            }
-                            // say('DBG#16 WebCrypto OK');
-
-                            // ---- DEK + encrypt
-                            // say('DBG#17 genDEK start');
-                            const { key: dekKey, raw: dekRaw } = await genDEK();
-                            // say('DBG#18 DEK raw length=' + dekRaw.length);
-
-                            // say('DBG#19 AES-GCM encrypt start');
-                            const enc = await aesGcmEncRaw(dekKey, note);
-                            // say('DBG#20 enc.c_b64 len=' + enc.c_b64.length + ' iv_b64=' + enc.iv_b64);
-
-
-                            // ---- per-answer wrap
-                            const NAMES = {
-                                a1: ["{{ form.customerTextAnswerOne.vars.full_name }}","{{ form.customerTextAnswerOneKms2.vars.full_name }}","{{ form.customerTextAnswerOneKms3.vars.full_name }}"],
-                                a2: ["{{ form.customerTextAnswerTwo.vars.full_name }}","{{ form.customerTextAnswerTwoKms2.vars.full_name }}","{{ form.customerTextAnswerTwoKms3.vars.full_name }}"],
-                                b1: ["{{ form.beneficiaryTextAnswerOne.vars.full_name }}","{{ form.beneficiaryTextAnswerOneKms2.vars.full_name }}","{{ form.beneficiaryTextAnswerOneKms3.vars.full_name }}"],
-                                b2: ["{{ form.beneficiaryTextAnswerTwo.vars.full_name }}","{{ form.beneficiaryTextAnswerTwoKms2.vars.full_name }}","{{ form.beneficiaryTextAnswerTwoKms3.vars.full_name }}"],
-                            };
-                            const answers = { a1, a2, b1, b2 };
-
-                            // Get userId from a data attribute or embedded variable
-                            // You'll need to add this to your template somewhere
-                            const userId = {{ app.user.id }}; // Assuming you have the user object
-
-                            // flag that FE encryption happened
-                            setHidden("{{ form.frontendEncrypted.vars.full_name }}", '1');
-
-                            let anyWrapSucceeded = false;
-
-                            for (const [slot, val] of Object.entries(answers)) {
-                                if (!val) {
-                                    continue;
-                                }
-
-                                // Argon2 for this specific answer
-                                const { h, salt } = await argonH(val);
-                                const hB64 = b64FromBytes(h);
-                                const sB64 = b64FromBytes(salt);
-
-
-                                // answer_fp ONCE per slot (depends on c/iv/s)
-                                const answer_fp = await sha256_b64_utf8(`${enc.c_b64}.${enc.iv_b64}.${sB64}`);
-
-                                // HKDF info MUST match PHP exactly
-                                const infoStr = `inner-wrap-v1|u=${userId}|fp=${answer_fp}`;
-
-                                // Derive AES-256-GCM wrap key from H using HKDF
-                                const hkdfKey = await crypto.subtle.importKey('raw', h, 'HKDF', false, ['deriveKey']);
-                                const wrapKey = await crypto.subtle.deriveKey(
-                                    {
-                                        name: 'HKDF',
-                                        hash: 'SHA-256',
-                                        salt: new Uint8Array([]), // empty salt
-                                        info: new TextEncoder().encode(infoStr),
-                                    },
-                                    hkdfKey,
-                                    { name: 'AES-GCM', length: 256 },
-                                    false,
-                                    ['encrypt']
-                                );
-
-                                // Inner wrap the SAME DEK ONCE per slot
-                                const ivInner = crypto.getRandomValues(new Uint8Array(12));
-                                const aad = new TextEncoder().encode(`u=${userId}|fp=${answer_fp}`);
-
-                                const innerBlob = await crypto.subtle.encrypt(
-                                    { name: 'AES-GCM', iv: ivInner, additionalData: aad },
-                                    wrapKey,
-                                    dekRaw
-                                );
-
-                                // inner = ivInner || (ciphertext||tag)
-                                const innerWithIv = new Uint8Array(ivInner.length + innerBlob.byteLength);
-                                innerWithIv.set(ivInner, 0);
-                                innerWithIv.set(new Uint8Array(innerBlob), ivInner.length);
-                                const innerB64 = b64FromBytes(innerWithIv);
-
-                                // Now wrap innerB64 with each KMS replica
-                                for (let i = 0; i < 3; i++) {
-                                    const kmsId = i + 1;
-
-                                    const w_b64 = await wrapWithKMS(kmsId, innerB64, hB64, answer_fp);
-                                    if (!w_b64) {
-                                        continue;
-                                    }
-
-                                    anyWrapSucceeded = true;
-
-                                    const payload = JSON.stringify({
-                                        kms_id: "kms" + kmsId,
-                                        c: enc.c_b64,
-                                        iv: enc.iv_b64,
-                                        w: w_b64,
-                                        s: sB64
-                                    });
-
-                                    const hiddenName = NAMES[slot][i];
-                                    setHidden(hiddenName, payload);
-                                }
-                            }
-
-                            // say('DBG#26 done building payloads');
-                            // if (overlay) say('DBG#27 leaving overlay visible until submit');
-
-                            if (DEBUG_MODE) {
-                                // say('DBG#28 DEBUG submit now');
-                                form.submit();
-                            }
-                        } catch (ex) {
-                            alert('Encryption failed: ' + (ex && ex.message || ex));
-                            if (overlay) overlay.style.display = 'none';
-                            // DO NOT submit here. Investigate instead.
+                            showOverlay(overlay, false);
+                            form.submit();
+                        } catch (err) {
+                            showOverlay(overlay, false);
+                            alert(`Encryption failed: ${err?.message || err}`);
+                            log('submit error', err);
                         }
-                    });
+                    }, { passive: false });
+                }
 
-                    // say('DBG#29 submit listener attached');
+                if (document.readyState === 'loading') {
+                    document.addEventListener('DOMContentLoaded', init, { once: true });
+                } else {
+                    init();
                 }
             })();
         </script>

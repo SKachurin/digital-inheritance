@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Service;
 
+use App\Service\Api\KmsCrypto;
 use App\Service\Api\KmsRateLimitedExceptionService;
 use App\Service\Api\KmsUnwrapInterface;
 use Psr\Log\LoggerInterface;
@@ -19,6 +20,7 @@ final class CryptoService
     public function __construct(
         private readonly ParameterBagInterface $params,
         private readonly LoggerInterface $logger,
+        private readonly KmsCrypto $kmsCrypto,
         private readonly KmsUnwrapInterface $kmsUnwrap,
         ?string $personalString = null
     ) {
@@ -147,8 +149,8 @@ final class CryptoService
             return $result;
         }
 
-        // IMPORTANT: no unknown mapping; we only trust per-kms deks map
-        $deks = $this->kmsUnwrap->unwrapDeks($customerId, $h_b64, $answerFp, $replicas);
+        // New flow: gateway returns INNER blobs per kms_id (raw bytes).
+        $inners = $this->kmsUnwrap->unwrapInners($customerId, $h_b64, $answerFp, $replicas);
 
         foreach ($slots as $i => $obj) {
             $kmsId = $indexToKms[$i] ?? null;
@@ -156,53 +158,30 @@ final class CryptoService
                 continue;
             }
 
-            $innerBlob = $deks[$kmsId] ?? null;
-            if (!is_string($innerBlob)) {
+
+            $innerRaw = $inners[$kmsId] ?? null;
+            if (!is_string($innerRaw) || $innerRaw === '') {
+                continue; // this KMS failed or returned invalid INNER
+            }
+
+            // IMPORTANT: innerUnwrapDek expects RAW H bytes (not base64).
+            $dek = $this->kmsCrypto->innerUnwrapDek($innerRaw, $H, $customerId, $answerFp);
+            if ($dek === false) {
+                continue; // wrong answer OR tampered/mismatched blob
+            }
+
+
+            $ct = base64_decode((string)$obj['c'], true);
+            $iv = base64_decode((string)$obj['iv'], true);
+            if ($ct === false || $iv === false) {
                 continue;
             }
 
-            // Handle if KMS returns base64 instead of raw bytes
-            if (preg_match('/^[A-Za-z0-9+\/=]+$/', $innerBlob) && strlen($innerBlob) > 60) {
-                $decoded = base64_decode($innerBlob, true);
-                if ($decoded !== false) {
-                    $innerBlob = $decoded;
-                }
-            }
-
-            if (strlen($innerBlob) < (12 + 16 + 32)) { // 60 bytes minimum
-                continue;
-            }
-
-            // Same info string format as JS
-            $info = 'inner-wrap-v1|u=' . $customerId . '|fp=' . $answerFp;
-            $wrapKey = hash_hkdf('sha256', $H, 32, $info, '');
-
-            // Extract components
-            $ivInner = substr($innerBlob, 0, 12);
-            $tag = substr($innerBlob, -16);
-            $ciphertext = substr($innerBlob, 12, -16);
-
-            // Same AAD format as JS
-            $aad = 'u=' . $customerId . '|fp=' . $answerFp;
-            $dek = openssl_decrypt($ciphertext, 'aes-256-gcm', $wrapKey, OPENSSL_RAW_DATA, $ivInner, $tag, $aad);
-
-            if ($dek === false || strlen($dek) !== 32) {
-                continue;
-            }
-
-            // Now use the real DEK to decrypt the note
-            $ct = base64_decode((string) $obj['c'], true);
-            $ivNote = base64_decode((string) $obj['iv'], true);
-            if ($ct === false || $ivNote === false) {
-                continue;
-            }
-
-            $plain = $this->decryptAesGcm($dek, $ivNote, $ct);
+            $plain = $this->decryptAesGcm($dek, $iv, $ct);
             if ($plain !== false) {
                 $result[$i] = $plain;
             }
         }
-
         return $result;
     }
 
