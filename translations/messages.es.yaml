@@ -160,13 +160,15 @@ click_here: 'Haga clic aquí'
 restore_pass: 'Recuperación de contraseña'
 enter_email: 'Por favor, introduzca su primer correo electrónico (es su usuario). El correo debe haber sido verificado previamente.'
 create_your_secure_envelope_text: |
-  No hay restricciones sobre lo que puedes almacenar aquí (salvo un límite de 10.000 caracteres). Puedes guardar desde frases semilla de carteras cripto y credenciales de banca online hasta cartas de amor, notas personales o incluso un mapa del tesoro para tus seres queridos.
+  Aquí puedes almacenar cualquier tipo de información (con un límite de 10.000 caracteres). Puedes incluir frases semilla de criptomonedas, credenciales bancarias en línea, cartas personales, instrucciones o incluso un “mapa del tesoro” para tus seres queridos.
 
-  El Sobre se cifra utilizando una combinación de nuestra clave de seguridad y material criptográfico derivado de tus respuestas a preguntas secretas. Nunca almacenamos tus respuestas: solo se guarda información cifrada.
+  Tu Sobre se cifra directamente en el navegador utilizando una clave aleatoria AES-256-GCM (DEK). Después, ese DEK se cifra localmente mediante una clave derivada de tu respuesta secreta (Argon2id + HKDF con vinculación estricta al contexto), generando un bloque INNER.
 
-  El texto en claro y las respuestas nunca salen de tu dispositivo. Además de HTTPS seguro, utilizamos un protocolo de cifrado del lado del cliente: la nota se cifra en el navegador con una clave de datos aleatoria AES-256-GCM, que luego se protege mediante una clave derivada de tu respuesta usando Argon2id y se refuerza con nuestra KMS mediante HKDF y cifrado autenticado. Incluso con acceso completo a la base de datos, es criptográficamente inviable recuperar la nota sin la respuesta correcta.
+  Finalmente, el bloque INNER es protegido por múltiples Sistemas de Gestión de Claves (KMS) independientes para garantizar redundancia. Nunca almacenamos tus respuestas — solo se guarda información cifrada.
 
-  El descifrado se realiza en tiempo real utilizando las respuestas que proporcionas al acceder al Sobre. Nunca se almacenan datos descifrados ni contraseñas.
+  Incluso con acceso completo a la base de datos, recuperar el contenido sin la respuesta correcta es criptográficamente inviable en la práctica.
+
+  Cuando descifras para ver o editar, el sistema realiza una operación de desprotección en línea y con limitación de intentos a través del gateway KMS, luego descifra el Sobre en memoria y envía el texto plano mediante HTTPS. El contenido descifrado no se almacena.
 dashboard:
   text: "¡Hola! 🤗"
   introduction_text_spoiler: "Primero lo primero"
@@ -305,8 +307,6 @@ dashboard:
     note: |
       Estos son los indicadores de estado de los Sistemas de Gestión de Claves
       que cifran tu Sobre.
-      Actualmente, solo un sistema está activo.
-      En la configuración completa, habrá tres proveedores.
       Si dos de ellos aparecen en rojo, recomendamos editar el Sobre
       para que pueda ser cifrado de nuevo utilizando tres instancias saludables.
     title: "Estado de KMS"
@@ -757,12 +757,14 @@ note_creation:
   default_text: |
     Reemplace este texto con sus datos:
     
-    No hay restricciones sobre lo que puedes almacenar aquí (salvo un límite de 10.000 caracteres). Puedes guardar desde frases semilla de carteras cripto y credenciales de banca online hasta cartas de amor, notas personales o incluso un mapa del tesoro para tus seres queridos.
-    El Sobre se cifra utilizando una combinación de nuestra clave de seguridad y material criptográfico derivado de tus respuestas a preguntas secretas. Nunca almacenamos tus respuestas: solo se guarda información cifrada.
+    Aquí puedes almacenar cualquier tipo de información (con un límite de 10.000 caracteres). Puedes incluir frases semilla de criptomonedas, credenciales bancarias en línea, cartas personales, instrucciones o incluso un “mapa del tesoro” para tus seres queridos.
+    Tu Sobre se cifra directamente en el navegador utilizando una clave aleatoria AES-256-GCM (DEK). Después, ese DEK se cifra localmente mediante una clave derivada de tu respuesta secreta (Argon2id + HKDF con vinculación estricta al contexto), generando un bloque INNER.
 
-    El texto en claro y las respuestas nunca salen de tu dispositivo. Además de HTTPS seguro, utilizamos un protocolo de cifrado del lado del cliente: la nota se cifra en el navegador con una clave de datos aleatoria AES-256-GCM, que luego se protege mediante una clave derivada de tu respuesta usando Argon2id y se refuerza con nuestra KMS mediante HKDF y cifrado autenticado. Incluso con acceso completo a la base de datos, es criptográficamente inviable recuperar la nota sin la respuesta correcta.
+    Finalmente, el bloque INNER es protegido por múltiples Sistemas de Gestión de Claves (KMS) independientes para garantizar redundancia. Nunca almacenamos tus respuestas — solo se guarda información cifrada.
 
-    El descifrado se realiza en tiempo real utilizando las respuestas que proporcionas al acceder al Sobre. Nunca se almacenan datos descifrados ni contraseñas.
+    Incluso con acceso completo a la base de datos, recuperar el contenido sin la respuesta correcta es criptográficamente inviable en la práctica.
+
+    Cuando descifras para ver o editar, el sistema realiza una operación de desprotección en línea y con limitación de intentos a través del gateway KMS, luego descifra el Sobre en memoria y envía el texto plano mediante HTTPS. El contenido descifrado no se almacena.
 if_decoded_can_edit: |
   Si has conseguido descifrar el texto y lo ves arriba, puedes copiarlo (por ejemplo, en el Bloc de notas), eliminar el Sobre actual y crear uno nuevo con el texto y las preguntas actualizadas.
   Esta es la forma más limpia y segura de editar el Sobre.

@@ -162,11 +162,12 @@ enter_email: "Please enter your first email(It's your login). Email have to be p
 create_your_secure_envelope_text: |
   There are no limits on what you can store here (aside from a 10,000-character field limit). You can include anything from crypto wallet seed phrases and online banking credentials to love letters, personal notes, or even a treasure map for your loved ones.
   
-  This Envelope is encrypted using a combination of our security key and cryptographic material derived from your answers to secret questions. We never store your answers — only encrypted data is saved.
-
-  Raw text and answers never leave your device. In addition to secure HTTPS, we use a client-side encryption protocol: your note is encrypted in the browser with a random AES-256-GCM data key, which is then wrapped using a key derived from your answer via Argon2id and further protected by our KMS using HKDF and authenticated encryption. Even with full database access, recovering the note without the correct answer is cryptographically infeasible.
+  Your Envelope is encrypted in your browser with a random AES-256-GCM data key (DEK). That DEK is then encrypted locally using a key derived from your secret answer (Argon2id + HKDF with strict context binding), producing an INNER blob.
+  Finally, the INNER blob is wrapped by multiple independent Key Management Systems (KMS) for redundancy. We never store your answers — only encrypted data.
   
-  Decryption is performed on the fly using the answers you provide when accessing the Envelope. No decrypted content or passwords are ever stored.
+  Even with full database access, recovering the note without the correct answer is cryptographically infeasible.
+  
+  When you decrypt for viewing/editing, the system performs an online, rate-limited unwrap via the KMS gateway, then decrypts the Envelope in memory and sends the plaintext back over HTTPS. Decrypted content is not stored.
 
 dashboard:
   text: "Hey there! 🤗"
@@ -302,8 +303,6 @@ dashboard:
   kms_status:
     note: |
       These are the status indicators for the Key Management Systems that encrypt your Envelope.
-      Currently, only one system is active.
-      In the full setup, there will be three providers.
       If two of them are red, we recommend editing the Envelope so it can be re-encrypted using three healthy instances.
     title: "KMS Status"
     empty: "No KMS data yet."
@@ -670,7 +669,7 @@ about_page:
   privacy_security:
     title: "Privacy & Security at Every Step"
     bullet1: "Encrypted Contacts: Your contact and heir details are encrypted before storage."
-    bullet2: "Encrypted Secret Answers: They are never saved to the database. Only you and your heir can unlock the Envelope."
+    bullet2: "Secret answers are never saved to the database (not even encrypted). Only you and your heir can unlock the Envelope."
     bullet3: "No Selling of Data: We do not watch you, track you, or sell your data to any third party."
     bullet4: "Independence from Big Tech: No Trusted Third Party: The system does not rely on legal documents, manual approvals, or human discretion to release data. Your data remains yours."
 
@@ -734,11 +733,13 @@ note_creation:
     Replace this text with your data:
     
     There are no limits on what you can store here (aside from a 10,000-character field limit). You can include anything from crypto wallet seed phrases and online banking credentials to love letters, personal notes, or even a treasure map for your loved ones.
+  
+    Your Envelope is encrypted in your browser with a random AES-256-GCM data key (DEK). That DEK is then encrypted locally using a key derived from your secret answer (Argon2id + HKDF with strict context binding), producing an INNER blob.
+    Finally, the INNER blob is wrapped by multiple independent Key Management Systems (KMS) for redundancy. We never store your answers — only encrypted data.
+  
+    Even with full database access, recovering the note without the correct answer is cryptographically infeasible.
+  
+    When you decrypt for viewing/editing, the system performs an online, rate-limited unwrap via the KMS gateway, then decrypts the Envelope in memory and sends the plaintext back over HTTPS. Decrypted content is not stored.
 
-    This Envelope is encrypted using a combination of our security key and cryptographic material derived from your answers to secret questions. We never store your answers — only encrypted data is saved.
-
-    Raw text and answers never leave your device. In addition to secure HTTPS, we use a client-side encryption protocol: your note is encrypted in the browser with a random AES-256-GCM data key, which is then wrapped using a key derived from your answer via Argon2id and further protected by our KMS using HKDF and authenticated encryption. Even with full database access, recovering the note without the correct answer is cryptographically infeasible.
-
-    Decryption is performed on the fly using the answers you provide when accessing the Envelope. No decrypted content or passwords are ever stored.
 if_decoded_can_edit: |
   If you successfully decrypted your text and can see it above, you can copy it (for example, into Notepad), delete the current Envelope, and create a new one with the updated text and questions. This is the cleanest and most secure way to edit an Envelope.

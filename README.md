@@ -98,11 +98,19 @@ To operate the service, at least one identifier must remain readable:
 
 ## 4) Envelope cryptography (DEK + KMS wrapping)
 
-Envelope encryption is **hybrid**:
-- The note is encrypted under a random **DEK** (AES-256-GCM).
-- The DEK is then wrapped using:
-   - **Argon2id(answer → H)**, and
-   - **KMS KEK** combined via **HKDF** to produce the wrapping key.
+Envelope encryption is hybrid and two-layered:
+
+1. Browser encrypts the note with a random DEK using AES-256-GCM.
+
+2. Browser encrypts the DEK into an INNER blob using a key derived from the secret answer:
+- `H = Argon2id(answer, salt) (memory-hard)`
+- `inner_key = HKDF-SHA256(ikm = H, info = "inner-wrap-v2|u=<user_id>|fp=<answer_fp>")`
+- `INNER = AES-256-GCM(inner_key, DEK; AAD = "u=<user_id>|fp=<answer_fp>")`
+
+3. KMS providers wrap/encrypt the INNER blob (not the DEK).
+4. The DB stores the KMS ciphertext as w.
+
+This keeps the DEK never present server-side in plaintext at encryption time, while still allowing online rate-limited unwrapping via the gateway.
 
 There can be:
 - up to **4 slots** (answers)
@@ -111,47 +119,29 @@ There can be:
 
 ### 4.1 Encrypt flow (creation)
 
-#### Data Encryption Key (DEK) — 32 random bytes
-- **Where**: browser (canonical design)
-- **Why**: the only key that encrypts the note.
+After note encryption (`c`, `iv`) and per-answer salt generation (`s`) + Argon2:
 
-#### Note encryption
-- Generate:
-   - `DEK` (32B random)
-   - `IV` (12B random)
-- Compute:
-   - `C = AES-256-GCM(DEK, Note, IV)` (includes tag)
+Fingerprint binding (unchanged):
+`answer_fp = SHA-256( b64(c) || "." || b64(iv) || "." || b64(s) )`
 
-#### For each provided answer (slot)
-Let answer be `A`:
-- Generate `Salt` (16B random)
-- Compute:
-   - `H = Argon2id(A, Salt, t=5, m=64MiB, p=1) → 32B`
+INNER creation (new):
+- `H = Argon2id(answer, s) → 32B`
+- `inner_key = HKDF-SHA256(H, info = "inner-wrap-v2|u=<user_id>|fp=<answer_fp>") → 32B`
+- `INNER = AES-256-GCM(inner_key, DEK, inner_iv; AAD = "u=<user_id>|fp=<answer_fp>")`
+- Stored/transmitted as base64 of `inner_iv || ct || tag` (this is `inner_b64`).
 
-Define fingerprint binding this slot to this ciphertext:
-- `answer_fp = SHA-256( b64(C) || "." || b64(IV) || "." || b64(Salt) )`
-
-#### KMS wrap (per replica)
-For each replica KMS (kms1/kms2/kms3):
-
-- KMS holds long-term secret `KEK` (never leaves KMS/HSM boundary conceptually)
-- Derive wrapping key:
-   - `KEK′ = HKDF-SHA256(KEK, salt=H, info="wrap-v2")`
-
-Wrap DEK:
-- `W = AES-256-GCM(KEK′, DEK, IV_wrap; AAD = user_id || answer_fp)`
-- Stored format:
-   - `W = IV_wrap || CT_wrap || TAG_wrap` (base64)
-
-**Non-deterministic**: new `IV_wrap` each time.
+KMS wrap (per replica) now wraps INNER:
+- Gateway endpoint: `POST /kms/wrap` (mTLS)
+- Contract field name is still `dek_b64`, but the value is actually INNER base64 (semantics changed, contract kept).
+- Response: `w_b64` per `kms_id`.
 
 ### 4.2 What the DB stores (per slot per replica)
 
 For each slot (answer) and each replica (kms1/kms2/kms3), the DB stores the JSON blob containing:
 
-- `c` : base64 ciphertext of the note
-- `iv`: base64 IV used for note encryption
-- `w` : base64 wrapped DEK
+- `c` : base64 note ciphertext
+- `iv`: base64 note IV
+- `w` : base64 KMS-wrapped INNER blob (not a wrapped DEK)
 - `s` : base64 Argon2 salt
 
 That is the `{c, iv, w, s}` blob.  
@@ -190,10 +180,12 @@ This binds the answer attempt to a **specific ciphertext** and prevents reuse.
 ### 5.3 KMS unwrap via gateway (online, rate-limited)
 The server does **not** unwrap the DEK locally.
 
-Instead, it calls the **KMS Gateway API**:
-- Endpoint: `POST /kms/unwrap`
-- Transport: **mutual TLS**
-- Payload includes: `user_id`, `h_b64`, `answer_fp`, and `replicas[] = { kms_id, w_b64 }`
+- Server recomputes `H = Argon2id(answer, s)` and `answer_fp`.
+- Server calls gateway `POST /kms/unwrap` with `user_id, h_b64, answer_fp,` and `replicas[] = { kms_id, w_b64 }`.
+- Gateway returns per-kms `deks_b64`, but values are INNER blobs.
+- Server performs:
+  `DEK = AES-256-GCM-DECRYPT(inner_key, INNER; AAD = "u=<user_id>|fp=<answer_fp>")`
+  `plaintext = AES-256-GCM-DECRYPT(DEK, iv, c)`
 
 #### Gateway protections
 At the gateway level:
@@ -306,12 +298,12 @@ A dedicated mTLS gateway provides wrap/unwrap and health probing.
 
 ### Endpoints
 - `POST /kms/wrap`  
-  Wrap DEK using `user_id`, `dek_b64`, `h_b64`, `answer_fp`  
-  Returns per-KMS results `{ kms_id: { ok, w_b64? } }`
+  Wrap INNER using user_id, h_b64, answer_fp and KMS selection.
+  Returns w_b64 per KMS.
 
 - `POST /kms/unwrap`  
-  Unwrap using `user_id`, `h_b64`, `answer_fp`, and provided replicas `{kms_id, w_b64}`  
-  Returns per-KMS `{ ok }` and `deks_b64` map
+  Unwrap w_b64 back into INNER (field name remains deks_b64 for compatibility).
+  API then decrypts INNER locally into DEK.
 
 - `GET /kms/health/check`  
   Performs real echo probe (wrap+unwrap) and returns status per KMS
