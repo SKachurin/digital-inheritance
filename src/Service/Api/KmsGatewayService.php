@@ -53,8 +53,7 @@ class KmsGatewayService
                     'local_pk'    => $this->keyPath,
                     'verify_peer' => true,
                     'verify_host' => true,
-                    'max_duration' => 8,
-                    'connect_timeout' => 2,
+                    'timeout'     => 10,
                 ]);
             } catch (\Throwable $e) {
                 $this->logger->error(sprintf('KMS unwrap HTTP error via %s: %s', $baseUrl, $e->getMessage()));
@@ -153,8 +152,7 @@ class KmsGatewayService
                     'local_pk'    => $this->keyPath,
                     'verify_peer' => true,
                     'verify_host' => true,
-                    'max_duration' => 8,
-                    'connect_timeout' => 2,
+                    'timeout'     => 10,
                 ]);
             } catch (\Throwable $e) {
                 $this->logger->error(sprintf('KMS wrap HTTP error via %s: %s', $baseUrl, $e->getMessage()));
@@ -279,8 +277,7 @@ class KmsGatewayService
                     'local_pk'    => $this->keyPath,
                     'verify_peer' => true,
                     'verify_host' => true,
-                    'max_duration' => 8,
-                    'connect_timeout' => 2,
+                    'timeout'     => 10,
                 ]);
             } catch (\Throwable $e) {
                 $this->logger->error(sprintf('KMS wrap HTTP error via %s: %s', $baseUrl, $e->getMessage()));
