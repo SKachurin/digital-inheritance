@@ -1,0 +1,56 @@
+groups:
+  - name: server-alerts
+    rules:
+      - alert: InstanceDown
+        expr: up{job="node"} == 0
+        for: 2m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Node exporter is down"
+          description: "Prometheus cannot scrape node-exporter for 2 minutes."
+
+      - alert: HighCPUUsage
+        expr: 100 - (avg by(instance) (rate(node_cpu_seconds_total{mode="idle"}[5m])) * 100) > 75
+        for: 10m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High CPU usage"
+          description: "CPU usage is above 85% for 10 minutes."
+
+      - alert: LowDiskSpace
+        expr: (node_filesystem_avail_bytes{fstype!~"tmpfs|overlay"} / node_filesystem_size_bytes{fstype!~"tmpfs|overlay"} * 100) < 25
+        for: 10m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Low disk space"
+          description: "Less than 15% disk space left."
+
+      - alert: LowMemory
+        expr: (node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes * 100) < 30
+        for: 10m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Low available memory"
+          description: "Available memory is below 20%."
+
+      - alert: HighSwapUsage
+        expr: (1 - (node_memory_SwapFree_bytes / node_memory_SwapTotal_bytes)) * 100 > 70
+        for: 15m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High swap usage"
+          description: "Swap usage is above 70% for 15 minutes."
+
+#      - alert: AlwaysFiringTest
+#        expr: vector(1)
+#        for: 1m
+#        labels:
+#          severity: warning
+#        annotations:
+#          summary: "Test alert"
+#          description: "This is a manual test alert."

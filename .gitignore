@@ -34,3 +34,7 @@ docker/mysql-data
 npm-debug.log
 yarn-error.log
 ###< symfony/webpack-encore-bundle ###
+
+###> Monitoring ###
+/monitoring/alertmanager/alertmanager.yml
+###< Monitoring ###
