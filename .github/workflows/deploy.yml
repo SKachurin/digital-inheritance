@@ -64,7 +64,7 @@ jobs:
           export API_HEALTHCHECK_CA="${{ secrets.API_HEALTHCHECK_CA }}";
           export TEST_KMS_KEY_1="${{ secrets.TEST_KMS_KEY_1 }}";
           export TEST_KMS_KEY_2="${{ secrets.TEST_KMS_KEY_2 }}";
-          export TEST_KMS_KEY_3
+          export TEST_KMS_KEY_3="${{ secrets.TEST_KMS_KEY_3 }}";
           export ALERTMANAGER_BOT_TOKEN="${{ secrets.ALERTMANAGER_BOT_TOKEN }}";
           export ALERTMANAGER_CHAT_ID="${{ secrets.ALERTMANAGER_CHAT_ID }}";
           cd /var/www/;
