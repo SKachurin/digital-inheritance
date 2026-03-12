@@ -171,7 +171,7 @@ checkout_page:
   premium: 'Премиум'
   desc_standard: 'Месячная подписка на сервис The Digital Heir'
   desc_premium: 'Если вам нравится сервис и вы хотите поддержать его развитие, оформите Премиум-подписку.'
-  price_standard: '$5.00/месяц'
+  price_standard: '$7.00/месяц'
   price_premium: '$25.00/месяц'
   buy_standard: 'Купить Стандарт'
   buy_premium: 'Купить Премиум'

@@ -162,7 +162,7 @@ checkout_page:
   premium: 'Premium'
   desc_standard: 'Monthly subscription to TheDigitalHeir service'
   desc_premium: 'If you love the service and want to support its development, subscribe to the Premium plan.'
-  price_standard: '$5.00/month'
+  price_standard: '$7.00/month'
   price_premium: '$25.00/month'
   buy_standard: 'Buy Standard'
   buy_premium: 'Buy Premium'

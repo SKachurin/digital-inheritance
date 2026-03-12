@@ -172,7 +172,7 @@ checkout_page:
   premium: 'Premium'
   desc_standard: 'Suscripción mensual al servicio The Digital Heir'
   desc_premium: 'Si te encanta el servicio y quieres apoyar su desarrollo, suscríbete al plan Premium.'
-  price_standard: '$5.00/mes'
+  price_standard: '$7.00/mes'
   price_premium: '$25.00/mes'
   buy_standard: 'Comprar Estándar'
   buy_premium: 'Comprar Premium'

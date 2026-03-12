@@ -12,7 +12,7 @@ class PlanPriceResolver
     public function getPricePerMonth(string $plan): ?int
     {
         return match ($plan) {
-            self::STANDARD => 5,
+            self::STANDARD => 7,
             self::PREMIUM => 25,
             default => null,
         };
