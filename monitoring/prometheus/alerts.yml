@@ -29,31 +29,22 @@ groups:
           description: "Less than 15% disk space left."
 
       - alert: LowMemoryWarning
-        expr: (node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes * 100) < 20
-        for: 10m
+        expr: (node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes * 100) < 15
+        for: 20m
         labels:
           severity: warning
         annotations:
           summary: "Low available memory"
-          description: "Available memory is below 20% for 10 minutes."
+          description: "Available memory is below 15% for 20 minutes."
 
       - alert: LowMemoryCritical
-        expr: (node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes * 100) < 10
+        expr: (node_memory_MemAvailable_bytes / node_memory_MemTotal_bytes * 100) < 8
         for: 5m
         labels:
           severity: critical
         annotations:
           summary: "Critically low available memory"
-          description: "Available memory is below 10% for 5 minutes."
-
-      - alert: HighSwapUsage
-        expr: (1 - (node_memory_SwapFree_bytes / node_memory_SwapTotal_bytes)) * 100 > 25
-        for: 10m
-        labels:
-          severity: warning
-        annotations:
-          summary: "High swap usage"
-          description: "Swap usage has exceeded 25% of configured swap capacity for 10 minutes."
+          description: "Available memory is below 8% for 5 minutes."
 
       - alert: HighSwapUsage
         expr: (1 - (node_memory_SwapFree_bytes / node_memory_SwapTotal_bytes)) * 100 > 50

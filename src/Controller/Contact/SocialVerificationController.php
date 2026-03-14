@@ -21,7 +21,6 @@ class SocialVerificationController extends AbstractController
     ) {}
 
     /**
-     * @throws Exception
      */
     public function verifySocial(
         string $token,
@@ -32,18 +31,16 @@ class SocialVerificationController extends AbstractController
         $verificationToken = $tokenRepository->findOneBy(['token' => $token]);
 
         if (!$verificationToken || $verificationToken->isExpired()) {
-
-            $contact = $verificationToken ? $verificationToken->getContact() : null;
-
-            if ($contact && $contact->getIsVerified()) {
-                $this->addFlash('info', $this->translator->trans('errors.flash.social_verified_already'));
-                return new RedirectResponse($this->generateUrl('user_home'));
-            }
-
-            throw $this->createNotFoundException('Invalid or expired verification token.');
+            $this->addFlash('info', 'Token invalid.');
+            return new RedirectResponse($this->generateUrl('user_home'));
         }
 
         $contact = $verificationToken->getContact();
+
+        if ($contact->getIsVerified()) {
+            $this->addFlash('info', $this->translator->trans('errors.flash.verified_already'));
+            return new RedirectResponse($this->generateUrl('user_home'));
+        }
 
         $contact->setIsVerified(true);
         $entityManager->persist($contact);

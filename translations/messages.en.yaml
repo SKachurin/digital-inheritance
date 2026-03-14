@@ -421,7 +421,7 @@ errors:
     phone_verified: 'Your WhatsApp has been verified.'
     social_sent: 'Verification social resent successfully.'
     social_verified: 'Your Social has been verified.'
-    social_verified_already: 'Your social contact has already been verified.'
+    verified_already: 'Your contact has already been verified.'
     fail_to_sent: 'Failed to resend the verification link. Please try again in a few minutes.'
     pass_recovery_sent: "If an account with that email exists, a password reset link has been sent to the verified email address on that account."
     pass_bad_link: 'This password reset link is invalid or has expired.'

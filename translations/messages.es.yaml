@@ -420,7 +420,7 @@ errors:
     phone_verified: 'Su WhatsApp ha sido verificado.'
     social_sent: 'Mensaje de verificación de redes sociales reenviado con éxito.'
     social_verified: 'Su contacto social ha sido verificado.'
-    social_verified_already: 'Su contacto social ya ha sido verificado.'
+    verified_already: 'Su contacto ya ha sido verificado.'
     fail_to_sent: 'No se pudo reenviar el enlace de verificación. Inténtelo de nuevo en unos minutos.'
     pass_recovery_sent: "Si existe una cuenta con ese correo electrónico, se ha enviado un enlace de restablecimiento de contraseña a sus correos electrónicos verificados."
     pass_bad_link: 'Este enlace de restablecimiento de contraseña no es válido o ha caducado.'

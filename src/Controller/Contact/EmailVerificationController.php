@@ -21,7 +21,6 @@ class EmailVerificationController extends AbstractController
     ) {}
 
     /**
-     * @throws Exception
      */
     public function verifyEmail(
         string $token,
@@ -32,17 +31,23 @@ class EmailVerificationController extends AbstractController
         $verificationToken = $tokenRepository->findOneBy(['token' => $token]);
 
         if (!$verificationToken || $verificationToken->isExpired()) {
-            throw $this->createNotFoundException('Invalid or expired verification token.');
+            $this->addFlash('info', 'Token invalid.');
+            return new RedirectResponse($this->generateUrl('user_home'));
         }
 
         $contact = $verificationToken->getContact();
+
+        if ($contact->getIsVerified()) {
+            $this->addFlash('info', $this->translator->trans('errors.flash.verified_already'));
+            return new RedirectResponse($this->generateUrl('user_home'));
+        }
 
         // Mark the contact as verified
         $contact->setIsVerified(true);
         $entityManager->persist($contact);
 
         // Remove the token to prevent reuse
-        $tokenRepository->delete($verificationToken);
+//        $tokenRepository->delete($verificationToken);
         $entityManager->flush();
 
         // Dispatch the event to create Actions
