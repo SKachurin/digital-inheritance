@@ -6,11 +6,11 @@ namespace App\Entity;
 
 use App\Enum\ActionTypeEnum;
 use App\Enum\IntervalEnum;
-use App\Repository\CustomerRepository;
+use App\Repository\ActionRepository;
 use Doctrine\ORM\Mapping as ORM;
 use App\Entity\Traits\Timestamps;
 
-#[ORM\Entity(repositoryClass: CustomerRepository::class)]
+#[ORM\Entity(repositoryClass: ActionRepository::class)]
 #[ORM\HasLifecycleCallbacks]
 class Action
 {
@@ -29,13 +29,16 @@ class Action
     private ActionTypeEnum $actionType = ActionTypeEnum::SOCIAL_CHECK;
 
     #[ORM\Column(type: 'string', enumType: IntervalEnum::class)]
-    private ?IntervalEnum $timeInterval;
+    private ?IntervalEnum $timeInterval = null;
 
     #[ORM\Column(type: 'string', length: 64, nullable: true)]
-    private string $status; // TODO change to enum ActionStatusEnum or delete - it's has no purpose so far
+    private ?string $status = null; // TODO change to enum ActionStatusEnum or delete - it's has no purpose so far
 
     #[ORM\Column(type: 'string', length: 128, nullable: true)]
-    private ?string $chatId;
+    private ?string $chatId = null;
+
+    #[ORM\Column(type: 'integer', options: ['default' => 0])]
+    private int $attemptCount = 0;
 
     #[ORM\ManyToOne(targetEntity: Contact::class)]
     #[ORM\JoinColumn(name: 'contact_id', nullable: true, onDelete: 'CASCADE')]
@@ -77,21 +80,21 @@ class Action
         $this->timeInterval = $timeInterval;
         return $this;
     }
-    public function getStatus(): string
+    public function getStatus(): ?string
     {
         return $this->status;
     }
-    public function setStatus(string $status): Action
+    public function setStatus(?string $status): Action
     {
         $this->status = $status;
         return $this;
     }
 
-    public function getChatId(): string
+    public function getChatId(): ?string
     {
         return $this->chatId;
     }
-    public function setChatId(string $chatId): Action
+    public function setChatId(?string $chatId): Action
     {
         $this->chatId = $chatId;
         return $this;
@@ -103,6 +106,29 @@ class Action
     public function setContact(Contact $contact): Action
     {
         $this->contact = $contact;
+        return $this;
+    }
+
+    public function getAttemptCount(): int
+    {
+        return $this->attemptCount;
+    }
+
+    public function setAttemptCount(int $attemptCount): self
+    {
+        $this->attemptCount = $attemptCount;
+        return $this;
+    }
+
+    public function incrementAttemptCount(): self
+    {
+        ++$this->attemptCount;
+        return $this;
+    }
+
+    public function resetAttemptCount(): self
+    {
+        $this->attemptCount = 0;
         return $this;
     }
 }

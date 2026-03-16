@@ -54,13 +54,11 @@ class Kms
         return $this;
     }
 
-    /** @return string[] */
     public function getGatewayIds(): array
     {
         return $this->gatewayIds;
     }
 
-    /** @param string[] $gatewayIds */
     public function setGatewayIds(array $gatewayIds): self
     {
         $this->gatewayIds = array_values($gatewayIds);

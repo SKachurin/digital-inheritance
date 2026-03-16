@@ -32,6 +32,8 @@ use App\Service\ChatLookupService;
 #[AsMessageHandler]
 class CronBatchConsumer
 {
+    private const MAX_ACTIVATED_ATTEMPTS = 5;
+
     public function __construct(
         private CustomerRepository             $customerRepository,
         private PipelineRepository             $pipelineRepository,
@@ -248,6 +250,16 @@ class CronBatchConsumer
         if (!empty($nextAction)) {
             $nextAction = reset($nextAction); // Get the first matching action
 
+            //reset count
+            $nextActionEntity = $this->actionRepository->findOneBy([
+                'customer' => $pipeline->getCustomer(),
+                'actionType' => ActionTypeEnum::from($nextAction['actionType']),
+            ]);
+
+            if ($nextActionEntity) {
+                $nextActionEntity->resetAttemptCount();
+            }
+
             // Update pipeline with next action
             $pipeline->setActionType(ActionTypeEnum::from($nextAction['actionType']));
             $pipeline->setActionStatus(ActionStatusEnum::ACTIVATED);
@@ -367,9 +379,7 @@ class CronBatchConsumer
      */
     private function sendMessenger(Action $action, Contact $contact, string $message): ActionStatusEnum
     {
-
         $response = $this->whatsAppService->sendMessageWhatsApp($contact, $message);
-
         $data = $this->decodeJsonResponse($response);
 
         if (isset($data['messageId'])) {
@@ -377,11 +387,10 @@ class CronBatchConsumer
             $lookup = $this->chatLookupService->make('whatsapp', (string)$data['chatId']);
             $action->setChatId($lookup);
 
-            return ActionStatusEnum::PENDING;
+            return $this->handleSuccessfulSend($action);
         }
 
-        //fail to check  - next try
-        return ActionStatusEnum::ACTIVATED;
+        return $this->handleActivatedRetry($action);
     }
 //
 //    /**
@@ -410,9 +419,7 @@ class CronBatchConsumer
      */
     private function sendEmail(Action $action, Contact $contact, string $message): ActionStatusEnum
     {
-
         $response = $this->emailService->sendMessageEmail($contact, $message);
-
         $data = $this->decodeJsonResponse($response);
 
         if (isset($data['chatId'])) {
@@ -420,17 +427,37 @@ class CronBatchConsumer
             $lookup = $this->chatLookupService->make('email', (string)$data['chatId']);
             $action->setChatId($lookup);
 
-            return ActionStatusEnum::PENDING;
+            return $this->handleSuccessfulSend($action);
         }
 
-        //fail to check  - next try
-        return ActionStatusEnum::ACTIVATED;
+        return $this->handleActivatedRetry($action);
     }
 
     private function decodeJsonResponse(JsonResponse $response): array
     {
         $data = json_decode($response->getContent(), true);
         return is_array($data) ? $data : [];
+    }
+
+    private function handleActivatedRetry(Action $action): ActionStatusEnum
+    {
+        $action->incrementAttemptCount();
+
+        if ($action->getAttemptCount() >= self::MAX_ACTIVATED_ATTEMPTS) {
+            $action->setStatus(ActionStatusEnum::FAIL->value);
+            return ActionStatusEnum::FAIL;
+        }
+
+        $action->setStatus(ActionStatusEnum::ACTIVATED->value);
+        return ActionStatusEnum::ACTIVATED;
+    }
+
+    private function handleSuccessfulSend(Action $action): ActionStatusEnum
+    {
+        $action->resetAttemptCount();
+        $action->setStatus(ActionStatusEnum::PENDING->value);
+
+        return ActionStatusEnum::PENDING;
     }
 
 }

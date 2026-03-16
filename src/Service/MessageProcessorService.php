@@ -72,6 +72,16 @@ class MessageProcessorService
                 return;
             }
 
+            //reset count
+            $firstActionEntity = $this->actionRepository->findOneBy([
+                'customer' => $pipeline->getCustomer(),
+                'actionType' => ActionTypeEnum::from($fa['actionType']),
+            ]);
+
+            if ($firstActionEntity) {
+                $firstActionEntity->resetAttemptCount();
+            }
+
             $pipeline->setActionType(ActionTypeEnum::from($fa['actionType']));
             $pipeline->setActionStatus(ActionStatusEnum::ACTIVATED);
 
