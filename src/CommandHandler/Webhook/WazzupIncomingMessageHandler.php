@@ -57,6 +57,7 @@ class WazzupIncomingMessageHandler
         }
 
         $this->messageProcessorService->processMessage(
+            channel: 'whatsapp',
             sender: $messageData['chatId'],
             text: $messageData['text'],
             sendMessage: fn($contact, $message) => $this->sendWhatsAppService->sendMessageWhatsApp($contact, $message)

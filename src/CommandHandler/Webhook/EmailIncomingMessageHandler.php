@@ -52,6 +52,7 @@ class EmailIncomingMessageHandler
         }
 
         $this->messageProcessorService->processMessage(
+            channel: 'email',
             sender: $sender,
             text: $text,
             sendMessage: fn($contact, $message) => $this->sendEmailService->sendMessageEmail($contact, $message)

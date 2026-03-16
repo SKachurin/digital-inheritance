@@ -23,6 +23,8 @@ parameters:
     API_HEALTHCHECK_IP_1: '%env(API_HEALTHCHECK_IP_1)%'
     API_HEALTHCHECK_IP_2: '%env(API_HEALTHCHECK_IP_2)%'
 
+    app.chat_lookup_key: '%env(APP_SECRET)%'
+
 services:
     # default configuration for services in *this* file
     _defaults:
@@ -187,3 +189,7 @@ services:
             $testKmsKey1B64: '%env(TEST_KMS_KEY_1)%'
             $testKmsKey2B64: '%env(TEST_KMS_KEY_2)%'
             $testKmsKey3B64: '%env(TEST_KMS_KEY_3)%'
+
+    App\Service\ChatLookupService:
+        arguments:
+            $lookupKey: '%app.chat_lookup_key%'

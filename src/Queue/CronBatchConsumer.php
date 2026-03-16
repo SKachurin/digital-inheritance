@@ -23,6 +23,8 @@ use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Messenger\Attribute\AsMessageHandler;
 use Symfony\Contracts\HttpClient\Exception\TransportExceptionInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use App\Service\ChatLookupService;
+//use App\Service\CryptoService;
 
 /**
  * Consumer processes the chunk of customers
@@ -41,7 +43,9 @@ class CronBatchConsumer
         private SendEmailService               $emailService,
         private BeneficiaryNotificationService $beneficiaryNotificationService,
         private LoggerInterface                $logger,
-        private TranslatorInterface            $translator
+        private TranslatorInterface            $translator,
+        private ChatLookupService              $chatLookupService,
+//        private CryptoService                  $cryptoService,
     ) {}
 
     /**
@@ -190,6 +194,7 @@ class CronBatchConsumer
 
         return match ($actionType) {
             ActionTypeEnum::SOCIAL_CHECK => $this->sendSocialCheck($actionData, $now, $contact),
+//            ActionTypeEnum::SOCIAL_SEND => $this->sendSocial($action, $contact, $message),
             ActionTypeEnum::MESSENGER_SEND,
             ActionTypeEnum::MESSENGER_SEND_2 => $this->sendMessenger($action, $contact, $message),
             ActionTypeEnum::EMAIL_SEND,
@@ -211,6 +216,7 @@ class CronBatchConsumer
             case ActionTypeEnum::SOCIAL_CHECK:
                 // this case is not possible
 
+//            case ActionTypeEnum::SOCIAL_SEND:
             case ActionTypeEnum::MESSENGER_SEND:
             case ActionTypeEnum::MESSENGER_SEND_2:
             case ActionTypeEnum::EMAIL_SEND:
@@ -317,7 +323,7 @@ class CronBatchConsumer
      */
     private function sendSocialCheck(array $actionData, \DateTimeImmutable $now, Contact $contact): ActionStatusEnum
     {
-        $response = $this->socialService->sendMessageSocial($contact);
+        $response = $this->socialService->sendMessageSocial($contact); // it's Check not message
 
         $data = $this->decodeJsonResponse($response);
 
@@ -368,7 +374,8 @@ class CronBatchConsumer
 
         if (isset($data['messageId'])) {
             //success. message sent.
-            $action->setChatId($data['chatId']);
+            $lookup = $this->chatLookupService->make('whatsapp', (string)$data['chatId']);
+            $action->setChatId($lookup);
 
             return ActionStatusEnum::PENDING;
         }
@@ -376,6 +383,22 @@ class CronBatchConsumer
         //fail to check  - next try
         return ActionStatusEnum::ACTIVATED;
     }
+//
+//    /**
+//     * @throws \SodiumException
+//     */
+//    private function sendSocial(Action $action, Contact $contact, string $message): ActionStatusEnum
+//    {
+//        $response = $this->socialService->sendRealMessageSocial($contact, $message);
+//        $data = $this->decodeJsonResponse($response);
+//
+//        if ($response->getStatusCode() === 200 && isset($data['output']) && is_array($data['output'])) {
+//            $action->setChatId((string) $contact->getId());
+//            return ActionStatusEnum::PENDING;
+//        }
+//
+//        return ActionStatusEnum::ACTIVATED;
+//    }
 
 
     /**
@@ -394,7 +417,8 @@ class CronBatchConsumer
 
         if (isset($data['chatId'])) {
             //success. message sent.
-            $action->setChatId($data['chatId']);
+            $lookup = $this->chatLookupService->make('email', (string)$data['chatId']);
+            $action->setChatId($lookup);
 
             return ActionStatusEnum::PENDING;
         }

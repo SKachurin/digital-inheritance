@@ -9,6 +9,7 @@ use App\Repository\PipelineRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Contracts\Translation\TranslatorInterface;
+use \App\Service\ChatLookupService;
 
 class MessageProcessorService
 {
@@ -17,12 +18,15 @@ class MessageProcessorService
         private readonly PipelineRepository $pipelineRepository,
         private readonly EntityManagerInterface $entityManager,
         private readonly TranslatorInterface $translator,
+        private readonly ChatLookupService $chatLookupService,
 //        private readonly LoggerInterface $logger
     ) {}
 
-    public function processMessage(string $sender, string $text, callable $sendMessage): void
+    public function processMessage(string $channel, string $sender, string $text, callable $sendMessage): void
     {
-        $action = $this->actionRepository->findOneBy(['chatId' => $sender]);
+        $lookup = $this->chatLookupService->make($channel, $sender);
+
+        $action = $this->actionRepository->findOneBy(['chatId' => $lookup]);
 
         if (!$action) {
             return;

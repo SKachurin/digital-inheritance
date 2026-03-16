@@ -58,7 +58,8 @@ class ActionCreateHandler
 
             case ContactTypeEnum::SOCIAL->value:
                 $this->createSingleAction($contact, ActionTypeEnum::SOCIAL_CHECK);
-                $this->createSingleAction($contact, ActionTypeEnum::SOCIAL_SEND);
+//                $this->createSingleAction($contact, ActionTypeEnum::SOCIAL_SEND); //TODO implementation of receiving messages
+                // enable SOCIAL_SEND only after inbound social replies are supported in python-service
                 break;
         }
 
