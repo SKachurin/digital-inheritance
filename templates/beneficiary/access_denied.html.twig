@@ -2,50 +2,84 @@
 
 {% block content %}
     <style>
-        .form-container {
-            padding-top: 4em;
-        }
-        .form-header {
-            margin-bottom: 1em; /* Add some space between the header and the form */
-        }
-        .button-group {
-            display: flex;
-            align-items: center;
-            margin-top: 0.5em; /* Adjust margin to align buttons properly */
-        }
-        .button-group a {
-            margin-left: 1em; /* Space between the buttons and the text area */
-        }
-        .divider {
-            font-size: 1.5em;
-            display: flex;
-            align-items: center;
+        .secret-envelope-page {
+            padding: 4rem 1rem 3rem;
         }
 
-        .divider::before, .divider::after {
-            flex: 1;
-            content: '';
-            padding: 1px;
-            background-color: #bbbb;
-            margin: 2em !important;
+        .secret-envelope-wrap {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+
+        .secret-envelope-card {
+            background: rgba(255, 255, 255, 0.88);
+            border: 1px solid rgba(0, 0, 0, 0.08);
+            border-radius: 14px;
+            padding: 2rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+            backdrop-filter: blur(4px);
+            margin-top: 8em;
+        }
+
+        .secret-envelope-title {
+            font-size: 2rem;
+            line-height: 1.2;
+            margin: 0 0 1rem;
+            font-weight: 700;
+        }
+
+        .secret-envelope-text {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin: 0;
+            color: #222;
+        }
+
+        .secret-envelope-flashes {
+            max-width: 900px;
+            margin: 1.5rem auto 0;
+        }
+
+        @media (max-width: 768px) {
+            .secret-envelope-page {
+                padding: 2rem 0.75rem 2rem;
+            }
+
+            .secret-envelope-card {
+                padding: 1.25rem;
+            }
+
+            .secret-envelope-title {
+                font-size: 1.6rem;
+            }
+
+            .secret-envelope-text {
+                font-size: 1rem;
+            }
         }
     </style>
-    <div class="container">
-        <h1 style="padding-top: 8em; font-size: 2rem;">{{ 'header.access_denied'|trans }}</h1>
 
-        <div class="row">
-            <div class="col-md-12">
-                <h4 style="padding-bottom: 3em;">{{ 'header.access_denied_text'|trans }}</h4>
+    <section class="secret-envelope-page">
+        <div class="secret-envelope-wrap">
+            <div class="secret-envelope-card">
+                <h1 class="secret-envelope-title">
+                    {{ 'header.access_denied'|trans }}
+                </h1>
 
+                <p class="secret-envelope-text">
+                    {{ 'header.access_denied_text'|trans }}
+                </p>
             </div>
         </div>
 
-        {% for label, messages in app.flashes %}
-            {% for message in messages %}
-                <div class="alert alert-{{ label }}">
-                    {{ message }}
-                </div>
+        <div class="secret-envelope-flashes">
+            {% for label, messages in app.flashes %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ label }}">
+                        {{ message }}
+                    </div>
+                {% endfor %}
             {% endfor %}
-        {% endfor %}
-    </div>
+        </div>
+    </section>
 {% endblock %}

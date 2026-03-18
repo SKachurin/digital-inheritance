@@ -6,15 +6,15 @@ use App\CommandHandler\Note\Decrypt\BeneficiaryNoteDecryptCounterHandler;
 use App\CommandHandler\Note\Decrypt\BeneficiaryNoteDecryptInputDto;
 use App\Form\Type\BeneficiaryDecryptType;
 use App\Form\Type\BeneficiaryDecryptType1;
-use App\Repository\VerificationTokenRepository;
 use App\Repository\NoteRepository;
+use App\Repository\VerificationTokenRepository;
 use App\Service\CryptoService;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\Request;
 use Random\RandomException;
 use SodiumException;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\UnprocessableEntityHttpException;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Messenger\Stamp\HandledStamp;
@@ -22,13 +22,14 @@ use Symfony\Component\Messenger\Stamp\HandledStamp;
 class BeneficiaryAccessController extends AbstractController
 {
     public function __construct(
-        private readonly VerificationTokenRepository          $tokenRepository,
-        private readonly NoteRepository                       $noteRepository,
-        private readonly EntityManagerInterface               $entityManager,
-        private readonly CryptoService                        $cryptoService,
-        private readonly MessageBusInterface                  $commandBus,
+        private readonly VerificationTokenRepository $tokenRepository,
+        private readonly NoteRepository $noteRepository,
+        private readonly EntityManagerInterface $entityManager,
+        private readonly CryptoService $cryptoService,
+        private readonly MessageBusInterface $commandBus,
         private readonly BeneficiaryNoteDecryptCounterHandler $beneficiaryNoteDecryptCounterHandler,
-    ) {}
+    ) {
+    }
 
     /**
      * @throws SodiumException|RandomException
@@ -44,7 +45,6 @@ class BeneficiaryAccessController extends AbstractController
 
         $decodedNote = false;
         $contact = $verificationToken->getContact();
-//        $contact = $this->contactRepository->getOneBy(['id' => 3]); // for test
 
         $beneficiary = $contact->getBeneficiary();
         if (!$beneficiary) {
@@ -67,13 +67,16 @@ class BeneficiaryAccessController extends AbstractController
         $dto = new BeneficiaryNoteDecryptInputDto($note);
         $dto
             ->setBeneficiaryTextAnswerOne($note->getBeneficiaryTextAnswerOne())
+            ->setBeneficiaryTextAnswerOneKms2($note->getBeneficiaryTextAnswerOneKms2())
+            ->setBeneficiaryTextAnswerOneKms3($note->getBeneficiaryTextAnswerOneKms3())
+            ->setBeneficiaryTextAnswerTwo($note->getBeneficiaryTextAnswerTwo())
+            ->setBeneficiaryTextAnswerTwoKms2($note->getBeneficiaryTextAnswerTwoKms2())
+            ->setBeneficiaryTextAnswerTwoKms3($note->getBeneficiaryTextAnswerTwoKms3())
             ->setBeneficiaryFirstQuestion(
                 $this->cryptoService->decryptData(
                     $note->getBeneficiary()->getBeneficiaryFirstQuestion()
                 )
-            );
-        $dto
-            ->setBeneficiaryTextAnswerTwo($note->getBeneficiaryTextAnswerTwo())
+            )
             ->setBeneficiarySecondQuestion(
                 $this->cryptoService->decryptData(
                     $note->getBeneficiary()->getBeneficiarySecondQuestion()
@@ -84,16 +87,13 @@ class BeneficiaryAccessController extends AbstractController
         $dto->setLockoutUntil($note->getLockoutUntil());
 
         $form = $this->createForm(BeneficiaryDecryptType::class, $dto);
-
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
             /** @var BeneficiaryNoteDecryptInputDto $noteData */
             $noteData = $form->getData();
 
             $envelope = $this->commandBus->dispatch($noteData);
-
             $handledStamp = $envelope->last(HandledStamp::class);
 
             if (!$handledStamp) {
@@ -102,15 +102,11 @@ class BeneficiaryAccessController extends AbstractController
 
             $handledResult = $handledStamp->getResult();
 
-            // Dispatch to BeneficiaryNoteDecryptCounterHandler to update attempts/lockouts:
             $this->beneficiaryNoteDecryptCounterHandler->__invoke($handledResult);
 
-            if ($handledResult->getAttemptCount() != 0) {
-
-                $form1 = $this->createForm(BeneficiaryDecryptType::class, $dto);
-
+            if ($handledResult->getAttemptCount() !== 0) {
+                $form1 = $this->createForm(BeneficiaryDecryptType::class, $noteData);
             } else {
-
                 $form1 = $this->createForm(BeneficiaryDecryptType1::class, $handledResult);
                 $decodedNote = true;
             }
@@ -129,11 +125,10 @@ class BeneficiaryAccessController extends AbstractController
                 'customerFullName' => $customerFullName,
                 'beneficiaryFullName' => $beneficiaryFullName,
             ]);
-
         }
 
         return $this->render('beneficiary/access_granted.html.twig', [
-            'form' => $form,
+            'form' => $form->createView(),
             'decodedNote' => $decodedNote,
             'customerFullName' => $customerFullName,
             'beneficiaryFullName' => $beneficiaryFullName,

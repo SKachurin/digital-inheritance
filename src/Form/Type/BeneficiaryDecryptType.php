@@ -15,7 +15,6 @@ class BeneficiaryDecryptType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
-
         $builder
             ->add('beneficiaryTextAnswerOne', TextareaType::class, [
                 'label' => 'form.label.text_encoded_beneficiary_first',
@@ -30,8 +29,40 @@ class BeneficiaryDecryptType extends AbstractType
                     'placeholder' => 'form.attr.placeholder.for_encrypted_text',
                     'rows' => 10,
                     'style' => 'height: 15em',
-                    'readonly' => true
-                ]
+                    'readonly' => true,
+                ],
+            ])
+            ->add('beneficiaryTextAnswerOneKms2', TextareaType::class, [
+                'label' => 'form.label.text_encoded_beneficiary_first_kms2',
+                'required' => false,
+                'constraints' => [
+                    new Length([
+                        'max' => 10000,
+                        'maxMessage' => 'beneficiary Text Answer One KMS2 cannot be longer than {{ limit }} characters.',
+                    ]),
+                ],
+                'attr' => [
+                    'placeholder' => 'form.attr.placeholder.for_encrypted_text',
+                    'rows' => 10,
+                    'style' => 'height: 15em',
+                    'readonly' => true,
+                ],
+            ])
+            ->add('beneficiaryTextAnswerOneKms3', TextareaType::class, [
+                'label' => 'form.label.text_encoded_beneficiary_first_kms3',
+                'required' => false,
+                'constraints' => [
+                    new Length([
+                        'max' => 10000,
+                        'maxMessage' => 'beneficiary Text Answer One KMS3 cannot be longer than {{ limit }} characters.',
+                    ]),
+                ],
+                'attr' => [
+                    'placeholder' => 'form.attr.placeholder.for_encrypted_text',
+                    'rows' => 10,
+                    'style' => 'height: 15em',
+                    'readonly' => true,
+                ],
             ])
             ->add('beneficiaryTextAnswerTwo', TextareaType::class, [
                 'label' => 'form.label.text_encoded_beneficiary_second',
@@ -46,17 +77,48 @@ class BeneficiaryDecryptType extends AbstractType
                     'placeholder' => 'form.attr.placeholder.for_encrypted_text',
                     'rows' => 10,
                     'style' => 'height: 15em',
-                    'readonly' => true
-                ]
+                    'readonly' => true,
+                ],
+            ])
+            ->add('beneficiaryTextAnswerTwoKms2', TextareaType::class, [
+                'label' => 'form.label.text_encoded_beneficiary_second_kms2',
+                'required' => false,
+                'constraints' => [
+                    new Length([
+                        'max' => 10000,
+                        'maxMessage' => 'beneficiary Text Answer Two KMS2 cannot be longer than {{ limit }} characters.',
+                    ]),
+                ],
+                'attr' => [
+                    'placeholder' => 'form.attr.placeholder.for_encrypted_text',
+                    'rows' => 10,
+                    'style' => 'height: 15em',
+                    'readonly' => true,
+                ],
+            ])
+            ->add('beneficiaryTextAnswerTwoKms3', TextareaType::class, [
+                'label' => 'form.label.text_encoded_beneficiary_second_kms3',
+                'required' => false,
+                'constraints' => [
+                    new Length([
+                        'max' => 10000,
+                        'maxMessage' => 'beneficiary Text Answer Two KMS3 cannot be longer than {{ limit }} characters.',
+                    ]),
+                ],
+                'attr' => [
+                    'placeholder' => 'form.attr.placeholder.for_encrypted_text',
+                    'rows' => 10,
+                    'style' => 'height: 15em',
+                    'readonly' => true,
+                ],
             ])
             ->add('beneficiaryFirstQuestion', TextType::class, [
                 'label' => 'form.label.beneficiary_first_question',
                 'required' => false,
                 'attr' => [
                     'placeholder' => 'form.attr.placeholder.for_question',
-                    'readonly' => true
-                ]
-
+                    'readonly' => true,
+                ],
             ])
             ->add('beneficiaryFirstQuestionAnswer', TextType::class, [
                 'label' => 'form.label.beneficiary_first_question_answer',
@@ -67,14 +129,13 @@ class BeneficiaryDecryptType extends AbstractType
                 'required' => false,
                 'attr' => [
                     'placeholder' => 'form.attr.placeholder.for_question',
-                    'readonly' => true
-                ]
+                    'readonly' => true,
+                ],
             ])
             ->add('beneficiarySecondQuestionAnswer', TextType::class, [
                 'label' => 'form.label.beneficiary_second_question_answer',
                 'required' => false,
             ])
-
             ->add('submit', SubmitType::class, [
                 'label' => 'form.label.try_decrypt',
                 'attr' => ['class' => 'btn btn-outline-dark'],

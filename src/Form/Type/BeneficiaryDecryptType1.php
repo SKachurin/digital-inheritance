@@ -4,9 +4,7 @@ namespace App\Form\Type;
 
 use App\CommandHandler\Note\Decrypt\BeneficiaryNoteDecryptOutputDto;
 use Symfony\Component\Form\AbstractType;
-use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\TextareaType;
-use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -21,36 +19,26 @@ class BeneficiaryDecryptType1 extends AbstractType
                 'attr' => [
                     'rows' => 10,
                     'placeholder' => 'form.attr.placeholder.fail_decrypt',
+                    'readonly' => true,
                 ],
             ])
-            ->add('beneficiaryFirstQuestion', TextType::class, [
-                'label' => 'form.label.beneficiary_first_question',
+            ->add('customerTextKMS2', TextareaType::class, [
+                'label' => 'form.label.your_text_kms2',
                 'required' => false,
                 'attr' => [
-                    'placeholder' => 'form.attr.placeholder.for_question',
-//                        'readonly' => true
-                ]
-
+                    'rows' => 10,
+                    'placeholder' => 'form.attr.placeholder.fail_decrypt',
+                    'readonly' => true,
+                ],
             ])
-            ->add('beneficiaryFirstQuestionAnswer', TextType::class, [
-                'label' => 'form.label.beneficiary_first_question_answer',
-                'required' => false,
-            ])
-            ->add('beneficiarySecondQuestion', TextType::class, [
-                'label' => 'form.label.beneficiary_second_question',
+            ->add('customerTextKMS3', TextareaType::class, [
+                'label' => 'form.label.your_text_kms3',
                 'required' => false,
                 'attr' => [
-                    'placeholder' => 'form.attr.placeholder.for_question',
-//                        'readonly' => true
-                ]
-            ])
-            ->add('beneficiarySecondQuestionAnswer', TextType::class, [
-                'label' => 'form.label.beneficiary_second_question_answer',
-                'required' => false,
-            ])
-            ->add('submit', SubmitType::class, [
-                'label' => 'form.label.edit_envelope',
-                'attr' => ['class' => 'btn btn-outline-dark'],
+                    'rows' => 10,
+                    'placeholder' => 'form.attr.placeholder.fail_decrypt',
+                    'readonly' => true,
+                ],
             ]);
     }
 

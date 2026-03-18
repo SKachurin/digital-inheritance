@@ -11,9 +11,9 @@ class BeneficiaryNoteDecryptOutputDto
     #[Assert\NotBlank]
     private Note $note;
 
-    private ?string $customerText = null;      // KMS1 display (plain or fallback)
-    private ?string $customerTextKMS2 = null;  // KMS2 display
-    private ?string $customerTextKMS3 = null;  // KMS3 display
+    private ?string $customerText = null;
+    private ?string $customerTextKMS2 = null;
+    private ?string $customerTextKMS3 = null;
 
     private bool $decryptionSucceeded = false;
 
@@ -102,12 +102,12 @@ class BeneficiaryNoteDecryptOutputDto
         return $this;
     }
 
-    public function getLockoutUntil(): ?\DateTimeImmutable
+    public function getLockoutUntil(): ?DateTimeImmutable
     {
         return $this->lockoutUntil;
     }
 
-    public function setLockoutUntil(?\DateTimeImmutable $v): self
+    public function setLockoutUntil(?DateTimeImmutable $v): self
     {
         $this->lockoutUntil = $v;
         return $this;
@@ -135,7 +135,6 @@ class BeneficiaryNoteDecryptOutputDto
         return $this;
     }
 
-    // keep your metadata setters/getters as needed (unchanged)
     public function getBeneficiaryTextAnswerOne(): ?string
     {
         return $this->beneficiaryTextAnswerOne;

@@ -13,8 +13,6 @@ class BeneficiaryNoteDecryptInputDto
 
     private ?int $attemptCount = null;
     private ?DateTimeImmutable $lockoutUntil = null;
-
-    // KMS triplets for beneficiary answers
     private ?string $beneficiaryTextAnswerOne = null;
     private ?string $beneficiaryTextAnswerOneKms2 = null;
     private ?string $beneficiaryTextAnswerOneKms3 = null;
@@ -44,6 +42,7 @@ class BeneficiaryNoteDecryptInputDto
     public function setNote(Note $note): self
     {
         $this->note = $note;
+
         return $this;
     }
 
@@ -55,6 +54,7 @@ class BeneficiaryNoteDecryptInputDto
     public function setBeneficiaryTextAnswerOne(?string $v): self
     {
         $this->beneficiaryTextAnswerOne = $v;
+
         return $this;
     }
 
@@ -66,6 +66,7 @@ class BeneficiaryNoteDecryptInputDto
     public function setBeneficiaryTextAnswerOneKms2(?string $v): self
     {
         $this->beneficiaryTextAnswerOneKms2 = $v;
+
         return $this;
     }
 
@@ -77,6 +78,7 @@ class BeneficiaryNoteDecryptInputDto
     public function setBeneficiaryTextAnswerOneKms3(?string $v): self
     {
         $this->beneficiaryTextAnswerOneKms3 = $v;
+
         return $this;
     }
 
@@ -88,6 +90,7 @@ class BeneficiaryNoteDecryptInputDto
     public function setBeneficiaryTextAnswerTwo(?string $v): self
     {
         $this->beneficiaryTextAnswerTwo = $v;
+
         return $this;
     }
 
@@ -99,6 +102,7 @@ class BeneficiaryNoteDecryptInputDto
     public function setBeneficiaryTextAnswerTwoKms2(?string $v): self
     {
         $this->beneficiaryTextAnswerTwoKms2 = $v;
+
         return $this;
     }
 
@@ -110,6 +114,7 @@ class BeneficiaryNoteDecryptInputDto
     public function setBeneficiaryTextAnswerTwoKms3(?string $v): self
     {
         $this->beneficiaryTextAnswerTwoKms3 = $v;
+
         return $this;
     }
 
@@ -121,6 +126,7 @@ class BeneficiaryNoteDecryptInputDto
     public function setBeneficiaryFirstQuestion(?string $v): self
     {
         $this->beneficiaryFirstQuestion = $v;
+
         return $this;
     }
 
@@ -132,6 +138,7 @@ class BeneficiaryNoteDecryptInputDto
     public function setBeneficiaryFirstQuestionAnswer(?string $v): self
     {
         $this->beneficiaryFirstQuestionAnswer = $v;
+
         return $this;
     }
 
@@ -143,6 +150,7 @@ class BeneficiaryNoteDecryptInputDto
     public function setBeneficiarySecondQuestion(?string $v): self
     {
         $this->beneficiarySecondQuestion = $v;
+
         return $this;
     }
 
@@ -154,6 +162,7 @@ class BeneficiaryNoteDecryptInputDto
     public function setBeneficiarySecondQuestionAnswer(?string $v): self
     {
         $this->beneficiarySecondQuestionAnswer = $v;
+
         return $this;
     }
 
@@ -165,17 +174,19 @@ class BeneficiaryNoteDecryptInputDto
     public function setAttemptCount(?int $v): self
     {
         $this->attemptCount = $v;
+
         return $this;
     }
 
-    public function getLockoutUntil(): ?\DateTimeImmutable
+    public function getLockoutUntil(): ?DateTimeImmutable
     {
         return $this->lockoutUntil;
     }
 
-    public function setLockoutUntil(?\DateTimeImmutable $v): self
+    public function setLockoutUntil(?DateTimeImmutable $v): self
     {
         $this->lockoutUntil = $v;
+
         return $this;
     }
 
@@ -187,6 +198,7 @@ class BeneficiaryNoteDecryptInputDto
     public function setBeneficiaryCongrats(string $v): self
     {
         $this->beneficiaryCongrats = $v;
+
         return $this;
     }
 }
