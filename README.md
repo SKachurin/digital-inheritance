@@ -8,6 +8,12 @@ Video about the service:
 [![Video about service](https://markdown-videos-api.jorgenkh.no/url?url=https%3A%2F%2Fwww.youtube.com%2Fwatch%3Fv%3D5_o8S4dfc1M%26utm_source%3Dgithub)](https://www.youtube.com/watch?v=5_o8S4dfc1M&utm_source=github)
 ---
 
+
+More tutorial-like, with screens.:
+
+[![Video about service](https://markdown-videos-api.jorgenkh.no/url?url=https%3A%2F%2Fwww.youtube.com%2Fwatch%3Fv%3DPntSDqlM9Zk%26utm_source%3Dgithub)](https://www.youtube.com/watch?v=5_o8S4dfc1M&utm_source=github)
+---
+
 ## 0) The problem this project solves
 
 The core problem addressed by this project is how to safely use
