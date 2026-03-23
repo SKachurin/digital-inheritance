@@ -107,14 +107,18 @@
             <!-- ALERT (Mobile Only) -->
             <div class="alert-container header-mobile text-center">
                 <div class="alert alert-info text-center d-lg-none">
-                    <b>{{ 'header.test_mode'|trans }}</b>
+                    <a class="text-dark" href="{{ path('onboarding') }}">
+                        <b>{{ 'header.test_mode'|trans }}</b>
+                    </a>
                 </div>
             </div>
 
             <!-- ALERT MESSAGE BELOW HEADER -->
             <div id="alert-test" class="alert-container header text-center">
                 <div class="alert alert-info p-2 px-3 m-0 d-lg-block d-none">
-                    <b>{{ 'header.test_mode'|trans }}</b>
+                    <a class="text-dark" href="{{ path('onboarding') }}">
+                        <b>{{ 'header.test_mode'|trans }}</b>
+                    </a>
                 </div>
             </div>
         {% endif %}

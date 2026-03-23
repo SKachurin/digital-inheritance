@@ -1,0 +1,285 @@
+{% extends 'base.html.twig' %}
+
+{% block og_title %}{{ 'onboarding_page.title'|trans }}{% endblock %}
+
+{% block og_description %}{{ 'onboarding_page.description'|trans }}{% endblock %}
+{% block og_image %}{{ '/build/logo-TheDigitalHeir-192x192.png' }}{% endblock %}
+
+{% block content %}
+    <style>
+        .faq {
+            padding: 5rem 9%;
+            background: rgba(250, 250, 250, 0.95);
+            text-align: center;
+            margin-top: 12rem;
+            margin-left: 9%;
+            margin-right: 9%;
+
+        }
+
+        .faq h1 {
+            margin-top: 0rem !important;
+            padding-top: 0rem !important;
+            margin-bottom: 4rem !important;
+
+        }
+
+        body {
+            font-family: 'Inter', 'Roboto', sans-serif;
+            color: #333;
+            text-align: left;
+        }
+
+        h1 {
+            font-size: 2.8rem;
+            font-weight: 800;
+            text-align: center;
+            margin-bottom: 4rem;
+            letter-spacing: -0.5px;
+        }
+
+        .video-wrapper {
+            width: 100%;
+            max-width: 690px;
+            margin: 0 auto 4rem;
+            aspect-ratio: 16 / 9;
+        }
+
+        .video-wrapper iframe {
+            width: 100%;
+            height: 100%;
+            border: 0;
+            display: block;
+        }
+
+        .container.text h3 {
+            margin: 0 0 2rem 7rem !important;
+        }
+
+        .container.text h4 {
+            margin: 0 0 2rem 8rem !important;
+        }
+
+        h4 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #222;
+            margin-top: 2rem;
+        }
+
+        p {
+            color: #444;
+            max-width: 80%;
+            margin: 0 auto 1.2rem;
+            font-size: 1.2rem;
+        }
+
+
+        .faq ul {
+            list-style: disc inside;
+            padding-left: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .faq ul li {
+            font-size: 1.2rem;
+            line-height: 1.5;
+            margin-bottom: 0.6rem;
+            text-indent: 0; /* Ensures proper alignment */
+        }
+
+        .faq ul li::marker {
+            font-size: 1.4rem;
+            color: #111;
+        }
+
+        .container.text {
+            max-width: 700px;
+            margin: auto;
+            text-align: left;
+        }
+
+        .container.text {
+            max-width: 900px; /* Keeps all content within a readable width */
+            margin: 0 auto; /* Centers the container */
+            text-align: left; /* Ensures natural text alignment */
+            padding: 0 2rem; /* Adds space from edges */
+        }
+
+        .container.text > * {
+            max-width: 80%; /* Matches paragraph width */
+            margin: 0 auto 1.5rem; /* Keeps spacing uniform */
+        }
+
+        #ol li {
+            padding-left: 1rem !important;
+        }
+
+        .faq ul li {
+            padding-left: 4rem; /* Ensures lists have proper indentation */
+        }
+
+        h3, h4 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-top: 2rem;
+        }
+
+        @media (max-width: 991px) {
+            .faq {
+                margin-top: 27rem;
+                margin-left: 2%;
+                margin-right: 2%;
+                padding: 5rem 2%;
+            }
+            .container.text {
+                padding-top: 2rem;
+            }
+            .container.text > * {
+                max-width: 100%;
+            }
+
+            p {
+                color: #444;
+                max-width: 100%;
+                margin: 1rem 2rem 2rem 2rem !important;
+                font-size: 2rem;
+            }
+
+            .faq ul li {
+                padding-left: 4rem; /* Ensures lists have proper indentation */
+                font-size: 2rem;
+            }
+
+            .container.text h3 {
+                margin: 1rem 2rem 2rem 2rem !important;
+                font-size: 2.9rem;
+            }
+            .container.text h4 {
+                margin: 1rem 2rem 2rem 2rem !important;
+                font-size: 2.3rem !important;
+            }
+
+            #ol {
+                padding-left: 6rem !important;
+            }
+
+        }
+    </style>
+<section class="faq">
+    <div class="container text">
+
+        <!-- Page Title -->
+        <h1 class="mt-7 pt5" style="padding-top: 4em;">
+            {{ 'onboarding_page.title'|trans }}
+        </h1>
+
+        <!-- Introduction -->
+{#        <h3>{{ 'about_page.introduction.title'|trans }}</h3>#}
+        <p>{{ 'onboarding_page.introduction.text'| trans| raw }}</p>
+
+        <div class="video-wrapper">
+            <iframe
+                    width="690"
+                    height="415"
+                    src="https://www.youtube.com/embed/PntSDqlM9Zk?start=46"
+                    title="YouTube video player"
+                    frameborder="0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    referrerpolicy="strict-origin-when-cross-origin"
+                    allowfullscreen>
+            </iframe>
+        </div>
+
+        <h3>{{ 'onboarding_page.reminder.title'|trans }}</h3>
+        <ul>
+            <li>{{ 'onboarding_page.reminder.bullet1'|trans }}</li>
+            <li>{{ 'onboarding_page.reminder.bullet2'|trans }}</li>
+            <li>{{ 'onboarding_page.reminder.bullet3'|trans }}</li>
+            <li>{{ 'onboarding_page.reminder.bullet4'|trans }}</li>
+            <li>{{ 'onboarding_page.reminder.bullet5'|trans }}</li>
+        </ul>
+
+        <h3>{{ 'onboarding_page.why_choose.title'|trans }}</h3>
+
+        <h4>{{ 'onboarding_page.why_choose.item1.title'|trans }}</h4>
+        <ul>
+            <li>{{ 'onboarding_page.why_choose.item1.bullet1'|trans }}</li>
+            <li>{{ 'onboarding_page.why_choose.item1.bullet2'|trans }}</li>
+            <li>{{ 'onboarding_page.why_choose.item1.bullet3'|trans }}</li>
+        </ul>
+
+        <h4>{{ 'onboarding_page.why_choose.item2.title'|trans }}</h4>
+        <ul>
+            <li>{{ 'onboarding_page.why_choose.item2.bullet1'|trans }}</li>
+            <li>{{ 'onboarding_page.why_choose.item2.bullet2'|trans }}</li>
+            <li>{{ 'onboarding_page.why_choose.item2.bullet3'|trans }}</li>
+        </ul>
+
+        <h4>{{ 'onboarding_page.why_choose.item3.title'|trans }}</h4>
+        <ul>
+            <li>{{ 'onboarding_page.why_choose.item3.bullet1'|trans }}</li>
+            <li>{{ 'onboarding_page.why_choose.item3.bullet2'|trans }}</li>
+        </ul>
+
+        <h4>{{ 'onboarding_page.why_choose.item4.title'|trans }}</h4>
+        <ul>
+            <li>{{ 'onboarding_page.why_choose.item4.bullet1'|trans }}</li>
+            <li>{{ 'onboarding_page.why_choose.item4.bullet2'|trans }}</li>
+            <li>{{ 'onboarding_page.why_choose.item4.bullet3'|trans }}</li>
+        </ul>
+
+        <h4>{{ 'onboarding_page.why_choose.item5.title'|trans }}</h4>
+        <ul>
+            <li>{{ 'onboarding_page.why_choose.item5.bullet1'|trans }}</li>
+            <li>{{ 'onboarding_page.why_choose.item5.bullet2'|trans }}</li>
+            <li>{{ 'onboarding_page.why_choose.item5.bullet3'|trans }}</li>
+        </ul>
+
+        <h3>{{ 'onboarding_page.how_it_works.title'|trans }}</h3>
+
+        <h4>{{ 'onboarding_page.how_it_works.item1.title'|trans }}</h4>
+        <ul>
+            <li>{{ 'onboarding_page.how_it_works.item1.bullet1'|trans }}</li>
+            <li>{{ 'onboarding_page.how_it_works.item1.bullet2'|trans }}</li>
+        </ul>
+
+        <h4>{{ 'onboarding_page.how_it_works.item2.title'|trans }}</h4>
+        <ul>
+            <li>{{ 'onboarding_page.how_it_works.item2.bullet1'|trans }}</li>
+            <li>{{ 'onboarding_page.how_it_works.item2.bullet2'|trans }}</li>
+            <li>{{ 'onboarding_page.how_it_works.item2.bullet3'|trans }}</li>
+        </ul>
+
+        <h4>{{ 'onboarding_page.how_it_works.item3.title'|trans }}</h4>
+        <ul>
+            <li>{{ 'onboarding_page.how_it_works.item3.bullet1'|trans }}</li>
+            <li>{{ 'onboarding_page.how_it_works.item3.bullet2'|trans }}</li>
+            <li>{{ 'onboarding_page.how_it_works.item3.bullet3'|trans }}</li>
+        </ul>
+
+        <h4>{{ 'onboarding_page.how_it_works.item4.title'|trans }}</h4>
+        <ul>
+            <li>{{ 'onboarding_page.how_it_works.item4.bullet1'|trans }}</li>
+            <li>{{ 'onboarding_page.how_it_works.item4.bullet2'|trans }}</li>
+            <li>{{ 'onboarding_page.how_it_works.item4.bullet3'|trans }}</li>
+        </ul>
+
+        <h4>{{ 'onboarding_page.how_it_works.item5.title'|trans }}</h4>
+        <ul>
+            <li>{{ 'onboarding_page.how_it_works.item5.bullet1'|trans }}</li>
+            <li>{{ 'onboarding_page.how_it_works.item5.bullet2'|trans }}</li>
+            <li>{{ 'onboarding_page.how_it_works.item5.bullet3'|trans }}</li>
+        </ul>
+
+        <h4>{{ 'onboarding_page.how_it_works.item6.title'|trans }}</h4>
+        <ul>
+            <li>{{ 'onboarding_page.how_it_works.item6.bullet1'|trans }}</li>
+            <li>{{ 'onboarding_page.how_it_works.item6.bullet2'|trans }}</li>
+            <li>{{ 'onboarding_page.how_it_works.item6.bullet3'|trans }}</li>
+        </ul>
+
+    </div>
+</section>
+{% endblock %}
+

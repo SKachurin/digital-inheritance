@@ -156,6 +156,12 @@ about:
     defaults:
         template:  'about.html.twig'
 
+onboarding:
+    path:       /onboarding
+    controller: Symfony\Bundle\FrameworkBundle\Controller\TemplateController
+    defaults:
+        template:  'onboarding.html.twig'
+
 contact_us:
     path:       /contact_us
     controller: Symfony\Bundle\FrameworkBundle\Controller\TemplateController

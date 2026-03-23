@@ -12,7 +12,7 @@ header:
   language: 'EN | ESP | RU'
   new_heir_explain: 'Por favor, facilite la mayor cantidad de información posible sobre su heredero: esto nos ayudará a contactarlo en caso de que ocurran los eventos que describa en la sección del Pipeline.'
   new_heir_explain_1: "Sea especialmente preciso con los datos de contacto (como teléfono o correo electrónico), ya que no se verificarán en este momento."
-  test_mode: 'Para probar el servicio, usa tus propios datos de contacto como los de tu Heredero.'
+  test_mode: "Cómo probar el servicio. Onboarding"
   access_denied: 'Acceso denegado'
   access_denied_text: 'No tienes acceso a este sobre seguro o el enlace ha expirado.'
   envelope_from: 'Este sobre fue creado por '
@@ -768,3 +768,88 @@ note_creation:
 if_decoded_can_edit: |
   Si has conseguido descifrar el texto y lo ves arriba, puedes copiarlo (por ejemplo, en el Bloc de notas), eliminar el Sobre actual y crear uno nuevo con el texto y las preguntas actualizadas.
   Esta es la forma más limpia y segura de editar el Sobre.
+
+onboarding_page:
+  title: "Cómo probar el servicio"
+  description: "Una guía rápida paso a paso para probar The Digital Heir de principio a fin."
+  introduction:
+    text: |
+      Para probar de forma segura toda la lógica de The Digital Heir, utiliza tus propios datos de contacto como los datos de contacto de tu Heredero. De ese modo, cuando termine el Pipeline, el enlace de acceso volverá a ti y podrás ver el flujo de entrega desde ambos lados.
+      <br>
+      La configuración es simple: añade y verifica tus propios contactos, añade a tu Heredero, crea el Sobre, configura el Pipeline y luego prueba qué sucede cuando el Pipeline llega a su final.
+
+  why_choose:
+    title: "Qué estás probando"
+    item1:
+      title: "1. Verificación de contactos"
+      bullet1: "Añade tus propios correos electrónicos, números de teléfono y Telegram."
+      bullet2: "Verifica cada contacto que quieras usar en el Pipeline."
+      bullet3: "Los contactos verificados pasan a estar disponibles como acciones en el constructor del Pipeline."
+
+    item2:
+      title: "2. Flujo de entrega al Heredero"
+      bullet1: "Crea el perfil de tu Heredero usando tus propios datos de contacto alternativos para la prueba."
+      bullet2: "Los contactos del Heredero no se verifican durante la configuración, así que el Heredero no necesita interactuar por adelantado."
+      bullet3: "Cuando termine el Pipeline, el sistema generará y enviará el enlace especial de acceso a los contactos del Heredero que hayas indicado."
+
+    item3:
+      title: "3. Cifrado del Sobre"
+      bullet1: "Crea un Sobre seguro y protégelo con preguntas secretas."
+      bullet2: "Tu texto se cifra antes de almacenarse y las respuestas nunca se guardan."
+
+    item4:
+      title: "4. Lógica del Pipeline"
+      bullet1: "Construye la secuencia de acciones que el sistema usará para comprobar si estás bien."
+      bullet2: "Tú eliges tanto el tipo de acción como el intervalo de espera."
+      bullet3: "Si respondes a tiempo con tu contraseña, el Pipeline se reinicia. Si no, termina."
+
+    item5:
+      title: "5. Escenario final de liberación"
+      bullet1: "Cuando termina el Pipeline, el sistema genera un enlace de tiempo limitado."
+      bullet2: "Ese enlace se envía a todos los contactos del Heredero que hayas introducido."
+      bullet3: "Usando ese enlace, el Heredero puede intentar descifrar el Sobre respondiendo a la pregunta secreta."
+
+  how_it_works:
+    title: "Guía de prueba paso a paso"
+    item1:
+      title: "Paso 1. Añade y verifica tus propios contactos"
+      bullet1: "Empieza añadiendo tus propios correos electrónicos, números de teléfono y Telegram."
+      bullet2: "Después de añadir cada contacto, abre Edit y envía el código de verificación."
+
+    item2:
+      title: "Paso 2. Crea tu Heredero"
+      bullet1: "Añade un perfil de Heredero con apodo, idioma y datos de contacto."
+      bullet2: "Para la prueba, usa tus propios datos de contacto alternativos como los datos del Heredero."
+      bullet3: "Esos contactos del Heredero serán el destino del enlace de entrega cuando termine el Pipeline."
+
+    item3:
+      title: "Paso 3. Crea tu Sobre seguro"
+      bullet1: "Escribe en el Sobre el texto que quieres proteger."
+      bullet2: "Define al menos una pregunta secreta y su respuesta."
+      bullet3: "Asegúrate de que la respuesta sea fácil de recordar para la persona adecuada, pero difícil de adivinar para cualquiera más."
+
+    item4:
+      title: "Paso 4. Configura el Pipeline"
+      bullet1: "Elige cómo debe comprobar el sistema si estás bien."
+      bullet2: "Las acciones disponibles dependen de cuáles de tus contactos ya han sido verificados."
+      bullet3: "Guarda el Pipeline para activarlo."
+
+    item5:
+      title: "Paso 5. Comprende el resultado"
+      bullet1: "Si respondes a tiempo con el Okay Password correcto, el Pipeline se reinicia."
+      bullet2: "Si no respondes a tiempo, o la respuesta es incorrecta, el Pipeline termina."
+      bullet3: "Después de eso, el sistema enviará el enlace de acceso a los contactos de tu Heredero."
+
+    item6:
+      title: "Paso 6. Prueba el lado del Heredero"
+      bullet1: "Abre el enlace que fue enviado al contacto de tu Heredero."
+      bullet2: "Intenta descifrar el Sobre respondiendo a la pregunta secreta."
+      bullet3: "Esto te permite probar de principio a fin el flujo de entrega y acceso."
+
+  reminder:
+    title: "Notas importantes"
+    bullet1: "Usa tus propios datos de contacto como los datos del Heredero solo para hacer pruebas."
+    bullet2: "La prueba gratuita dura 3 días."
+    bullet3: "Después de que termine la prueba, el sistema dejará de comprobar si sigues activo a menos que tengas un plan de pago."
+    bullet4: "Editar y volver a guardar el Pipeline lo reinicia y vuelve a empezar el ciclo."
+    bullet5: "También puedes unirte al programa de referidos desde tu panel."

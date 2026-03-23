@@ -12,7 +12,7 @@ header:
   language: 'EN | ESP | RU'
   new_heir_explain: 'Please provide as much information about your Heir as possible — this will help us reach this person in case of the events you describe in the Pipeline section.'
   new_heir_explain_1: "Please be especially precise with contact details (like phone and email) as they are not going to be verified now."
-  test_mode: "To test the service, use your own contact details as your Heir's."
+  test_mode: "How to test the service. Onboarding"
   access_denied: 'Access Denied'
   access_denied_text: 'You do not have access to this secure envelope or the link has expired.'
   envelope_from: 'This envelope was created by '
@@ -743,3 +743,88 @@ note_creation:
 
 if_decoded_can_edit: |
   If you successfully decrypted your text and can see it above, you can copy it (for example, into Notepad), delete the current Envelope, and create a new one with the updated text and questions. This is the cleanest and most secure way to edit an Envelope.
+
+onboarding_page:
+  title: "How to Test the Service"
+  description: "A quick walkthrough of how to test The Digital Heir from start to finish."
+  introduction:
+    text: |
+      To safely test the the full logic of The Digital Heir, use your own contact details as your Heir’s contact details. That way, when the Pipeline ends, the access link will come back to you and you can see the delivery flow from both sides.
+      <br>
+      The setup is simple: add and verify your own contacts, add your Heir, create the Envelope, configure the Pipeline, and then test what happens when the Pipeline reaches its end.
+
+  why_choose:
+    title: "What You Are Testing"
+    item1:
+      title: "1. Contact verification"
+      bullet1: "Add your own emails, phone numbers, and Telegram."
+      bullet2: "Verify each contact you want to use in the Pipeline."
+      bullet3: "Verified contacts become available as actions in the Pipeline constructor."
+
+    item2:
+      title: "2. Heir delivery flow"
+      bullet1: "Create your Heir profile using your own spare contact details for testing."
+      bullet2: "Heir contacts are not verified during setup, so the Heir does not need to interact in advance."
+      bullet3: "When the Pipeline ends, the system generates and sends the special access link to the Heir contacts you provided."
+
+    item3:
+      title: "3. Envelope encryption"
+      bullet1: "Create a secure Envelope and protect it with secret questions."
+      bullet2: "Your text is encrypted before storage, and the answers themselves are never stored."
+
+    item4:
+      title: "4. Pipeline logic"
+      bullet1: "Build the sequence of actions the system will use to check whether you are okay."
+      bullet2: "You choose both the action type and the waiting interval."
+      bullet3: "If you respond with your password in time, the Pipeline resets. If not, it ends."
+
+    item5:
+      title: "5. Final release scenario"
+      bullet1: "When the Pipeline ends, the system generates a limited-time link."
+      bullet2: "That link is sent to all Heir contacts you entered."
+      bullet3: "Using that link, the Heir can try to decrypt the Envelope by answering the secret question."
+
+  how_it_works:
+    title: "Step-by-Step Test Walkthrough"
+    item1:
+      title: "Step 1. Add and verify your own contacts"
+      bullet1: "Start by adding your own email addresses, phone numbers, and Telegram."
+      bullet2: "After adding each contact, open Edit and send the verification code."
+
+    item2:
+      title: "Step 2. Create your Heir"
+      bullet1: "Add a Heir profile with a nickname, language, and contact details."
+      bullet2: "For testing, use your own alternative contact details as the Heir’s details."
+      bullet3: "These Heir contacts are the destination for the delivery link when the Pipeline ends."
+
+    item3:
+      title: "Step 3. Create your secure Envelope"
+      bullet1: "Write the text you want to protect inside the Envelope."
+      bullet2: "Set at least one secret question and answer."
+      bullet3: "Make sure the answer is memorable for the right person but hard to guess for anyone else."
+
+    item4:
+      title: "Step 4. Configure the Pipeline"
+      bullet1: "Choose how the system should check in on you."
+      bullet2: "Available actions depend on which of your contacts have already been verified."
+      bullet3: "Save the Pipeline to activate it."
+
+    item5:
+      title: "Step 5. Understand the outcome"
+      bullet1: "If you reply in time with the correct Okay Password, the Pipeline resets."
+      bullet2: "If you do not reply in time, or the reply is wrong, the Pipeline ends."
+      bullet3: "After that, the system sends the access link to your Heir contacts."
+
+    item6:
+      title: "Step 6. Test the Heir side"
+      bullet1: "Open the link that was sent to your Heir contact."
+      bullet2: "Try to decrypt the Envelope by answering the secret question."
+      bullet3: "This lets you test the delivery and access flow from end to end."
+
+  reminder:
+    title: "Important Notes"
+    bullet1: "Use your own contact details as the Heir’s details only for testing."
+    bullet2: "The free trial lasts 3 days."
+    bullet3: "After the trial ends, the system will stop checking in on you unless you are on a paid plan."
+    bullet4: "Editing and saving the Pipeline resets it and starts the cycle again."
+    bullet5: "You can also join the referral program from your dashboard."
