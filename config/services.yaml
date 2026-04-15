@@ -193,3 +193,7 @@ services:
     App\Service\ChatLookupService:
         arguments:
             $lookupKey: '%app.chat_lookup_key%'
+
+    App\Service\AdminAlertService:
+        arguments:
+            $admin_tg: '%admin_tg%'

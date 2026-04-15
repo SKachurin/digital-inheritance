@@ -39,4 +39,18 @@ class ContactRepository extends BaseRepository
             ->getResult();
     }
 
+    /**
+     * @return Contact[]
+     */
+    public function findVerifiedCustomerContactsOrdered(int $customerId): array
+    {
+        return $this->createQueryBuilder('c')
+            ->andWhere('c.customer = :customerId')
+            ->andWhere('c.isVerified = true')
+            ->setParameter('customerId', $customerId)
+            ->orderBy('c.id', 'ASC')
+            ->getQuery()
+            ->getResult();
+    }
+
 }

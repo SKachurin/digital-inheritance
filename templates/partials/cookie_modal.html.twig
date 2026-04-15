@@ -181,6 +181,14 @@
 <script>
     document.getElementById('accept-cookies-btn').addEventListener('click', function () {
         document.cookie = "essential_cookie_accepted=true; path=/; max-age=31536000; SameSite=Lax";
+
+        // if (typeof window.clarity === 'function') {
+        //     window.clarity('consentv2', {
+        //         ad_Storage: "denied",
+        //         analytics_Storage: "granted"
+        //     });
+        // }
+
         location.reload();
     });
 </script>

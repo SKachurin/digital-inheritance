@@ -455,6 +455,7 @@ messages:
     </br></br>
     Nota: Dependiendo de tu proveedor de suscripción, es posible que debas cancelarla manualmente.
   notification_message: "Hola %beneficiary_name%,\n\nLa persona llamada %customer_name% ha listado este contacto como un contacto de emergencia en The Digital Heir. Haz clic en el enlace para acceder al sobre seguro:"
+  payment_expiring: "Ten en cuenta que te quedan %days% día(s) de tu periodo pagado. Después de eso, tu Pipeline dejará de comprobar tu actividad."
 
 home_page:
   title: 'Presentamos “El Heredero Digital”'

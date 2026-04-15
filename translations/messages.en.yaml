@@ -455,6 +455,7 @@ messages:
     </br></br>
     Please note: Depending on your subscription provider, you may need to cancel your subscription manually.
   notification_message: "Hey %beneficiary_name%,\n\nPerson named %customer_name% has listed this contact as an emergency contact on The Digital Heir. Click the link to access the secure envelope:"
+  payment_expiring: "Please note: you have %days% day(s) left in your paid period. After that, your Pipeline will stop checking on you."
 
 home_page:
   title: 'Introducing “The Digital Heir"'

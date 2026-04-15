@@ -3,6 +3,7 @@
 namespace App\Service;
 
 use App\Controller\PythonServiceController;
+use App\Service\AdminAlertService;
 use Psr\Log\LoggerInterface;
 
 class BackupDatabaseService
@@ -17,7 +18,8 @@ class BackupDatabaseService
         private readonly string                  $s3Bucket,
         private readonly PythonServiceController $pythonServiceController,
         private readonly string                  $admin_tg,
-        private readonly LoggerInterface         $logger
+        private readonly LoggerInterface         $logger,
+        private readonly AdminAlertService       $adminAlertService,
     )
     {
         $parts = parse_url($databaseUrl);
@@ -55,7 +57,13 @@ class BackupDatabaseService
                     unlink($yesterdayFile);
                     $this->uploadToS3($todayFile);
                 } else {
-                    $this->notifyAdminSmallerBackup($todayFile, $yesterdayFile);
+//                    $this->notifyAdminSmallerBackup($todayFile, $yesterdayFile);
+                    $message = sprintf(
+                        "Today's backup (%d bytes) is smaller than yesterday's (%d bytes). Manual review needed.",
+                        filesize($todayFile),
+                        filesize($yesterdayFile)
+                    );
+                    $this->adminAlertService->notify($message);
                 }
             } else {
                 // No yesterday file — first-time or new backup flow
@@ -65,7 +73,10 @@ class BackupDatabaseService
             // Attempt to delete old backup from S3
             $this->deleteOldBackupFromS3($oldS3FileKey);
         } else {
-            $this->logger->error("Backup creation failed: $todayFile");
+            $message = sprintf('Backup creation failed: %s', $todayFile);
+
+            $this->logger->error($message);
+            $this->adminAlertService->notify($message);
         }
     }
 
@@ -88,6 +99,13 @@ class BackupDatabaseService
             'output' => implode("\n", $output),
             'status' => $status
         ]);
+
+        $this->adminAlertService->notify(sprintf(
+                "Backup command failed.\nStatus: %d\nCommand: %s\nOutput:\n%s",
+                $status,
+                implode(' ', $cmd),
+                implode("\n", $output)
+        ));
     }
         return $status === 0;
     }
@@ -104,27 +122,12 @@ class BackupDatabaseService
 
         if ($status !== 0) {
             $this->logger->error('S3 upload failed: ' . implode("\n", $output));
-        }
-//        else {
-//            $this->logger->info('Backup uploaded to S3: ' . basename($filename));
-//        }
-    }
 
-    private function notifyAdminSmallerBackup(string $todayFile, string $yesterdayFile): void
-    {
-        $message = sprintf(
-            "Today's backup (%d bytes) is smaller than yesterday's (%d bytes). Manual review needed.",
-            filesize($todayFile),
-            filesize($yesterdayFile)
-        );
-
-        try {
-            $this->pythonServiceController->callPythonService([$this->admin_tg], $message);
-        } catch (\Exception $e) {
-            $this->logger->error('Failed to notify admin', [
-                'Exception' => $e,
-                'Message' => $message,
-            ]);
+            $this->adminAlertService->notify(sprintf(
+                "S3 upload failed.\nStatus: %d\nOutput:\n%s",
+                $status,
+                implode("\n", $output)
+            ));
         }
     }
 
@@ -137,12 +140,5 @@ class BackupDatabaseService
 
         exec($cmd, $output, $status);
 
-//        if ($status === 0) {
-//            $this->logger->info("Old backup deleted from S3: $key");
-//        } else {
-//            $this->logger->warning("Failed to delete old backup from S3: $key", [
-//                'output' => implode("\n", $output)
-//            ]);
-//        }
     }
 }

@@ -7,23 +7,23 @@ namespace App\Service;
 use App\Message\DeleteMarkedAccountsMessage;
 use App\Message\KmsHealthCheckMessage;
 use App\Message\MarkExpiredAsNotPaidMessage;
-use App\Repository\CustomerRepository;
 use App\Queue\CronBatchProducer;
-use Psr\Log\LoggerInterface;
+use App\Repository\CustomerRepository;
 use Symfony\Component\Messenger\MessageBusInterface;
 use Symfony\Component\Notifier\Exception\TransportExceptionInterface;
+use Psr\Cache\CacheItemPoolInterface;
+use Psr\Log\LoggerInterface;
 
 class CronService
 {
     public function __construct(
-        private CustomerRepository             $customerRepository,
-        private CronBatchProducer              $batchProducer,
-        private readonly MessageBusInterface   $bus,
-        private readonly BackupDatabaseService $backupDatabaseService
+        private CustomerRepository $customerRepository,
+        private CronBatchProducer $batchProducer,
+        private readonly MessageBusInterface $bus,
+        private readonly BackupDatabaseService $backupDatabaseService,
+        private readonly CacheItemPoolInterface $cache,
 //        private LoggerInterface              $logger
-
-    )
-    {
+    ) {
     }
 
     /**
@@ -58,31 +58,59 @@ class CronService
         }
 
         $now = new \DateTimeImmutable();
-        $hour = (int)$now->format('H');
-        $minute = (int)$now->format('i');
+        $hour = (int) $now->format('H');
+        $minute = (int) $now->format('i');
 
         // Run deleteMarkedAccounts once between 00:00 and 00:15
         if ($hour === 0 && $minute <= 15) {
-            $this->bus->dispatch(new DeleteMarkedAccountsMessage());
-//            $this->logger->error('CronBatchProducer dispatching DeleteMarkedAccountsMessage');
+            $this->dispatchOncePerDay('delete_marked_accounts', new DeleteMarkedAccountsMessage(), $now);
         }
 
-        // Run once between 02:00–02:10
+        // Run once between 02:00–02:15
         if ($hour === 1 && $minute <= 15) {
-            $this->bus->dispatch(new MarkExpiredAsNotPaidMessage());
-//            $this->logger->error('CronBatchProducer dispatching MarkExpiredAsNotPaidMessage');
+            $this->dispatchOncePerDay('mark_expired_as_not_paid', new MarkExpiredAsNotPaidMessage(), $now);
         }
 
         // Run DB backup once daily at 03:00–03:10
         if ($hour === 3 && $minute <= 10) {
-            $this->backupDatabaseService->run();
+            $this->runBackupOncePerDay($now);
         }
 
         // Run once between 04:00–04:10
         if ($hour === 4 && $minute <= 10) {
-            $this->bus->dispatch(new KmsHealthCheckMessage());
+            $this->dispatchOncePerDay('kms_health_check', new KmsHealthCheckMessage(), $now);
         }
     }
 
-}
+    private function dispatchOncePerDay(string $prefix, object $message, \DateTimeImmutable $now): void
+    {
+        $key = sprintf('%s_%s', $prefix, $now->format('Y-m-d'));
+        $item = $this->cache->getItem($key);
 
+        if ($item->isHit()) {
+            return;
+        }
+
+        $this->bus->dispatch($message);
+
+        $item->set(true);
+        $item->expiresAfter(172800); // 2 days
+        $this->cache->save($item);
+    }
+
+    private function runBackupOncePerDay(\DateTimeImmutable $now): void
+    {
+        $key = sprintf('db_backup_%s', $now->format('Y-m-d'));
+        $item = $this->cache->getItem($key);
+
+        if ($item->isHit()) {
+            return;
+        }
+
+        $this->backupDatabaseService->run();
+
+        $item->set(true);
+        $item->expiresAfter(172800);
+        $this->cache->save($item);
+    }
+}
