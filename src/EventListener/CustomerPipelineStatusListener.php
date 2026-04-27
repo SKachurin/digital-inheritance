@@ -17,7 +17,7 @@ use Twig\Environment;
 class CustomerPipelineStatusListener
 {
     private const COOKIE_NAME = '_pipeline';
-    private const COOKIE_DURATION = '+15 minutes';
+    private const COOKIE_DURATION = '+5 minutes';
 
     private ?string $cookieToSet = null;
     private bool $clearCookie = false;
@@ -34,14 +34,14 @@ class CustomerPipelineStatusListener
         $route = $request->attributes->get('_route');
 
         $targetRoutes = [
-            'user_home', 'user_home_1', 'user_home_ref',
+            'user_home_pay', 'user_home', 'user_home_1', 'user_home_ref',
             'user_home_email', 'user_home_email_', 'user_home_phone',
             'user_home_social', 'user_home_heir',
             'user_home_env', 'user_home_pipe',
-            'pipeline_create', 'pipeline_edit', 'contact_create',
+            'pipeline_create','pipeline_edit', 'contact_create',
             'contact_edit', 'beneficiary_create',
-            'beneficiary_edit', 'customer_delete',
-            'user_home_phone_', 'note_edit'
+            'beneficiary_edit', 'customer_delete', 'note_create',
+            'note_edit', 'user_home_phone_'
         ];
 
         if (!in_array($route, $targetRoutes, true)) {
@@ -65,13 +65,22 @@ class CustomerPipelineStatusListener
         $cookieValue = $request->cookies->get(self::COOKIE_NAME);
 
         if ($cookieValue !== null && !$this->clearCookie) {
-            if (preg_match('/^([01]):(.+):(\d+)$/', $cookieValue, $m)) {
-                [$all, $hasPipeline, $timestamp, $cookieCustomerId] = $m;
+            if (preg_match('/^(\d+):([a-z_]+):(.+):(\d+)$/', $cookieValue, $m)) {
+                [$all, $pipelineIdFromCookie, $pipelineStatusFromCookie, $timestamp, $cookieCustomerId] = $m;
+
+                $pipelineIdFromCookie = (int) $pipelineIdFromCookie;
+
                 if ((int) $cookieCustomerId === $customerId) {
                     try {
                         $createdAt = new DateTimeImmutable($timestamp);
+
                         if ($createdAt->modify(self::COOKIE_DURATION) > $now) {
-                            $this->twig->addGlobal('customerHasPipeline', (bool) $hasPipeline);
+                            $this->twig->addGlobal('customerHasPipeline', $pipelineIdFromCookie);
+                            $this->twig->addGlobal(
+                                'customerPipelineStatus',
+                                $pipelineStatusFromCookie !== 'none' ? $pipelineStatusFromCookie : null
+                            );
+
                             return;
                         }
                     } catch (\Exception) {
@@ -83,16 +92,24 @@ class CustomerPipelineStatusListener
 
         // fallback — fresh check
         $pipelineId = $this->pipelineRepository->customerHasPipeline($customer);
-//        $hasPipeline = $pipelineId !== null;
-        $pipelineId = $pipelineId ? : 0;
+        $pipelineId = $pipelineId ?: 0;
+
+        $customerPipelineStatus = null;
+
+        if ($pipelineId > 0) {
+            $customerPipelineStatus = $this->pipelineRepository->getPipelineStatusById($pipelineId);
+        }
 
         $this->twig->addGlobal('customerHasPipeline', $pipelineId);
+        $this->twig->addGlobal('customerPipelineStatus', $customerPipelineStatus);
 
         $this->cookieToSet = sprintf(
-            '%d:%s:%d',
-            $pipelineId ? : 0,
+            '%d:%s:%s:%d',
+            $pipelineId,
+            $customerPipelineStatus ?? 'none',
             $now->format(DATE_ATOM),
-            $customerId);
+            $customerId
+        );
     }
 
     public function onKernelResponse(ResponseEvent $event): void

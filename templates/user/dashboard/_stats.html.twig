@@ -2,10 +2,17 @@
 
 <div class="stats-container">
 
-    {% if customerHasPipeline and customerPaymentStatus in ['trial', 'paid'] %}
+    {% if customerPipelineStatus == 'activated' and customerPaymentStatus in ['trial', 'paid'] %}
         <a class="stat-card" href="{{ path('user_home_pipe') }}">
             <div class="stat-value" >
                 {{ 'dashboard.pipe_active'|trans }}
+            </div>
+            <div class="stat-label">{{ 'dashboard.pipe_status'|trans }}</div>
+        </a>
+    {% elseif customerPipelineStatus == 'fail' %}
+        <a class="stat-card" href="{{ path('user_home_pipe') }}">
+            <div class="stat-value" style="color: #3cbd81;">
+                {{ 'dashboard.pipe_done'|trans }}
             </div>
             <div class="stat-label">{{ 'dashboard.pipe_status'|trans }}</div>
         </a>

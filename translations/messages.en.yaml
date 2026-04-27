@@ -260,7 +260,7 @@ dashboard:
   payment_completed_left: 'days left'
   payment_completed_tip: "Thank you! Your payment is confirmed."
   pipe_status: "Pipeline Status"
-  pipe_active: "Active"
+  pipe_done: "Finished"
   pipe_inactive: "Inactive"
   nav:
     home: "Home"

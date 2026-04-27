@@ -265,6 +265,7 @@ dashboard:
   payment_completed_tip: "Спасибо! Ваш платёж подтверждён."
   pipe_status: "Статус пайплайна"
   pipe_active: "Активен"
+  pipe_done: "Завершена"
   pipe_inactive: "Неактивен"
   nav:
     home: "Главная"

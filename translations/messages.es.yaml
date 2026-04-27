@@ -264,6 +264,7 @@ dashboard:
   payment_completed_tip: "¡Gracias! Tu pago ha sido confirmado."
   pipe_status: "Estado del pipeline"
   pipe_active: "Activo"
+  pipe_done: "Hecho"
   pipe_inactive: "Inactivo"
   nav:
     home: "Inicio"

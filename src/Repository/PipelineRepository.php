@@ -39,4 +39,23 @@ class PipelineRepository extends BaseRepository
         }
         return null;
     }
+
+    public function getPipelineStatusById(int $pipelineId): ?string
+    {
+        $result = $this->createQueryBuilder('p')
+            ->select('p.pipelineStatus')
+            ->where('p.id = :pipelineId')
+            ->setParameter('pipelineId', $pipelineId)
+            ->setMaxResults(1)
+            ->getQuery()
+            ->getOneOrNullResult();
+
+        $status = $result['pipelineStatus'] ?? null;
+
+        if ($status instanceof \BackedEnum) {
+            return $status->value;
+        }
+
+        return is_string($status) ? $status : null;
+    }
 }
