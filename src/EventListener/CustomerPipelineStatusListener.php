@@ -7,6 +7,7 @@ namespace App\EventListener;
 use App\Entity\Customer;
 use App\Repository\PipelineRepository;
 use DateTimeImmutable;
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\HttpFoundation\Cookie;
 use Symfony\Component\HttpKernel\Event\RequestEvent;
 use Symfony\Component\HttpKernel\Event\ResponseEvent;
@@ -54,8 +55,15 @@ class CustomerPipelineStatusListener
             return;
         }
 
-        // Always clear cookie on payment route
-        if ($route === 'user_home_pay') {
+        // Always clear cookie on these routes
+        $forceFreshPipelineCheck = in_array($route, [
+            'user_home_pipe',
+            'pipeline_create',
+            'pipeline_edit',
+            'user_home_pay'
+        ], true);
+
+        if ($forceFreshPipelineCheck) {
             $this->clearCookie = true;
         }
 
@@ -126,7 +134,9 @@ class CustomerPipelineStatusListener
                 ->withSameSite('lax');
 
             $response->headers->setCookie($expired);
-        } elseif ($this->cookieToSet !== null) {
+        }
+
+        if ($this->cookieToSet !== null) {
             $cookie = Cookie::create(self::COOKIE_NAME)
                 ->withValue($this->cookieToSet)
                 ->withExpires($now->modify(self::COOKIE_DURATION))
@@ -136,13 +146,5 @@ class CustomerPipelineStatusListener
 
             $response->headers->setCookie($cookie);
         }
-    }
-
-    public static function getSubscribedEvents(): array
-    {
-        return [
-            KernelEvents::REQUEST => ['onKernelRequest', 100],
-            KernelEvents::RESPONSE => ['onKernelResponse', -100],
-        ];
     }
 }

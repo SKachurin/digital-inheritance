@@ -31,7 +31,7 @@ final class KmsStatusListener
             'pipeline_create', 'pipeline_edit', 'contact_create',
             'contact_edit', 'beneficiary_create',
             'beneficiary_edit', 'customer_delete',
-            'user_home_phone_', 'note_edit'
+            'user_home_phone_', 'note_edit', 'user_home_pay'
         ];
 
         if (!in_array($route, $targetRoutes, true)) {
