@@ -1,0 +1,14 @@
+User-agent: *
+Allow: /
+
+Disallow: /lk
+Disallow: /checkout
+Disallow: /note
+Disallow: /pipeline
+Disallow: /beneficiary
+Disallow: /customer
+Disallow: /secret-envelope
+Disallow: /wait
+Disallow: /404
+
+Sitemap: https://thedigitalheir.com/sitemap.xml

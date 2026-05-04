@@ -9,11 +9,38 @@ Video about the service:
 ---
 
 
-More tutorial-like, with screens.:
+Tutorial with screenshots:
 
 [![Video about service](https://markdown-videos-api.jorgenkh.no/url?url=https%3A%2F%2Fwww.youtube.com%2Fwatch%3Fv%3DPntSDqlM9Zk%26utm_source%3Dgithub)](https://www.youtube.com/watch?v=PntSDqlM9Zk&utm_source=github)
 ---
+## Contents
 
+- [0. The problem this project solves](#0-the-problem-this-project-solves)
+- [1. Terminology](#1-terminology)
+- [2. Threat model and guarantees](#2-threat-model--guarantees)
+  - [What we protect against](#what-we-protect-against)
+  - [What we do not protect against](#what-we-do-not-protect-against)
+- [3. Data stored and encryption at rest](#3-data-stored--encryption-at-rest-server-side)
+- [4. Envelope cryptography](#4-envelope-cryptography-dek--kms-wrapping)
+  - [4.1 Encrypt flow](#41-encrypt-flow-creation)
+  - [4.2 What the database stores](#42-what-the-db-stores-per-slot-per-replica)
+  - [4.3 What is never stored](#43-what-is-never-stored)
+- [5. Decrypt flow](#5-decrypt-flow-unlock)
+  - [5.1 Inputs](#51-inputs)
+  - [5.2 Deriving unwrap key material](#52-deriving-the-unwrap-key-material)
+  - [5.3 KMS unwrap via gateway](#53-kms-unwrap-via-gateway-online-rate-limited)
+  - [5.4 Multi-gateway and multi-KMS behavior](#54-multi-gateway-and-multi-kms-behavior)
+  - [5.5 Final decryption](#55-final-decryption-current-implementation)
+  - [5.6 Security outcome](#56-security-outcome)
+  - [5.7 Operational isolation and coercion resistance](#57-operational-isolation-and-coercion-resistance)
+- [6. Rate limiting and lockouts](#6-rate-limiting--lockouts-high-level)
+- [7. KMS replicas and health status](#7-kms-replicas--health-status)
+- [8. KMS Health Gateway API](#8-kms-health-gateway-api-mtls)
+- [9. Open-source verification and key code paths](#9-open-source-verification--key-code-paths)
+- [10. Referral program](#10-referral-program)
+- [11. Project roadmap](#11-project-roadmap)
+
+---
 ## 0) The problem this project solves
 
 The core problem addressed by this project is how to safely use
@@ -37,7 +64,7 @@ The Digital Heir lets a user create a single **Envelope** (an *encrypted note*) 
 
 ---
 
-## 1) Terminology (consistent naming)
+## 1) Terminology
 
 - **Envelope**: the encrypted note stored on our servers.
 - **Answer**: user-provided secret that gates access to Envelope decryption.
@@ -56,16 +83,12 @@ The Digital Heir lets a user create a single **Envelope** (an *encrypted note*) 
 - Envelope data is stored as encrypted blobs; plaintext is not stored.
 - Secret **answers are never stored** (not even hashed).
 
-**If the app server is compromised (read access):**
-- Encrypted-at-rest fields remain protected without the platform secrets.
-- Envelope blobs remain protected without correct answers + KMS unwrap.
-
 **Online brute-force attempts against answers:**
 - Unwrap is rate-limited at the KMS Gateway layer (per: `user_id + answer_fp`).
 - Additional attempt counters/lockouts are enforced at the Symfony app layer (per Envelope).
 
 ### What we do NOT protect against
-- **Weak answers** (guessable secrets reduce security).
+- **Weak answers** (guessable secrets reduce security - bad example pair -  q: All we need is...? a: Love. ).
   - The system is designed around secrets that are easy for the intended recipient
     to remember, but hard for anyone else to guess.  
     The goal is not cryptographic strength of the answer itself, but *contextual exclusivity*.  
@@ -76,7 +99,7 @@ The Digital Heir lets a user create a single **Envelope** (an *encrypted note*) 
     - and protected against online guessing by strict rate limits and lockouts.
 - **Compromised client device/browser** (keylogger/malware defeats client secrecy).
 - **Compromised email/WhatsApp/Telegram account** (can impact Pipeline messaging).
-- **User error**: if answers are forgotten, Envelope become permanently inaccessible.
+- **User error**: if answers are forgotten, Envelope becomes permanently inaccessible.
 
 ---
 
@@ -94,12 +117,6 @@ The symmetric key is derived in `CryptoService` from two environment secrets:
 Derivation (current design):
 - Both are SHA-256’d
 - Then XOR’d into a 32-byte key
-
-### Which fields are plaintext
-To operate the service, at least one identifier must remain readable:
-- **Primary email** is stored in plaintext (used as login / routing / account lookup).
-  Everything else is intended to be encrypted at rest.
-
 ---
 
 ## 4) Envelope cryptography (DEK + KMS wrapping)
@@ -218,7 +235,7 @@ For each unwrap attempt:
 - gateway URLs are resolved dynamically from DB + environment
 
 From the response:
-- only DEKs with valid length (32 bytes) are accepted
+- only successfully unwrapped INNER blobs are accepted; malformed or empty blobs are discarded.
 - malformed or empty DEKs are discarded
 
 If no DEK is successfully unwrapped:
@@ -342,24 +359,34 @@ Suggested audit targets:
 
 ---
 
-## 10) Technical FAQ (short)
-
-**Q: If the DB leaks, can an attacker brute-force answers offline?**  
-They can attempt offline guessing against Argon2id-derived `H`, but unwrap still requires KMS `KEK`. Without KMS compromise, the attacker cannot validate guesses by unwrapping the DEK. (Online guessing is rate-limited.)
-
-**Q: Why store questions at all?**  
-Questions are stored **encrypted** so the UI can show prompts to the user/heir. Answers are never stored.
-
-**Q: Why does the server ever see plaintext during decrypt?**  
-Current implementation trades “pure client-side decrypt” for stronger centralized enforcement of attempt limits and lockouts.   
-Plaintext is intended to be memory-only and never stored.
-
-## 11) Referral program
+## 10) Referral program
 
 The Digital Heir includes a built-in referral program.
 
-- **Lifetime commission:**: earn **20% of all payments** made by customers who register via your referral link or QR code (recurring, for as long as they stay subscribed).
+- **Lifetime commission:** earn **20% of all payments** made by customers who register via your referral link or QR code (recurring, for as long as they stay subscribed).
 - **Second-level commission:** earn an additional **5% from payments** made by people invited by your referrals.
 - **Attribution:**: the referral code is saved on a visitor’s first visit and applied automatically at registration. Cross-device registrations may not be attributed unless the user later logs in from the original device.
 - **Rewards & withdrawals:** rewards are credited immediately after payment, but withdrawals follow a 1-month hold period (you can withdraw rewards earned at least one month ago).
 - **Payouts:** currently manual — request a withdrawal via the Contact Us page.
+
+---
+
+## 11) Project roadmap
+
+
+### Implement
+- message to admin tg about KMS health and about API health
+- message to users about KMS health to TG - if no TG - to WhatsApp
+- More Socials to check "last online"(Insta, WA)
+- QR for ref links
+
+### Buy
+- external security audit
+- external encryption audit
+
+### Research
+> This server-side decrypt is intentional and allows the system to enforce attempt limits, lockouts, and timing guarantees centrally.
+- could be moved to front-end with same level of protection?
+- How to proof that the code in the Git repository matches the code on the project server.
+- Second flow with the Picture instead of questions
+- Switch to Lattice-based Cryptography/LWE algo
