@@ -1,9 +1,36 @@
 {% extends 'base.html.twig' %}
 
-{% block og_title %}{{ 'onboarding_page.title'|trans }}{% endblock %}
+{% set page_key = 'onboarding' %}
+{% set page_title = 'onboarding_page.title'|trans %}
+{% set page_description = 'onboarding_page.description'|trans %}
 
-{% block og_description %}{{ 'onboarding_page.description'|trans }}{% endblock %}
-{% block og_image %}{{ '/build/logo-TheDigitalHeir-192x192.png' }}{% endblock %}
+{% block title %}{{ page_title|trim }}{% endblock %}
+
+{% block meta_description %}{{ page_description|trim }}{% endblock %}
+
+{% block og_title %}{{ page_title|trim }}{% endblock %}
+
+{% block og_description %}{{ page_description|trim }}{% endblock %}
+
+{% block og_image %}
+    {{ absolute_url(asset('/build/logo-TheDigitalHeir-512x512.png')) }}
+{% endblock %}
+
+{% block og_url %}
+    {{ absolute_url(path('localized_static_page', {
+        _locale: app.request.locale|default('en'),
+        slug: ('slug.' ~ page_key)|trans({}, 'routes', app.request.locale|default('en'))
+    })) }}
+{% endblock %}
+
+{% block custom_head %}
+    {% include 'partials/seo_static_page.html.twig' with {
+        page_key: page_key,
+        title: page_title,
+        description: page_description,
+        schema_type: 'WebPage'
+    } %}
+{% endblock %}
 
 {% block content %}
     <style>

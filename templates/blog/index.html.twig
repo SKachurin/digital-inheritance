@@ -1,0 +1,305 @@
+{% extends 'base.html.twig' %}
+
+{% set blogSeo = {
+    en: {
+        title: 'The Digital Heir Blog',
+        description: 'Practical notes about digital inheritance, encrypted recovery, secure access, and protecting sensitive information for the people who may need it later.',
+        intro: 'Practical notes about digital inheritance, encrypted recovery, secure access, and protecting sensitive information for the people who may need it later.',
+        readMore: 'Read more →',
+        locale: 'en_US',
+        dateFormat: 'M d, Y'
+    },
+    es: {
+        title: 'Blog de The Digital Heir',
+        description: 'Notas prácticas sobre herencia digital, recuperación cifrada, acceso seguro y protección de información sensible para las personas que puedan necesitarla más adelante.',
+        intro: 'Notas prácticas sobre herencia digital, recuperación cifrada, acceso seguro y protección de información sensible para las personas que puedan necesitarla más adelante.',
+        readMore: 'Leer más →',
+        locale: 'es_ES',
+        dateFormat: 'd.m.Y'
+    },
+    ru: {
+        title: 'Блог The Digital Heir',
+        description: 'Практические заметки о цифровом наследовании, зашифрованном восстановлении доступа и защите важной информации для тех, кому она может понадобиться позже.',
+        intro: 'Практические заметки о цифровом наследовании, зашифрованном восстановлении доступа и защите важной информации для тех, кому она может понадобиться позже.',
+        readMore: 'Читать дальше →',
+        locale: 'ru_RU',
+        dateFormat: 'd.m.Y'
+    }
+} %}
+
+{% set seo = blogSeo[locale]|default(blogSeo.en) %}
+{% set blogUrl = absolute_url(path('blog_index', {'_locale': locale})) %}
+{% set blogImage = absolute_url(asset('/build/logo-TheDigitalHeir-512x512.png')) %}
+
+{% block title %}{{ seo.title }}{% endblock %}
+
+{% block meta_description %}{{ seo.description }}{% endblock %}
+
+{% block og_type %}website{% endblock %}
+
+{% block og_locale %}{{ seo.locale }}{% endblock %}
+
+{% block og_title %}{{ seo.title }}{% endblock %}
+
+{% block og_description %}{{ seo.description }}{% endblock %}
+
+{% block og_image %}{{ blogImage }}{% endblock %}
+
+{% block og_url %}{{ blogUrl }}{% endblock %}
+
+{% block twitter_card %}summary{% endblock %}
+
+{% block twitter_title %}{{ seo.title }}{% endblock %}
+
+{% block twitter_description %}{{ seo.description }}{% endblock %}
+
+{% block twitter_image %}{{ blogImage }}{% endblock %}
+
+{% block custom_head %}
+    <link rel="canonical" href="{{ blogUrl }}">
+
+    <link rel="alternate" hreflang="en" href="{{ absolute_url(path('blog_index', {'_locale': 'en'})) }}">
+    <link rel="alternate" hreflang="es" href="{{ absolute_url(path('blog_index', {'_locale': 'es'})) }}">
+    <link rel="alternate" hreflang="ru" href="{{ absolute_url(path('blog_index', {'_locale': 'ru'})) }}">
+    <link rel="alternate" hreflang="x-default" href="{{ absolute_url(path('blog_index', {'_locale': 'en'})) }}">
+
+    <script type="application/ld+json">
+        {
+            "@context": "https://schema.org",
+            "@type": "Blog",
+            "name": {{ seo.title|json_encode|raw }},
+            "description": {{ seo.description|json_encode|raw }},
+            "url": {{ blogUrl|json_encode|raw }},
+            "inLanguage": {{ locale|json_encode|raw }},
+            "publisher": {
+                "@type": "Organization",
+                "name": "The Digital Heir",
+                "logo": {
+                    "@type": "ImageObject",
+                    "url": {{ absolute_url(asset('/build/logo-TheDigitalHeir-512x512.png'))|json_encode|raw }}
+        }
+    },
+    "blogPost": [
+        {% for post in posts %}
+                {
+                    "@type": "BlogPosting",
+                    "headline": {{ post.title|json_encode|raw }},
+                    "description": {{ post.preview|json_encode|raw }},
+                    "url": {{ absolute_url(path('blog_article', {'_locale': locale, 'slug': post.slug}))|json_encode|raw }},
+                    "datePublished": "{{ post.date|date('c') }}",
+                    "dateModified": "{{ post.updated|default(post.date)|date('c') }}",
+                    "inLanguage": {{ locale|json_encode|raw }},
+                    "author": {
+                        "@type": "Person",
+                        "name": "Sergei Kachurin"
+                    },
+                    "publisher": {
+                        "@type": "Organization",
+                        "name": "The Digital Heir",
+                        "logo": {
+                            "@type": "ImageObject",
+                            "url": {{ absolute_url(asset('/build/logo-TheDigitalHeir-512x512.png'))|json_encode|raw }}
+                        }
+                    }
+                }{% if not loop.last %},{% endif %}
+        {% endfor %}
+        ]
+    }
+    </script>
+{% endblock %}
+
+{% block content %}
+    <section class="blog-page">
+        <div class="container blog-container">
+            <header class="blog-start text-center blog-card">
+                <p class="blog-kicker">The Digital Heir</p>
+
+                <h1 class="mt-7 pt5" style="padding-top: 4em;">
+                    Blog
+                </h1>
+
+                <p class="blog-intro">
+                    {{ seo.intro }}
+                </p>
+            </header>
+
+            <div class="blog-list">
+                {% for post in posts %}
+                    <article class="blog-card">
+                        <time class="blog-card-meta" datetime="{{ post.date|date('Y-m-d') }}">
+                            {{ post.date|date(seo.dateFormat) }}
+                        </time>
+
+                        <h2 class="blog-card-title">
+                            <a href="{{ path('blog_article', {'_locale': locale, 'slug': post.slug}) }}">
+                                {{ post.title }}
+                            </a>
+                        </h2>
+
+                        <p class="blog-card-preview">
+                            {{ post.preview }}
+                        </p>
+
+                        <a class="blog-read-more" href="{{ path('blog_article', {'_locale': locale, 'slug': post.slug}) }}">
+                            {{ seo.readMore }}
+                        </a>
+                    </article>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+
+    <style>
+        .blog-page {
+            padding: 8rem 0 4rem;
+        }
+
+        .blog-container {
+            max-width: 900px;
+        }
+
+        .blog-start {
+            margin-bottom: 4rem;
+            background: rgba(234, 237, 240, 0.87) !important;
+            padding: 5rem 9% !important;
+            text-align: center !important;
+            margin-top: 4rem;
+            margin-left: 9%;
+            margin-right: 9%;
+        }
+
+        .blog-kicker {
+            margin-bottom: 0.5rem;
+            font-size: 0.85rem;
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+            color: #555;
+            font-family: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+        }
+
+        .blog-start h1 {
+            margin-top: 0rem !important;
+            padding-top: 0rem !important;
+            margin-bottom: 4rem !important;
+            font-size: 2.8rem;
+            font-weight: 800;
+            text-align: center;
+            letter-spacing: -0.5px;
+
+        }
+
+
+        .blog-intro {
+            max-width: 720px;
+            margin: 0 auto;
+            font-size: 1.1rem;
+            color: #444;
+            line-height: 1.8;
+        }
+
+        .blog-list {
+            display: flex;
+            flex-direction: column;
+            gap: 1.5rem;
+        }
+
+        .blog-card {
+            padding: 2rem;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.92);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+            border: 1px solid rgba(0, 0, 0, 0.06);
+        }
+
+        .blog-card-meta {
+            margin-bottom: 0.75rem;
+            font-size: 0.85rem;
+            color: #777;
+            font-family: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+        }
+
+        .blog-card-title {
+            margin: 0 0 1rem;
+            padding: 0;
+            font-size: 1.45rem;
+            line-height: 1.4;
+            text-shadow: none;
+        }
+
+        .blog-card-title a {
+            color: #222;
+            text-decoration: none;
+        }
+
+        .blog-card-title a:hover {
+            text-decoration: underline;
+        }
+
+        .blog-card-preview {
+            margin-bottom: 1rem;
+            color: #333;
+            line-height: 1.8;
+        }
+
+        .blog-read-more {
+            display: inline-block;
+            color: #212529;
+            font-weight: 600;
+            text-decoration: none;
+            border-bottom: 1px solid rgba(33, 37, 41, 0.35);
+        }
+
+        .blog-read-more:hover {
+            color: #000;
+            border-bottom-color: #000;
+        }
+
+        @media (max-width: 991px) {
+            .blog-start{
+                margin-top: -4rem;
+            }
+
+            .blog-page {
+                padding-top: 18rem;
+            }
+
+            .blog-container {
+                padding-top: 0;
+            }
+
+            .blog-kicker {
+                font-size: 1.4rem;
+            }
+
+            .blog-intro {
+                font-size: 2rem;
+            }
+
+            .blog-list {
+                gap: 2.5rem;
+            }
+
+            .blog-card {
+                padding: 3rem;
+                border-radius: 18px;
+            }
+
+            .blog-card-meta {
+                font-size: 1.5rem;
+            }
+
+            .blog-card-title {
+                font-size: 2.8rem !important;
+                margin: 0 0 1rem !important;
+            }
+
+            .blog-card-preview {
+                font-size: 2rem;
+            }
+
+            .blog-read-more {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+{% endblock %}

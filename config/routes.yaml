@@ -16,6 +16,22 @@ user_login:
     path:       /log
     controller: App\Controller\Customer\LoginController::index
 
+blog_redirect:
+    path: /blog
+    controller: App\Controller\Blog\BlogController::redirectToLocalizedBlog
+
+blog_index:
+    path: /{_locale}/blog
+    controller: App\Controller\Blog\BlogController::index
+    requirements:
+        _locale: en|es|ru
+
+blog_article:
+    path: /{_locale}/blog/{slug}
+    controller: App\Controller\Blog\BlogController::article
+    requirements:
+        _locale: en|es|ru
+
 user_home_1:
     path:       /lk_old
     defaults:
@@ -138,6 +154,12 @@ home:
     defaults:
         template:  'home_new.html.twig'
 
+localized_static_page:
+    path: /{_locale}/{slug}
+    controller: App\Controller\LocalizedPageRedirectController::show
+    requirements:
+        _locale: en|es|ru
+
 404:
     path:       /404
     controller: Symfony\Bundle\FrameworkBundle\Controller\TemplateController
@@ -149,12 +171,6 @@ wait:
     controller: Symfony\Bundle\FrameworkBundle\Controller\TemplateController
     defaults:
         template:  'wait.html.twig'
-
-about:
-    path:       /about
-    controller: Symfony\Bundle\FrameworkBundle\Controller\TemplateController
-    defaults:
-        template:  'about.html.twig'
 
 onboarding:
     path:       /onboarding

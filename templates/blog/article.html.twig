@@ -1,0 +1,465 @@
+{% extends 'base.html.twig' %}
+
+{% set articleUrl = absolute_url(path('blog_article', {'_locale': locale, 'slug': article.slug})) %}
+{% set articleImage = article.image ? absolute_url(asset(article.image)) : absolute_url(asset('build/logo-TheDigitalHeir-192x192.png')) %}
+
+{% block title %}{{ article.title }} | The Digital Heir Blog{% endblock %}
+
+{% block meta_description %}{{ article.description }}{% endblock %}
+
+{% block og_type %}article{% endblock %}
+{% block og_locale %}{{ article.og_locale|default('en_US') }}{% endblock %}
+{% block og_title %}{{ article.title }}{% endblock %}
+{% block og_description %}{{ article.description }}{% endblock %}
+{% block og_image %}{{ articleImage }}{% endblock %}
+{% block og_url %}{{ articleUrl }}{% endblock %}
+
+{% block twitter_card %}summary_large_image{% endblock %}
+{% block twitter_title %}{{ article.title }}{% endblock %}
+{% block twitter_description %}{{ article.description }}{% endblock %}
+{% block twitter_image %}{{ articleImage }}{% endblock %}
+
+{% block custom_head %}
+    <link rel="canonical" href="{{ articleUrl }}">
+
+    {% for hreflang, translatedPost in translations %}
+        <link rel="alternate" hreflang="{{ hreflang }}" href="{{ absolute_url(path('blog_article', {'_locale': hreflang, 'slug': translatedPost.slug})) }}">
+    {% endfor %}
+
+    {% if translations.en is defined %}
+        <link rel="alternate" hreflang="x-default" href="{{ absolute_url(path('blog_article', {'_locale': 'en', 'slug': translations.en.slug})) }}">
+    {% else %}
+        <link rel="alternate" hreflang="x-default" href="{{ articleUrl }}">
+    {% endif %}
+
+    <meta property="article:published_time" content="{{ article.date|date('c') }}">
+    <meta property="article:modified_time" content="{{ article.updated|date('c') }}">
+    {% if article.category is defined and article.category %}
+        <meta property="article:section" content="{{ article.category }}">
+    {% endif %}
+
+    {% if article.topic is defined and article.topic %}
+        <meta property="article:tag" content="{{ article.topic }}">
+    {% endif %}
+
+    <script type="application/ld+json">
+        {{ {
+            '@context': 'https://schema.org',
+            '@type': 'BlogPosting',
+            'mainEntityOfPage': {
+                '@type': 'WebPage',
+                '@id': articleUrl
+            },
+            'url': articleUrl,
+            'headline': article.title,
+            'description': article.description,
+            'image': [
+                articleImage
+            ],
+            'datePublished': article.date|date('c'),
+            'dateModified': article.updated ? article.updated|date('c') : article.date|date('c'),
+            'author': {
+                '@type': 'Person',
+                'name': 'Sergei Kachurin'
+            },
+            'publisher': {
+                '@type': 'Organization',
+                'name': 'The Digital Heir',
+                'logo': {
+                    '@type': 'ImageObject',
+                    'url': absolute_url(asset('build/logo-TheDigitalHeir-512x512.png'))
+                }
+            },
+            'inLanguage': locale
+        }|json_encode(constant('JSON_UNESCAPED_SLASHES'))|raw }}
+    </script>
+{% endblock %}
+
+{% block content %}
+    <section class="blog-article-page">
+        <div class="container blog-article-container">
+
+            <article class="blog-article-card">
+                <header class="blog-article-header">
+                    <a class="blog-back-link" href="{{ path('blog_index', {'_locale': locale}) }}">
+                        ← Blog
+                    </a>
+
+                    <p class="blog-kicker">The Digital Heir</p>
+
+                    <h1 class="blog-article-title">
+                        {{ article.title }}
+                    </h1>
+
+                    <div class="blog-article-meta">
+                        {% if locale == 'es' %}
+                            {{ article.date|date('d.m.Y') }}
+                        {% elseif locale == 'ru' %}
+                            {{ article.date|date('d.m.Y') }}
+                        {% else %}
+                            {{ article.date|date('M d, Y') }}
+                        {% endif %}
+
+                        {% if article.category is defined and article.category %}
+                            · {{ article.category }}
+                        {% endif %}
+                        {% if article.topic is defined and article.topic %}
+                            · {{ article.topic }}
+                        {% endif %}
+                    </div>
+
+                    <p class="blog-article-lead">
+                        {{ article.description }}
+                    </p>
+                </header>
+
+                {% if article.image %}
+                    <figure class="blog-article-image blog-article-image-top">
+                        <img
+                                src="{{ asset(article.image) }}"
+                                alt="{{ article.image_alt }}"
+                        >
+                    </figure>
+                {% endif %}
+
+                <div class="blog-article-content">
+                    {{ article.content_html|raw }}
+                </div>
+            </article>
+
+            <nav class="blog-continue-reading" aria-label="Continue reading">
+                {% if previousPost %}
+                    <a class="blog-nav-post blog-nav-prev" href="{{ path('blog_article', {'_locale': locale, 'slug': previousPost.slug}) }}">
+                        <span>Previous post</span>
+                        <strong>{{ previousPost.title }}</strong>
+                    </a>
+                {% else %}
+                    <div class="blog-nav-post blog-nav-disabled">
+                        <span>Previous post</span>
+                        <strong>You are reading the first article</strong>
+                    </div>
+                {% endif %}
+
+                {% if nextPost %}
+                    <a class="blog-nav-post blog-nav-next" href="{{ path('blog_article', {'_locale': locale, 'slug': nextPost.slug}) }}">
+                        <span>Next post</span>
+                        <strong>{{ nextPost.title }}</strong>
+                    </a>
+                {% else %}
+                    <div class="blog-nav-post blog-nav-disabled blog-nav-next">
+                        <span>Next post</span>
+                        <strong>No newer article yet</strong>
+                    </div>
+                {% endif %}
+            </nav>
+
+        </div>
+    </section>
+
+    <style>
+        .blog-article-page {
+            padding: 8rem 0 4rem;
+            margin-top: 6rem;
+        }
+
+        .blog-article-container {
+            max-width: 900px;
+        }
+
+        .blog-article-card {
+            padding: 3rem;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.92);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+            border: 1px solid rgba(0, 0, 0, 0.06);
+        }
+
+        .blog-article-header {
+            padding: 5rem 9% !important;
+            margin-bottom: 3rem;
+            text-align: center;
+            background: rgba(234, 237, 240, 0.87) !important;
+        }
+
+        .blog-back-link {
+            display: inline-block;
+            margin-bottom: 2rem;
+            color: #333;
+            font-weight: 600;
+            text-decoration: none;
+            border-bottom: 1px solid rgba(33, 37, 41, 0.25);
+        }
+
+        .blog-back-link:hover {
+            color: #000;
+            border-bottom-color: #000;
+        }
+
+        .blog-kicker {
+            margin-bottom: 0.5rem;
+            font-size: 0.85rem;
+            letter-spacing: 0.16em;
+            text-transform: uppercase;
+            color: #555;
+            font-family: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+        }
+
+        .blog-article-title {
+            margin: 0 auto 1.5rem !important;
+            padding: 0 !important;
+            max-width: 760px;
+            font-size: 2.7rem !important;
+            line-height: 1.25;
+            font-weight: 800;
+            text-align: center;
+            text-shadow: none !important;
+            letter-spacing: -0.5px;
+        }
+
+        .blog-article-meta {
+            margin-bottom: 2rem;
+            font-size: 0.9rem;
+            color: #777;
+            font-family: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+        }
+
+        .blog-article-lead {
+            max-width: 760px;
+            margin: 0 auto;
+            font-size: 1.18rem;
+            color: #333;
+            line-height: 1.9;
+        }
+
+        .blog-article-content {
+            max-width: 760px;
+            margin: 0 auto;
+        }
+
+        .blog-article-content p {
+            margin-bottom: 1.45rem;
+            font-size: 1.08rem;
+            line-height: 1.9;
+            color: #333;
+        }
+
+        .blog-article-content h2 {
+            margin: 3rem 0 1.1rem !important;
+            padding: 0 !important;
+            font-size: 1.65rem !important;
+            line-height: 1.35;
+            text-shadow: none !important;
+            color: #222;
+        }
+
+        .blog-article-content h3 {
+            margin: 2.2rem 0 1rem !important;
+            padding: 0 !important;
+            font-size: 1.3rem !important;
+            line-height: 1.35;
+            text-shadow: none !important;
+            color: #222;
+        }
+
+        .blog-article-content a {
+            color: #111;
+            font-weight: 600;
+            text-decoration: none;
+            border-bottom: 1px solid rgba(33, 37, 41, 0.35);
+        }
+
+        .blog-article-content a:hover {
+            border-bottom-color: #000;
+        }
+
+        .blog-article-content ul {
+            max-width: 720px;
+            margin: 0 auto 1.8rem;
+            padding-left: 1.5rem;
+        }
+
+        .blog-article-content li {
+            margin-bottom: 0.7rem;
+            font-size: 1.08rem;
+            line-height: 1.8;
+        }
+
+        .blog-article-content blockquote {
+            margin: 2.3rem 0;
+            padding: 1.5rem 1.7rem;
+            border-left: 4px solid rgba(33, 37, 41, 0.35);
+            background: rgba(234, 237, 240, 0.72);
+            border-radius: 8px;
+            font-size: 1.12rem;
+            line-height: 1.8;
+            color: #222;
+        }
+
+        .blog-article-image {
+            max-width: 760px;
+            margin: 3rem auto;
+        }
+
+        .blog-article-image-top {
+            margin-top: 0;
+        }
+
+        .blog-article-image img {
+            display: block;
+            width: 100%;
+            height: auto;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            border: 1px solid rgba(0, 0, 0, 0.06);
+        }
+
+        .blog-continue-reading {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .blog-nav-post {
+            display: block;
+            padding: 1.5rem;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, 0.92);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+            border: 1px solid rgba(0, 0, 0, 0.06);
+            color: #222;
+            text-decoration: none;
+        }
+
+        .blog-nav-post span {
+            display: block;
+            margin-bottom: 0.45rem;
+            font-size: 0.82rem;
+            color: #777;
+            text-transform: uppercase;
+            letter-spacing: 0.12em;
+            font-family: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+        }
+
+        .blog-nav-post strong {
+            display: block;
+            font-size: 1.05rem;
+            line-height: 1.55;
+        }
+
+        .blog-nav-post:hover {
+            color: #000;
+            transform: translateY(-1px);
+            transition: transform 0.15s ease-in-out;
+        }
+
+        .blog-nav-disabled {
+            opacity: 0.65;
+        }
+
+        .blog-nav-disabled:hover {
+            transform: none;
+        }
+
+        .blog-nav-next {
+            text-align: right;
+        }
+
+        @media (max-width: 991px) {
+            .blog-article-page {
+                padding-top: 18rem;
+            }
+
+            .blog-article-container {
+                padding-top: 0;
+            }
+
+            .blog-article-card {
+                padding: 3rem;
+                border-radius: 18px;
+            }
+
+            .blog-back-link {
+                font-size: 1.7rem;
+                margin-bottom: 2.5rem;
+            }
+
+            .blog-kicker {
+                font-size: 1.4rem;
+            }
+
+            .blog-article-title {
+                font-size: 3rem !important;
+                line-height: 1.35;
+                margin-bottom: 2rem !important;
+            }
+
+            .blog-article-meta {
+                font-size: 1.4rem;
+                line-height: 1.6;
+            }
+
+            .blog-article-lead {
+                font-size: 2rem;
+                line-height: 1.75 !important;
+            }
+
+            .blog-article-content p,
+            .blog-article-content li {
+                font-size: 2rem;
+                line-height: 1.75 !important;
+                margin-bottom: 2.2rem;
+            }
+
+            .blog-article-content h2 {
+                font-size: 2.8rem !important;
+                line-height: 1.35;
+                margin-top: 4rem !important;
+                margin-bottom: 1.6rem !important;
+            }
+
+            .blog-article-content h3 {
+                font-size: 2.3rem !important;
+                line-height: 1.35;
+            }
+
+            .blog-article-content blockquote {
+                padding: 2rem;
+                font-size: 2rem;
+                line-height: 1.7;
+                border-left-width: 6px;
+            }
+
+            .blog-article-image {
+                margin: 4rem auto;
+            }
+
+            .blog-article-image img {
+                border-radius: 18px;
+            }
+
+            .blog-continue-reading {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+                margin-top: 2.5rem;
+            }
+
+            .blog-nav-post {
+                padding: 2.5rem;
+                border-radius: 18px;
+            }
+
+            .blog-nav-post span {
+                font-size: 1.35rem;
+            }
+
+            .blog-nav-post strong {
+                font-size: 1.9rem;
+            }
+
+            .blog-nav-next {
+                text-align: left;
+            }
+        }
+    </style>
+{% endblock %}

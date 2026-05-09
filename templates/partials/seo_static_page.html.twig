@@ -1,0 +1,56 @@
+{% set currentLocale = app.request.locale in ['en', 'es', 'ru'] ? app.request.locale : 'en' %}
+
+{% set currentUrl = absolute_url(path('localized_static_page', {
+    _locale: currentLocale,
+    slug: ('slug.' ~ page_key)|trans({}, 'routes', currentLocale)
+})) %}
+
+<link rel="canonical" href="{{ currentUrl }}">
+
+<link rel="alternate" hreflang="en" href="{{ absolute_url(path('localized_static_page', {
+    _locale: 'en',
+    slug: ('slug.' ~ page_key)|trans({}, 'routes', 'en')
+})) }}">
+
+<link rel="alternate" hreflang="es" href="{{ absolute_url(path('localized_static_page', {
+    _locale: 'es',
+    slug: ('slug.' ~ page_key)|trans({}, 'routes', 'es')
+})) }}">
+
+<link rel="alternate" hreflang="ru" href="{{ absolute_url(path('localized_static_page', {
+    _locale: 'ru',
+    slug: ('slug.' ~ page_key)|trans({}, 'routes', 'ru')
+})) }}">
+
+<link rel="alternate" hreflang="x-default" href="{{ absolute_url(path('localized_static_page', {
+    _locale: 'en',
+    slug: ('slug.' ~ page_key)|trans({}, 'routes', 'en')
+})) }}">
+
+<script type="application/ld+json">
+{{ {
+        '@context': 'https://schema.org',
+        '@type': schema_type|default('WebPage'),
+        'name': title,
+        'description': description,
+        'url': currentUrl,
+        'inLanguage': currentLocale,
+        'mainEntityOfPage': {
+            '@type': 'WebPage',
+            '@id': currentUrl
+        },
+        'isPartOf': {
+            '@type': 'WebSite',
+            'name': 'The Digital Heir',
+            'url': absolute_url(path('home'))
+        },
+        'publisher': {
+            '@type': 'Organization',
+            'name': 'The Digital Heir',
+            'logo': {
+                '@type': 'ImageObject',
+                'url': absolute_url(asset('/build/logo-TheDigitalHeir-512x512.png'))
+            }
+        }
+    }|json_encode(constant('JSON_UNESCAPED_SLASHES'))|raw }}
+</script>

@@ -697,8 +697,7 @@ about_page:
     title: "Privacidad y seguridad en cada paso"
     bullet1: "Contactos cifrados: tus contactos y detalles de herederos se almacenan cifrados."
     bullet2: "Respuestas secretas cifradas: nunca se guardan en la base de datos. Solo tú y tu heredero pueden desbloquear el Sobre."
-    bullet3: "No vendemos tus datos: no te rastreamos ni compartimos información con terceros."
-    bullet4: "Independencia de las grandes tecnológicas y ausencia de terceros de confianza: el sistema no depende de documentos legales, aprobaciones manuales ni de decisiones humanas para liberar los datos. Tus datos siguen siendo tuyos."
+    bullet3: "Independencia de las grandes tecnológicas y ausencia de terceros de confianza: el sistema no depende de documentos legales, aprobaciones manuales ni de decisiones humanas para liberar los datos. Tus datos siguen siendo tuyos."
 
   pipeline:
     title: "Configurando tu pipeline de herencia"

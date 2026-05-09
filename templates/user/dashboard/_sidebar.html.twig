@@ -25,7 +25,10 @@
 
 <div class="sidebar-content">
     <p class="">
-        <a class="sidebar-note" href="{{ path('onboarding') }}">
+        <a class="sidebar-note" href="{{ path('localized_static_page', {
+            _locale: app.request.locale|default('en'),
+            slug: 'slug.onboarding'|trans({}, 'routes')
+        }) }}">
             {{ 'header.test_mode'|trans }}
         </a>
     </p>

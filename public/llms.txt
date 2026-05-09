@@ -1,0 +1,37 @@
+# The Digital Heir
+
+> The Digital Heir is a secure digital inheritance service for protecting and transferring sensitive digital information only when the owner becomes unavailable.
+
+The service allows users to create an encrypted digital Envelope, add trusted heirs, configure secret questions, verify contact channels, and build an inactivity Pipeline that can release a limited-time decryption link to the selected heir.
+
+## Main pages
+
+- Home: https://thedigitalheir.com/
+- Onboarding: https://thedigitalheir.com/en/onboarding
+- About: https://thedigitalheir.com/en/about
+- Contact: https://thedigitalheir.com/en/contact
+- Terms: https://thedigitalheir.com/en/terms
+- Privacy Policy: https://thedigitalheir.com/en/privacy
+- Refund Policy: https://thedigitalheir.com/en/refund
+
+## Product summary
+
+The Digital Heir helps users protect sensitive digital assets such as passwords, private keys, recovery phrases, account access instructions, confidential notes, and important personal information.
+
+The core idea is simple: the user prepares encrypted information in advance, defines who should receive access, and configures the conditions under which delivery should happen.
+
+## Security model
+
+- Sensitive Envelope content is encrypted before storage.
+- Secret answers are not stored as plain text.
+- The service is designed to avoid early disclosure to heirs.
+- The heir receives access only if the configured inactivity Pipeline reaches its final step.
+- Access is protected through secret questions and anti-brute-force controls.
+
+## Public repository
+
+- GitHub: https://github.com/SKachurin/digital-inheritance
+
+## Contact
+
+- Telegram: https://t.me/TheDigitalHeir_com

@@ -253,7 +253,10 @@
             <p>{{ 'home_page.info_2_text'|trans }}</p>
             <p>{{ 'home_page.info_3_text'|trans |raw }}</p>
             {% if app.user %}
-                <a href="{{ path('about') }}" class="btn btn-outline-dark btn-floating m-4 mt-4 btn-in-text">
+                <a href="{{ path('localized_static_page', {
+                    _locale: app.request.locale|default('en'),
+                    slug: 'slug.about'|trans({}, 'routes')
+                }) }}" class="btn btn-outline-dark btn-floating m-4 mt-4 btn-in-text">
                     <i class="">{{ 'home_page.learn_more'|trans }}</i>
                 </a>
             {% else %}

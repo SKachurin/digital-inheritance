@@ -671,8 +671,7 @@ about_page:
     title: "Privacy & Security at Every Step"
     bullet1: "Encrypted Contacts: Your contact and heir details are encrypted before storage."
     bullet2: "Secret answers are never saved to the database (not even encrypted). Only you and your heir can unlock the Envelope."
-    bullet3: "No Selling of Data: We do not watch you, track you, or sell your data to any third party."
-    bullet4: "Independence from Big Tech: No Trusted Third Party: The system does not rely on legal documents, manual approvals, or human discretion to release data. Your data remains yours."
+    bullet3: "Independence from Big Tech: No Trusted Third Party: The system does not rely on legal documents, manual approvals, or human discretion to release data. Your data remains yours."
 
   pipeline:
     title: "Setting Up Your Inheritance Pipeline"

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset
-        xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+        xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
 
     <url>
         <loc>https://thedigitalheir.com/</loc>
@@ -9,19 +10,91 @@
     </url>
 
     <url>
-        <loc>https://thedigitalheir.com/onboarding</loc>
+        <loc>https://thedigitalheir.com/en/onboarding</loc>
+        <xhtml:link rel="alternate" hreflang="en" href="https://thedigitalheir.com/en/onboarding"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://thedigitalheir.com/es/guia"/>
+        <xhtml:link rel="alternate" hreflang="ru" href="https://thedigitalheir.com/ru/instruktsiya"/>
+        <xhtml:link rel="alternate" hreflang="x-default" href="https://thedigitalheir.com/en/onboarding"/>
         <changefreq>monthly</changefreq>
         <priority>0.9</priority>
     </url>
 
     <url>
-        <loc>https://thedigitalheir.com/about</loc>
+        <loc>https://thedigitalheir.com/es/guia</loc>
+        <xhtml:link rel="alternate" hreflang="en" href="https://thedigitalheir.com/en/onboarding"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://thedigitalheir.com/es/guia"/>
+        <xhtml:link rel="alternate" hreflang="ru" href="https://thedigitalheir.com/ru/instruktsiya"/>
+        <xhtml:link rel="alternate" hreflang="x-default" href="https://thedigitalheir.com/en/onboarding"/>
+        <changefreq>monthly</changefreq>
+        <priority>0.9</priority>
+    </url>
+
+    <url>
+        <loc>https://thedigitalheir.com/ru/instruktsiya</loc>
+        <xhtml:link rel="alternate" hreflang="en" href="https://thedigitalheir.com/en/onboarding"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://thedigitalheir.com/es/guia"/>
+        <xhtml:link rel="alternate" hreflang="ru" href="https://thedigitalheir.com/ru/instruktsiya"/>
+        <xhtml:link rel="alternate" hreflang="x-default" href="https://thedigitalheir.com/en/onboarding"/>
+        <changefreq>monthly</changefreq>
+        <priority>0.9</priority>
+    </url>
+
+    <url>
+        <loc>https://thedigitalheir.com/en/about</loc>
+        <xhtml:link rel="alternate" hreflang="en" href="https://thedigitalheir.com/en/about"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://thedigitalheir.com/es/sobre-el-servicio"/>
+        <xhtml:link rel="alternate" hreflang="ru" href="https://thedigitalheir.com/ru/o-servise"/>
+        <xhtml:link rel="alternate" hreflang="x-default" href="https://thedigitalheir.com/en/about"/>
         <changefreq>monthly</changefreq>
         <priority>0.8</priority>
     </url>
 
     <url>
-        <loc>https://thedigitalheir.com/contact_us</loc>
+        <loc>https://thedigitalheir.com/es/sobre-el-servicio</loc>
+        <xhtml:link rel="alternate" hreflang="en" href="https://thedigitalheir.com/en/about"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://thedigitalheir.com/es/sobre-el-servicio"/>
+        <xhtml:link rel="alternate" hreflang="ru" href="https://thedigitalheir.com/ru/o-servise"/>
+        <xhtml:link rel="alternate" hreflang="x-default" href="https://thedigitalheir.com/en/about"/>
+        <changefreq>monthly</changefreq>
+        <priority>0.8</priority>
+    </url>
+
+    <url>
+        <loc>https://thedigitalheir.com/ru/o-servise</loc>
+        <xhtml:link rel="alternate" hreflang="en" href="https://thedigitalheir.com/en/about"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://thedigitalheir.com/es/sobre-el-servicio"/>
+        <xhtml:link rel="alternate" hreflang="ru" href="https://thedigitalheir.com/ru/o-servise"/>
+        <xhtml:link rel="alternate" hreflang="x-default" href="https://thedigitalheir.com/en/about"/>
+        <changefreq>monthly</changefreq>
+        <priority>0.8</priority>
+    </url>
+
+    <url>
+        <loc>https://thedigitalheir.com/en/contact</loc>
+        <xhtml:link rel="alternate" hreflang="en" href="https://thedigitalheir.com/en/contact"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://thedigitalheir.com/es/contacto"/>
+        <xhtml:link rel="alternate" hreflang="ru" href="https://thedigitalheir.com/ru/kontakty"/>
+        <xhtml:link rel="alternate" hreflang="x-default" href="https://thedigitalheir.com/en/contact"/>
+        <changefreq>monthly</changefreq>
+        <priority>0.6</priority>
+    </url>
+
+    <url>
+        <loc>https://thedigitalheir.com/es/contacto</loc>
+        <xhtml:link rel="alternate" hreflang="en" href="https://thedigitalheir.com/en/contact"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://thedigitalheir.com/es/contacto"/>
+        <xhtml:link rel="alternate" hreflang="ru" href="https://thedigitalheir.com/ru/kontakty"/>
+        <xhtml:link rel="alternate" hreflang="x-default" href="https://thedigitalheir.com/en/contact"/>
+        <changefreq>monthly</changefreq>
+        <priority>0.6</priority>
+    </url>
+
+    <url>
+        <loc>https://thedigitalheir.com/ru/kontakty</loc>
+        <xhtml:link rel="alternate" hreflang="en" href="https://thedigitalheir.com/en/contact"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://thedigitalheir.com/es/contacto"/>
+        <xhtml:link rel="alternate" hreflang="ru" href="https://thedigitalheir.com/ru/kontakty"/>
+        <xhtml:link rel="alternate" hreflang="x-default" href="https://thedigitalheir.com/en/contact"/>
         <changefreq>monthly</changefreq>
         <priority>0.6</priority>
     </url>
@@ -33,19 +106,91 @@
     </url>
 
     <url>
-        <loc>https://thedigitalheir.com/terms</loc>
+        <loc>https://thedigitalheir.com/en/terms</loc>
+        <xhtml:link rel="alternate" hreflang="en" href="https://thedigitalheir.com/en/terms"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://thedigitalheir.com/es/terminos"/>
+        <xhtml:link rel="alternate" hreflang="ru" href="https://thedigitalheir.com/ru/usloviya"/>
+        <xhtml:link rel="alternate" hreflang="x-default" href="https://thedigitalheir.com/en/terms"/>
         <changefreq>yearly</changefreq>
         <priority>0.3</priority>
     </url>
 
     <url>
-        <loc>https://thedigitalheir.com/privacy</loc>
+        <loc>https://thedigitalheir.com/es/terminos</loc>
+        <xhtml:link rel="alternate" hreflang="en" href="https://thedigitalheir.com/en/terms"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://thedigitalheir.com/es/terminos"/>
+        <xhtml:link rel="alternate" hreflang="ru" href="https://thedigitalheir.com/ru/usloviya"/>
+        <xhtml:link rel="alternate" hreflang="x-default" href="https://thedigitalheir.com/en/terms"/>
         <changefreq>yearly</changefreq>
         <priority>0.3</priority>
     </url>
 
     <url>
-        <loc>https://thedigitalheir.com/refund</loc>
+        <loc>https://thedigitalheir.com/ru/usloviya</loc>
+        <xhtml:link rel="alternate" hreflang="en" href="https://thedigitalheir.com/en/terms"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://thedigitalheir.com/es/terminos"/>
+        <xhtml:link rel="alternate" hreflang="ru" href="https://thedigitalheir.com/ru/usloviya"/>
+        <xhtml:link rel="alternate" hreflang="x-default" href="https://thedigitalheir.com/en/terms"/>
+        <changefreq>yearly</changefreq>
+        <priority>0.3</priority>
+    </url>
+
+    <url>
+        <loc>https://thedigitalheir.com/en/privacy</loc>
+        <xhtml:link rel="alternate" hreflang="en" href="https://thedigitalheir.com/en/privacy"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://thedigitalheir.com/es/privacidad"/>
+        <xhtml:link rel="alternate" hreflang="ru" href="https://thedigitalheir.com/ru/politika-konfidentsialnosti"/>
+        <xhtml:link rel="alternate" hreflang="x-default" href="https://thedigitalheir.com/en/privacy"/>
+        <changefreq>yearly</changefreq>
+        <priority>0.3</priority>
+    </url>
+
+    <url>
+        <loc>https://thedigitalheir.com/es/privacidad</loc>
+        <xhtml:link rel="alternate" hreflang="en" href="https://thedigitalheir.com/en/privacy"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://thedigitalheir.com/es/privacidad"/>
+        <xhtml:link rel="alternate" hreflang="ru" href="https://thedigitalheir.com/ru/politika-konfidentsialnosti"/>
+        <xhtml:link rel="alternate" hreflang="x-default" href="https://thedigitalheir.com/en/privacy"/>
+        <changefreq>yearly</changefreq>
+        <priority>0.3</priority>
+    </url>
+
+    <url>
+        <loc>https://thedigitalheir.com/ru/politika-konfidentsialnosti</loc>
+        <xhtml:link rel="alternate" hreflang="en" href="https://thedigitalheir.com/en/privacy"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://thedigitalheir.com/es/privacidad"/>
+        <xhtml:link rel="alternate" hreflang="ru" href="https://thedigitalheir.com/ru/politika-konfidentsialnosti"/>
+        <xhtml:link rel="alternate" hreflang="x-default" href="https://thedigitalheir.com/en/privacy"/>
+        <changefreq>yearly</changefreq>
+        <priority>0.3</priority>
+    </url>
+
+    <url>
+        <loc>https://thedigitalheir.com/en/refund</loc>
+        <xhtml:link rel="alternate" hreflang="en" href="https://thedigitalheir.com/en/refund"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://thedigitalheir.com/es/reembolso"/>
+        <xhtml:link rel="alternate" hreflang="ru" href="https://thedigitalheir.com/ru/vozvrat"/>
+        <xhtml:link rel="alternate" hreflang="x-default" href="https://thedigitalheir.com/en/refund"/>
+        <changefreq>yearly</changefreq>
+        <priority>0.3</priority>
+    </url>
+
+    <url>
+        <loc>https://thedigitalheir.com/es/reembolso</loc>
+        <xhtml:link rel="alternate" hreflang="en" href="https://thedigitalheir.com/en/refund"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://thedigitalheir.com/es/reembolso"/>
+        <xhtml:link rel="alternate" hreflang="ru" href="https://thedigitalheir.com/ru/vozvrat"/>
+        <xhtml:link rel="alternate" hreflang="x-default" href="https://thedigitalheir.com/en/refund"/>
+        <changefreq>yearly</changefreq>
+        <priority>0.3</priority>
+    </url>
+
+    <url>
+        <loc>https://thedigitalheir.com/ru/vozvrat</loc>
+        <xhtml:link rel="alternate" hreflang="en" href="https://thedigitalheir.com/en/refund"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://thedigitalheir.com/es/reembolso"/>
+        <xhtml:link rel="alternate" hreflang="ru" href="https://thedigitalheir.com/ru/vozvrat"/>
+        <xhtml:link rel="alternate" hreflang="x-default" href="https://thedigitalheir.com/en/refund"/>
         <changefreq>yearly</changefreq>
         <priority>0.3</priority>
     </url>

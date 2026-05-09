@@ -1,5 +1,7 @@
 User-agent: *
 Allow: /
+Allow: /llms.txt
+Allow: /llms/
 
 Disallow: /lk
 Disallow: /checkout
@@ -10,5 +12,6 @@ Disallow: /customer
 Disallow: /secret-envelope
 Disallow: /wait
 Disallow: /404
+Disallow: /change_language
 
 Sitemap: https://thedigitalheir.com/sitemap.xml
