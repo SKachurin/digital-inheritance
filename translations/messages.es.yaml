@@ -21,6 +21,7 @@ header:
   here_is_your_data: 'Aquí están tus datos'
   save_it: 'Guárdalos ahora o podrás intentar descifrarlos más tarde.'
   link_will_expire: 'El enlace a esta página expirará en una semana.'
+  blog: Blog
   contact_us: 'Contáctanos'
 
 overlay_encrypting: 'Cifrando tu sobre…'

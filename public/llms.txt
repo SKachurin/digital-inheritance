@@ -13,6 +13,13 @@ The service allows users to create an encrypted digital Envelope, add trusted he
 - Terms: https://thedigitalheir.com/en/terms
 - Privacy Policy: https://thedigitalheir.com/en/privacy
 - Refund Policy: https://thedigitalheir.com/en/refund
+- Blog: https://thedigitalheir.com/en/blog
+- Full LLM context: https://thedigitalheir.com/llms-full.txt
+
+## Blog articles
+
+- Things You Should Know About Google’s Inactive Account Manager: https://thedigitalheir.com/en/blog/things-you-should-know-about-google-inactive-account-manager
+- Things You Should Know About Apple Legacy Contact: https://thedigitalheir.com/en/blog/things-you-should-know-about-apple-legacy-contact
 
 ## Product summary
 

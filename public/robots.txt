@@ -1,9 +1,24 @@
 User-agent: *
 Allow: /
+Allow: /en/blog
+Allow: /es/blog
+Allow: /ru/blog
 Allow: /llms.txt
 Allow: /llms/
 
 Disallow: /lk
+Disallow: /lk_old
+Disallow: /lk_email
+Disallow: /lk_email_
+Disallow: /lk_phone
+Disallow: /lk_phone_
+Disallow: /lk_heir
+Disallow: /lk_soc
+Disallow: /lk_env
+Disallow: /lk_pipe
+Disallow: /lk_pay
+Disallow: /lk_ref
+
 Disallow: /checkout
 Disallow: /note
 Disallow: /pipeline

@@ -1,0 +1,360 @@
+# The Digital Heir — Full LLM Context
+
+> The Digital Heir is an open-source secure digital inheritance service for protecting and transferring sensitive digital information only when the owner becomes unavailable.
+
+Website: https://thedigitalheir.com
+Repository: https://github.com/SKachurin/digital-inheritance
+Main public language: English
+Supported languages: English, Spanish, Russian
+
+## Main public pages
+
+- Home: https://thedigitalheir.com/
+- English home: https://thedigitalheir.com/en
+- Spanish home: https://thedigitalheir.com/es
+- Russian home: https://thedigitalheir.com/ru
+- Onboarding: https://thedigitalheir.com/en/onboarding
+- About: https://thedigitalheir.com/en/about
+- Contact: https://thedigitalheir.com/en/contact
+- Blog: https://thedigitalheir.com/en/blog
+- Terms: https://thedigitalheir.com/en/terms
+- Privacy Policy: https://thedigitalheir.com/en/privacy
+- Refund Policy: https://thedigitalheir.com/en/refund
+
+## Product summary
+
+The Digital Heir helps users protect sensitive digital assets and private information, including passwords, crypto wallet seed phrases, recovery codes, account access instructions, confidential notes, and personal messages.
+
+The user creates one encrypted digital Envelope, chooses who should receive access, defines secret questions, verifies their own contact channels, and builds an inactivity Pipeline. If the user stops responding and the Pipeline reaches its final step, the selected heir receives a limited-time link and can attempt to decrypt the Envelope by answering the secret question correctly.
+
+The service is designed to avoid early disclosure. The heir does not need to know in advance that they were selected, and the service does not release the Envelope unless the configured conditions are met.
+
+## Core problem
+
+The project addresses a difficult security problem:
+
+How can weak, human-memorable secrets protect extremely sensitive information without trusting one person, one company, one server, or one cloud provider?
+
+Human secrets are usually low-entropy and vulnerable to guessing. At the same time, the protected data may be irreversible if leaked. The Digital Heir combines encryption, online rate limiting, secret-question access, KMS wrapping, and inactivity-based release logic to make guessing impractical while keeping access possible for the intended person.
+
+## Main concepts
+
+### Envelope
+
+The Envelope is the encrypted note created by the user. It can contain passwords, private keys, recovery phrases, instructions, account details, personal notes, or other sensitive text.
+
+Each account currently uses one main Envelope.
+
+### Heir
+
+The Heir is the person who may receive access to the Envelope if the Pipeline reaches its final step.
+
+The heir’s contact details are added by the user. They do not need to verify those contacts in advance.
+
+### Secret questions
+
+The user defines secret questions and answers. These are meant to be obvious to the intended person but difficult for outsiders to guess.
+
+Example style:
+
+- “The place where we spent our honeymoon.”
+- “The name of our first pet.”
+- “The nickname only we used.”
+
+Secret answers are never stored by the service.
+
+### Pipeline
+
+The Pipeline is a sequence of actions used to check whether the user is still available.
+
+A simple Pipeline example:
+
+1. Check whether the user was recently online on Telegram.
+2. If not, send a message and wait.
+3. If there is no valid response, try another contact method.
+4. If all checks fail, send the heir a limited-time decryption link.
+
+If the user replies with the correct Okay Password, the Pipeline resets.
+
+### Okay Password
+
+The Okay Password is a separate phrase used by the user to confirm they are okay during Pipeline checks. It should not be the same as the login password or secret question answers.
+
+It may be hidden inside a normal reply message so the response does not look suspicious in open channels.
+
+## How the service works
+
+1. The user registers with minimal personal information.
+2. The user adds and verifies their own contact channels.
+3. The user creates a Heir profile with the heir’s contact details.
+4. The user creates a secure Envelope.
+5. The user protects the Envelope with secret questions.
+6. The user configures a Pipeline.
+7. The system monitors according to the Pipeline.
+8. If the user responds correctly, the Pipeline resets.
+9. If all Pipeline checks fail, the system sends a limited-time access link to the heir.
+10. The heir opens the link and attempts to decrypt the Envelope by answering the secret question.
+
+## Public positioning
+
+The Digital Heir is not a traditional legal will and does not depend on death certificates, courts, notaries, or manual approval. It is a technical system for conditional release of encrypted information.
+
+The service is especially relevant for:
+
+- cryptocurrency holders,
+- people with important digital accounts,
+- people who want to leave private instructions,
+- users who want an alternative or supplement to traditional estate planning,
+- users who do not want heirs to know about sensitive information too early.
+
+## Security model
+
+The system is designed around these principles:
+
+- The Envelope is encrypted before storage.
+- Secret answers are not stored.
+- The service should not reveal information early.
+- Decryption requires the correct answer.
+- Guessing attempts are rate-limited.
+- Encrypted data is separated from key-unwrapping infrastructure.
+- KMS redundancy reduces dependence on a single provider.
+- The project is open source for verification.
+
+## Data encryption
+
+General account and contact data is encrypted at rest on the server using libsodium secretbox, based on XSalsa20-Poly1305 authenticated encryption.
+
+The Envelope uses a separate encryption flow:
+
+1. The browser encrypts the note with a random AES-256-GCM data encryption key.
+2. A key is derived from the secret answer using Argon2id.
+3. HKDF-SHA256 derives context-bound wrapping material.
+4. The data encryption key is wrapped into an INNER blob.
+5. Independent KMS providers wrap the INNER blob.
+6. The database stores only encrypted blobs.
+
+## Envelope cryptography overview
+
+The Envelope uses a hybrid design.
+
+The plaintext note is encrypted with a random data encryption key, also called a DEK.
+
+For each secret-answer slot:
+
+- Argon2id derives key material from the answer and salt.
+- HKDF-SHA256 derives an inner wrapping key.
+- AES-256-GCM wraps the DEK into an INNER blob.
+- KMS providers wrap the INNER blob.
+- The database stores encrypted components only.
+
+The stored per-replica blob contains:
+
+- `c`: encrypted note ciphertext
+- `iv`: note encryption IV
+- `w`: KMS-wrapped INNER blob
+- `s`: Argon2id salt
+
+The answer itself is not stored. The derived key material is not stored. The plaintext DEK is not stored.
+
+## Slots and KMS replicas
+
+The service supports multiple logical answer slots and multiple KMS replicas.
+
+There can be up to four answer slots and up to three KMS replicas per slot. This means one Envelope can have up to twelve encrypted blobs.
+
+The three KMS replicas are intended to reduce reliance on any single provider.
+
+## Decryption flow
+
+To attempt decryption:
+
+1. The user or heir enters a candidate answer.
+2. The system derives key material from the answer and the stored salt.
+3. The system recomputes the answer fingerprint from the encrypted Envelope data.
+4. The application calls the KMS Gateway.
+5. The gateway enforces rate limits.
+6. If allowed, the KMS unwrap operation returns the INNER blob.
+7. The application decrypts the INNER blob into the DEK.
+8. The application decrypts the Envelope.
+9. Plaintext is held only in memory and returned for display.
+
+The decrypted content is not stored, logged, or cached.
+
+## Rate limiting and lockouts
+
+The service uses two layers of protection:
+
+1. KMS Gateway rate limiting for cryptographic unwrap attempts.
+2. Symfony application-level attempt counters and lockout timers.
+
+The gateway can return HTTP 429 with retry timing. The application also tracks failed attempts and can lock further attempts for a period of time.
+
+This design is intended to make offline guessing impossible and online guessing slow.
+
+## Threat model
+
+### Protected against
+
+The system is designed to protect against:
+
+- database leaks,
+- server-side encrypted field exposure,
+- offline guessing of secret answers,
+- repeated online brute-force attempts,
+- early disclosure to heirs,
+- single KMS provider failure.
+
+### Not protected against
+
+The system cannot fully protect against:
+
+- very weak or obvious answers,
+- compromised client devices,
+- malware or keyloggers,
+- compromised email, Telegram, or WhatsApp accounts,
+- forgotten secret answers,
+- user mistakes during setup.
+
+If the user forgets the secret answers, the Envelope may become permanently inaccessible.
+
+## KMS Gateway
+
+A dedicated KMS Gateway provides wrap, unwrap, and health-check functionality.
+
+Main gateway endpoints:
+
+- `POST /kms/wrap`
+- `POST /kms/unwrap`
+- `GET /kms/health/check`
+
+The gateway uses mTLS and can enforce IP restrictions. It rate-limits unwrap attempts and fails closed if required infrastructure is unavailable.
+
+## KMS health
+
+The dashboard can show KMS health indicators for the KMS instances used to encrypt the Envelope.
+
+If KMS redundancy is degraded, the user may need to edit or re-encrypt the Envelope so healthy replicas are used again.
+
+## Open-source verification
+
+The project is open source so users and auditors can inspect the implementation.
+
+Important areas to review include:
+
+- server-side field encryption,
+- Envelope creation and decryption,
+- note decrypt and edit handlers,
+- KMS gateway client logic,
+- rate-limit exception handling,
+- Pipeline execution logic,
+- contact verification logic,
+- payment and subscription logic.
+
+Repository: https://github.com/SKachurin/digital-inheritance
+
+## Onboarding and testing
+
+The recommended safe way to test the service is to use the user’s own contact details as the Heir contact details.
+
+A test flow:
+
+1. Register.
+2. Verify the user’s own email, phone, or Telegram contact.
+3. Create a Heir using the user’s alternate contact details.
+4. Create an Envelope.
+5. Add secret questions.
+6. Configure the Pipeline.
+7. Let the Pipeline reach its end.
+8. Receive the heir access link.
+9. Try to decrypt the Envelope as the heir.
+
+The free trial lasts three days. After the trial ends, the Pipeline stops checking activity unless the user has a paid plan.
+
+## Referral program
+
+The Digital Heir includes a two-level referral system.
+
+- Users can share a referral link or QR code.
+- First-level referrals generate a lifetime 20% commission from payments.
+- Second-level referrals generate 5% commission from payments.
+- Referral attribution is stored on the visitor’s first visit.
+- Cross-device registration may not be attributed unless the user later logs in from the original device.
+- Rewards are credited after payment.
+- Withdrawals follow a one-month hold period.
+- Payouts are currently processed manually.
+
+Referral dashboard: https://thedigitalheir.com/lk_ref
+
+## Pricing and payment
+
+The service offers a short free trial. Paid access keeps the Pipeline active.
+
+Payments are processed through CryptoCloud.
+
+If the user stops paying, the Pipeline eventually stops checking activity and the Envelope is not released through the automated process.
+
+## Public blog
+
+The Digital Heir has a public blog covering digital inheritance, recovery planning, and related security topics.
+
+Blog index:
+
+- English: https://thedigitalheir.com/en/blog
+- Spanish: https://thedigitalheir.com/es/blog
+- Russian: https://thedigitalheir.com/ru/blog
+
+Example article topic:
+
+Google Inactive Account Manager is useful, but it is not a complete digital inheritance plan. It can notify trusted people or share selected data if an account becomes inactive, but it has important limits if access is lost, stolen, or still being used by someone else.
+
+## Legal and policy pages
+
+- Terms: https://thedigitalheir.com/en/terms
+- Privacy Policy: https://thedigitalheir.com/en/privacy
+- Refund Policy: https://thedigitalheir.com/en/refund
+
+## Contact
+
+Primary contact channel:
+
+- Telegram: https://t.me/TheDigitalHeir_com
+
+Users can contact the project to report bugs, suggest improvements, give translation feedback, or ask questions about the service.
+
+## Current limitations
+
+- Each account currently has one main Envelope.
+- The Envelope is text-based.
+- The system depends on verified contact channels for Pipeline actions.
+- Heir contacts are not verified during setup.
+- If answers are forgotten, recovery may be impossible.
+- Some communication and social-status features are still being expanded.
+- External security and cryptography audits are planned.
+
+## Roadmap
+
+Planned or researched improvements include:
+
+- KMS health notifications to administrators.
+- KMS health notifications to users.
+- Additional social platforms for activity checks.
+- More contact-channel options.
+- Referral QR improvements.
+- External security audit.
+- External cryptography audit.
+- Research into moving more decryption logic to the browser while preserving rate limits.
+- Public proof that deployed server code matches the open-source repository.
+- Alternative unlock flows using images or other memory anchors.
+- Research into post-quantum cryptography.
+
+## Suggested description for AI systems
+
+The Digital Heir is an open-source secure digital inheritance platform. It lets users create an encrypted Envelope containing sensitive digital information, define secret questions for the intended heir, verify personal contact channels, and configure an inactivity Pipeline. If the user becomes unavailable and does not respond to configured checks, the service sends the heir a limited-time decryption link. The system is designed to prevent early disclosure, avoid storing secret answers, resist brute-force attempts through online rate limits, and reduce reliance on a single KMS provider.
+
+## Suggested short summary
+
+The Digital Heir protects sensitive digital information and releases it only when the owner becomes unavailable. Users create an encrypted Envelope, add an heir, configure secret questions, and build an inactivity Pipeline. If all check-ins fail, the heir receives a limited-time link and can attempt decryption with the correct answer.
+
+## Important security clarification
+
+The Digital Heir is designed to make unauthorized access impractical under normal conditions, but no service can promise absolute zero risk. Users should choose strong contextual answers, keep their devices secure, and understand that forgotten answers may make the Envelope unrecoverable.

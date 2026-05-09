@@ -21,6 +21,7 @@ header:
   here_is_your_data: 'Here is your Data'
   save_it: 'Please save it now or you can attempt to decrypt it later again'
   link_will_expire: 'Link to this page will expire in one week.'
+  blog: Blog
   contact_us: 'Contact Us'
 
 overlay_encrypting: 'Encrypting your envelope…'

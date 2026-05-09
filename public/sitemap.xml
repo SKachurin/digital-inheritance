@@ -10,6 +10,35 @@
     </url>
 
     <url>
+        <loc>https://thedigitalheir.com/en</loc>
+        <xhtml:link rel="alternate" hreflang="en" href="https://thedigitalheir.com/en"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://thedigitalheir.com/es"/>
+        <xhtml:link rel="alternate" hreflang="ru" href="https://thedigitalheir.com/ru"/>
+        <xhtml:link rel="alternate" hreflang="x-default" href="https://thedigitalheir.com/"/>
+        <changefreq>weekly</changefreq>
+        <priority>0.8</priority>
+    </url>
+
+    <url>
+        <loc>https://thedigitalheir.com/es</loc>
+        <xhtml:link rel="alternate" hreflang="en" href="https://thedigitalheir.com/en"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://thedigitalheir.com/es"/>
+        <xhtml:link rel="alternate" hreflang="ru" href="https://thedigitalheir.com/ru"/>
+        <xhtml:link rel="alternate" hreflang="x-default" href="https://thedigitalheir.com/"/>
+        <changefreq>weekly</changefreq>
+        <priority>0.8</priority>
+    </url>
+
+    <url>
+        <loc>https://thedigitalheir.com/ru</loc>
+        <xhtml:link rel="alternate" hreflang="en" href="https://thedigitalheir.com/en"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://thedigitalheir.com/es"/>
+        <xhtml:link rel="alternate" hreflang="ru" href="https://thedigitalheir.com/ru"/>
+        <xhtml:link rel="alternate" hreflang="x-default" href="https://thedigitalheir.com/"/>
+        <changefreq>weekly</changefreq>
+        <priority>0.8</priority>
+    </url>
+    <url>
         <loc>https://thedigitalheir.com/en/onboarding</loc>
         <xhtml:link rel="alternate" hreflang="en" href="https://thedigitalheir.com/en/onboarding"/>
         <xhtml:link rel="alternate" hreflang="es" href="https://thedigitalheir.com/es/guia"/>
@@ -194,5 +223,96 @@
         <changefreq>yearly</changefreq>
         <priority>0.3</priority>
     </url>
+
+    <url>
+        <loc>https://thedigitalheir.com/en/blog</loc>
+        <xhtml:link rel="alternate" hreflang="en" href="https://thedigitalheir.com/en/blog"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://thedigitalheir.com/es/blog"/>
+        <xhtml:link rel="alternate" hreflang="ru" href="https://thedigitalheir.com/ru/blog"/>
+        <xhtml:link rel="alternate" hreflang="x-default" href="https://thedigitalheir.com/en/blog"/>
+        <changefreq>weekly</changefreq>
+        <priority>0.7</priority>
+    </url>
+
+    <url>
+        <loc>https://thedigitalheir.com/es/blog</loc>
+        <xhtml:link rel="alternate" hreflang="en" href="https://thedigitalheir.com/en/blog"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://thedigitalheir.com/es/blog"/>
+        <xhtml:link rel="alternate" hreflang="ru" href="https://thedigitalheir.com/ru/blog"/>
+        <xhtml:link rel="alternate" hreflang="x-default" href="https://thedigitalheir.com/en/blog"/>
+        <changefreq>weekly</changefreq>
+        <priority>0.7</priority>
+    </url>
+
+    <url>
+        <loc>https://thedigitalheir.com/ru/blog</loc>
+        <xhtml:link rel="alternate" hreflang="en" href="https://thedigitalheir.com/en/blog"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://thedigitalheir.com/es/blog"/>
+        <xhtml:link rel="alternate" hreflang="ru" href="https://thedigitalheir.com/ru/blog"/>
+        <xhtml:link rel="alternate" hreflang="x-default" href="https://thedigitalheir.com/en/blog"/>
+        <changefreq>weekly</changefreq>
+        <priority>0.7</priority>
+    </url>
+
+    <url>
+        <loc>https://thedigitalheir.com/en/blog/things-you-should-know-about-google-inactive-account-manager</loc>
+        <xhtml:link rel="alternate" hreflang="en" href="https://thedigitalheir.com/en/blog/things-you-should-know-about-google-inactive-account-manager"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://thedigitalheir.com/es/blog/cosas-que-debes-saber-sobre-el-administrador-de-cuentas-inactivas-de-google"/>
+        <xhtml:link rel="alternate" hreflang="ru" href="https://thedigitalheir.com/ru/blog/chto-nuzhno-znat-o-menedzhere-neaktivnyh-akkauntov-google"/>
+        <xhtml:link rel="alternate" hreflang="x-default" href="https://thedigitalheir.com/en/blog/things-you-should-know-about-google-inactive-account-manager"/>
+        <changefreq>monthly</changefreq>
+        <priority>0.6</priority>
+    </url>
+
+    <url>
+        <loc>https://thedigitalheir.com/es/blog/cosas-que-debes-saber-sobre-el-administrador-de-cuentas-inactivas-de-google</loc>
+        <xhtml:link rel="alternate" hreflang="en" href="https://thedigitalheir.com/en/blog/things-you-should-know-about-google-inactive-account-manager"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://thedigitalheir.com/es/blog/cosas-que-debes-saber-sobre-el-administrador-de-cuentas-inactivas-de-google"/>
+        <xhtml:link rel="alternate" hreflang="ru" href="https://thedigitalheir.com/ru/blog/chto-nuzhno-znat-o-menedzhere-neaktivnyh-akkauntov-google"/>
+        <xhtml:link rel="alternate" hreflang="x-default" href="https://thedigitalheir.com/en/blog/things-you-should-know-about-google-inactive-account-manager"/>
+        <changefreq>monthly</changefreq>
+        <priority>0.6</priority>
+    </url>
+
+    <url>
+        <loc>https://thedigitalheir.com/ru/blog/chto-nuzhno-znat-o-menedzhere-neaktivnyh-akkauntov-google</loc>
+        <xhtml:link rel="alternate" hreflang="en" href="https://thedigitalheir.com/en/blog/things-you-should-know-about-google-inactive-account-manager"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://thedigitalheir.com/es/blog/cosas-que-debes-saber-sobre-el-administrador-de-cuentas-inactivas-de-google"/>
+        <xhtml:link rel="alternate" hreflang="ru" href="https://thedigitalheir.com/ru/blog/chto-nuzhno-znat-o-menedzhere-neaktivnyh-akkauntov-google"/>
+        <xhtml:link rel="alternate" hreflang="x-default" href="https://thedigitalheir.com/en/blog/things-you-should-know-about-google-inactive-account-manager"/>
+        <changefreq>monthly</changefreq>
+        <priority>0.6</priority>
+    </url>
+
+    <url>
+        <loc>https://thedigitalheir.com/en/blog/things-you-should-know-about-apple-legacy-contact</loc>
+        <xhtml:link rel="alternate" hreflang="en" href="https://thedigitalheir.com/en/blog/things-you-should-know-about-apple-legacy-contact"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://thedigitalheir.com/es/blog/cosas-que-debes-saber-sobre-apple-legacy-contact"/>
+        <xhtml:link rel="alternate" hreflang="ru" href="https://thedigitalheir.com/ru/blog/chto-nuzhno-znat-ob-apple-legacy-contact"/>
+        <xhtml:link rel="alternate" hreflang="x-default" href="https://thedigitalheir.com/en/blog/things-you-should-know-about-apple-legacy-contact"/>
+        <changefreq>yearly</changefreq>
+        <priority>0.6</priority>
+    </url>
+
+    <url>
+        <loc>https://thedigitalheir.com/es/blog/cosas-que-debes-saber-sobre-apple-legacy-contact</loc>
+        <xhtml:link rel="alternate" hreflang="en" href="https://thedigitalheir.com/en/blog/things-you-should-know-about-apple-legacy-contact"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://thedigitalheir.com/es/blog/cosas-que-debes-saber-sobre-apple-legacy-contact"/>
+        <xhtml:link rel="alternate" hreflang="ru" href="https://thedigitalheir.com/ru/blog/chto-nuzhno-znat-ob-apple-legacy-contact"/>
+        <xhtml:link rel="alternate" hreflang="x-default" href="https://thedigitalheir.com/en/blog/things-you-should-know-about-apple-legacy-contact"/>
+        <changefreq>yearly</changefreq>
+        <priority>0.6</priority>
+    </url>
+
+    <url>
+        <loc>https://thedigitalheir.com/ru/blog/chto-nuzhno-znat-ob-apple-legacy-contact</loc>
+        <xhtml:link rel="alternate" hreflang="en" href="https://thedigitalheir.com/en/blog/things-you-should-know-about-apple-legacy-contact"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://thedigitalheir.com/es/blog/cosas-que-debes-saber-sobre-apple-legacy-contact"/>
+        <xhtml:link rel="alternate" hreflang="ru" href="https://thedigitalheir.com/ru/blog/chto-nuzhno-znat-ob-apple-legacy-contact"/>
+        <xhtml:link rel="alternate" hreflang="x-default" href="https://thedigitalheir.com/en/blog/things-you-should-know-about-apple-legacy-contact"/>
+        <changefreq>yearly</changefreq>
+        <priority>0.6</priority>
+    </url>
+
 
 </urlset>

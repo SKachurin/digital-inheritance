@@ -26,9 +26,17 @@
 
     {% set currentLocale = app.request.locale in ['en', 'es', 'ru'] ? app.request.locale : 'en' %}
 
+    {% set homePath = path('localized_home', {
+        _locale: currentLocale
+    }) %}
+
     {% set aboutPath = path('localized_static_page', {
         _locale: currentLocale,
         slug: 'slug.about'|trans({}, 'routes', currentLocale)
+    }) %}
+
+    {% set blogPath = path('blog_index', {
+        _locale: currentLocale
     }) %}
 
     {% set contactUsPath = path('localized_static_page', {
@@ -95,7 +103,7 @@
             <div class="container-fluid d-flex align-items-center justify-content-center justify-content-md-between">
 
                 <!-- LOGO & TITLE -->
-                <a href="{{ path('home') }}" id="logo" class="d-flex align-items-center text-dark text-decoration-none">
+                <a href="{{ homePath }}" id="logo" class="d-flex align-items-center text-dark text-decoration-none">
 
                 <img src="{{ '/build/logo-TheDigitalHeir-192x192.png' }}" alt="Logo" width="60" height="60" class="me-2">
                     <div class="d-flex flex-column">
@@ -121,6 +129,7 @@
                             <li class="nav-item"><a href="{{ path('user_registration') }}" class="nav-link"><b>{{ 'header.registration'|trans }}</b></a></li>
                         {% endif %}
                         <li class="nav-item"><a href="{{ aboutPath }}" class="nav-link"><b>{{ 'header.about'|trans }}</b></a></li>
+                        <li class="nav-item"><a href="{{ blogPath }}" class="nav-link"><b>{{ 'header.blog'|trans }}</b></a></li>
                         <li class="nav-item"><a href="{{ contactUsPath }}" class="nav-link"><b>{{ 'header.contact_us'|trans }}</b></a></li>
 
                         <!-- LANGUAGE SELECTOR -->
@@ -156,7 +165,7 @@
             </div>
         </header>
 
-        {% if app.request.attributes.get('_route') != 'home' %}
+        {% if app.request.attributes.get('_route') not in ['home', 'localized_home'] %}
             <!-- ALERT (Mobile Only) -->
             <div class="alert-container header-mobile text-center">
                 <div class="alert alert-info text-center d-lg-none">

@@ -6,20 +6,17 @@ use App\Entity\Customer;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Cookie;
-use Symfony\Component\HttpFoundation\RedirectResponse;
-use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\RouterInterface;
+use Symfony\Component\HttpFoundation\RequestStack;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 class LangController extends AbstractController
 {
     private const LANGUAGE_COOKIE = 'preferred_language';
     private const COOKIE_DURATION = '+1 year';
-
     private const AVAILABLE_LANGUAGES = ['en', 'ru', 'es'];
 
-    private const STATIC_PAGE_KEYS = [
+    private const STATIC_PAGES = [
         'about',
         'contact_us',
         'onboarding',
@@ -32,7 +29,6 @@ class LangController extends AbstractController
     public function __construct(
         private RequestStack $requestStack,
         private EntityManagerInterface $entityManager,
-        private RouterInterface $router,
         private TranslatorInterface $translator,
     ) {
     }
@@ -43,13 +39,47 @@ class LangController extends AbstractController
             $lang = 'en';
         }
 
-        $response = $this->createRedirectResponse($lang);
+        $request = $this->requestStack->getCurrentRequest();
+        $route = $request?->attributes->get('_route');
+
+        $redirectUrl = $this->generateUrl('localized_home', [
+            '_locale' => $lang,
+        ]);
+
+        if ($request) {
+            if ($route === 'localized_home' || $route === 'home') {
+                $redirectUrl = $this->generateUrl('localized_home', [
+                    '_locale' => $lang,
+                ]);
+            }
+
+            if ($route === 'localized_static_page') {
+                $currentLocale = $request->attributes->get('_locale', 'en');
+                $currentSlug = $request->attributes->get('slug');
+
+                $pageKey = $this->resolvePageKeyFromSlug($currentSlug, $currentLocale);
+
+                if ($pageKey !== null) {
+                    $redirectUrl = $this->generateUrl('localized_static_page', [
+                        '_locale' => $lang,
+                        'slug' => $this->translator->trans(
+                            'slug.' . $pageKey,
+                            [],
+                            'routes',
+                            $lang
+                        ),
+                    ]);
+                }
+            }
+        }
+
+        $response = $this->redirect($redirectUrl);
 
         $cookie = Cookie::create(self::LANGUAGE_COOKIE)
             ->withValue($lang)
             ->withExpires(new \DateTime(self::COOKIE_DURATION))
             ->withPath('/')
-            ->withSecure(false) // keep false for localhost; change to true on HTTPS production if needed
+            ->withSecure(true)
             ->withHttpOnly(true)
             ->withSameSite('lax');
 
@@ -65,67 +95,13 @@ class LangController extends AbstractController
         return $response;
     }
 
-    private function createRedirectResponse(string $targetLang): RedirectResponse
+    private function resolvePageKeyFromSlug(?string $slug, string $locale): ?string
     {
-        $request = $this->requestStack->getCurrentRequest();
-
-        if ($request === null) {
-            return $this->redirectToRoute('home');
+        if (!$slug) {
+            return null;
         }
 
-        $referer = $request->headers->get('referer');
-
-        if (!$referer) {
-            return $this->redirectToRoute('home');
-        }
-
-        $refererPath = parse_url($referer, PHP_URL_PATH);
-
-        if (!is_string($refererPath) || $refererPath === '') {
-            return $this->redirectToRoute('home');
-        }
-
-        try {
-            $matchedRoute = $this->router->match($refererPath);
-        } catch (\Throwable) {
-            return $this->redirect($referer);
-        }
-
-        $routeName = $matchedRoute['_route'] ?? null;
-
-        if ($routeName !== 'localized_static_page') {
-            return $this->redirect($referer);
-        }
-
-        $currentLocale = $matchedRoute['_locale'] ?? null;
-        $currentSlug = $matchedRoute['slug'] ?? null;
-
-        if (!is_string($currentLocale) || !is_string($currentSlug)) {
-            return $this->redirect($referer);
-        }
-
-        $pageKey = $this->resolvePageKeyBySlug($currentSlug, $currentLocale);
-
-        if ($pageKey === null) {
-            return $this->redirect($referer);
-        }
-
-        $targetSlug = $this->translator->trans(
-            'slug.' . $pageKey,
-            [],
-            'routes',
-            $targetLang
-        );
-
-        return $this->redirectToRoute('localized_static_page', [
-            '_locale' => $targetLang,
-            'slug' => $targetSlug,
-        ]);
-    }
-
-    private function resolvePageKeyBySlug(string $slug, string $locale): ?string
-    {
-        foreach (self::STATIC_PAGE_KEYS as $pageKey) {
+        foreach (self::STATIC_PAGES as $pageKey) {
             $translatedSlug = $this->translator->trans(
                 'slug.' . $pageKey,
                 [],

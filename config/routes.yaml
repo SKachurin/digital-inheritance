@@ -149,10 +149,17 @@ beneficiary_delete:
 
 
 home:
-    path:       /
+    path: /
+    controller: App\Controller\LocalizedHomeController::redirectToPreferredLocale
+
+localized_home:
+    path: /{_locale}
     controller: Symfony\Bundle\FrameworkBundle\Controller\TemplateController
     defaults:
-        template:  'home_new.html.twig'
+        template: 'home_new.html.twig'
+    requirements:
+        _locale: en|es|ru
+
 
 localized_static_page:
     path: /{_locale}/{slug}
