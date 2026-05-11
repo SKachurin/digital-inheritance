@@ -314,5 +314,34 @@
         <priority>0.6</priority>
     </url>
 
+    <url>
+        <loc>https://thedigitalheir.com/en/blog/why-your-crypto-wealth-may-never-reach-the-next-generation</loc>
+        <xhtml:link rel="alternate" hreflang="en" href="https://thedigitalheir.com/en/blog/why-your-crypto-wealth-may-never-reach-the-next-generation"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://thedigitalheir.com/es/blog/por-que-tu-patrimonio-en-criptomonedas-puede-no-llegar-a-la-siguiente-generacion"/>
+        <xhtml:link rel="alternate" hreflang="ru" href="https://thedigitalheir.com/ru/blog/pochemu-vashe-kriptosostoyanie-mozhet-ne-dostatsya-sleduyushchemu-pokoleniyu"/>
+        <xhtml:link rel="alternate" hreflang="x-default" href="https://thedigitalheir.com/en/blog/why-your-crypto-wealth-may-never-reach-the-next-generation"/>
+        <changefreq>monthly</changefreq>
+        <priority>0.6</priority>
+    </url>
+
+    <url>
+        <loc>https://thedigitalheir.com/es/blog/por-que-tu-patrimonio-en-criptomonedas-puede-no-llegar-a-la-siguiente-generacion</loc>
+        <xhtml:link rel="alternate" hreflang="en" href="https://thedigitalheir.com/en/blog/why-your-crypto-wealth-may-never-reach-the-next-generation"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://thedigitalheir.com/es/blog/por-que-tu-patrimonio-en-criptomonedas-puede-no-llegar-a-la-siguiente-generacion"/>
+        <xhtml:link rel="alternate" hreflang="ru" href="https://thedigitalheir.com/ru/blog/pochemu-vashe-kriptosostoyanie-mozhet-ne-dostatsya-sleduyushchemu-pokoleniyu"/>
+        <xhtml:link rel="alternate" hreflang="x-default" href="https://thedigitalheir.com/en/blog/why-your-crypto-wealth-may-never-reach-the-next-generation"/>
+        <changefreq>monthly</changefreq>
+        <priority>0.6</priority>
+    </url>
+
+    <url>
+        <loc>https://thedigitalheir.com/ru/blog/pochemu-vashe-kriptosostoyanie-mozhet-ne-dostatsya-sleduyushchemu-pokoleniyu</loc>
+        <xhtml:link rel="alternate" hreflang="en" href="https://thedigitalheir.com/en/blog/why-your-crypto-wealth-may-never-reach-the-next-generation"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://thedigitalheir.com/es/blog/por-que-tu-patrimonio-en-criptomonedas-puede-no-llegar-a-la-siguiente-generacion"/>
+        <xhtml:link rel="alternate" hreflang="ru" href="https://thedigitalheir.com/ru/blog/pochemu-vashe-kriptosostoyanie-mozhet-ne-dostatsya-sleduyushchemu-pokoleniyu"/>
+        <xhtml:link rel="alternate" hreflang="x-default" href="https://thedigitalheir.com/en/blog/why-your-crypto-wealth-may-never-reach-the-next-generation"/>
+        <changefreq>monthly</changefreq>
+        <priority>0.6</priority>
+    </url>
 
 </urlset>

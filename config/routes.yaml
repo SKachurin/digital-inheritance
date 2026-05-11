@@ -147,7 +147,7 @@ beneficiary_delete:
     path: /beneficiary/{beneficiaryId}/delete
     controller: App\Controller\Beneficiary\BeneficiaryDeleteController::delete
 
-
+#STATIC FILES
 home:
     path: /
     controller: App\Controller\LocalizedHomeController::redirectToPreferredLocale
@@ -160,54 +160,59 @@ localized_home:
     requirements:
         _locale: en|es|ru
 
-
 localized_static_page:
     path: /{_locale}/{slug}
     controller: App\Controller\LocalizedPageRedirectController::show
     requirements:
         _locale: en|es|ru
 
+about_redirect:
+    path: /about
+    controller: App\Controller\LocalizedPageRedirectController::redirectOldStaticPage
+    defaults:
+        pageKey: about
+
+onboarding_redirect:
+    path: /onboarding
+    controller: App\Controller\LocalizedPageRedirectController::redirectOldStaticPage
+    defaults:
+        pageKey: onboarding
+
+contact_us_redirect:
+    path: /contact_us
+    controller: App\Controller\LocalizedPageRedirectController::redirectOldStaticPage
+    defaults:
+        pageKey: contact_us
+
+terms_redirect:
+    path: /terms
+    controller: App\Controller\LocalizedPageRedirectController::redirectOldStaticPage
+    defaults:
+        pageKey: terms
+
+privacy_redirect:
+    path: /privacy
+    controller: App\Controller\LocalizedPageRedirectController::redirectOldStaticPage
+    defaults:
+        pageKey: privacy
+
+refund_redirect:
+    path: /refund
+    controller: App\Controller\LocalizedPageRedirectController::redirectOldStaticPage
+    defaults:
+        pageKey: refund
+
+wait_redirect:
+    path: /wait
+    controller: App\Controller\LocalizedPageRedirectController::redirectOldStaticPage
+    defaults:
+        pageKey: wait
+
 404:
-    path:       /404
-    controller: Symfony\Bundle\FrameworkBundle\Controller\TemplateController
+    path: /404
+    controller: App\Controller\LocalizedPageRedirectController::redirectOldStaticPage
     defaults:
-        template:  '404.html.twig'
-
-wait:
-    path:       /wait
-    controller: Symfony\Bundle\FrameworkBundle\Controller\TemplateController
-    defaults:
-        template:  'wait.html.twig'
-
-onboarding:
-    path:       /onboarding
-    controller: Symfony\Bundle\FrameworkBundle\Controller\TemplateController
-    defaults:
-        template:  'onboarding.html.twig'
-
-contact_us:
-    path:       /contact_us
-    controller: Symfony\Bundle\FrameworkBundle\Controller\TemplateController
-    defaults:
-        template:  'contactUs.html.twig'
-
-terms:
-    path:       /terms
-    controller: Symfony\Bundle\FrameworkBundle\Controller\TemplateController
-    defaults:
-        template:  'legal/terms.html.twig'
-
-privacy:
-    path:       /privacy
-    controller: Symfony\Bundle\FrameworkBundle\Controller\TemplateController
-    defaults:
-        template:  'legal/privacy.html.twig'
-
-refund:
-    path:       /refund
-    controller: Symfony\Bundle\FrameworkBundle\Controller\TemplateController
-    defaults:
-        template:  'legal/refund.html.twig'
+        pageKey: 404
 
 successful_payment:
     path: /successful-payment

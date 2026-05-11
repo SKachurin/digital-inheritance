@@ -3,11 +3,15 @@
 namespace App\Controller\Customer;
 
 use App\Entity\Customer;
+use App\Service\Blog\MarkdownBlogPostProvider;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Cookie;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\RequestStack;
+use Symfony\Component\Routing\RouterInterface;
+use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Contracts\Translation\TranslatorInterface;
 
 class LangController extends AbstractController
@@ -30,6 +34,8 @@ class LangController extends AbstractController
         private RequestStack $requestStack,
         private EntityManagerInterface $entityManager,
         private TranslatorInterface $translator,
+        private RouterInterface $router,
+        private MarkdownBlogPostProvider $blogPostProvider,
     ) {
     }
 
@@ -40,36 +46,77 @@ class LangController extends AbstractController
         }
 
         $request = $this->requestStack->getCurrentRequest();
-        $route = $request?->attributes->get('_route');
 
         $redirectUrl = $this->generateUrl('localized_home', [
             '_locale' => $lang,
         ]);
 
-        if ($request) {
-            if ($route === 'localized_home' || $route === 'home') {
-                $redirectUrl = $this->generateUrl('localized_home', [
-                    '_locale' => $lang,
-                ]);
-            }
+        $referer = $request?->headers->get('referer');
 
-            if ($route === 'localized_static_page') {
-                $currentLocale = $request->attributes->get('_locale', 'en');
-                $currentSlug = $request->attributes->get('slug');
+        if ($referer) {
+            $path = parse_url($referer, PHP_URL_PATH) ?: '/';
 
-                $pageKey = $this->resolvePageKeyFromSlug($currentSlug, $currentLocale);
+            try {
+                $matched = $this->router->match($path);
+                $route = $matched['_route'] ?? null;
 
-                if ($pageKey !== null) {
-                    $redirectUrl = $this->generateUrl('localized_static_page', [
+                if ($route === 'home' || $route === 'localized_home') {
+                    $redirectUrl = $this->generateUrl('localized_home', [
                         '_locale' => $lang,
-                        'slug' => $this->translator->trans(
-                            'slug.' . $pageKey,
-                            [],
-                            'routes',
-                            $lang
-                        ),
                     ]);
                 }
+
+                if ($route === 'localized_static_page') {
+                    $currentLocale = $matched['_locale'] ?? 'en';
+                    $currentSlug = $matched['slug'] ?? null;
+
+                    $pageKey = $this->resolvePageKeyFromSlug($currentSlug, $currentLocale);
+
+                    if ($pageKey !== null) {
+                        $redirectUrl = $this->generateUrl('localized_static_page', [
+                            '_locale' => $lang,
+                            'slug' => $this->translator->trans(
+                                'slug.' . $pageKey,
+                                [],
+                                'routes',
+                                $lang
+                            ),
+                        ]);
+                    }
+                }
+
+                if ($route === 'blog_index') {
+                    $redirectUrl = $this->generateUrl('blog_index', [
+                        '_locale' => $lang,
+                    ]);
+                }
+
+                if ($route === 'blog_article') {
+                    $currentLocale = $matched['_locale'] ?? 'en';
+                    $currentSlug = $matched['slug'] ?? null;
+
+                    $currentPost = $this->blogPostProvider->findPublishedPostBySlug(
+                        $currentLocale,
+                        $currentSlug
+                    );
+
+                    if ($currentPost !== null) {
+                        $translations = $this->blogPostProvider->getTranslations($currentPost);
+
+                        if (isset($translations[$lang])) {
+                            $redirectUrl = $this->generateUrl('blog_article', [
+                                '_locale' => $lang,
+                                'slug' => $translations[$lang]->slug,
+                            ]);
+                        } else {
+                            $redirectUrl = $this->generateUrl('blog_index', [
+                                '_locale' => $lang,
+                            ]);
+                        }
+                    }
+                }
+            } catch (ResourceNotFoundException) {
+                // Keep fallback to localized home.
             }
         }
 
