@@ -80,7 +80,7 @@
         <div class="container blog-article-container">
 
             <article class="blog-article-card">
-                <header class="blog-article-header">
+                <div class="blog-article-header">
                     <a class="blog-back-link" href="{{ path('blog_index', {'_locale': locale}) }}">
                         ← Blog
                     </a>
@@ -111,7 +111,7 @@
                     <p class="blog-article-lead">
                         {{ article.description }}
                     </p>
-                </header>
+                </div>
 
                 {% if article.image %}
                     <figure class="blog-article-image blog-article-image-top">
@@ -367,7 +367,7 @@
 
         @media (max-width: 991px) {
             .blog-article-page {
-                padding-top: 18rem;
+                padding-top: 8rem;
             }
 
             .blog-article-container {
