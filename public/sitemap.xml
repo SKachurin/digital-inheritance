@@ -344,4 +344,34 @@
         <priority>0.6</priority>
     </url>
 
+    <url>
+        <loc>https://thedigitalheir.com/en/blog/why-self-custody-without-inheritance-planning-is-incomplete-security</loc>
+        <xhtml:link rel="alternate" hreflang="en" href="https://thedigitalheir.com/en/blog/why-self-custody-without-inheritance-planning-is-incomplete-security"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://thedigitalheir.com/es/blog/por-que-la-autocustodia-sin-planificacion-hereditaria-es-una-seguridad-incompleta"/>
+        <xhtml:link rel="alternate" hreflang="ru" href="https://thedigitalheir.com/ru/blog/pochemu-self-custody-bez-plana-nasledovaniya-eto-nepolnaya-bezopasnost"/>
+        <xhtml:link rel="alternate" hreflang="x-default" href="https://thedigitalheir.com/en/blog/why-self-custody-without-inheritance-planning-is-incomplete-security"/>
+        <changefreq>monthly</changefreq>
+        <priority>0.6</priority>
+    </url>
+
+    <url>
+        <loc>https://thedigitalheir.com/es/blog/por-que-la-autocustodia-sin-planificacion-hereditaria-es-una-seguridad-incompleta</loc>
+        <xhtml:link rel="alternate" hreflang="en" href="https://thedigitalheir.com/en/blog/why-self-custody-without-inheritance-planning-is-incomplete-security"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://thedigitalheir.com/es/blog/por-que-la-autocustodia-sin-planificacion-hereditaria-es-una-seguridad-incompleta"/>
+        <xhtml:link rel="alternate" hreflang="ru" href="https://thedigitalheir.com/ru/blog/pochemu-self-custody-bez-plana-nasledovaniya-eto-nepolnaya-bezopasnost"/>
+        <xhtml:link rel="alternate" hreflang="x-default" href="https://thedigitalheir.com/en/blog/why-self-custody-without-inheritance-planning-is-incomplete-security"/>
+        <changefreq>monthly</changefreq>
+        <priority>0.6</priority>
+    </url>
+
+    <url>
+        <loc>https://thedigitalheir.com/ru/blog/pochemu-self-custody-bez-plana-nasledovaniya-eto-nepolnaya-bezopasnost</loc>
+        <xhtml:link rel="alternate" hreflang="en" href="https://thedigitalheir.com/en/blog/why-self-custody-without-inheritance-planning-is-incomplete-security"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://thedigitalheir.com/es/blog/por-que-la-autocustodia-sin-planificacion-hereditaria-es-una-seguridad-incompleta"/>
+        <xhtml:link rel="alternate" hreflang="ru" href="https://thedigitalheir.com/ru/blog/pochemu-self-custody-bez-plana-nasledovaniya-eto-nepolnaya-bezopasnost"/>
+        <xhtml:link rel="alternate" hreflang="x-default" href="https://thedigitalheir.com/en/blog/why-self-custody-without-inheritance-planning-is-incomplete-security"/>
+        <changefreq>monthly</changefreq>
+        <priority>0.6</priority>
+    </url>
+
 </urlset>

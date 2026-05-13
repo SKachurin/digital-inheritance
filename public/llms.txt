@@ -20,7 +20,8 @@ The service allows users to create an encrypted digital Envelope, add trusted he
 
 - Things You Should Know About Google’s Inactive Account Manager: https://thedigitalheir.com/en/blog/things-you-should-know-about-google-inactive-account-manager
 - Things You Should Know About Apple Legacy Contact: https://thedigitalheir.com/en/blog/things-you-should-know-about-apple-legacy-contact
-- Why Your Crypto Wealth May Never Reach the Next Generation: https://thedigitalheir.com/ru/blog/pochemu-vashe-kriptosostoyanie-mozhet-ne-dostatsya-sleduyushchemu-pokoleniyu<
+- Why Your Crypto Wealth May Never Reach the Next Generation: https://thedigitalheir.com/ru/blog/pochemu-vashe-kriptosostoyanie-mozhet-ne-dostatsya-sleduyushchemu-pokoleniyu
+- Why Self-Custody Without Inheritance Planning Is Incomplete Security https://thedigitalheir.com/en/blog/why-self-custody-without-inheritance-planning-is-incomplete-security
 
 ## Product summary
 
