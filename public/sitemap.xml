@@ -374,4 +374,34 @@
         <priority>0.6</priority>
     </url>
 
+    <url>
+        <loc>https://thedigitalheir.com/en/blog/fires-floods-lost-backups-hidden-weakness-seed-phrase-storage</loc>
+        <xhtml:link rel="alternate" hreflang="en" href="https://thedigitalheir.com/en/blog/fires-floods-lost-backups-hidden-weakness-seed-phrase-storage"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://thedigitalheir.com/es/blog/incendios-inundaciones-y-copias-perdidas-la-debilidad-oculta-del-almacenamiento-de-seed-phrases"/>
+        <xhtml:link rel="alternate" hreflang="ru" href="https://thedigitalheir.com/ru/blog/pozhary-navodneniya-i-poteryannye-rezervnye-kopii-skrytaya-slabost-hraneniya-seed-frazy"/>
+        <xhtml:link rel="alternate" hreflang="x-default" href="https://thedigitalheir.com/en/blog/fires-floods-lost-backups-hidden-weakness-seed-phrase-storage"/>
+        <changefreq>monthly</changefreq>
+        <priority>0.6</priority>
+    </url>
+
+    <url>
+        <loc>https://thedigitalheir.com/es/blog/incendios-inundaciones-y-copias-perdidas-la-debilidad-oculta-del-almacenamiento-de-seed-phrases</loc>
+        <xhtml:link rel="alternate" hreflang="en" href="https://thedigitalheir.com/en/blog/fires-floods-lost-backups-hidden-weakness-seed-phrase-storage"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://thedigitalheir.com/es/blog/incendios-inundaciones-y-copias-perdidas-la-debilidad-oculta-del-almacenamiento-de-seed-phrases"/>
+        <xhtml:link rel="alternate" hreflang="ru" href="https://thedigitalheir.com/ru/blog/pozhary-navodneniya-i-poteryannye-rezervnye-kopii-skrytaya-slabost-hraneniya-seed-frazy"/>
+        <xhtml:link rel="alternate" hreflang="x-default" href="https://thedigitalheir.com/en/blog/fires-floods-lost-backups-hidden-weakness-seed-phrase-storage"/>
+        <changefreq>monthly</changefreq>
+        <priority>0.6</priority>
+    </url>
+
+    <url>
+        <loc>https://thedigitalheir.com/ru/blog/pozhary-navodneniya-i-poteryannye-rezervnye-kopii-skrytaya-slabost-hraneniya-seed-frazy</loc>
+        <xhtml:link rel="alternate" hreflang="en" href="https://thedigitalheir.com/en/blog/fires-floods-lost-backups-hidden-weakness-seed-phrase-storage"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://thedigitalheir.com/es/blog/incendios-inundaciones-y-copias-perdidas-la-debilidad-oculta-del-almacenamiento-de-seed-phrases"/>
+        <xhtml:link rel="alternate" hreflang="ru" href="https://thedigitalheir.com/ru/blog/pozhary-navodneniya-i-poteryannye-rezervnye-kopii-skrytaya-slabost-hraneniya-seed-frazy"/>
+        <xhtml:link rel="alternate" hreflang="x-default" href="https://thedigitalheir.com/en/blog/fires-floods-lost-backups-hidden-weakness-seed-phrase-storage"/>
+        <changefreq>monthly</changefreq>
+        <priority>0.6</priority>
+    </url>
+
 </urlset>
