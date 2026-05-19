@@ -404,4 +404,34 @@
         <priority>0.6</priority>
     </url>
 
+    <url>
+        <loc>https://thedigitalheir.com/en/blog/when-ai-agents-start-holding-wallets-who-inherits-the-access</loc>
+        <xhtml:link rel="alternate" hreflang="en" href="https://thedigitalheir.com/en/blog/when-ai-agents-start-holding-wallets-who-inherits-the-access"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://thedigitalheir.com/es/blog/cuando-los-agentes-de-ia-empiecen-a-guardar-wallets-quien-heredara-el-acceso"/>
+        <xhtml:link rel="alternate" hreflang="ru" href="https://thedigitalheir.com/ru/blog/kogda-ai-agenty-nachnut-hranit-koshelki-kto-unasleduet-dostup"/>
+        <xhtml:link rel="alternate" hreflang="x-default" href="https://thedigitalheir.com/en/blog/when-ai-agents-start-holding-wallets-who-inherits-the-access"/>
+        <changefreq>monthly</changefreq>
+        <priority>0.6</priority>
+    </url>
+
+    <url>
+        <loc>https://thedigitalheir.com/es/blog/cuando-los-agentes-de-ia-empiecen-a-guardar-wallets-quien-heredara-el-acceso</loc>
+        <xhtml:link rel="alternate" hreflang="en" href="https://thedigitalheir.com/en/blog/when-ai-agents-start-holding-wallets-who-inherits-the-access"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://thedigitalheir.com/es/blog/cuando-los-agentes-de-ia-empiecen-a-guardar-wallets-quien-heredara-el-acceso"/>
+        <xhtml:link rel="alternate" hreflang="ru" href="https://thedigitalheir.com/ru/blog/kogda-ai-agenty-nachnut-hranit-koshelki-kto-unasleduet-dostup"/>
+        <xhtml:link rel="alternate" hreflang="x-default" href="https://thedigitalheir.com/en/blog/when-ai-agents-start-holding-wallets-who-inherits-the-access"/>
+        <changefreq>monthly</changefreq>
+        <priority>0.6</priority>
+    </url>
+
+    <url>
+        <loc>https://thedigitalheir.com/ru/blog/kogda-ai-agenty-nachnut-hranit-koshelki-kto-unasleduet-dostup</loc>
+        <xhtml:link rel="alternate" hreflang="en" href="https://thedigitalheir.com/en/blog/when-ai-agents-start-holding-wallets-who-inherits-the-access"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://thedigitalheir.com/es/blog/cuando-los-agentes-de-ia-empiecen-a-guardar-wallets-quien-heredara-el-acceso"/>
+        <xhtml:link rel="alternate" hreflang="ru" href="https://thedigitalheir.com/ru/blog/kogda-ai-agenty-nachnut-hranit-koshelki-kto-unasleduet-dostup"/>
+        <xhtml:link rel="alternate" hreflang="x-default" href="https://thedigitalheir.com/en/blog/when-ai-agents-start-holding-wallets-who-inherits-the-access"/>
+        <changefreq>monthly</changefreq>
+        <priority>0.6</priority>
+    </url>
+
 </urlset>
