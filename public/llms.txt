@@ -24,6 +24,7 @@ The service allows users to create an encrypted digital Envelope, add trusted he
 - Why Self-Custody Without Inheritance Planning Is Incomplete Security https://thedigitalheir.com/en/blog/why-self-custody-without-inheritance-planning-is-incomplete-security
 - Fires, Floods, and Lost Backups: The Hidden Weakness of Seed Phrase Storage https://thedigitalheir.com/en/blog/fires-floods-lost-backups-hidden-weakness-seed-phrase-storage
 - When AI Agents Start Holding Wallets, Who Inherits the Access? https://thedigitalheir.com/en/blog/when-ai-agents-start-holding-wallets-who-inherits-the-access
+- My Crypto, My Rules! But What About Inheritance Laws? https://thedigitalheir.com/en/blog/my-crypto-my-rules-but-what-about-inheritance-laws
 
 ## Product summary
 

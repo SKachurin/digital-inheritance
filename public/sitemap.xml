@@ -434,4 +434,34 @@
         <priority>0.6</priority>
     </url>
 
+    <url>
+        <loc>https://thedigitalheir.com/en/blog/my-crypto-my-rules-but-what-about-inheritance-laws</loc>
+        <xhtml:link rel="alternate" hreflang="en" href="https://thedigitalheir.com/en/blog/my-crypto-my-rules-but-what-about-inheritance-laws"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://thedigitalheir.com/es/blog/mi-cripto-mis-reglas-pero-que-pasa-con-las-leyes-de-herencia"/>
+        <xhtml:link rel="alternate" hreflang="ru" href="https://thedigitalheir.com/ru/blog/moya-kriptovalyuta-moi-pravila-no-chto-naschet-zakonov-nasledovaniya"/>
+        <xhtml:link rel="alternate" hreflang="x-default" href="https://thedigitalheir.com/en/blog/my-crypto-my-rules-but-what-about-inheritance-laws"/>
+        <changefreq>monthly</changefreq>
+        <priority>0.6</priority>
+    </url>
+
+    <url>
+        <loc>https://thedigitalheir.com/es/blog/mi-cripto-mis-reglas-pero-que-pasa-con-las-leyes-de-herencia</loc>
+        <xhtml:link rel="alternate" hreflang="en" href="https://thedigitalheir.com/en/blog/my-crypto-my-rules-but-what-about-inheritance-laws"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://thedigitalheir.com/es/blog/mi-cripto-mis-reglas-pero-que-pasa-con-las-leyes-de-herencia"/>
+        <xhtml:link rel="alternate" hreflang="ru" href="https://thedigitalheir.com/ru/blog/moya-kriptovalyuta-moi-pravila-no-chto-naschet-zakonov-nasledovaniya"/>
+        <xhtml:link rel="alternate" hreflang="x-default" href="https://thedigitalheir.com/en/blog/my-crypto-my-rules-but-what-about-inheritance-laws"/>
+        <changefreq>monthly</changefreq>
+        <priority>0.6</priority>
+    </url>
+
+    <url>
+        <loc>https://thedigitalheir.com/ru/blog/moya-kriptovalyuta-moi-pravila-no-chto-naschet-zakonov-nasledovaniya</loc>
+        <xhtml:link rel="alternate" hreflang="en" href="https://thedigitalheir.com/en/blog/my-crypto-my-rules-but-what-about-inheritance-laws"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://thedigitalheir.com/es/blog/mi-cripto-mis-reglas-pero-que-pasa-con-las-leyes-de-herencia"/>
+        <xhtml:link rel="alternate" hreflang="ru" href="https://thedigitalheir.com/ru/blog/moya-kriptovalyuta-moi-pravila-no-chto-naschet-zakonov-nasledovaniya"/>
+        <xhtml:link rel="alternate" hreflang="x-default" href="https://thedigitalheir.com/en/blog/my-crypto-my-rules-but-what-about-inheritance-laws"/>
+        <changefreq>monthly</changefreq>
+        <priority>0.6</priority>
+    </url>
+
 </urlset>
