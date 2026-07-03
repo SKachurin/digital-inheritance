@@ -464,4 +464,34 @@
         <priority>0.6</priority>
     </url>
 
+    <url>
+        <loc>https://thedigitalheir.com/en/blog/read-before-apple-legacy-contact-google-inactive-account-manager</loc>
+        <xhtml:link rel="alternate" hreflang="en" href="https://thedigitalheir.com/en/blog/read-before-apple-legacy-contact-google-inactive-account-manager"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://thedigitalheir.com/es/blog/lee-esto-antes-de-usar-apple-legacy-contact-o-el-administrador-de-cuentas-inactivas-de-google"/>
+        <xhtml:link rel="alternate" hreflang="ru" href="https://thedigitalheir.com/ru/blog/prochitayte-eto-pered-ispolzovaniem-apple-legacy-contact-ili-menedzhera-neaktivnyh-akkauntov-google"/>
+        <xhtml:link rel="alternate" hreflang="x-default" href="https://thedigitalheir.com/en/blog/read-before-apple-legacy-contact-google-inactive-account-manager"/>
+        <changefreq>monthly</changefreq>
+        <priority>0.6</priority>
+    </url>
+
+    <url>
+        <loc>https://thedigitalheir.com/es/blog/lee-esto-antes-de-usar-apple-legacy-contact-o-el-administrador-de-cuentas-inactivas-de-google</loc>
+        <xhtml:link rel="alternate" hreflang="en" href="https://thedigitalheir.com/en/blog/read-before-apple-legacy-contact-google-inactive-account-manager"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://thedigitalheir.com/es/blog/lee-esto-antes-de-usar-apple-legacy-contact-o-el-administrador-de-cuentas-inactivas-de-google"/>
+        <xhtml:link rel="alternate" hreflang="ru" href="https://thedigitalheir.com/ru/blog/prochitayte-eto-pered-ispolzovaniem-apple-legacy-contact-ili-menedzhera-neaktivnyh-akkauntov-google"/>
+        <xhtml:link rel="alternate" hreflang="x-default" href="https://thedigitalheir.com/en/blog/read-before-apple-legacy-contact-google-inactive-account-manager"/>
+        <changefreq>monthly</changefreq>
+        <priority>0.6</priority>
+    </url>
+
+    <url>
+        <loc>https://thedigitalheir.com/ru/blog/prochitayte-eto-pered-ispolzovaniem-apple-legacy-contact-ili-menedzhera-neaktivnyh-akkauntov-google</loc>
+        <xhtml:link rel="alternate" hreflang="en" href="https://thedigitalheir.com/en/blog/read-before-apple-legacy-contact-google-inactive-account-manager"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://thedigitalheir.com/es/blog/lee-esto-antes-de-usar-apple-legacy-contact-o-el-administrador-de-cuentas-inactivas-de-google"/>
+        <xhtml:link rel="alternate" hreflang="ru" href="https://thedigitalheir.com/ru/blog/prochitayte-eto-pered-ispolzovaniem-apple-legacy-contact-ili-menedzhera-neaktivnyh-akkauntov-google"/>
+        <xhtml:link rel="alternate" hreflang="x-default" href="https://thedigitalheir.com/en/blog/read-before-apple-legacy-contact-google-inactive-account-manager"/>
+        <changefreq>monthly</changefreq>
+        <priority>0.6</priority>
+    </url>
+
 </urlset>
