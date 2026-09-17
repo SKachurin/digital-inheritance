@@ -9,10 +9,10 @@ updated: "2026-09-17"
 published: true
 description: "A short tale about Billy Boy, a hidden fortune, a lost map, and the inheritance problem that survived long after he was gone."
 preview: "Billy Boy spent his life building and protecting a fortune. But when the map to it failed to reach the right people, his treasure became a legend instead of an inheritance."
+image: "images/blog/tale-of-billy-boy.webp"
+image_alt: "An old treasure map beside a lantern, books, coins, and a chest"
 translation_key: "tale-of-billy-boy"
 ---
-
-# The Tale of Billy Boy
 
 ## The Boy
 

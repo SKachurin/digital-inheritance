@@ -45,8 +45,20 @@ class EmailIncomingMessageHandler
 //            $this->logger->error("Payload field: $key", ['value' => $value]);
 //        }
 
-        if (str_contains(strtolower($recipient), 'support')) {
-            $this->supportForwarder->forwardSupportEmail($sender, $payload['subject'], $text);
+        if (str_contains(strtolower($recipient), 'support') || str_contains(strtolower($recipient), 'info')) {
+
+            $html = $payload['body-html'] ?? '';
+
+            if (is_array($html)) {
+                $html = implode("\n", $html);
+            }
+
+            $this->supportForwarder->forwardSupportEmail(
+                $sender,
+                $recipient,
+                $payload['subject'] ?? '',
+                $html !== '' ? $html : ($payload['stripped-text'] ?? '')
+            );
 
             return ['status_code' => 200, 'payload' => ['success' => true]];
         }

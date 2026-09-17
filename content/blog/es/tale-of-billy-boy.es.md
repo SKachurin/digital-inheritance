@@ -9,10 +9,10 @@ updated: "2026-09-17"
 published: true
 description: "Un cuento breve sobre Billy Boy, una fortuna escondida, un mapa perdido y un problema de herencia que sobrevivió mucho después de su muerte."
 preview: "Billy Boy pasó su vida creando y protegiendo una fortuna. Pero cuando el mapa no llegó a las personas adecuadas, su tesoro se convirtió en una leyenda en lugar de una herencia."
+image: "images/blog/tale-of-billy-boy.webp"
+image_alt: "Un antiguo mapa del tesoro junto a un farol, libros, monedas y un cofre"
 translation_key: "tale-of-billy-boy"
 ---
-
-# El cuento de Billy Boy
 
 ## El muchacho
 

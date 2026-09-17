@@ -16,11 +16,12 @@ class SupportEmailForwarderService
     {
     }
 
-    public function forwardSupportEmail(string $sender, string $subject, string $text): void
+    public function forwardSupportEmail(string $sender, string $recipient, string $subject, string $text): void
     {
         $forwardedMessage = sprintf(
-            "New support email from: %s\n, subject: %s, \n\n%s",
+            "New support email from: %s\n, to %s\n, subject: %s, \n\n%s",
             $sender,
+            $recipient,
             $subject,
             $text
         );
