@@ -494,4 +494,34 @@
         <priority>0.6</priority>
     </url>
 
+    <url>
+        <loc>https://thedigitalheir.com/en/blog/the-tale-of-billy-boy</loc>
+        <xhtml:link rel="alternate" hreflang="en" href="https://thedigitalheir.com/en/blog/the-tale-of-billy-boy"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://thedigitalheir.com/es/blog/el-cuento-de-billy-boy"/>
+        <xhtml:link rel="alternate" hreflang="ru" href="https://thedigitalheir.com/ru/blog/istoriya-billi-boya"/>
+        <xhtml:link rel="alternate" hreflang="x-default" href="https://thedigitalheir.com/en/blog/the-tale-of-billy-boy"/>
+        <changefreq>monthly</changefreq>
+        <priority>0.6</priority>
+    </url>
+
+    <url>
+        <loc>https://thedigitalheir.com/es/blog/el-cuento-de-billy-boy</loc>
+        <xhtml:link rel="alternate" hreflang="en" href="https://thedigitalheir.com/en/blog/the-tale-of-billy-boy"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://thedigitalheir.com/es/blog/el-cuento-de-billy-boy"/>
+        <xhtml:link rel="alternate" hreflang="ru" href="https://thedigitalheir.com/ru/blog/istoriya-billi-boya"/>
+        <xhtml:link rel="alternate" hreflang="x-default" href="https://thedigitalheir.com/en/blog/the-tale-of-billy-boy"/>
+        <changefreq>monthly</changefreq>
+        <priority>0.6</priority>
+    </url>
+
+    <url>
+        <loc>https://thedigitalheir.com/ru/blog/istoriya-billi-boya</loc>
+        <xhtml:link rel="alternate" hreflang="en" href="https://thedigitalheir.com/en/blog/the-tale-of-billy-boy"/>
+        <xhtml:link rel="alternate" hreflang="es" href="https://thedigitalheir.com/es/blog/el-cuento-de-billy-boy"/>
+        <xhtml:link rel="alternate" hreflang="ru" href="https://thedigitalheir.com/ru/blog/istoriya-billi-boya"/>
+        <xhtml:link rel="alternate" hreflang="x-default" href="https://thedigitalheir.com/en/blog/the-tale-of-billy-boy"/>
+        <changefreq>monthly</changefreq>
+        <priority>0.6</priority>
+    </url>
+
 </urlset>
