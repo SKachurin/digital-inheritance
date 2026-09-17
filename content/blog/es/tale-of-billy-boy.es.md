@@ -6,7 +6,7 @@ topic: "Historias de herencia digital"
 og_locale: "es_ES"
 date: "2026-09-17"
 updated: "2026-09-17"
-published: false
+published: true
 description: "Un cuento breve sobre Billy Boy, una fortuna escondida, un mapa perdido y un problema de herencia que sobrevivió mucho después de su muerte."
 preview: "Billy Boy pasó su vida creando y protegiendo una fortuna. Pero cuando el mapa no llegó a las personas adecuadas, su tesoro se convirtió en una leyenda en lugar de una herencia."
 translation_key: "tale-of-billy-boy"
